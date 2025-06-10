@@ -4,6 +4,9 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        Poppins: ["Poppins", "sans-serif"],
+      },
       colors: {
         primary: "#030014",
         secondary: "#151312",

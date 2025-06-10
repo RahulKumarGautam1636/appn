@@ -1,11 +1,12 @@
 // App.js
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import HomeScreen from './sreens/home';
+import { useFonts } from 'expo-font';
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import './globals.css';
-// import { verifyInstallation } from 'nativewind';
+import HomeScreen from './sreens/home';
+
+
 
 const ProfileScreen = () => <View style={styles.screen}><Text>Profile</Text></View>;
 const SettingsScreen = () => <View style={styles.screen}><Text>Settings</Text></View>;
@@ -13,7 +14,10 @@ const SettingsScreen = () => <View style={styles.screen}><Text>Settings</Text></
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
 
-  // verifyInstallation();
+  const [fontsLoaded] = useFonts({
+    'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf')
+    // 'MyCustomFont-Bold': require('./assets/fonts/MyCustomFont-Bold.ttf'),
+  });
 
   const renderScreen = () => {
     switch (activeTab) {
