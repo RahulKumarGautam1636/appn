@@ -5,7 +5,15 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Poppins: ["Poppins", "sans-serif"],
+        SpaceMono: ["SpaceMo-no", "sans-serif"],
+        Poppins: ["Poppins-Regular", "sans-serif"],
+        PoppinsBold: ["Poppins-Bold", "sans-serif"],
+        PoppinsExtraBold: ["Poppins-ExtraBold", "sans-serif"],
+        PoppinsExtraLight: ["Poppins-ExtraLight", "sans-serif"],
+        PoppinsLight: ["Poppins-Light", "sans-serif"],
+        PoppinsMedium: ["Poppins-Medium", "sans-serif"],
+        PoppinsSemibold: ["Poppins-Semibold", "sans-serif"],
+        PoppinsThin: ["Poppins-Thin", "sans-serif"],
       },
       colors: {
         primary: "#030014",

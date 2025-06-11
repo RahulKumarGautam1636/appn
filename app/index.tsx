@@ -14,10 +14,24 @@ const SettingsScreen = () => <View style={styles.screen}><Text>Settings</Text></
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
 
-  const [fontsLoaded] = useFonts({
-    'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf')
-    // 'MyCustomFont-Bold': require('./assets/fonts/MyCustomFont-Bold.ttf'),
+  const [loaded, error] = useFonts({
+      'Space-Mono': require('./../assets/fonts/SpaceMono-Regular.ttf'),
+      'Poppins-Bold': require('./../assets/fonts/Poppins/Poppins-Bold.ttf'),
+      'Poppins-ExtraBold': require('./../assets/fonts/Poppins/Poppins-ExtraBold.ttf'),
+      'Poppins-ExtraLight': require('./../assets/fonts/Poppins/Poppins-ExtraLight.ttf'),
+      'Poppins-Light': require('./../assets/fonts/Poppins/Poppins-Light.ttf'),
+      'Poppins-Medium': require('./../assets/fonts/Poppins/Poppins-Medium.ttf'),
+      'Poppins-Regular': require('./../assets/fonts/Poppins/Poppins-Regular.ttf'),
+      'Poppins-Semibold': require('./../assets/fonts/Poppins/Poppins-SemiBold.ttf'),
+      'Poppins-Thin': require('./../assets/fonts/Poppins/Poppins-Thin.ttf'),
   });
+
+  // useEffect(() => {
+  //     if (loaded || error) {
+  //         SplashScreen.hideAsync();
+  //     }
+  // }, [loaded, error]);
+  
 
   const renderScreen = () => {
     switch (activeTab) {
