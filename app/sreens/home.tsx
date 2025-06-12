@@ -12,7 +12,7 @@ const HomeScreen = () => {
     return (
         <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
             <View className='p-4'>
-                <View className="gap-3 flex-row items-center" style={styles.greet}>
+                <View className="gap-3 flex-row items-center">
                     <Image className='shadow-lg rounded-full' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                     {/* <View className="flex-col ">
                         <Text className="font-PoppinsBold text-gray-800 text-[18px]">
@@ -129,12 +129,17 @@ const HomeScreen = () => {
                     {[1,2,3,4].map(i => (
                         <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg' key={i}>
                             <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
-                            <View>
+                            <View className='flex-1'>
                                 <Text className="font-PoppinsSemibold text-gray-800 text-[14px]">Dr. Amelia Emma</Text>
-                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">Gynacologist</Text>
-                                <Text className="font-PoppinsMedium text-gray-800 text-[12px]">⭐ 4.9 
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]">Gynacologist</Text>
+                                <Text className="font-PoppinsMedium text-gray-800 text-[11px]">⭐ 4.9 
                                     &nbsp;<Text className='text-gray-500'>(2435 Reviews)</Text>
                                 </Text>
+                            </View>
+                            <View className='justify-between items-end'>
+                                {/* <Feather name="heart" size={18} color='black' /> */}
+                                <Ionicons name="arrow-forward-outline" size={20} color="#64748b" className='text-slate-500'/>
+                                <Text className="font-PoppinsSemibold text-pink-600 text-[12px]">₹600/hr</Text>
                             </View>
                         </View>
                     ))}
@@ -195,8 +200,5 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     screen: {
         minHeight: "100%"
-    },
-    greet: {
-        // backgroundColor: 'teal',
     }
 });

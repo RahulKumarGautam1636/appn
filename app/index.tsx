@@ -2,9 +2,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import './globals.css';
 import HomeScreen from './sreens/home';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import BookAppn from './sreens/bookAppn';
 
 
 
@@ -41,46 +43,35 @@ export default function App() {
         return <ProfileScreen />;
       case 'Settings':
         return <SettingsScreen />;
+      case 'Appointment':
+        return <BookAppn />;
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        {renderScreen()}
-      </View>
-
-      {/* <LinearGradient colors={['#4facfe', '#00f2fe']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.tabBar}> */}
-      <View style={styles.tabBar}>
-        {[
-          { name: 'Home', icon: 'home-outline' },
-          { name: 'Profile', icon: 'person-outline' },
-          { name: 'Settings', icon: 'settings-outline' },
-          { name: 'Appointment', icon: 'calendar-outline' },
-          { name: 'Dashbaord', icon: 'grid-outline' },
-        ].map((tab) => (
-          <TouchableOpacity
-            key={tab.name}
-            onPress={() => setActiveTab(tab.name)}
-            style={styles.tabItem}
-          >
-            <Ionicons
-              name={tab.icon}
-              size={18}
-              color={activeTab === tab.name ? '#e83d82' : '#6e6e6e'}
-            />
-            <Text 
-            style={[
-              styles.tabText,
-              activeTab === tab.name && styles.activeText
-            ]}>
-              {tab.name}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      {/* </LinearGradient> */}
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView className="flex-1">
+        <View style={styles.content}>
+          {renderScreen()}
+        </View>
+        <View style={styles.tabBar} className='border-t border-slate-200'>
+          {[
+            { name: 'Home', icon: 'home-outline' },
+            { name: 'Profile', icon: 'person-outline' },
+            { name: 'Settings', icon: 'settings-outline' },
+            { name: 'Appointment', icon: 'calendar-outline' },
+            { name: 'Dashbaord', icon: 'grid-outline' },
+          ].map((tab) => (
+            <TouchableOpacity key={tab.name} onPress={() => setActiveTab(tab.name)} style={styles.tabItem} >
+              <Ionicons name={tab.icon} size={18} color={activeTab === tab.name ? '#e83d82' : '#6e6e6e'} />
+              <Text  style={[ styles.tabText, activeTab === tab.name && styles.activeText ]}>
+                {tab.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
