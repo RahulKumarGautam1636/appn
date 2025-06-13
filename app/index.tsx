@@ -7,6 +7,7 @@ import './globals.css';
 import HomeScreen from './sreens/home';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import BookAppn from './sreens/bookAppn';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 
 
@@ -49,29 +50,31 @@ export default function App() {
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView className="flex-1">
-        <View style={styles.content}>
-          {renderScreen()}
-        </View>
-        <View style={styles.tabBar} className='border-t border-slate-200'>
-          {[
-            { name: 'Home', icon: 'home-outline' },
-            { name: 'Profile', icon: 'person-outline' },
-            { name: 'Settings', icon: 'settings-outline' },
-            { name: 'Appointment', icon: 'calendar-outline' },
-            { name: 'Dashbaord', icon: 'grid-outline' },
-          ].map((tab) => (
-            <TouchableOpacity key={tab.name} onPress={() => setActiveTab(tab.name)} style={styles.tabItem} >
-              <Ionicons name={tab.icon} size={18} color={activeTab === tab.name ? '#e83d82' : '#6e6e6e'} />
-              <Text  style={[ styles.tabText, activeTab === tab.name && styles.activeText ]}>
-                {tab.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <SafeAreaView className="flex-1">
+          <View style={styles.content}>
+            {renderScreen()}
+          </View>
+          <View style={styles.tabBar} className='border-t border-slate-200'>
+            {[
+              { name: 'Home', icon: 'home-outline' },
+              { name: 'Profile', icon: 'person-outline' },
+              { name: 'Settings', icon: 'settings-outline' },
+              { name: 'Appointment', icon: 'calendar-outline' },
+              { name: 'Dashbaord', icon: 'grid-outline' },
+            ].map((tab) => (
+              <TouchableOpacity key={tab.name} onPress={() => setActiveTab(tab.name)} style={styles.tabItem} >
+                <Ionicons name={tab.icon} size={18} color={activeTab === tab.name ? '#e83d82' : '#6e6e6e'} />
+                <Text  style={[ styles.tabText, activeTab === tab.name && styles.activeText ]}>
+                  {tab.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
