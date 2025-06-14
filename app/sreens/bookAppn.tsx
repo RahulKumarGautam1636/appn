@@ -2,7 +2,8 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ButtonPrimary from '../components';
 // import MyBottomSheet from '../components/bottomSheet';
 
 
@@ -169,19 +170,19 @@ const BookAppn = () => {
                 </View>
             </View> */}
 
-            <View className='bg-pink-500 m-3 rounded-3xl shadow-lg shadow-pink-700 overflow-hidden'>
+            <View className='bg-pink-500 m-3 mb-4 rounded-3xl shadow-md shadow-pink-700 overflow-hidden'>
                 <View className='justify-between flex-row px-4 py-2 items-center border-b border-pink-300'>
                     <View className='flex-row items-center gap-3'>
                         <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Clinics</Text>
                     </View>
                     <View className="gap-3 flex-row items-center ml-auto">
                         {/* <Feather name="chevron-left" size={24} color='#6b7280' /> */}
-                        <Text className="font-Poppins text-white text-[12px] leading-5">2 more clinics</Text>
+                        <Text className="font-Poppins text-white text-[12px] leading-4">2+ clinics</Text>
                         <Feather name="chevron-down" size={24} color='#fff' />
                     </View>
                 </View>
 
-                <View className='flex-row items-center gap-4 p-4 bg-pink-500 '>
+                <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-pink-500 '>
                     {/* <Feather name="sun" size={26} color="#fff" className='px-[9px] py-[9px] bg-pink-400 rounded-full' /> */}
                     {/* <FontAwesome5 name="hospital" size={60} color="#fff" className='px-1' /> */}
                     <View className='flex-1'>
@@ -204,7 +205,7 @@ const BookAppn = () => {
                         </View>
                         {/* <Text className="font-Poppins text-slate-100 text-[11px] mt-2" numberOfLines={1}>Ramnagar Kalitala Road, Ranaghat, Nadia</Text> */}
                     </View>
-                    <Feather name="chevron-right" size={24} color="#fff" className='ml-auto' />
+                    <Feather name="chevron-right" size={24} color="#fff" className='px-[9px] py-[9px] bg-pink-400 rounded-full'  />
                 </View>
             </View>
 
@@ -233,7 +234,7 @@ const BookAppn = () => {
                     <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Choose Schedule Time</Text>
                 </View>
             </View> */}
-            <View className='p-4 bg-white rounded-xl shadow-md shadow-gray-300 mt-4'>
+            <View className='py-5 px-4 pb-2 bg-white shadow-md shadow-gray-300 mt-4'>
                 {/* <View className='flex-row items-center gap-3 border-b border-gray-300 pb-3'>
                     <Feather name="sun" size={20} color="#fff" className='px-[9px] py-[9px] bg-orange-400 rounded-full' />
                     <View>
@@ -243,7 +244,7 @@ const BookAppn = () => {
                     <Feather name="chevron-up" size={24} color="gray" className='ml-auto' />
                 </View> */}
                 <View className='justify-start flex-row flex-wrap' style={{columnGap: '3.5%', 
-                    rowGap: '6.5%'
+                    // rowGap: '6.5%'
                     }}>
                     <SlotBtn time='08:30' />
                     <SlotBtn time='09:00' />
@@ -259,6 +260,7 @@ const BookAppn = () => {
                     <SlotBtn time='05:30' />
                 </View>
             </View>
+            <ButtonPrimary title='Book Appointment' active={true} onPress={() => {}} classes='m-4' />
             {/* <MyBottomSheet /> */}
 
             {/* <Animated.View>
@@ -293,7 +295,7 @@ const DayBtn = ({ day, date, active }: any) => {
 
 const SlotBtn = ({ time, active }: any) => {
     return (
-        <View className={`border-2 rounded-lg px-3 py-1 ${active ? 'bg-pink-50 border-pink-400' : 'bg-gray-50 border-gray-300'}`} style={{width: '17.1%'}}>
+        <View className={`border-2 rounded-lg px-3 py-1 mb-3 ${active ? 'bg-pink-50 border-pink-400' : 'bg-gray-50 border-gray-300'}`} style={{width: '17.1%'}}>
             <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-pink-500' : 'text-gray-500'}`}>{time}</Text>
             <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-pink-500' : 'text-gray-500'}`}>AM</Text>
         </View>

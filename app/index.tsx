@@ -8,6 +8,7 @@ import HomeScreen from './sreens/home';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import BookAppn from './sreens/bookAppn';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { BookingSuccess } from './sreens/bookingSuccess';
 
 
 
@@ -43,7 +44,7 @@ export default function App() {
       case 'Profile':
         return <ProfileScreen />;
       case 'Settings':
-        return <SettingsScreen />;
+        return <BookingSuccess />;
       case 'Appointment':
         return <BookAppn />;
     }

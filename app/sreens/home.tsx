@@ -145,7 +145,7 @@ const HomeScreen = () => {
                     ))}
                 </View>
             </View>
-            <View className='bg-white'>
+            {/* <View className='bg-white'>
                 <View className='justify-between flex-row p-4 items-center'>
                     <View className='flex-row items-center gap-3'>
                         <Ionicons name="arrow-back-outline" size={24} color="black" />
@@ -190,7 +190,7 @@ const HomeScreen = () => {
                 <Text className="font-PoppinsMedium pt-4 pb-2 text-gray-600 text-[12px]">About</Text>
                 <Text className="font-PoppinsMedium pt-4 pb-2 text-gray-600 text-[12px]">Clinics</Text>
                 <Text className="font-PoppinsMedium pt-4 pb-2 text-gray-600 text-[12px]">Reviews</Text>
-            </View>
+            </View> */}
         </ScrollView>
     )
 }
