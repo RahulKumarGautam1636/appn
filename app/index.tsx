@@ -1,22 +1,15 @@
 // App.js
-import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import './globals.css';
-import HomeScreen from './sreens/home';
+import { Link, SplashScreen, useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
+import { Text } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import BookAppn from './sreens/bookAppn';
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { BookingSuccess } from './sreens/bookingSuccess';
-
-
-
-const ProfileScreen = () => <View style={styles.screen}><Text>Profile</Text></View>;
-const SettingsScreen = () => <View style={styles.screen}><Text>Settings</Text></View>;
+import './globals.css';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('Home');
+
+  const router = useRouter();
 
   const [loaded, error] = useFonts({
       'Space-Mono': require('./../assets/fonts/SpaceMono-Regular.ttf'),
@@ -30,92 +23,21 @@ export default function App() {
       'Poppins-Thin': require('./../assets/fonts/Poppins/Poppins-Thin.ttf'),
   });
 
-  // useEffect(() => {
-  //     if (loaded || error) {
-  //         SplashScreen.hideAsync();
-  //     }
-  // }, [loaded, error]);
-  
-
-  const renderScreen = () => {
-    switch (activeTab) {
-      case 'Home':
-        return <HomeScreen />;
-      case 'Profile':
-        return <ProfileScreen />;
-      case 'Settings':
-        return <BookingSuccess />;
-      case 'Appointment':
-        return <BookAppn />;
-    }
-  };
+  useEffect(() => {
+      if (loaded || error) {
+          SplashScreen.hideAsync();
+          router.navigate('/login')
+      }
+  }, [loaded, error]);
 
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <SafeAreaView className="flex-1">
-          <View style={styles.content}>
-            {renderScreen()}
-          </View>
-          <View style={styles.tabBar} className='border-t border-slate-200'>
-            {[
-              { name: 'Home', icon: 'home-outline' },
-              { name: 'Profile', icon: 'person-outline' },
-              { name: 'Settings', icon: 'settings-outline' },
-              { name: 'Appointment', icon: 'calendar-outline' },
-              { name: 'Dashbaord', icon: 'grid-outline' },
-            ].map((tab) => (
-              <TouchableOpacity key={tab.name} onPress={() => setActiveTab(tab.name)} style={styles.tabItem} >
-                <Ionicons name={tab.icon} size={18} color={activeTab === tab.name ? '#e83d82' : '#6e6e6e'} />
-                <Text  style={[ styles.tabText, activeTab === tab.name && styles.activeText ]}>
-                  {tab.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <Text className=''>INDEX PAGE</Text>
+          <Link className='text-[3rem]' href={'/appn'}>Index</Link>
         </SafeAreaView>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f4f6f8',
-  },
-  content: {
-    flex: 1,
-  },
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tabBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    // elevation: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    backgroundColor: '#fff'
-  },
-  tabItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tabText: {
-    fontSize: 10,
-    color: '#6e6e6e',
-    marginTop: 4,
-  },
-  activeText: {
-    color: '#e83d82',
-    fontWeight: 'bold',
-  },
-});

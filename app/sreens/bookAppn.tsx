@@ -1,8 +1,8 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import ButtonPrimary from '../components';
 // import MyBottomSheet from '../components/bottomSheet';
 
@@ -171,7 +171,7 @@ const BookAppn = () => {
             </View> */}
 
             <View className='bg-pink-500 m-3 mb-4 rounded-3xl shadow-md shadow-pink-700 overflow-hidden'>
-                <View className='justify-between flex-row px-4 py-2 items-center border-b border-pink-300'>
+                <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-pink-300'>
                     <View className='flex-row items-center gap-3'>
                         <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Clinics</Text>
                     </View>
@@ -186,7 +186,7 @@ const BookAppn = () => {
                     {/* <Feather name="sun" size={26} color="#fff" className='px-[9px] py-[9px] bg-pink-400 rounded-full' /> */}
                     {/* <FontAwesome5 name="hospital" size={60} color="#fff" className='px-1' /> */}
                     <View className='flex-1'>
-                        <Text className="font-PoppinsSemibold text-[13px] text-white">Southern California Hospital</Text>
+                        <Text className="font-PoppinsSemibold text-[15px] text-white">Southern California Hospital</Text>
                         {/* <Text className="font-PoppinsSemibold text-gray-200 text-[11px] mt-1">08:30 AM - 12:00 PM</Text> */}
                         <View className='mt-2 '>
                             <View className='flex gap-3 flex-row items-center'>
