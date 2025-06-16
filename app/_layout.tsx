@@ -9,8 +9,8 @@ export default function RootLayout() {
     <>
       <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? 'light-content' : 'dark-content'} />
       <Stack>
-        <Stack.Screen name="appn/index" options={{ headerShown: false}} />
         <Stack.Screen name="index" options={{ headerShown: false}} />
+        <Stack.Screen name="appn" options={{ headerShown: false}} />
         <Stack.Screen name="login" options={{ headerShown: false}} />
         {/* <Stack.Screen name="movie/[id]" options={{ headerShown: false}} /> */}
       </Stack>

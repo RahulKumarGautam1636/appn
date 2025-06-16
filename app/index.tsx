@@ -26,7 +26,7 @@ export default function App() {
   useEffect(() => {
       if (loaded || error) {
           SplashScreen.hideAsync();
-          router.navigate('/login')
+          // router.navigate('/login')
       }
   }, [loaded, error]);
 
