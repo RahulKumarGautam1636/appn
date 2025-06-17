@@ -2,8 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Image, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Heart from '../../assets/icons/departments/heart.svg';
+import { Link } from 'expo-router';
 
 
 const HomeScreen = () => {
@@ -13,6 +14,20 @@ const HomeScreen = () => {
         <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
             <View className='p-4'>
                 <View className="gap-3 flex-row items-center">
+                    <Image className='rounded-full' source={require('../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
+                    <View className='mr-auto'>
+                        <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
+                        <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text>
+                    </View>
+                    <Link href={'/login'}>
+                        <View className="gap-2 flex-row items-center bg-white p-2 rounded-full shadow-lg">
+                            <Ionicons name="enter" size={25} color='#3b82f6' className='text-blue-500' />
+                            <Text className='font-PoppinsMedium leading-5 text-slate-700'>Login </Text>
+                        </View>
+                    </Link>
+                </View>
+
+                {/* <View className="gap-3 flex-row items-center">
                     <Image className='shadow-lg rounded-full' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Abhinandan Shaw</Text>
@@ -23,7 +38,7 @@ const HomeScreen = () => {
                             <FontAwesome name="bell" size={20} color='#3b82f6' className='text-blue-500'/>
                         </View>
                     </View>
-                </View>
+                </View> */}
                 <View className='relative my-3'>
                     <Feather className='absolute z-50 top-[13px] left-4' name="search" size={22} color='gray' />
                     <View className='z-10'>
@@ -112,7 +127,7 @@ const HomeScreen = () => {
                     <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Popular Doctors (3)</Text>
                     <Text className="font-PoppinsMedium text-pink-600 text-[16px] leading-[23px] mt-3">See All</Text>
                 </View> 
-                <View className='mt-3 gap-4'>
+                <View className='mt-2 gap-4'>
                     {[1,2,3,4].map(i => (
                         <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg' key={i}>
                             <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
