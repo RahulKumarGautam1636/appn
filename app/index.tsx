@@ -2,10 +2,12 @@
 import { useFonts } from 'expo-font';
 import { Link, SplashScreen, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
-import { Text } from 'react-native';
+import { Button, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import './globals.css';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { RootState } from './store/store';
 
 export default function App() {
 
@@ -30,12 +32,19 @@ export default function App() {
       }
   }, [loaded, error]);
 
+  // const dispatch = useDispatch();
+  // const count = useSelector((state: RootState) => state.counter.value);
+
   return (
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <SafeAreaView className="flex-1">
           <Text className=''>INDEX PAGE</Text>
-          <Link className='text-[3rem]' href={'/appn'}>Index</Link>
+          <Link className='text-[3rem]' href={'/'}>Index</Link>
+          <Link className='text-[3rem]' href={'/appn'}>Index 1</Link>
+          <Link className='text-[3rem]' href={'/appn/appnList'}>Index 2</Link>
+          <Link className='text-[3rem]' href={'/appn/appnPreview'}>Index 3</Link>
+          <Link className='text-[3rem]' href={'/appn/bookAppn'}>Index 4</Link>
         </SafeAreaView>
       </SafeAreaProvider>
     </GestureHandlerRootView>

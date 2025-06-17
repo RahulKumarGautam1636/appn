@@ -1,20 +1,23 @@
 import { Feather, FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Image, ScrollView, Text, View } from "react-native";
 import ButtonPrimary from "../components";
+import { Link } from "expo-router";
 
 const AppnPreview = () => {
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-screen'>
       <View className='bg-slate-100 flex-1'>
         <View className='justify-between flex-row p-4 items-center'>
-            <View className='flex-row items-center gap-3'>
-                <Ionicons name="arrow-back-outline" size={24} color="black" />
-                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Review & Pay</Text>
-            </View>
-            <View className="gap-3 flex-row items-center ml-auto">
-                <Feather name="heart" size={20} color='black' />
-                <Feather name="share-2" size={20} color='black' />
-            </View>
+              <Link href={'/appn/bookingSuccess'}>
+                <View className='flex-row items-center gap-3'>
+                    <Ionicons name="arrow-back-outline" size={24} color="black" />
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Review & Pay</Text>
+                </View>
+              </Link>
+              <View className="gap-3 flex-row items-center ml-auto">
+                  <Feather name="heart" size={20} color='black' />
+                  <Feather name="share-2" size={20} color='black' />
+              </View>
         </View>
         <View className="p-4 items-center">
           <Image className='shadow-lg rounded-full' source={require('../../assets/images/user.png')} style={{ width: 100, height: 100 }} />

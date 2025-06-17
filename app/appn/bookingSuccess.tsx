@@ -20,7 +20,7 @@ const BookingSuccess = () => {
         <View className="px-4 mb-1 items-center">
           <Heart height={250} />
           <Text className="font-PoppinsSemibold text-gray-800 text-[18px] text-center">Thanks, Your Booking has Confirmed.</Text>
-          <Text className="font-Poppins text-gray-600 text-[13px] text-center mt-2">Please check your Email for receipt and booking details.</Text>
+          <Text className="font-Poppins text-gray-600 text-[13px] text-center mt-2">Please check your Email for details.</Text>
         </View>
         {/* <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>
@@ -36,13 +36,15 @@ const BookingSuccess = () => {
               </View>
               <FontAwesome name="check" size={20} color='#16a34a' className="ms-auto" />
           </View>
-          <View className='py-3 px-4 bg-gray-100 mt-4 rounded-xl flex gap-3 flex-row'>
-              <FontAwesome5 name="calendar-alt" size={17} color="#ec4899" />
-              <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">Wednesday, Fabruary 17, 2025</Text>
-          </View>
-          <View className='py-3 px-4 bg-gray-100 my-4 rounded-xl flex gap-3 flex-row'>
-              <FontAwesome5 name="clock" size={17} color="#ec4899" />
-              <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">08:30 PM</Text>
+          <View className="p-4 bg-gray-100 my-4 rounded-xl gap-6">
+            <View className='flex gap-3 flex-row'>
+                <FontAwesome5 name="calendar-alt" size={17} color="#ec4899" />
+                <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">Wednesday, Fabruary 17, 2025</Text>
+            </View>
+            <View className='flex gap-3 flex-row'>
+                <FontAwesome5 name="clock" size={17} color="#ec4899" />
+                <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">08:30 PM</Text>
+            </View>
           </View>
           <View className='flex-row items-center mb-4 gap-4'>
               {/* <View className="bg-pink-500 py-[11px] px-[10px] rounded-full shadow-lg"> */}

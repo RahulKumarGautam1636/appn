@@ -28,6 +28,14 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TabsLayout() {
 
+  const tabs = [
+    { name: 'Home', icon: 'home-outline', key: 'home' },
+    { name: 'Profile', icon: 'person-outline', key: 'appnList' },
+    { name: 'Settings', icon: 'settings-outline', key: 'bookAppn' },
+    { name: 'Appointment', icon: 'calendar-outline', key: 'appnPreview' },
+    { name: 'Dashbaord', icon: 'grid-outline', key: 'bookingSuccess' },
+  ]
+  
   const router = useRouter()
   return (
     <GestureHandlerRootView>
@@ -37,27 +45,11 @@ export default function TabsLayout() {
             tabBar={({ state, descriptors, navigation }: any) => {
               return (
                 <View style={styles.tabBar} className='border-t border-slate-200'>
-                  {[
-                    { name: 'Home', icon: 'home-outline', key: 'home' },
-                    { name: 'Profile', icon: 'person-outline', key: 'appnList' },
-                    { name: 'Settings', icon: 'settings-outline', key: 'bookAppn' },
-                    { name: 'Appointment', icon: 'calendar-outline', key: 'appnPreview' },
-                    { name: 'Dashbaord', icon: 'grid-outline', key: 'bookingSuccess' },
-                  ].map((tab, index) => {
+                  {tabs.map((tab, index) => {
 
                     const isFocused = state.index === index;
-
                     const onPress = () => {
-                      // const event = navigation.emit({
-                      //   type: 'tabPress',
-                      //   target: tab.key,
-                      // });
-
                       router.push(`/appn/${tab.key}`);
-            
-                      // if (!isFocused && !event.defaultPrevented) {
-                      //   navigation.navigate(tab.name);
-                      // }
                     };
 
                     return (
@@ -74,109 +66,11 @@ export default function TabsLayout() {
             }
             screenOptions={{
               tabBarShowLabel: false,
-              headerShown: false
-              // tabBarItemStyle: {
-              //   width: "100%",
-              //   height: "100%",
-              //   justifyContent: "center",
-              //   alignItems: "center",
-              // },
-              // tabBarStyle: {
-                // backgroundColor: "#0F0D23",
-                // borderRadius: 50,
-                // marginHorizontal: 20,
-                // marginBottom: 36,
-                // height: 52,
-                // position: "absolute",
-                // overflow: "hidden",
-                // borderWidth: 1,
-                // borderColor: "#0F0D23",
-                // ...styles.tabBar
-              // },
-              // tabBarItemStyle: {
-              //   ...styles.tabText
-              // }
+              headerShown: false,
+              animation: 'shift', // or 'shift'
+              transitionSpec: { animation: 'timing', config: { duration: 250, }, },
             }}
           >
-            {/* <Tabs.Screen
-              name="home"
-              options={{
-                title: "",
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                  <View style={styles.tabItem} >
-                    <Ionicons name='home-outline' size={18} color={focused ? '#e83d82' : '#6e6e6e'} />
-                    <Text style={[ styles.tabText, focused && styles.activeText ]}>
-                      Home
-                    </Text>
-                  </View>
-                ),
-              }}
-            />
-
-            {/* <Tabs.Screen
-              name="appnList"
-              options={{
-                title: "",
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                  <View style={styles.tabItem} >
-                    <Ionicons name='person-outline' size={18} color={focused ? '#e83d82' : '#6e6e6e'} />
-                    <Text style={[ styles.tabText, focused && styles.activeText ]}>
-                      Profile
-                    </Text>
-                  </View>
-                ),
-              }}
-            />
-
-            <Tabs.Screen
-              name="appnPreview"
-              options={{
-                title: "",
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                  <View style={styles.tabItem} >
-                    <Ionicons name='settings-outline' size={18} color={focused ? '#e83d82' : '#6e6e6e'} />
-                    <Text style={[ styles.tabText, focused && styles.activeText ]}>
-                      Settings
-                    </Text>
-                  </View>
-                ),
-              }}
-            />
-
-            <Tabs.Screen
-              name="bookAppn"
-              options={{
-                title: "",
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                  <View style={styles.tabItem} >
-                    <Ionicons name='calendar-outline' size={18} color={focused ? '#e83d82' : '#6e6e6e'} />
-                    <Text style={[ styles.tabText, focused && styles.activeText ]}>
-                      Appointment
-                    </Text>
-                  </View>
-                ),
-              }}
-            />
-
-            <Tabs.Screen
-              name="bookingSuccess"
-              options={{
-                title: "",
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                  <View style={styles.tabItem} >
-                    <Ionicons name='grid-outline' size={18} color={focused ? '#e83d82' : '#6e6e6e'} />
-                    <Text style={[ styles.tabText, focused && styles.activeText ]}>
-                      Dashboard
-                    </Text>
-                  </View>
-                ),
-              }}
-            /> */}
           </Tabs>
         </SafeAreaView>
       </SafeAreaProvider>
@@ -204,7 +98,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    // elevation: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 8,
