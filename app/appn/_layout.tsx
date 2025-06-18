@@ -69,8 +69,16 @@ export default function TabsLayout() {
               headerShown: false,
               animation: 'shift', // or 'shift'
               transitionSpec: { animation: 'timing', config: { duration: 250, }, },
+              // unmountOnBlur: true
             }}
           >
+          {/* <Tabs.Screen
+            name="home"
+            options={{
+              tabBarLabel: 'Home',
+              unmountOnBlur: true as any, // 👈 this does the reset!
+            }}
+          /> */}
           </Tabs>
         </SafeAreaView>
       </SafeAreaProvider>

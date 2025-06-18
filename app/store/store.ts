@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import compCodeReducer, { loginReducer, userReducer } from './slices';
+import compCodeReducer, { appnReducer, companiesReducer, deptsReducer, loginReducer, userReducer } from './slices/slices';
 // import { devToolsEnhancer } from '@redux-devtools/extension';
 // import { compose } from 'redux';
 
@@ -10,14 +10,17 @@ const store = configureStore({
   reducer: {
     compCode: compCodeReducer,
     isLoggedIn: loginReducer,
-    user: userReducer
+    user: userReducer,
+    companies: companiesReducer,
+    depts: deptsReducer,
+    appnData: appnReducer,
   },
   // enhancers: (existingEnhancers) =>
   //   process.env.NODE_ENV === 'development'
   //     ? [compose(...existingEnhancers, devToolsEnhancer({ trace: true }))]
   //     : existingEnhancers,
 
-  // devTools: true // process.env.NODE_ENV === 'development'
+  // devTools: true // process.env.NODE_ENV === 'development' about the best place to make api call when using redux toolkit in my react native project
 });
 
 export default store;

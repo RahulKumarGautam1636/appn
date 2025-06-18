@@ -92,3 +92,4 @@ export const initMember = {
 
 export const BASE_URL = 'https://myapps.gsterpsoft.com'
 export const GSTERPSOFT_URL = 'https://apigst.gsterpsoft.com'  
+export const SRC_URL = 'https://erp.gsterpsoft.com';
