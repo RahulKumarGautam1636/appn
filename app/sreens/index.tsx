@@ -98,3 +98,12 @@
 //     fontWeight: 'bold',
 //   },
 // });
+
+
+import { Text } from 'react-native';
+
+export default function() {
+    return (
+        <Text>Screen Index</Text>
+    )
+}

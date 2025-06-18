@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import { setLogin, setUser, getCompanies } from "./store/slices/slices";
 
 interface loginType {
     phone: string,
@@ -20,27 +21,28 @@ const Login = () => {
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
     const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });
-    const [registerData, setRegisterData] = useState({
-        ...initReg,
-        BusinessType: 'B2C',      
-    })
+    const [registerData, setRegisterData] = useState({ ...initReg, BusinessType: 'B2C' });
+
+    const { list, selected, status, error} = useSelector((state: RootState) => state.companies);
 
     const handleLoginFormSubmit = () => {
       if (!loginData.phone || !loginData.password) return;
       makeLoginRequest(loginData);
+    //   dispatch(getCompanies({ companyCode: compCode, userId: '14701' }));
     }
     
     const makeLoginRequest = async (params: loginType) => {
         // loaderAction(true);
         const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.phone}&UP=${params.password}&CID=${params.EncCompanyId}`);
         // loaderAction(false);
-
+        console.log(res.data);
         // let appBusinessType = globalData.businessType.CodeValue;     
         // if (res.data.BusinessType !== appBusinessType) return alert('You are not Allowed to log in.');       // BLOCK LOGIN IF MISMATCH FOUND     which is the best place to make api call and update the redux store
     
         if (res.data.Remarks === 'INVALID') {
-        setLoginError({status: true, message: 'The username or password is incorrect.'});
+            setLoginError({status: true, message: 'The username or password is incorrect.'});
         } else if (res.data.Remarks === 'NOTINCOMPANY') {
+            alert('Not In Company.')
         // setRegisterData((pre => ({             
         //     ...pre,
         //     Salutation: res.data.Salutation,
@@ -98,7 +100,7 @@ const Login = () => {
         // setTabActive('register');
         // setLoginError({status: false, message: ''});
         } else if (!res.data.UserId || !res.data.UserType) {
-        return alert("Something Went wrong, We can't log you in.");
+            return alert("Something Went wrong, We can't log you in.");
         } else {
             let userLoginData = {
                 Name: res.data.UserFullName,
@@ -149,14 +151,16 @@ const Login = () => {
             };
         
             // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: res.data.UserPassword, compCode: params.companyCode }));
-            // userInfoAction(userLoginData);
+            dispatch(setUser(userLoginData));
+            dispatch(setLogin(true));
+            router.push('/appn');
             
             // modalAction('LOGIN_MODAL', false, { mode: res.data.UserType });
-            // loginStatusAction(true);
             // stringToast("Wellcome, You successfully logged in.", { type: 'success', autoClose: 5000 });
             // handleRedirect(res.data.UserType);
         }
     }
+
     return (
         <ScrollView contentContainerClassName='bg-slate-200 min-h-full'>
             <Image source={require('../assets/images/bg.jpg')} className="absolute w-full z-0" resizeMode="cover" />
@@ -171,6 +175,9 @@ const Login = () => {
                         <Text className="text-pink-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
                         <TextInput placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                     </View>
+                    {/* {status === 'loading' &&
+                        <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
+                    } */}
                     <Text className="text-pink-500 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
                     <ButtonPrimary onClick={handleLoginFormSubmit} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                     <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account ? 

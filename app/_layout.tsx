@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { StatusBar, useColorScheme } from "react-native";
 import { Provider } from 'react-redux';
-import { store } from "./store/store";
+import store from "./store/store";
 
 export default function RootLayout() {
   const theme = useColorScheme();
