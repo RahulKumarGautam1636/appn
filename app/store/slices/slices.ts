@@ -136,15 +136,10 @@ const deptsReducer = deptsSlice.reducer;
 const appnDataSlice = createSlice({
   name: 'appnData',
   initialState: {     
-    appnData: {
-      selectedAppnDate: "",                                                         // used to detect active item of date button slider in bookingForm.
-      UnderDoctId: "",
-      AppointDate: "",
-      AppTime: "",
-      TimeSlotId: "",
-      companyId: "", 
-    },
-    Doctor: { Name: "", SpecialistDesc: "", Qualification: "", RegMob1: "" }
+    selectedAppnDate: "",                                                         // used to detect active item of date button slider in bookingForm.
+    companyId: "", 
+    // UnderDoctId: "", AppointDate: "", AppTime: "", TimeSlotId: "",
+    doctor: { Name: "", SpecialistDesc: "", Qualification: "", RegMob1: "" }
   },
   reducers: {
     setAppnData: (state, action: any) => {
@@ -156,7 +151,71 @@ const appnDataSlice = createSlice({
 export const { setAppnData } = appnDataSlice.actions;
 const appnReducer = appnDataSlice.reducer;
 
+export const getMembers = createAsyncThunk(
+  'auth/getMembers',
+  async (params: any, { dispatch, rejectWithValue, getState }) => {
+    const user = getState().user;
+    const compCode = getState().compCode;
+    if (!user.UserId) return;
+    try {              
+      const res = await axios.get(`${BASE_URL}/api/member/Get?UserId=${user.UserId}&CID=${compCode}`, {});
+      if (res.data) {
+          const parentMember = res.data.AccPartyMemberMasterList.find((i: any) => i.MemberId === user.MemberId);
+          if (parentMember) {
+            return {membersList: res.data.AccPartyMemberMasterList, selectedMember: parentMember};
+          } else {
+            console.log('No parent member found');
+            return {membersList: res.data.AccPartyMemberMasterList};
+          }
+      }
+    } catch (err: any) {
+      return rejectWithValue(err.message || 'Something went wrong');
+    }
+  }
+);
+
+const membersSlice = createSlice({
+  name: 'appnData',
+  initialState: {     
+    membersList: [],
+    selectedMember: {},
+    status: 'idle', error: null
+  },
+  reducers: {
+    setMembers: (state, action: any) => {
+      state = Object.assign(state, action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    requestStatusHandlers(builder, getMembers, {
+      onSuccess: (state: any, action: any) => {
+        Object.assign(state, action.payload);
+      },
+    });
+  },
+});
+
+export const { setMembers } = membersSlice.actions;
+const membersReducer = membersSlice.reducer;
+
+
+const modalsSlice = createSlice({
+  name: 'modals',
+  initialState: {     
+    APPN_PREVIEW: { state: false, data: "" },
+    APPN_SUCCESS: { state: false, data: "" },
+  },
+  reducers: {
+    setModal: (state, action: any) => {
+      state = Object.assign(state, action.payload);
+    },
+  }
+});
+
+export const { setModal } = modalsSlice.actions;
+const modalsReducer = modalsSlice.reducer;
+
 
 
 export default compCodeReducer;
-export { loginReducer, userReducer, companiesReducer, deptsReducer, appnReducer }
+export { loginReducer, userReducer, companiesReducer, deptsReducer, appnReducer, membersReducer, modalsReducer }

@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Image, ScrollView, Text, TextInput, View } from "react-native";
+import { Image, Modal, ScrollView, Text, TextInput, View } from "react-native";
 import ButtonPrimary from "./components";
 import { BASE_URL, initReg } from "@/constants";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { setLogin, setUser, getCompanies } from "./store/slices/slices";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 interface loginType {
     phone: string,
@@ -162,7 +163,16 @@ const Login = () => {
     }
 
     return (
-        <ScrollView contentContainerClassName='bg-slate-200 min-h-full'>
+        <SafeAreaProvider>
+        <SafeAreaView className="flex-1">
+        <Modal
+            transparent={true}
+            visible={true}
+            animationType="slide"
+            onRequestClose={() => {}}
+            presentationStyle='overFullScreen'
+        >
+        <ScrollView contentContainerClassName='bg-slate-200 min-h-full' style={{minHeight: '100%'}}>
             <Image source={require('../assets/images/bg.jpg')} className="absolute w-full z-0" resizeMode="cover" />
             <View className='bg-white mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem] px-4 pt-6 pb-36'>
                 <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center py-4">Welcome Back</Text>
@@ -186,6 +196,9 @@ const Login = () => {
                 </View>
             </View>
         </ScrollView>
+        </Modal>
+        </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 

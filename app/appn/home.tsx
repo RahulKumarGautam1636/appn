@@ -7,7 +7,7 @@ import { Link } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useEffect, useState } from 'react';
-import { getCompanies, getDepartments } from '../store/slices/slices';
+import { getCompanies, getDepartments, getMembers } from '../store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray } from '../components';
 import { BASE_URL } from '@/constants';
 import { getFrom } from '../components/utils';
@@ -26,6 +26,7 @@ const HomeScreen = () => {
 
     useEffect(() => {
         dispatch(getCompanies({ companyCode: compCode, userId: user.UserId ? user.UserId : 14701 }));
+        dispatch(getMembers(compCode, user.UserId, user.MemberId));
     }, [user.UserId, compCode])
 
     useEffect(() => {
@@ -36,7 +37,6 @@ const HomeScreen = () => {
         let controller = new AbortController();
         const getDoctors = async (companyCode: string, subCode: string, activeDate: string) => {
             if (!companyCode || subCode === ''  || !activeDate) return;
-             console.log(companyCode, subCode, activeDate);
             const res = await getFrom(`${BASE_URL}/api/Values/Get?CID=${companyCode}&type=INTDOCT&prefixText=&Specialist=${subCode}&Sdate=${activeDate}&Area=&Pin=&LowerFeesRange=&UpperFeesRange=`, {}, setDoctors, controller.signal);                                                        
             if (res) {
                 setTimeout(() => {
@@ -48,10 +48,8 @@ const HomeScreen = () => {
         return () => controller.abort();
     }, [selected.EncCompanyId, depts.selected?.SubCode])
 
-    console.log(doctors)
-
     return (
-        <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
+        <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100 '>
             <View className='p-4'>
                 {isLoggedIn ? 
                     <View className="gap-3 flex-row items-center">

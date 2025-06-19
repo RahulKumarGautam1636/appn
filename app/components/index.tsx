@@ -1,10 +1,15 @@
 import { SRC_URL } from "@/constants"
 import { FontAwesome5, Ionicons } from "@expo/vector-icons"
-import { Image, Text, TouchableOpacity, View } from "react-native"
+import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import { Link } from "expo-router";
-import { useDispatch } from "react-redux";
-import { setAppnData } from "../store/slices/slices";
+import { setAppnData, setModal } from "../store/slices/slices";
+
+import React from 'react';
+import Modal from 'react-native-modal';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../store/store";
+
 
 export default function ButtonPrimary({ title, onPress, active, classes, textClasses, onClick }: any) {
   return (
@@ -48,20 +53,19 @@ export const DeptCard = ({ data }: any) => {
   )
 }
 
-export const Card_1 = ({ data, selectedDate }: any) => {
+export const Card_1 = ({ data, selectedDate, activeCompanyId }: any) => {
 
   const dispatch = useDispatch();
 
   const handleBooking = () => {
-    let doctor = {
-      appnData: { 
-        // UnderDoctId: data.PartyCode, 
-        selectedAppnDate: selectedDate ? selectedDate : '', 
-        // AppTime: '', TimeSlotId: '', companyId: activeCompanyId, AppointDate: selectedDate 
-      },
+    let doctorData = {
+      selectedAppnDate: selectedDate ? selectedDate : '', 
+      companyId: activeCompanyId, 
+      // UnderDoctId: data.PartyCode, 
+      // AppTime: '', TimeSlotId: '', AppointDate: ''
       doctor: data
     }
-    dispatch(setAppnData(doctor))
+    dispatch(setAppnData(doctorData))
   }
 
   return (
@@ -69,7 +73,7 @@ export const Card_1 = ({ data, selectedDate }: any) => {
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
           <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
           <View className='flex-1'>
-              <Text className="font-PoppinsSemibold text-gray-800 text-[14px]">{data.Name}</Text>
+              <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.Name}</Text>
               <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.SpecialistDesc}</Text>
               <Text className="font-PoppinsMedium text-gray-800 text-[11px]">⭐ 4.9 
                   &nbsp;<Text className='text-gray-500'>(2435 Reviews)</Text>
@@ -105,3 +109,37 @@ export const getDatesArray = function(start: Date, end: number) {
   }
   return arr;
 };
+
+
+
+export const GlobalModal = () => {
+  const dispatch = useDispatch();
+  const modals = useSelector((state: RootState) => state.modals);
+
+  const ModalComponent = () => <Text>Hello world</Text>;
+
+  return (
+    <Modal
+      isVisible={false}
+      onBackdropPress={() => dispatch(setModal('modal_key'))}
+      animationIn="fadeInUp"
+      animationOut="fadeOutDown"
+      backdropOpacity={0.3}
+      useNativeDriver
+    >
+      <View style={styles.modal}>
+        <ModalComponent />
+      </View>
+    </Modal>
+  );
+};
+
+const styles = StyleSheet.create({
+  modal: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+});
+

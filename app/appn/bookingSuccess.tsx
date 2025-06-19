@@ -56,7 +56,7 @@ const BookingSuccess = () => {
                   <Text className="font-Poppins text-gray-500 text-[11px]" numberOfLines={1}>Ramnagar Kalitala Road, Ranaghat Nadia.</Text>
               </View>
           </View>
-          <ButtonPrimary title='View All Details' classes='p-[10px] bg-white border border-gray-400 mt-1' textClasses='text-sm' />
+          <ButtonPrimary title='View All Details' onPress={() => alert('Button Clicked.')} classes='p-[10px] bg-white border border-gray-400 mt-1' textClasses='text-sm' />
         </View>
         {/* <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>
