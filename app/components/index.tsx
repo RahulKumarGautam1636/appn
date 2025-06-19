@@ -3,6 +3,8 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons"
 import { Image, Text, TouchableOpacity, View } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import { Link } from "expo-router";
+import { useDispatch } from "react-redux";
+import { setAppnData } from "../store/slices/slices";
 
 export default function ButtonPrimary({ title, onPress, active, classes, textClasses, onClick }: any) {
   return (
@@ -46,11 +48,24 @@ export const DeptCard = ({ data }: any) => {
   )
 }
 
-export const Card_1 = ({ data }: any) => {
+export const Card_1 = ({ data, selectedDate, activeCompanyId }: any) => {
+
+  const dispatch = useDispatch();
+
+  const handleBooking = () => {
+    let doctorData = {
+      selectedAppnDate: selectedDate ? selectedDate : '', 
+      companyId: activeCompanyId, 
+      // UnderDoctId: data.PartyCode, 
+      // AppTime: '', TimeSlotId: '', AppointDate: ''
+      doctor: data
+    }
+    dispatch(setAppnData(doctorData))
+  }
 
   return (
-    // <Link href={`/appn/doctor/${data.PartyCode}`} className="">
-      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg'>
+    <Link href={`/appn/doctor/${data.PartyCode}`} onPress={handleBooking}>
+      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
           <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
           <View className='flex-1'>
               <Text className="font-PoppinsSemibold text-gray-800 text-[14px]">{data.Name}</Text>
@@ -64,23 +79,28 @@ export const Card_1 = ({ data }: any) => {
               <Text className="font-PoppinsSemibold text-pink-600 text-[12px]">₹600/hr</Text>
           </View>
       </View>
-    // </Link>
-
-      // <View>
-      //   <Link href={`/appn/doctor/${data.PartyCode}`} className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg'>
-      //     <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
-      //     <View className='flex-1'>
-      //         <Text className="font-PoppinsSemibold text-gray-800 text-[14px]">{data.Name}</Text>
-      //         <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.SpecialistDesc}</Text>
-      //         <Text className="font-PoppinsMedium text-gray-800 text-[11px]">⭐ 4.9 
-      //             &nbsp;<Text className='text-gray-500'>(2435 Reviews)</Text>
-      //         </Text>
-      //     </View>
-      //     <View className='justify-between items-end'>
-      //         <Ionicons name="arrow-forward-outline" size={20} color="#64748b" className='text-slate-500'/>
-      //         <Text className="font-PoppinsSemibold text-pink-600 text-[12px]">₹600/hr</Text>
-      //     </View>
-      // </Link>
-      // </View>
+    </Link>
   )
 }
+
+export const DayBtn = ({ data, activeDate, handleActive }: any) => {
+  let day = data.dateStr.split(' ')[0]
+  let date = data.dateStr.split(' ')[2];
+  let active = data.date === activeDate;
+  return (
+      <TouchableOpacity onPress={() => handleActive((pre: any) => ({...pre, activeDate: data.date}))} className='gap-3 flex-1 text-center items-center'>
+          <Text className={`font-PoppinsMedium pt-4 text-[12px] ${active ? 'text-gray-600' : 'text-gray-400'}`}>{day}</Text>
+          <View className={`items-center justify-center h-11 w-12 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-pink-500' : 'bg-white'}`}>
+              <Text className={`font-PoppinsMedium text-gray-600 text-[13px] leading-5 ${active ? 'text-white' : ''}`}>{date}</Text>
+          </View>
+      </TouchableOpacity>
+  )
+} 
+
+export const getDatesArray = function(start: Date, end: number) {
+  const endDate = new Date(new Date().setDate(start.getDate() + end));
+  for(var arr=[],dt=new Date(start); dt<=new Date(endDate); dt.setDate(dt.getDate()+1)){
+      arr.push({dateStr: new Date(dt).toDateString(), date: new Date(dt).toLocaleDateString('en-TT')});
+  }
+  return arr;
+};

@@ -7,8 +7,8 @@ import { Link } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useEffect, useState } from 'react';
-import { getCompanies, getDepartments } from '../store/slices/slices';
-import { CompCard, DeptCard, Card_1 } from '../components';
+import { getCompanies, getDepartments, getMembers } from '../store/slices/slices';
+import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray } from '../components';
 import { BASE_URL } from '@/constants';
 import { getFrom } from '../components/utils';
 
@@ -22,9 +22,11 @@ const HomeScreen = () => {
     const { list, selected, status, error } = useSelector((state: RootState) => state.companies);
     const depts = useSelector((state: RootState) => state.depts);
     const [doctors, setDoctors] = useState({loading: true, data: {PartyMasterList: [], CompanyMasterList: []}, err: {status: false, msg: ''}})
+    const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 5), activeDate: new Date().toLocaleDateString('en-TT')});
 
     useEffect(() => {
         dispatch(getCompanies({ companyCode: compCode, userId: user.UserId ? user.UserId : 14701 }));
+        dispatch(getMembers(compCode, user.UserId, user.MemberId));
     }, [user.UserId, compCode])
 
     useEffect(() => {
@@ -35,7 +37,6 @@ const HomeScreen = () => {
         let controller = new AbortController();
         const getDoctors = async (companyCode: string, subCode: string, activeDate: string) => {
             if (!companyCode || subCode === ''  || !activeDate) return;
-             console.log(companyCode, subCode, activeDate);
             const res = await getFrom(`${BASE_URL}/api/Values/Get?CID=${companyCode}&type=INTDOCT&prefixText=&Specialist=${subCode}&Sdate=${activeDate}&Area=&Pin=&LowerFeesRange=&UpperFeesRange=`, {}, setDoctors, controller.signal);                                                        
             if (res) {
                 setTimeout(() => {
@@ -47,10 +48,8 @@ const HomeScreen = () => {
         return () => controller.abort();
     }, [selected.EncCompanyId, depts.selected?.SubCode])
 
-    console.log(doctors)
-
     return (
-        <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
+        <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100 '>
             <View className='p-4'>
                 {isLoggedIn ? 
                     <View className="gap-3 flex-row items-center">
@@ -86,6 +85,25 @@ const HomeScreen = () => {
                     </View>
                     <Feather className='absolute z-50 top-[3px] right-[3px] bg-pink-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>
+                <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-2">Upcoming Schedule (3)</Text>
+                <View className='bg-pink-500 rounded-3xl p-5 my-3'>
+                    <View className='flex-row'>
+                        <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                        <View>
+                            <Text className="font-PoppinsBold text-white text-[14px]">Prof. Dr. Logan Mason</Text>
+                            <Text className="font-Poppins text-gray-200 text-[11px]">Orthopedic Consultation</Text>
+                        </View>
+                        <View className="bg-pink-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
+                            <FontAwesome name="arrow-right" size={20} color='#fff' />
+                        </View>
+                    </View>
+                    <View className='py-3 px-4 bg-pink-400 mt-4 rounded-2xl flex gap-3 flex-row '>
+                        <FontAwesome5 name="calendar-alt" size={17} color="#fff" />
+                        <Text className="font-Poppins text-gray-100 text-[13px] me-auto leading-5">June 12, 2025</Text>
+                        <FontAwesome5 name="clock" size={17} color="#fff" />
+                        <Text className="font-Poppins text-gray-100 text-[13px] leading-5">9:30 AM</Text>
+                    </View>
+                </View>
                 {(() => {
                     if (depts.status === 'loading') {
                         return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
@@ -118,7 +136,7 @@ const HomeScreen = () => {
                     }
                 })()}
 
-                <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Upcoming Schedule (3)</Text>
+                {/* <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Upcoming Schedule (3)</Text>
                 <View className='bg-pink-500 rounded-3xl p-5 mt-4'>
                     <View className='flex-row'>
                         <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
@@ -136,13 +154,23 @@ const HomeScreen = () => {
                         <FontAwesome5 name="clock" size={17} color="#fff" />
                         <Text className="font-Poppins text-gray-100 text-[13px] leading-5">9:30 AM</Text>
                     </View>
+                </View> */}
+                <View className='px-2 pb-1 flex-row justify-around'>
+                    {filterdates.dates.map((i: any) => <DayBtn data={i} key={i.date} activeDate={filterdates.activeDate} handleActive={setFilterDates} />)}
+                    {/* <DayBtn day='Tue' date='11'/>
+                    <DayBtn day='Tue' date='12' active/>
+                    <DayBtn day='Wed' date='13'/>
+                    <DayBtn day='hur' date='14'/>
+                    <DayBtn day='Fri' date='15'/>
+                    <DayBtn day='Sat' date='16'/>
+                    <DayBtn day='Sun' date='17'/> */}
                 </View>
                 <View className='justify-between flex-row py-3'>
                     <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Popular Doctors (3)</Text>
                     <Text className="font-PoppinsMedium text-pink-600 text-[16px] leading-[23px] mt-3">See All</Text>
                 </View> 
                 <View className='mt-2 gap-4'>
-                    {doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} />)}
+                    {doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />)}
                 </View>
             </View>
         </ScrollView>

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import compCodeReducer, { companiesReducer, deptsReducer, loginReducer, userReducer } from './slices/slices';
+import compCodeReducer, { appnReducer, companiesReducer, deptsReducer, loginReducer, membersReducer, userReducer } from './slices/slices';
 // import { devToolsEnhancer } from '@redux-devtools/extension';
 // import { compose } from 'redux';
 
@@ -12,7 +12,9 @@ const store = configureStore({
     isLoggedIn: loginReducer,
     user: userReducer,
     companies: companiesReducer,
-    depts: deptsReducer
+    depts: deptsReducer,
+    appnData: appnReducer,
+    members: membersReducer,
   },
   // enhancers: (existingEnhancers) =>
   //   process.env.NODE_ENV === 'development'
