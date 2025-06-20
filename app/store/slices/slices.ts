@@ -78,8 +78,7 @@ const companiesSlice = createSlice({
 },
   reducers: {
     setCompanies: (state, action: any) => {
-      if (action.payload.list) state.list = action.payload.list
-      if (action.payload.selected) state.list = action.payload.selected
+      Object.assign(state, action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -117,8 +116,7 @@ const deptsSlice = createSlice({
   initialState: { list: [], selected: {}, status: 'idle', error: null },
   reducers: {
     setDepts: (state, action: any) => {
-      if (action.payload.list) state.list = action.payload.list
-      if (action.payload.selected) state.list = action.payload.selected
+      Object.assign(state, action.payload);
     },
   },
   extraReducers: (builder) => {

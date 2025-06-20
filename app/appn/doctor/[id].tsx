@@ -9,17 +9,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '@/constants';
-import { getFrom } from '@/app/components/utils';
+import { getFrom, GridLoader } from '@/app/components/utils';
 import axios from 'axios';
 import { setAppnData } from '@/app/store/slices/slices';
 import { useRouter } from 'expo-router';
 import AppnPreview from '../appnPreview';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import BookingSuccess from '../bookingSuccess';
-import ReactNativeModal from 'react-native-modal';
-const { width, height } = Dimensions.get('window');
+// import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+// import ReactNativeModal from 'react-native-modal';
+// const { width, height } = Dimensions.get('window');
 
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Booking = () => {
@@ -243,8 +243,11 @@ const Booking = () => {
     // }));
 
     const [confirmation, setConfirmation] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const toggleConfirmation = () => {
+        setConfirmation(false);
+        setSuccess(true);
         // if (translateX.value) {
         //     translateX.value = withTiming(0, { duration: 500 });
         // } else {
@@ -316,7 +319,7 @@ const Booking = () => {
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Clinics</Text>
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Reviews</Text>
                 </View>
-                {/* <View className='bg-pink-500 m-3 mb-4 rounded-3xl shadow-md shadow-pink-700 overflow-hidden'>
+                <View className='bg-pink-500 m-3 mb-4 rounded-3xl shadow-md shadow-pink-700 overflow-hidden'>
                     <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-pink-300'>
                         <View className='flex-row items-center gap-3'>
                             <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Clinics</Text>
@@ -343,7 +346,7 @@ const Booking = () => {
                         </View>
                         <Feather name="chevron-right" size={24} color="#fff" className='px-[9px] py-[9px] bg-pink-400 rounded-full'  />
                     </View>
-                </View> */}
+                </View>
 
                 <View className='justify-between flex-row px-4 pt-1 items-center'>
                     <View className='flex-row items-center gap-3'>
@@ -358,7 +361,7 @@ const Booking = () => {
                 <View className='px-2 pb-1 flex-row justify-around'>
                     {(() => {
                         if (dateTabsList.loading) {
-                            return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
+                            return <GridLoader classes='h-[70px] w-[50px]' containerClass='flex-row gap-3 mt-4' />
                         } else if (dateTabsList.err.status) {
                             return;
                         } else {
@@ -374,7 +377,7 @@ const Booking = () => {
                     }}>
                         {(() => {
                             if (dateSlotsList.loading) {
-                                return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text> 
+                                return <GridLoader classes='h-[50px] w-[17.1%] mb-3' count={10} containerClass='flex-row flex-wrap' />
                             } else if (dateSlotsList.err.status) {
                                 return;
                             } else {
@@ -417,7 +420,7 @@ const Booking = () => {
                 </ReactNativeModal> */}
 
                 {/* With in-build modal */}
-                <Modal
+                {/* <Modal
                     transparent={true}
                     visible={confirmation}
                     animationType="slide"
@@ -425,25 +428,13 @@ const Booking = () => {
                     presentationStyle='overFullScreen'
                 >
                     <AppnPreview bookAppn={handleBookingFormSubmit} handleOpen={setConfirmation} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
-                </Modal>
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                </Modal> */}
+                <View className={`absolute inset-0 bg-white ${confirmation ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}>
+                    <AppnPreview bookAppn={handleBookingFormSubmit} handleOpen={toggleConfirmation} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
+                </View>
+                <View className={`absolute inset-0 bg-white ${success ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}>
+                    <BookingSuccess doctor={doctor} bookingData={bookingData} clinic={selectedCompany} />
+                </View>
             {/* </Animated.View> */}
             {/* <Animated.View style={[{ flex: 1 }, animatedStyle2]} pointerEvents="box-none" className='absolute z-30 inset-0'> */}
                 {/* <BookingSuccess bookAppn={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} /> */}

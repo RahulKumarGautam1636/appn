@@ -163,42 +163,43 @@ const Login = () => {
     }
 
     return (
-        <SafeAreaProvider>
-        <SafeAreaView className="flex-1">
-        <Modal
-            transparent={true}
-            visible={true}
-            animationType="slide"
-            onRequestClose={() => {}}
-            presentationStyle='overFullScreen'
-        >
-        <ScrollView contentContainerClassName='bg-slate-200 min-h-full' style={{minHeight: '100%'}}>
-            <Image source={require('../assets/images/bg.jpg')} className="absolute w-full z-0" resizeMode="cover" />
-            <View className='bg-white mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem] px-4 pt-6 pb-36'>
-                <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center py-4">Welcome Back</Text>
-                <View className="p-4 gap-6">
-                    <View className='z-10'>
-                        <Text className="text-pink-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
-                        <TextInput placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
-                    </View>
-                    <View className='z-10'>
-                        <Text className="text-pink-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
-                        <TextInput placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
-                    </View>
-                    {/* {status === 'loading' &&
-                        <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
-                    } */}
-                    <Text className="text-pink-500 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
-                    <ButtonPrimary onClick={handleLoginFormSubmit} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
-                    <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account ? 
-                        <Text className="text-pink-500"> Register Now</Text>
-                    </Text>
+        // <Modal
+        //     transparent={true}
+        //     visible={true}
+        //     animationType="none"
+        //     onRequestClose={() => {}}
+        //     presentationStyle='fullScreen'
+        //     className="absolute inset-0"
+        // >
+            <ScrollView contentContainerClassName='bg-slate-200 min-h-full' style={{minHeight: '100%'}}>
+                {/* <Image source={require('../assets/images/bg.jpg')} className="absolute w-full h-full z-0" resizeMode="cover" /> */}
+                <View className="w-full h-1/2 z-0 justify-center items-center relative">
+                    <Image source={require('../assets/images/bg.jpg')} className="h-full w-full" resizeMode="cover" />
+                    {/* <Image source={require('../assets/images/logo.png')} className="h-[150px] w-[150px] absolute top-[35%] left-1/2" style={{transform: 'translate(-50%, -50%)'}} resizeMode="cover" /> */}
                 </View>
-            </View>
-        </ScrollView>
-        </Modal>
-        </SafeAreaView>
-        </SafeAreaProvider>
+                <View className='bg-white mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem] px-4 pt-6 pb-36 absolute bottom-0 w-full'>
+                    <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center py-4">Welcome Back</Text>
+                    <View className="p-4 gap-6">
+                        <View className='z-10'>
+                            <Text className="text-pink-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
+                            <TextInput placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                        </View>
+                        <View className='z-10'>
+                            <Text className="text-pink-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
+                            <TextInput placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                        </View>
+                        {/* {status === 'loading' &&
+                            <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
+                        } */}
+                        <Text className="text-pink-500 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
+                        <ButtonPrimary onClick={handleLoginFormSubmit} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
+                        <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account ? 
+                            <Text className="text-pink-500"> Register Now</Text>
+                        </Text>
+                    </View>
+                </View>
+            </ScrollView>
+        // </Modal>
     )
 }
 

@@ -33,7 +33,7 @@ export default function TabsLayout() {
     { name: 'Profile', icon: 'person-outline', key: 'appnList' },
     { name: 'Settings', icon: 'settings-outline', key: 'bookAppn' },
     { name: 'Appointment', icon: 'calendar-outline', key: 'appnPreview' },
-    { name: 'Dashbaord', icon: 'grid-outline', key: 'bookingSuccess' },
+    { name: 'Dashbaord', icon: 'grid-outline', key: 'members' },
   ]
   
   const router = useRouter()

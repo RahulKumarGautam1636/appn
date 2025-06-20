@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { getCompanies, getDepartments, getMembers } from '../store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray } from '../components';
 import { BASE_URL } from '@/constants';
-import { getFrom } from '../components/utils';
+import SkeletonBox, { getFrom, GridLoader, ListLoader } from '../components/utils';
 
 
 const HomeScreen = () => {
@@ -22,7 +22,7 @@ const HomeScreen = () => {
     const { list, selected, status, error } = useSelector((state: RootState) => state.companies);
     const depts = useSelector((state: RootState) => state.depts);
     const [doctors, setDoctors] = useState({loading: true, data: {PartyMasterList: [], CompanyMasterList: []}, err: {status: false, msg: ''}})
-    const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 5), activeDate: new Date().toLocaleDateString('en-TT')});
+    const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 30), activeDate: new Date().toLocaleDateString('en-TT')});
 
     useEffect(() => {
         dispatch(getCompanies({ companyCode: compCode, userId: user.UserId ? user.UserId : 14701 }));
@@ -30,8 +30,8 @@ const HomeScreen = () => {
     }, [user.UserId, compCode])
 
     useEffect(() => {
-        dispatch(getDepartments({ companyCode: compCode }));
-    }, [compCode])
+        dispatch(getDepartments({ companyCode: selected.EncCompanyId }));
+    }, [selected])
 
     useEffect(() => {
         let controller = new AbortController();
@@ -44,9 +44,9 @@ const HomeScreen = () => {
                 }, 500)
             }                                                                                                   
         } 
-        getDoctors(selected.EncCompanyId, depts.selected?.SubCode, '18/06/2025');  
+        getDoctors(selected.EncCompanyId, depts.selected?.SubCode, filterdates.activeDate);  
         return () => controller.abort();
-    }, [selected.EncCompanyId, depts.selected?.SubCode])
+    }, [selected.EncCompanyId, depts.selected?.SubCode, filterdates.activeDate])
 
     return (
         <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100 '>
@@ -85,7 +85,7 @@ const HomeScreen = () => {
                     </View>
                     <Feather className='absolute z-50 top-[3px] right-[3px] bg-pink-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>
-                <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-2">Upcoming Schedule (3)</Text>
+                <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-2">Upcoming Schedule</Text>
                 <View className='bg-pink-500 rounded-3xl p-5 my-3'>
                     <View className='flex-row'>
                         <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
@@ -104,27 +104,19 @@ const HomeScreen = () => {
                         <Text className="font-Poppins text-gray-100 text-[13px] leading-5">9:30 AM</Text>
                     </View>
                 </View>
-                {(() => {
-                    if (depts.status === 'loading') {
-                        return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
-                    } else if (depts.error) {
-                        return;
-                    } else {
-                        return (
-                            <View className='py-3'>
-                                <ScrollView horizontal={true} contentContainerClassName='items-start flex-row gap-4' showsHorizontalScrollIndicator={false}>
-                                    {depts.list.map((dept: any) => {
-                                        return <DeptCard data={dept} key={dept.SubCode} />
-                                    })}
-                                </ScrollView>
-                            </View>
-                        )
-                    }
-                })()}
+                <View className='justify-between flex-row pt-1 items-center'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                    </View>
+                    <View className="gap-3 flex-row items-center ml-auto">
+                        <Feather name="chevron-left" size={24} color='#6b7280' />
+                        <Feather name="chevron-right" size={24} color='#6b7280' />
+                    </View>
+                </View>
                 
                 {(() => {
                     if (status === 'loading') {
-                        return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
+                        return <GridLoader classes='h-[90px] w-[200px]' containerClass='flex-row gap-3' />
                     } else if (error) {
                         return;
                     } else {
@@ -132,6 +124,32 @@ const HomeScreen = () => {
                             <ScrollView horizontal={true} contentContainerClassName='py-3 px-[2] gap-4' showsHorizontalScrollIndicator={false}>
                                 {list.map((i: any) => <CompCard data={i} key={i.EncCompanyId} active={selected?.EncCompanyId === i.EncCompanyId}/>)}
                             </ScrollView>
+                        )
+                    }
+                })()}
+                <View className='justify-between flex-row pt-1 items-center'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Department</Text>
+                    </View>
+                    <View className="gap-3 flex-row items-center ml-auto">
+                        <Feather name="chevron-left" size={24} color='#6b7280' />
+                        <Feather name="chevron-right" size={24} color='#6b7280' />
+                    </View>
+                </View>
+                {(() => {
+                    if (depts.status === 'loading') {
+                        return <GridLoader classes='h-[65px] w-[65px] rounded-full' containerClass='flex-row gap-3 my-4' style={{borderRadius: '100%'}} />;
+                    } else if (depts.error) {
+                        return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{depts.error}</Text>;
+                    } else {
+                        return (
+                            <View className='py-3'>
+                                <ScrollView horizontal={true} contentContainerClassName='items-start flex-row gap-4' showsHorizontalScrollIndicator={false}>
+                                    {depts.list.map((dept: any) => {
+                                        return <DeptCard data={dept} key={dept.SubCode} active={depts?.selected.SubCode === dept.SubCode}/>
+                                    })}
+                                </ScrollView>
+                            </View>
                         )
                     }
                 })()}
@@ -155,22 +173,34 @@ const HomeScreen = () => {
                         <Text className="font-Poppins text-gray-100 text-[13px] leading-5">9:30 AM</Text>
                     </View>
                 </View> */}
+                <View className='justify-between flex-row pt-1 items-center'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Date</Text>
+                    </View>
+                    <View className="gap-3 flex-row items-center ml-auto">
+                        <Feather name="chevron-left" size={24} color='#6b7280' />
+                        <Feather name="chevron-right" size={24} color='#6b7280' />
+                    </View>
+                </View>
                 <View className='px-2 pb-1 flex-row justify-around'>
-                    {filterdates.dates.map((i: any) => <DayBtn data={i} key={i.date} activeDate={filterdates.activeDate} handleActive={setFilterDates} />)}
-                    {/* <DayBtn day='Tue' date='11'/>
-                    <DayBtn day='Tue' date='12' active/>
-                    <DayBtn day='Wed' date='13'/>
-                    <DayBtn day='hur' date='14'/>
-                    <DayBtn day='Fri' date='15'/>
-                    <DayBtn day='Sat' date='16'/>
-                    <DayBtn day='Sun' date='17'/> */}
+                    <ScrollView horizontal={true} contentContainerClassName='items-start flex-row gap-4' showsHorizontalScrollIndicator={false}>
+                        {filterdates.dates.map((i: any) => <DayBtn data={i} key={i.date} activeDate={filterdates.activeDate} handleActive={setFilterDates} />)}
+                    </ScrollView>
                 </View>
                 <View className='justify-between flex-row py-3'>
-                    <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Popular Doctors (3)</Text>
+                    <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Available Doctors</Text>
                     <Text className="font-PoppinsMedium text-pink-600 text-[16px] leading-[23px] mt-3">See All</Text>
                 </View> 
                 <View className='mt-2 gap-4'>
-                    {doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />)}
+                    {(() => {
+                        if (doctors.loading) {
+                            return <GridLoader />
+                        } else if (doctors.err.status) {
+                            return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{doctors.err.msg}</Text>
+                        } else {
+                            return doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />)
+                        }
+                    })()}
                 </View>
             </View>
         </ScrollView>

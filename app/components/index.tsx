@@ -1,9 +1,9 @@
 import { SRC_URL } from "@/constants"
-import { FontAwesome5, Ionicons } from "@expo/vector-icons"
+import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons"
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import { Link } from "expo-router";
-import { setAppnData, setModal } from "../store/slices/slices";
+import { setAppnData, setCompanies, setDepts, setModal } from "../store/slices/slices";
 
 import React from 'react';
 import Modal from 'react-native-modal';
@@ -20,8 +20,9 @@ export default function ButtonPrimary({ title, onPress, active, classes, textCla
 }
 
 export const CompCard = ({ data, active }: any) => {
+  const dispatch = useDispatch();  
   return (
-    <View className={`flex-row gap-4 p-[13px] rounded-xl shadow-lg ${active ? 'border border-pink-500 bg-pink-50' : 'bg-white'}`}>
+    <TouchableOpacity onPress={() => dispatch(setCompanies({selected: data}))} className={`flex-row gap-4 p-[13px] rounded-xl shadow-lg ${active ? 'border border-pink-500 bg-pink-50' : 'bg-white'}`}>
         {/* <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 65, height: 65 }} /> */}
         <Image className='shadow-lg rounded-xl' src={`${SRC_URL}/Content/CompanyLogo/${data.LogoUrl}`} style={{ width: 65, height: 65 }} />
         <View>
@@ -35,21 +36,22 @@ export const CompCard = ({ data, active }: any) => {
                 <Text className="text-gray-500 font-PoppinsMedium text-[11px] leading-5">{data.ADDRESS}</Text>
             </View>
         </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
-export const DeptCard = ({ data }: any) => {
+export const DeptCard = ({ data, active }: any) => {
+  const dispatch = useDispatch();
   return (
-    <View className='items-center shadow-lg'>
-        <View className='p-4 bg-white rounded-full mb-2 shadow-lg'>
+    <TouchableOpacity onPress={() => dispatch(setDepts({selected: data}))} className='items-center'>
+        <View className={`p-4 rounded-full mb-2 shadow-lg shadow-gray-300 ${active ? 'border border-pink-500 bg-pink-50' : 'bg-white'}`}>
             <Heart width={24} height={24} />
         </View>
         {data.Description.length > 8 ?
-          <Text className='text-[12px]'>{(data.Description).slice(0, 9)}..</Text> :
-          <Text className='text-[12px]'>{data.Description}</Text> 
+          <Text className={`text-[12px] ${active && 'text-pink-500 font-medium'}`}>{(data.Description).slice(0, 9)}..</Text> :
+          <Text className={`text-[12px] ${active && 'text-pink-500 font-medium'}`}>{data.Description}</Text> 
         }
-    </View>
+    </TouchableOpacity>
   )
 }
 
@@ -85,6 +87,29 @@ export const Card_1 = ({ data, selectedDate, activeCompanyId }: any) => {
           </View>
       </View>
     </Link>
+  )
+}
+
+export const Card_2 = ({ data }: any) => {
+
+  return (
+    // <Link href={`/appn/doctor/${data.PartyCode}`} onPress={handleBooking}>
+      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
+          <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
+          <View className='flex-1'>
+              <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.MemberName}</Text>
+              <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.RelationShipWithHolder}</Text>
+              <Text className="font-PoppinsMedium text-gray-800 text-[11px]">
+                  &nbsp;<Text className='text-gray-500'>{data.Age} Years,   {data.GenderDesc}</Text>
+              </Text>
+          </View>
+          <View className='justify-between items-end'>
+              <FontAwesome name="pencil" size={20} color="#64748b" />
+              <Ionicons name="arrow-forward-outline" size={20} color="#64748b"/>
+              {/* <Text className="font-PoppinsSemibold text-pink-600 text-[12px]">₹600/hr</Text> */}
+          </View>
+      </View>
+    // </Link>
   )
 }
 

@@ -93,8 +93,8 @@ const AppnList = () => {
                 <Text className="font-Poppins text-gray-500 text-[13px] leading-5">Male</Text>
             </View>
             <Text className="text-sm pt-4 text-gray-500 leading-6">
-                <Text className="text-pink-500">Appointment Note: </Text>
-                Patient note of his medical history patient note of his medical history.
+                <Text className="text-pink-500">Appointment Note : </Text>
+                Prescriptions, Reports and Documents added by Patient will apear here.
             </Text>
             </View>
             <View className='justify-between flex-row px-4 pt-1 pb-4 items-center'>

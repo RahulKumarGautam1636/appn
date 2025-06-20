@@ -3,7 +3,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ButtonPrimary from "../components";
 // import { Link } from "expo-router";
 
-const AppnPreview = ({ handleOpen=false, doctor={}, bookingData={}, clinic={}, member={}, bookAppn }: any) => {
+const AppnPreview = ({ handleOpen, doctor={}, bookingData={}, clinic={}, member={}, bookAppn }: any) => {
   
   
   return (
@@ -51,9 +51,10 @@ const AppnPreview = ({ handleOpen=false, doctor={}, bookingData={}, clinic={}, m
               <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{member.GenderDesc}</Text>
           </View>
           <Text className="text-sm py-3 text-gray-500">
-            <Text className="text-pink-500">Note: </Text>
+            <Text className="text-pink-500 font-Poppins">Note: </Text>
             You can submit patient details, old prescription, and test reports in the drop link.
           </Text>
+           <ButtonPrimary title='Add Document' classes='p-[10px] bg-gray-50 border-dashed border border-gray-400 mt-1' textClasses='text-sm' />
         </View>
         <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>
@@ -125,7 +126,7 @@ const AppnPreview = ({ handleOpen=false, doctor={}, bookingData={}, clinic={}, m
               <Text className="font-PoppinsSemibold text-gray-700 text-[14px] leading-5">₹ 210</Text>
           </View>
         </View>
-        <ButtonPrimary title='Confirm Booking' active={true} onPress={() => handleOpen(false)} classes='mx-4 mb-4' />
+        <ButtonPrimary title='Confirm Booking' active={true} onPress={handleOpen} classes='mx-4 mb-4' />
       </View>
     </ScrollView>
   )

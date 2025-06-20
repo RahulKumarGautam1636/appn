@@ -2,8 +2,10 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Image, ScrollView, Text, View } from "react-native";
 import Heart from '../../assets/icons/success.svg';
 import ButtonPrimary from "../components";
+import { useRouter } from "expo-router";
 
-const BookingSuccess = () => {
+const BookingSuccess = ({ doctor, bookingData, clinic }: any) => {
+  const router = useRouter()
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
       <View className=''>
@@ -31,19 +33,19 @@ const BookingSuccess = () => {
           <View className='flex-row items-center'>
               <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
               <View>
-                  <Text className="font-PoppinsBold text-[14px]">Dr. Kevin Leone</Text>
-                  <Text className="font-Poppins text-gray-500 text-[11px]">Gynacologist</Text>
+                  <Text className="font-PoppinsBold text-[14px]">{doctor.Name}</Text>
+                  <Text className="font-Poppins text-gray-500 text-[11px]">{doctor.SpecialistDesc}</Text>
               </View>
               <FontAwesome name="check" size={20} color='#16a34a' className="ms-auto" />
           </View>
           <View className="p-4 bg-gray-100 my-4 rounded-xl gap-6">
             <View className='flex gap-3 flex-row'>
                 <FontAwesome5 name="calendar-alt" size={17} color="#ec4899" />
-                <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">Wednesday, Fabruary 17, 2025</Text>
+                <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{bookingData.AppointDate}</Text>
             </View>
             <View className='flex gap-3 flex-row'>
                 <FontAwesome5 name="clock" size={17} color="#ec4899" />
-                <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">08:30 PM</Text>
+                <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{bookingData.AppTime}</Text>
             </View>
           </View>
           <View className='flex-row items-center mb-4 gap-4'>
@@ -52,11 +54,11 @@ const BookingSuccess = () => {
                 <FontAwesome5 name="hospital" size={35} color="#ec4899" />
               {/* </View> */}
               <View className="flex-1">
-                  <Text className="font-PoppinsSemibold text-[14px]">Southern California Hospital</Text>
-                  <Text className="font-Poppins text-gray-500 text-[11px]" numberOfLines={1}>Ramnagar Kalitala Road, Ranaghat Nadia.</Text>
+                  <Text className="font-PoppinsSemibold text-[14px]">{clinic.COMPNAME}</Text>
+                  <Text className="font-Poppins text-gray-500 text-[11px]" numberOfLines={1}>{clinic.ADDRESS}</Text>
               </View>
           </View>
-          <ButtonPrimary title='View All Details' onPress={() => alert('Button Clicked.')} classes='p-[10px] bg-white border border-gray-400 mt-1' textClasses='text-sm' />
+          <ButtonPrimary title='View All Details' onPress={() => router.push('/appn/appnList')} classes='p-[10px] bg-white border border-gray-400 mt-1' textClasses='text-sm' />
         </View>
         {/* <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>
