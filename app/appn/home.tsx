@@ -182,7 +182,7 @@ const HomeScreen = () => {
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </View>
-                <View className='px-2 pb-1 flex-row justify-around'>
+                <View className='pb-1 flex-row justify-around'>
                     <ScrollView horizontal={true} contentContainerClassName='items-start flex-row gap-4' showsHorizontalScrollIndicator={false}>
                         {filterdates.dates.map((i: any) => <DayBtn data={i} key={i.date} activeDate={filterdates.activeDate} handleActive={setFilterDates} />)}
                     </ScrollView>

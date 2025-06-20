@@ -23,6 +23,7 @@ const Login = () => {
     const [loginError, setLoginError] = useState({status: false, message: ''});
     const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });
     const [registerData, setRegisterData] = useState({ ...initReg, BusinessType: 'B2C' });
+    const [loading, setLoading] = useState(false);
 
     const { list, selected, status, error} = useSelector((state: RootState) => state.companies);
 
@@ -33,9 +34,9 @@ const Login = () => {
     }
     
     const makeLoginRequest = async (params: loginType) => {
-        // loaderAction(true);
+        setLoading(true)
         const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.phone}&UP=${params.password}&CID=${params.EncCompanyId}`);
-        // loaderAction(false);
+        setLoading(false)
         console.log(res.data);
         // let appBusinessType = globalData.businessType.CodeValue;     
         // if (res.data.BusinessType !== appBusinessType) return alert('You are not Allowed to log in.');       // BLOCK LOGIN IF MISMATCH FOUND     which is the best place to make api call and update the redux store
@@ -192,7 +193,7 @@ const Login = () => {
                             <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
                         } */}
                         <Text className="text-pink-500 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
-                        <ButtonPrimary onClick={handleLoginFormSubmit} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
+                        <ButtonPrimary onClick={handleLoginFormSubmit} isLoading={loading} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                         <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account ? 
                             <Text className="text-pink-500"> Register Now</Text>
                         </Text>

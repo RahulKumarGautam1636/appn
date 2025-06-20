@@ -53,7 +53,7 @@ export default function TabsLayout() {
                     };
 
                     return (
-                      <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} >
+                      <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px] ${isFocused ? 'border- border-pink-500' : ''}`}>
                         <Ionicons name={tab.icon} size={18} color={isFocused ? '#e83d82' : '#6e6e6e'} />
                         <Text  style={[ styles.tabText, isFocused && styles.activeText ]}>
                           {tab.name}
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 10,
+    // paddingVertical: 10,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     shadowColor: '#000',

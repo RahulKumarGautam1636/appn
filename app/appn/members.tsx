@@ -21,7 +21,7 @@ const Members = () => {
                     </View>
                 </View>
                 <View className='mt-2 gap-4'>
-                    {membersList.map((member: any) => <Card_2 data={member} key={member.MemberId} selectedDate={'01/05/2025'} />)}
+                    {membersList.map((member: any, index: number) => <Card_2 data={member} key={index} selectedDate={'01/05/2025'} />)}
                 </View>
             </View>
         </ScrollView>

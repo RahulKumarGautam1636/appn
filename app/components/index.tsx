@@ -2,6 +2,7 @@ import { SRC_URL } from "@/constants"
 import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons"
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
+import Loader from '../../assets/images/loader.svg';
 import { Link } from "expo-router";
 import { setAppnData, setCompanies, setDepts, setModal } from "../store/slices/slices";
 
@@ -11,13 +12,88 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../store/store";
 
 
-export default function ButtonPrimary({ title, onPress, active, classes, textClasses, onClick }: any) {
+import { useEffect } from 'react';
+import Svg, { Circle, G } from 'react-native-svg';
+import Animated, {
+  useSharedValue,
+  useAnimatedProps,
+  withRepeat,
+  withSequence,
+  withTiming,
+  Easing,
+  interpolate,
+  withDelay
+} from 'react-native-reanimated';
+
+
+export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
+
   return (
-    <TouchableOpacity onPressOut={onClick} className={`p-4 items-center rounded-full shadow-sm shadow-gray-700 ${classes} ${active ? 'bg-pink-500' : 'bg-gray-300'}`} onPress={onPress}>
-      <Text className={`font-PoppinsSemibold ${textClasses} ${active ? 'text-white' : 'text-slate-500'}`}>{title}</Text>
+    <TouchableOpacity onPressOut={onClick} className={`p-4 items-center justify-center rounded-full shadow-sm shadow-gray-700 ${classes} ${(active && !isLoading) ? 'bg-pink-500' : 'bg-gray-300'}`} onPress={onPress}>
+      {isLoading ? 
+      <SvgLoader /> : 
+      <Text className={`font-PoppinsSemibold ${textClasses} ${(active && !isLoading) ? 'text-white' : 'text-slate-500'}`}>{title}</Text>
+      }
     </TouchableOpacity>
   )
 }
+
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
+const CircleWave = ({ delay = 0, color, cx }: any) => {
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    const animation = withRepeat(
+      withSequence(
+        withTiming(1, {
+          duration: 500,
+          easing: Easing.bezier(0.3, 0, 0.7, 1),
+        }),
+        withTiming(0, {
+          duration: 500,
+          easing: Easing.bezier(0.3, 0, 0.7, 1),
+        })
+      ),
+      -1
+    );
+
+    progress.value = withDelay(delay, animation);
+  }, []);
+
+  const animatedProps = useAnimatedProps(() => {
+    const scale = interpolate(progress.value, [0, 1], [0, 1]);
+    return {
+      r: 38 * scale,
+    };
+  });
+
+  return (
+    <G transform={`translate(${cx} 50)`}>
+      <AnimatedCircle cx="0" cy="0" r="38" fill={color} 
+      animatedProps={animatedProps}
+       />
+    </G>
+  );
+};
+
+
+
+export const SvgLoader = () => {
+  return (
+    <View style={{ width: 80, height: 20 }}>
+      <Svg width="100%" height="100%" viewBox="0 0 200 100">
+        <CircleWave delay={0} color="#abbd81" cx={240} />
+        <CircleWave delay={125} color="#f8b26a" cx={145} />
+        <CircleWave delay={250} color="#f47e60" cx={50} />
+        <CircleWave delay={375} color="#e15b64" cx={-45} />
+      </Svg>
+    </View>
+  );
+}
+
+
 
 export const CompCard = ({ data, active }: any) => {
   const dispatch = useDispatch();  

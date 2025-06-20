@@ -60,7 +60,7 @@ export const GridLoader = ({ classes='h-[120px] flex-1', count=6, containerClass
 
   return (
     <View className={`flex justify-between overflow-hidden ${containerClass}`}>
-      {Array.from(Array(count).keys()).map(i => (<Animated.View className={`${classes} bg-gray-200`} key={i} style={[styles.skeleton, style, { opacity }]} />))}
+      {Array.from(Array(count).keys()).map(i => (<Animated.View className={`${classes} bg-gray-300`} key={i} style={[styles.skeleton, style, { opacity }]} />))}
     </View>
   )
 }
@@ -68,7 +68,6 @@ export const GridLoader = ({ classes='h-[120px] flex-1', count=6, containerClass
 
 const styles = StyleSheet.create({
   skeleton: {
-    backgroundColor: '#d1d5db',
     borderRadius: 12
   },
 });
