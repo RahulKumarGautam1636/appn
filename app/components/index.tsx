@@ -1,13 +1,13 @@
 import { SRC_URL } from "@/constants"
-import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons"
-import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native"
+import { Entypo, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
+import { Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import Loader from '../../assets/images/loader.svg';
 import { Link } from "expo-router";
 import { setAppnData, setCompanies, setDepts, setModal } from "../store/slices/slices";
 
-import React from 'react';
-import Modal from 'react-native-modal';
+import React, { useRef, useState } from 'react';
+import Modal, { ReactNativeModal } from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "../store/store";
 
@@ -121,10 +121,10 @@ export const DeptCard = ({ data, active }: any) => {
   return (
     <TouchableOpacity onPress={() => dispatch(setDepts({selected: data}))} className='items-center'>
         <View className={`p-4 rounded-full mb-2 shadow-lg shadow-gray-300 ${active ? 'border border-pink-500 bg-pink-50' : 'bg-white'}`}>
-            <Heart width={24} height={24} />
+            <Heart width={30} height={30} />
         </View>
         {data.Description.length > 8 ?
-          <Text className={`text-[12px] ${active && 'text-pink-500 font-medium'}`}>{(data.Description).slice(0, 9)}..</Text> :
+          <Text className={`text-[12px] ${active && 'text-pink-500 font-medium'}`}>{(data.Description).slice(0, 13)}..</Text> :
           <Text className={`text-[12px] ${active && 'text-pink-500 font-medium'}`}>{data.Description}</Text> 
         }
     </TouchableOpacity>
@@ -166,24 +166,63 @@ export const Card_1 = ({ data, selectedDate, activeCompanyId }: any) => {
   )
 }
 
-export const Card_2 = ({ data }: any) => {
+export const Card_2 = ({ data, index }: any) => {
+
+  const [active, setActive] = useState(false);
+
+  const Dropdown = () => {
+    return (
+      <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+          <TouchableOpacity className='flex-row gap-3 p-4 border-b border-gray-300' >
+            <FontAwesome5 name="flask" size={17} color="#ec4899" />
+            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='flex-row gap-3 p-4 border-b border-gray-300'>
+            <FontAwesome6 name="calendar-alt" size={17} color="#ec4899" />
+            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='flex-row gap-3 p-4'>
+            <Ionicons name="flask" size={17} color="#ec4899"/>
+            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
+          </TouchableOpacity>
+      </View>
+    )
+  }
 
   return (
     // <Link href={`/appn/doctor/${data.PartyCode}`} onPress={handleBooking}>
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
-          <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
-          <View className='flex-1'>
-              <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.MemberName}</Text>
-              <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.RelationShipWithHolder}</Text>
-              <Text className="font-PoppinsMedium text-gray-800 text-[11px]">
-                  &nbsp;<Text className='text-gray-500'>{data.Age} Years,   {data.GenderDesc}</Text>
-              </Text>
-          </View>
-          <View className='justify-between items-end'>
-              <FontAwesome name="pencil" size={20} color="#64748b" />
-              <Ionicons name="arrow-forward-outline" size={20} color="#64748b"/>
-              {/* <Text className="font-PoppinsSemibold text-pink-600 text-[12px]">₹600/hr</Text> */}
-          </View>
+        <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
+        <View className='flex-1'>
+            <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.MemberName}</Text>
+            <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.RelationShipWithHolder}</Text>
+            <Text className="font-PoppinsMedium text-gray-800 text-[11px]">
+                &nbsp;<Text className='text-gray-500'>{data.Age} Years,   {data.GenderDesc}</Text>
+            </Text>
+        </View>
+        <View className='justify-between items-end'>
+          <TouchableOpacity onPress={() => setActive(true)} >
+            <Entypo name="dots-three-horizontal" size={20} color="#64748b" />
+          </TouchableOpacity>
+          <Ionicons name="arrow-forward-outline" size={20} color="#64748b"/>
+        </View>
+          <ReactNativeModal
+            isVisible={active}
+            onBackdropPress={() => setActive(false)}
+            animationIn="fadeInUp"
+            animationOut="fadeOutDown"
+            backdropOpacity={0.3}
+            useNativeDriver
+            coverScreen={true}
+            style={{margin: 0, flex: 1, height: '100%',
+            alignItems: undefined,
+            justifyContent: 'center',
+            }}
+            // deviceHeight={height}
+            // customBackdrop={<View style={{flex: 1}} />}
+          >
+            <Dropdown />
+          </ReactNativeModal>
       </View>
     // </Link>
   )

@@ -116,7 +116,7 @@ const HomeScreen = () => {
                 
                 {(() => {
                     if (status === 'loading') {
-                        return <GridLoader classes='h-[90px] w-[200px]' containerClass='flex-row gap-3' />
+                        return <GridLoader classes='h-[90px] w-[200px]' containerClass='flex-row gap-3 my-3' />
                     } else if (error) {
                         return;
                     } else {

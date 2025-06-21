@@ -1,6 +1,8 @@
 import axios, { GenericAbortSignal } from "axios";
-import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from "../store/store";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -71,3 +73,6 @@ const styles = StyleSheet.create({
     borderRadius: 12
   },
 });
+
+
+

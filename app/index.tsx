@@ -45,7 +45,7 @@ export default function App() {
           <Link className='text-[3rem]' href={'/appn'}>Index 1</Link>
           <Link className='text-[3rem]' href={'/appn/appnList'}>Index 2</Link>
           <Link className='text-[3rem]' href={'/appn/appnPreview'}>Index 3</Link>
-          <Link className='text-[3rem]' href={'/appn/bookAppn'}>Index 4</Link>
+          <Link className='text-[3rem]' href={'/profile'}>Index 4</Link>
           {/* <ButtonPrimary onClick={() => setLoading(!loading)} isLoading={loading} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' /> */}
         </SafeAreaView>
       </SafeAreaProvider>

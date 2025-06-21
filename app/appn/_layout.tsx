@@ -38,9 +38,9 @@ export default function TabsLayout() {
   
   const router = useRouter()
   return (
-    <GestureHandlerRootView>
-      <SafeAreaProvider>
-        <SafeAreaView className="flex-1">
+    // <GestureHandlerRootView>
+    //   <SafeAreaProvider>
+    //     <SafeAreaView className="flex-1">
           <Tabs
             tabBar={({ state, descriptors, navigation }: any) => {
               return (
@@ -80,9 +80,9 @@ export default function TabsLayout() {
             }}
           /> */}
           </Tabs>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    //     </SafeAreaView>
+    //   </SafeAreaProvider>
+    // </GestureHandlerRootView>
   );
 }
 
