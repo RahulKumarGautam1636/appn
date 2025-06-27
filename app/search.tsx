@@ -1,16 +1,16 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { FlatList, Text, TextInput, TouchableOpacity } from "react-native";
-import { Pressable, ScrollView, View } from "react-native";
-import { Card_1, DeptCard } from "../components";
-import { RootState } from "@/app/store/store";
+import { ScrollView, View } from "react-native";
+import { Card_1 } from "../src/components";
+import { RootState } from "@/src/store/store";
 import { useSelector } from "react-redux";
-import { getFrom, GridLoader } from "../components/utils";
+import { getFrom, GridLoader } from "../src/components/utils";
 import { BASE_URL, defaultId, zero } from "@/constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 
-export default function MainSearch() {
-    const depts = useSelector((state: RootState) => state.depts);
+function MainSearch() {
+    // const depts = useSelector((state: RootState) => state.depts);
     const compCode = useSelector((state: RootState) => state.compCode);
     const [doctors, setDoctors] = useState({loading: false, data: {PartyMasterList: [], CompanyMasterList: []}, err: {status: false, msg: ''}}); 
     const [searchKey, setSearchKey] = useState({query: 'roha', filterBy: 'INTDOCT'});
@@ -23,7 +23,7 @@ export default function MainSearch() {
         if (!companyCode) return alert('no companyCode received');                  
         const res = await getFrom(`${BASE_URL}/api/search/Get?CID=${companyCode}&Type=${key.filterBy}&SearchString=${key.query}`, {}, setDoctors);
         if (res) {
-            console.log(res);            
+            // console.log(res);            
             setDoctors(res);
         } else {
             console.log('No data received');
@@ -61,7 +61,7 @@ export default function MainSearch() {
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
             <View className="p-4">
                 <View className='relative'>
-                    <TouchableOpacity onPress={() => router.back()} className="absolute z-50 top-[13px] left-4">
+                    <TouchableOpacity onPress={() => router.back()} className="absolute z-50 top-[12px] left-4">
                         <Ionicons name="arrow-back-outline" size={22} color="#3b82f6" />
                     </TouchableOpacity>
                     <View className='z-10'>
@@ -87,3 +87,5 @@ export default function MainSearch() {
         </ScrollView>
     )
 }
+
+export default MainSearch;

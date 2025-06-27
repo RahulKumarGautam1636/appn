@@ -1,15 +1,15 @@
 import { SRC_URL } from "@/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
-import { Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager } from "react-native"
+import { Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import Loader from '../../assets/images/loader.svg';
 import { Link } from "expo-router";
-import { setAppnData, setCompanies, setDepts, setMembers, setModal } from "../store/slices/slices";
+import { setAppnData, setCompanies, setDepts, setMembers, setModal } from "@/src/store/slices/slices";
 
 import React, { useRef, useState } from 'react';
 import Modal, { ReactNativeModal } from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from "../store/store";
+// import { RootState } from "@/src/store/store";
 
 
 import { useEffect } from 'react';
@@ -24,7 +24,7 @@ import Animated, {
   interpolate,
   withDelay
 } from 'react-native-reanimated';
-import AppnDetail from "../appn/appnDetail";
+import AppnDetail from "@/app/appnDetail";
 
 
 export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
@@ -155,16 +155,15 @@ export const DeptCard = ({ data, active }: any) => {
   )
 }
 
-export const Card_1 = ({ data, selectedDate, activeCompanyId }: any) => {
+export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
 
   const dispatch = useDispatch();
 
   const handleBooking = () => {
     let doctorData = {
       selectedAppnDate: selectedDate ? selectedDate : '', 
-      companyId: activeCompanyId, 
-      // UnderDoctId: data.PartyCode, 
-      // AppTime: '', TimeSlotId: '', AppointDate: ''
+      docCompId: docCompId, 
+      // UnderDoctId: data.PartyCode, AppTime: '', TimeSlotId: '', AppointDate: '',
       doctor: data
     }
     dispatch(setAppnData(doctorData))
@@ -280,11 +279,11 @@ export const getDatesArray = function(start: Date, end: number) {
 
 
 export const Card_3 = ({ data }: any) => {
-  const [active, setActive] = useState(false);
+  const dispatch = useDispatch();
   return (
     <>
       {/* <Link href={`/appn/appnDetail/${data.}`}> */}
-        <TouchableOpacity onPress={() => setActive(true)} className='flex-row gap-1 p-4 mb-2 bg-white rounded-xl shadow-md shadow-gray-400 w-full'>
+        <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: data}))} className='flex-row gap-1 p-4 bg-white rounded-xl shadow-md shadow-gray-400 w-full'>
           <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('./../../assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
           <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-700 text-[15px] mb-3">{data.AppointmentTo}</Text>
@@ -303,7 +302,7 @@ export const Card_3 = ({ data }: any) => {
           <Feather name="chevron-right" className='my-auto' size={30} color='#ec4899' />
         </TouchableOpacity>
       {/* </Link> */}
-      <ReactNativeModal
+      {/* <ReactNativeModal
         isVisible={active}
         onBackdropPress={() => setActive(false)}
         animationIn="fadeInUp"
@@ -316,32 +315,45 @@ export const Card_3 = ({ data }: any) => {
         justifyContent: 'center',
       }}
         // deviceHeight={height}
-        // customBackdrop={<View style={{flex: 1}} />}
+        // customBackdrop={<View style={{flex: 1}} />
       >
         <AppnDetail data={data} handleOpen={setActive} />
-      </ReactNativeModal>
+      </ReactNativeModal> */}
     </>
   )
 }
 
 
-export const MyModal = ({ modalActive, child, name, customClass }: any) => {
+export const MyModal = ({ modalActive, child, name, customClass, onClose }: any) => {
   const dispatch = useDispatch();
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      dispatch(setModal(name))
+    }
+  }
 
   return (
     <ReactNativeModal
       isVisible={modalActive}
-      onBackdropPress={() => dispatch(setModal(name))}
+      onBackdropPress={handleClose}
       animationIn="fadeInUp"
       animationOut="fadeOutDown"
       backdropOpacity={0.3}
       useNativeDriver
       coverScreen={true}
+      avoidKeyboard={true}
       style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center'}}
+      // deviceHeight={height}
+      // customBackdrop={<View style={{flex: 1}} />
     >
-      <View style={styles.modal}>
-        {React.cloneElement(child, { name: name, modalActive: modalActive })}
-      </View>
+      <KeyboardAvoidingView className="flex-1">
+        <View style={styles.modal}>
+          {React.cloneElement(child, { name: name, modalActive: modalActive })}
+        </View>
+      </KeyboardAvoidingView>
     </ReactNativeModal>
   );
 };

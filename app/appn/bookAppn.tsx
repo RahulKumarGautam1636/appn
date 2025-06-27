@@ -3,7 +3,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import ButtonPrimary from '../components';
+import ButtonPrimary from '../../src/components';
 // import MyBottomSheet from '../components/bottomSheet';
 
 

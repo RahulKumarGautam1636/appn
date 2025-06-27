@@ -2,38 +2,29 @@ import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Dimensions, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ButtonPrimary from '@/app/components';
-// import { useLocalSearchParams } from 'expo-router';
+import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ButtonPrimary from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/app/store/store';
+import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '@/constants';
-import { getFrom, GridLoader } from '@/app/components/utils';
+import { getFrom, GridLoader, withAutoUnmount } from '@/src/components/utils';
 import axios from 'axios';
-import { setAppnData, setModal } from '@/app/store/slices/slices';
-import { useRouter } from 'expo-router';
+import { setAppnData, setCompanies, setModal } from '@/src/store/slices/slices';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import AppnPreview from '../appnPreview';
-import BookingSuccess from '../bookingSuccess';
+import BookingSuccess from '../../../src/components/modals/bookingSuccess';
 import ReactNativeModal from 'react-native-modal';
-// import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-// import ReactNativeModal from 'react-native-modal';
-// const { width, height } = Dimensions.get('window');
-
-// import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Booking = () => {
 
-    // const { id } = useLocalSearchParams();
-    const { selectedAppnDate, doctor, companyId } = useSelector((i: RootState) => i.appnData)
-    const selectedCompany = useSelector((i: RootState) => i.companies).selected
+    const { selectedAppnDate, doctor, docCompId } = useSelector((i: RootState) => i.appnData)
     const user = useSelector((i: RootState) => i.user)
     const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
-    const { selectedMember} = useSelector((i: RootState) => i.members)
-    const companiesList = useSelector((i: RootState) => i.companies.list)
+    const { selectedMember } = useSelector((i: RootState) => i.members)
+    const { list: companiesList, selected: selectedCompany} = useSelector((i: RootState) => i.companies)
     const [selectedDate, setSelectedDate] = useState(selectedAppnDate);
-    // const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 5), activeDate: new Date().toLocaleDateString('en-TT')});
     const [dateTabsList, setDateTabsList] = useState({loading: true, data: [], err: {status: false, msg: ''}});
     const [dateSlotsList, setDateSlotsList] = useState({loading: true, data: [], err: {status: false, msg: ''}});
     const [selectedSlot, setSelectedSlot] = useState(null);
@@ -41,6 +32,9 @@ const Booking = () => {
     const router = useRouter();
     const [activeCompany, setActiveCompany] = useState({});
     const [loading, setLoading] = useState(false);
+    const params = useLocalSearchParams();
+
+    console.log(params);
 
     useEffect(() => {
         setSelectedDate(selectedAppnDate);
@@ -89,29 +83,39 @@ const Booking = () => {
         } 
     } 
 
-    const [bookingData, setBookingData] = useState({ AppointDate: '', AppTime: '', TimeSlotId: null, companyId: '' });
+    const [bookingData, setBookingData] = useState({ AppointDate: '', AppTime: '', TimeSlotId: null });
 
-    const selectSlot = (AutoId, SDateStr, SInTimeStr, EncCompanyId) => {
-        setBookingData(pre => ({...pre, AppointDate: SDateStr, AppTime: SInTimeStr, TimeSlotId: AutoId, companyId: EncCompanyId }))
-        // bookingInfoAction({ AppointDate: SDateStr, AppTime: SInTimeStr, TimeSlotId: AutoId, companyId: EncCompanyId });
+    const selectSlot = (AutoId, SDateStr, SInTimeStr) => {
+        setBookingData(pre => ({...pre, AppointDate: SDateStr, AppTime: SInTimeStr, TimeSlotId: AutoId }))
         setSelectedSlot(AutoId);
     }
     
     const handleDateChange = (i: any) => {
         setSelectedDate(i.SDateStr);
         getDateSlotsList(doctor.PartyCode, i.SDateStr); 
-        selectSlot('', '', '', '');
+        selectSlot('', '', '');
     }
 
     useEffect(() => {
+        if (docCompId && selectedCompany.EncCompanyId !== docCompId) {
+            let active = companiesList.find(i => i.EncCompanyId === docCompId);
+            if (active) {
+                dispatch(setCompanies({selected: active}))
+                return;
+            } else {
+                alert("An Error Occured. Error code: 001");
+                router.back();
+                return;
+            }
+        }
         if (companiesList.length === 0) return;
-        let active = companiesList.find(i => i.EncCompanyId === companyId);   
+        let active = companiesList.find(i => i.EncCompanyId === selectedCompany.EncCompanyId);   
         if (active) {
             setActiveCompany(active);
         } else {
             setActiveCompany(companiesList[0])
         }    
-    }, [companiesList.length])
+    }, [companiesList.length, selectedCompany.EncCompanyId])
 
     const handleBookingFormSubmit = async (e: any) => {
         // handleConfirmation();
@@ -121,8 +125,8 @@ const Booking = () => {
             return;
         }
         if (isLoggedIn) {
-            let appDate = getDateDifference(bookingData.AppointDate);
-            console.log(appDate);      
+            // let appDate = getDateDifference(bookingData.AppointDate);
+            // console.log(appDate);      
             if (!selectedMember.MemberId) {
             // let productToastData = { msg: 'Added to Cart', product: {name: 'Description', price: 1200}, button: {text: 'Visit Cart', link: '/cartPage'} };
             // productToast(productToastData);
@@ -211,8 +215,7 @@ const Booking = () => {
             // modalAction('APPN_BOOKING_MODAL', false);
             handleConfirmation();
             const initBookingData = {
-                selectedAppnDate: "",                                                         
-                companyId: "", 
+                selectedAppnDate: "", 
                 // doctor: { Name: "", SpecialistDesc: "", Qualification: "", RegMob1: "" }
             }
             dispatch(setAppnData(initBookingData))            // reset the bookingInfo
@@ -222,24 +225,24 @@ const Booking = () => {
 
     }
 
-    const getDateDifference = (date: string) => {
-        let x = mmDDyyyyDate(date, '/', '/');
-        let appnDate = new Date(x).getDate();
-        const currDate = new Date().getDate();
-        if (appnDate > currDate) {
-            return 'tomorrow';    
-        } else if (appnDate < currDate) {     
-            return 'yesterday';    
-        } else {
-            return 'today';      
-        }
-    } 
+    // const getDateDifference = (date: string) => {
+    //     let x = mmDDyyyyDate(date, '/', '/');
+    //     let appnDate = new Date(x).getDate();
+    //     const currDate = new Date().getDate();
+    //     if (appnDate > currDate) {
+    //         return 'tomorrow';    
+    //     } else if (appnDate < currDate) {     
+    //         return 'yesterday';    
+    //     } else {
+    //         return 'today';      
+    //     }
+    // } 
 
-    const mmDDyyyyDate = (date: string, currSeperator: string, requiredSeperator: string) => {                 // Convert dd/mm/yyyy to mm/dd/yyyy format because dd/mm/yyyy is not taken as Date() object to create new date.
-        if (!date.includes(currSeperator)) return console.log('CurrentSeperator does not exist in received date.');
-        const [dd, mm, yyyy] = date.split(currSeperator);
-        return mm + requiredSeperator + dd + requiredSeperator + yyyy;                  
-    }
+    // const mmDDyyyyDate = (date: string, currSeperator: string, requiredSeperator: string) => {                 // Convert dd/mm/yyyy to mm/dd/yyyy format because dd/mm/yyyy is not taken as Date() object to create new date.
+    //     if (!date.includes(currSeperator)) return console.log('CurrentSeperator does not exist in received date.');
+    //     const [dd, mm, yyyy] = date.split(currSeperator);
+    //     return mm + requiredSeperator + dd + requiredSeperator + yyyy;                  
+    // }
 
     const [confirmation, setConfirmation] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -253,7 +256,7 @@ const Booking = () => {
         <>
             <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
                 <View className='bg-white'>
-                    <View className='justify-between flex-row p-4 items-center'>
+                    <Pressable onPress={() => router.back()} className='justify-between flex-row p-4 items-center'>
                         <View className='flex-row items-center gap-3'>
                             <Ionicons name="arrow-back-outline" size={24} color="black" />
                             <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">General Doctors</Text>
@@ -262,7 +265,7 @@ const Booking = () => {
                             <Feather name="heart" size={20} color='black' />
                             <Feather name="share-2" size={20} color='black' />
                         </View>
-                    </View>
+                    </Pressable>
                     <View className='flex-row gap-4 p-[13px]'>
                         <Image className='' source={require('./../../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
                         <View>
@@ -366,7 +369,7 @@ const Booking = () => {
                             } else if (dateSlotsList.err.status) {
                                 return;
                             } else {
-                                return dateSlotsList.data.slice(0, 3).map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr, i.EncCompanyId)}/>))
+                                return dateSlotsList.data.slice(0, 3).map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr)}/>))
                             }
                         })()}
                     </View>
@@ -456,7 +459,7 @@ const Booking = () => {
 
 
 
-export default Booking;
+export default withAutoUnmount(Booking);
 
 const styles = StyleSheet.create({
     screen: {

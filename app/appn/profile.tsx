@@ -33,7 +33,7 @@ const Profile = () => {
                     </View>
                 </View>
                 <View className='flex-row gap-4 p-[13px] items-center mb-2'>
-                    <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('./../assets/images/user.png')} style={{ width: 80, height: 80 }} />
+                    <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('./../../assets/images/user.png')} style={{ width: 80, height: 80 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-slate-800 text-[15px] mb-2">{user.Name}</Text>
                         <View className='flex-row gap-2'>
@@ -71,7 +71,7 @@ const Profile = () => {
                 </Link>                
                 <Link href={'/appn/appnList'}>
                     <View className='flex-row gap-4 w-full p-5 border-b border-gray-200 items-center'>
-                        <FontAwesome6 name="calendar-alt" size={22} color="#ec4899" style={{width: 26}}/>
+                        <FontAwesome5 name="calendar-alt" size={22} color="#ec4899" style={{width: 26}} />
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Appointments</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
@@ -83,14 +83,14 @@ const Profile = () => {
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
-                <Link href={'/appn/members'}>
+                <Link href={'/members'}>
                     <View className='flex-row gap-4 w-full p-5 border-b border-gray-200'>
                         <FontAwesome5 name="users" size={20} color="#ec4899" style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Members</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
-                <Link href={'/'}>
+                <Link href={'/login'}>
                     <View className='flex-row gap-4 w-full p-5 border-b border-gray-200'>
                         <FontAwesome5 name="history" size={20} color="#ec4899" style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Patient History</Text>

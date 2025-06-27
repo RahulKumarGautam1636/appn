@@ -5,14 +5,14 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Card_3 } from '../components';
+import { Card_3 } from '../../src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { BASE_URL } from '@/constants';
-import { getFrom, ListLoader, NoContent } from '../components/utils';
+import { getFrom, ListLoader, NoContent } from '../../src/components/utils';
 
 
-const Profile = () => {
+const AppnList = () => {
 
     const router = useRouter();
     const user = useSelector((i: RootState) => i.user);
@@ -101,4 +101,4 @@ const Profile = () => {
     )
 }
 
-export default Profile;
+export default AppnList;

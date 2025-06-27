@@ -1,11 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { RootState } from '../store/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card_2 } from '../components';
+import { Card_2 } from '../src/components';
 import { useRouter } from 'expo-router';
-import { setModal } from '../store/slices/slices';
+import { setModal } from '@/src/store/slices/slices';
+import { RootState } from '@/src/store/store';
 
 const Members = ({ modalActive }: any) => {
     const { membersList, selectedMember } = useSelector((state: RootState) => state.members);

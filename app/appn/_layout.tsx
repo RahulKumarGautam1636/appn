@@ -2,36 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-// function TabIcon({ focused, icon, title }: any) {
-//   if (focused) {
-//     return (
-//       <ImageBackground
-//         source={images.highlight}
-//         className="flex flex-row w-full flex-1 min-w-[112px] min-h-14 mt-4 justify-center items-center rounded-full overflow-hidden"
-//       >
-//         <Image source={icon} tintColor="#151312" className="size-5" />
-//         <Text className="text-secondary text-base font-semibold ml-2">
-//           {title}
-//         </Text>
-//       </ImageBackground>
-//     );
-//   }
-
-//   return (
-//     <View className="size-full justify-center items-center mt-4 rounded-full">
-//       <Image source={icon} tintColor="#A8B5DB" className="size-5" />
-//     </View>
-//   );
-// }
-
 export default function TabsLayout() {
 
   const tabs = [
     { name: 'OPD', icon: 'home-outline', key: 'home' },
     { name: 'Lab Test', icon: 'calendar-outline', key: 'appnList' },
-    { name: 'Account', icon: 'person-outline', key: 'appnPreview' },
-    { name: 'Dashboard', icon: 'grid-outline', key: 'bookAppn' },
-    { name: 'Cart', icon: 'settings-outline', key: 'members' },
+    { name: 'Account', icon: 'person-outline', key: 'profile' },
+    // { name: 'Dashboard', icon: 'grid-outline', key: 'bookAppn' },
+    // { name: 'Cart', icon: 'settings-outline', key: 'members' },
   ]
   
   const router = useRouter()
@@ -43,6 +21,19 @@ export default function TabsLayout() {
             {tabs.map((tab, index) => {
               const isFocused = state.routes[state.index]?.name === tab.key;
               const onPress = () => router.push(`/appn/${tab.key}`);
+
+              // const onPress = () => {
+              //   const event = navigation.emit({
+              //     type: 'tabPress',
+              //     target: state.routes[index].key,
+              //     canPreventDefault: true,
+              //   });
+    
+              //   if (!isFocused && !event.defaultPrevented) {
+              //     navigation.navigate(tab.key);
+              //   }
+              // };
+              
               return (
                 <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px] ${isFocused ? 'border- border-pink-500' : ''}`}>
                   <Ionicons name={tab.icon} size={18} color={isFocused ? '#e83d82' : '#6e6e6e'} />
@@ -61,9 +52,18 @@ export default function TabsLayout() {
         headerShown: false,
         animation: 'shift',
         transitionSpec: { animation: 'timing', config: { duration: 250, }, },
-        // unmountOnBlur: true
       }}
     >
+      {/* {tabs.map(tab => (
+        <Tabs.Screen
+          key={tab.key}
+          name={tab.key}
+          options={{
+            title: tab.name,
+            // unmountOnBlur: true,
+          }}
+        />
+      ))} */}
     </Tabs>
   );
 }

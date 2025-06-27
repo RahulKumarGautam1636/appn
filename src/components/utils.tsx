@@ -1,8 +1,7 @@
 import axios, { GenericAbortSignal } from "axios";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from "../store/store";
+import { useFocusEffect } from '@react-navigation/native';
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -85,5 +84,19 @@ export const NoContent = ({ label='No Items Found.', imgClass='h-[150]', textCla
 }
 
 
+export function withAutoUnmount(Component: React.ComponentType<any>) {
+  return function WrappedComponent(props: any) {
+    const [isMounted, setIsMounted] = useState(true);
 
+    useFocusEffect(
+      useCallback(() => {
+        setIsMounted(true);
+        return () => setIsMounted(false);
+      }, [])
+    );
 
+    if (!isMounted) return null;
+
+    return <Component {...props} />;
+  };
+}

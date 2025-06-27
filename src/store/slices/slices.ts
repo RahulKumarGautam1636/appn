@@ -52,7 +52,7 @@ export const getCompanies = createAsyncThunk(
     // const compCode = getState().compCode;
     try {              
       const res = await axios.get(`${BASE_URL}/api/CompMast/Get?CID=${params.companyCode}&UID=${params.userId}`);
-        console.log(res);
+        // console.log(res);
         if (res.status === 200) {  
           let parentCompany = res.data.find((i: any) => i.EncCompanyId === params.companyCode);                                                                                                          
           // dispatch(setCompanies({ list: res.data, selected: parentCompany }));     
@@ -74,7 +74,7 @@ export const getCompanies = createAsyncThunk(
 
 const companiesSlice = createSlice({
   name: 'companies',
-  initialState: { list: [], selected: {}, status: 'idle', error: null
+  initialState: { list: [], selected: {}, status: 'loading', error: null
 },
   reducers: {
     setCompanies: (state, action: any) => {
@@ -113,7 +113,7 @@ export const getDepartments = createAsyncThunk(
 
 const deptsSlice = createSlice({
   name: 'departments',
-  initialState: { list: [], selected: {}, status: 'idle', error: null },
+  initialState: { list: [], selected: {}, status: 'loading', error: null },
   reducers: {
     setDepts: (state, action: any) => {
       Object.assign(state, action.payload);
@@ -135,7 +135,7 @@ const appnDataSlice = createSlice({
   name: 'appnData',
   initialState: {     
     selectedAppnDate: "",                                                         // used to detect active item of date button slider in bookingForm.
-    companyId: "", 
+    docCompId: "", 
     // UnderDoctId: "", AppointDate: "", AppTime: "", TimeSlotId: "",
     doctor: { Name: "", SpecialistDesc: "", Qualification: "", RegMob1: "" }
   },
@@ -177,7 +177,7 @@ const membersSlice = createSlice({
   initialState: {     
     membersList: [],
     selectedMember: {},
-    status: 'idle', error: null
+    status: 'loading', error: null
   },
   reducers: {
     setMembers: (state, action: any) => {
@@ -204,10 +204,13 @@ const modalsSlice = createSlice({
     APPN_SUCCESS: { state: false, data: "" },
     COMPANIES: { state: false, data: '' },
     MEMBERS: { state: false, data: '' },
+    LOGIN: { state: false, data: '' },
+    APPN_DETAIL: { state: false, data: '' },
+    DEPTS: { state: false, data: '' },
   },
   reducers: {
     setModal: (state, action: any) => {
-      let data = action.payload.data && ''
+      let data = action.payload.data || '';
       return {...state, [action.payload.name]: {state: action.payload.state, data: data}}
     },
   }

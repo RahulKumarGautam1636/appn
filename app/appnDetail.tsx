@@ -4,15 +4,18 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link } from 'expo-router';
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ButtonPrimary from '@/app/components';
+import ButtonPrimary from '@/src/components';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setModal } from '@/src/store/slices/slices';
 
 const { width } = Dimensions.get('window');
 
 const AppnDetail = ({ data, handleOpen }: any) => {
 
+    const dispatch = useDispatch();
     // const isFocused = useIsFocused();
     // const translateX = useSharedValue(width); 
 
@@ -33,7 +36,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                 <View className='bg-white'>
                     <View className='justify-between flex-row p-4 items-center'>
                         {/* <Link href={'/login'}> */}
-                            <Pressable onPress={() => handleOpen(false)} className='flex-row items-center gap-3'>
+                            <Pressable onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: false}))} className='flex-row items-center gap-3'>
                                 <Ionicons name="arrow-back-outline" size={24} color="black" />
                                 <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment Details</Text>
                             </Pressable>
@@ -44,7 +47,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                         </View>
                     </View>
                     <View className='flex-row gap-4 p-[13px]'>
-                        <Image className='' source={require('../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
+                        <Image className='' source={require('../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
                         <View>
                             <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{data.AppointmentTo}</Text>
                             <View className='flex-row gap-2'>
@@ -79,7 +82,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
             </View>
             <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
             <View className='flex-row items-center'>
-                <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                <Image className='shadow-lg rounded-full me-3' source={require('../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                 <View>
                     <Text className="font-PoppinsBold text-[14px]">{data.PartyName}</Text>
                     <Text className="font-Poppins text-gray-500 text-[11px]">Myself</Text>

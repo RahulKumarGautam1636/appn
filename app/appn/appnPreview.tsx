@@ -1,7 +1,7 @@
 import { Feather, FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import ButtonPrimary from "../components";
-import { setModal } from "../store/slices/slices";
+import ButtonPrimary from "../../src/components";
+import { setModal } from "@/src/store/slices/slices";
 import { useDispatch } from "react-redux";
 // import { Link } from "expo-router";
 

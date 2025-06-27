@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/src/store/store";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { CompCard, MyModal } from "../index";
-import { setModal } from "@/app/store/slices/slices";
-import Members from "@/app/appn/members";
+import { setModal } from "@/src/store/slices/slices";
+import Members from "@/app/members";
+import Login from "../../../app/login";
+import AppnDetail from "@/app/appnDetail";
+import { DeptsModal } from "@/app/depts";
 
 
 const Modals = () => {
@@ -14,6 +17,9 @@ const Modals = () => {
         <>
             <MyModal modalActive={modals.COMPANIES.state} name='COMPANIES' child={<CompanySelection />} />
             <MyModal modalActive={modals.MEMBERS.state} name='MEMBERS' child={<Members />} />
+            <MyModal modalActive={modals.LOGIN.state} name='LOGIN' child={<Login />} />
+            <MyModal modalActive={modals.APPN_DETAIL.state} name='APPN_DETAIL' child={<AppnDetail data={modals.APPN_DETAIL.data} />} />
+            <MyModal modalActive={modals.DEPTS.state} name='DEPTS' child={<DeptsModal />} />
         </>
     )
 }

@@ -1,12 +1,12 @@
 import { useRouter } from "expo-router";
 import { Image, Modal, ScrollView, Text, TextInput, View } from "react-native";
-import ButtonPrimary from "./components";
+import ButtonPrimary from "../src/components";
 import { BASE_URL, initReg } from "@/constants";
 import { useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
-import { setLogin, setUser, getCompanies } from "./store/slices/slices";
+import { RootState } from "@/src/store/store";
+import { setLogin, setUser, getCompanies, setModal } from "../src/store/slices/slices";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 interface loginType {
@@ -37,7 +37,7 @@ const Login = () => {
         setLoading(true)
         const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.phone}&UP=${params.password}&CID=${params.EncCompanyId}`);
         setLoading(false)
-        console.log(res.data);
+        // console.log(res.data);
         // let appBusinessType = globalData.businessType.CodeValue;     
         // if (res.data.BusinessType !== appBusinessType) return alert('You are not Allowed to log in.');       // BLOCK LOGIN IF MISMATCH FOUND     which is the best place to make api call and update the redux store
     
@@ -155,7 +155,8 @@ const Login = () => {
             // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: res.data.UserPassword, compCode: params.companyCode }));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
-            router.push('/appn');
+            // dispatch(setModal({ name: 'LOGIN', state: false }))
+            router.back();
             
             // modalAction('LOGIN_MODAL', false, { mode: res.data.UserType });
             // stringToast("Wellcome, You successfully logged in.", { type: 'success', autoClose: 5000 });
