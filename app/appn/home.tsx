@@ -82,18 +82,18 @@ const HomeScreen = () => {
             return (
                 <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: firstAppn}))}>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-2">Upcoming Schedule</Text>
-                    <View className='bg-pink-500 rounded-3xl p-5 my-3'>
+                    <View className='bg-primary-500 rounded-3xl p-5 my-3'>
                         <View className='flex-row'>
                             <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View>
                                 <Text className="font-PoppinsBold text-white text-[14px]">{firstAppn.AppointmentTo}</Text>
                                 <Text className="font-Poppins text-gray-200 text-[11px]">{firstAppn.DocSpecialistDesc}</Text>
                             </View>
-                            <View className="bg-pink-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
+                            <View className="bg-primary-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
                                 <FontAwesome name="arrow-right" size={20} color='#fff' />
                             </View>
                         </View>
-                        <View className='py-3 px-4 bg-pink-400 mt-4 rounded-2xl flex gap-3 flex-row '>
+                        <View className='py-3 px-4 bg-primary-400 mt-4 rounded-2xl flex gap-3 flex-row '>
                             <FontAwesome5 name="calendar-alt" size={17} color="#fff" />
                             <Text className="font-Poppins text-gray-100 text-[13px] me-auto leading-5">{new Date(firstAppn.NextAppDate).toLocaleDateString('en-TT')}</Text>
                             <FontAwesome5 name="clock" size={17} color="#fff" />
@@ -138,14 +138,14 @@ const HomeScreen = () => {
                     </View>
                 }
                 <View className='relative my-3 w-full'>
-                        <Feather className='absolute z-50 top-[13px] left-4' name="search" size={22} color='gray' />
-                        <Link href={'/search'}>
+                    <Feather className='absolute z-50 top-[13px] left-4' name="search" size={22} color='gray' />
+                    <Link href={'/search'}>
                         <View className='z-10 w-full pointer-events-none'>
                             <TextInput placeholder='Search Doctors..' className='bg-white pl-[3.3rem] pr-4 py-4 rounded-full shadow-lg shadow-blue-500' />
                         </View>
-                        </Link>
-                        <Feather className='absolute z-50 top-[3px] right-[3px] bg-pink-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
-                    </View>
+                    </Link>
+                    <Feather className='absolute z-50 top-[3px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
+                </View>
                 {isLoggedIn && renderAppnData(appData)}
                 <View className='justify-between flex-row pt-1 items-center'>
                     <View className='flex-row items-center gap-3'>
@@ -155,7 +155,7 @@ const HomeScreen = () => {
                         {/* <Feather name="chevron-left" size={24} color='#6b7280' />
                         <Feather name="chevron-right" size={24} color='#6b7280' /> */}
                         <Pressable onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))}>
-                            <Text className="font-PoppinsMedium text-pink-600 text-[15px] leading-[23px]">View All</Text>
+                            <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
                         </Pressable>
                     </View>
                 </View>
@@ -180,7 +180,7 @@ const HomeScreen = () => {
                     <TouchableOpacity onPress={() => dispatch(setModal({name: 'DEPTS', state: true}))} className="gap-3 flex-row items-center ml-auto">
                         {/* <Feather name="chevron-left" size={24} color='#6b7280' />
                         <Feather name="chevron-right" size={24} color='#6b7280' /> */}
-                        <Text className="font-PoppinsMedium text-pink-600 text-[15px] leading-[23px]">View All</Text>
+                        <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
                     </TouchableOpacity>
                 </View>
                 {(() => {
@@ -202,18 +202,18 @@ const HomeScreen = () => {
                 })()}
 
                 {/* <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Upcoming Schedule (3)</Text>
-                <View className='bg-pink-500 rounded-3xl p-5 mt-4'>
+                <View className='bg-primary-500 rounded-3xl p-5 mt-4'>
                     <View className='flex-row'>
                         <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                         <View>
                             <Text className="font-PoppinsBold text-white text-[14px]">Prof. Dr. Logan Mason</Text>
                             <Text className="font-Poppins text-gray-200 text-[11px]">Orthopedic Consultation</Text>
                         </View>
-                        <View className="bg-pink-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
+                        <View className="bg-primary-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
                             <FontAwesome name="arrow-right" size={20} color='#fff' />
                         </View>
                     </View>
-                    <View className='py-3 px-4 bg-pink-400 mt-4 rounded-2xl flex gap-3 flex-row '>
+                    <View className='py-3 px-4 bg-primary-400 mt-4 rounded-2xl flex gap-3 flex-row '>
                         <FontAwesome5 name="calendar-alt" size={17} color="#fff" />
                         <Text className="font-Poppins text-gray-100 text-[13px] me-auto leading-5">June 12, 2025</Text>
                         <FontAwesome5 name="clock" size={17} color="#fff" />
@@ -236,7 +236,7 @@ const HomeScreen = () => {
                 </View>
                 <View className='justify-between flex-row py-3'>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-3">Available Doctors</Text>
-                    <Text className="font-PoppinsMedium text-pink-600 text-[15px] leading-[23px] mt-3">View All</Text>
+                    <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px] mt-3">View All</Text>
                 </View> 
                 <View className='mt-2 gap-4'>
                     {(() => {

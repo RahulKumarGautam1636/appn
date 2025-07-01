@@ -30,7 +30,7 @@ import AppnDetail from "@/app/appnDetail";
 export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
 
   return (
-    <TouchableOpacity onPressOut={onClick} className={`p-4 items-center justify-center rounded-full shadow-sm shadow-gray-700 ${classes} ${(active && !isLoading) ? 'bg-pink-500' : 'bg-gray-300'}`} onPress={onPress}>
+    <TouchableOpacity onPressOut={onClick} className={`p-4 items-center justify-center rounded-full shadow-sm shadow-gray-700 ${classes} ${(active && !isLoading) ? 'bg-primary-500' : 'bg-gray-300'}`} onPress={onPress}>
       {isLoading ? 
       <SvgLoader /> : 
       <Text className={`font-PoppinsSemibold ${textClasses} ${(active && !isLoading) ? 'text-white' : 'text-slate-500'}`}>{title}</Text>
@@ -108,7 +108,7 @@ export const CompCard = ({ data, active, details }: any) => {
     }
   }
   return (
-    <View className={`items-center p-[13px] rounded-xl shadow-lg ${active ? 'border border-pink-500 bg-pink-50' : 'bg-white'}`}>
+    <View className={`items-center p-[13px] rounded-xl shadow-lg ${active ? 'border border-primary-500 bg-primary-50' : 'bg-white'}`}>
       <View className="flex-row gap-4">
         <Image className='shadow-lg rounded-xl' src={`${SRC_URL}/Content/CompanyLogo/${data.LogoUrl}`} style={{ width: 65, height: 65 }} />
         <TouchableOpacity onPress={handleSelect} className="flex-1 min-w-0">  
@@ -127,7 +127,7 @@ export const CompCard = ({ data, active, details }: any) => {
         <TouchableOpacity className={`py-2 items-center rounded-xl flex-1 ${active ? 'bg-gray-400' : 'bg-sky-500'}`} onPress={handleSelect}>
           <Text className="text-white font-Poppins">{active ? 'Selected' : 'Select Clinic'}</Text>
         </TouchableOpacity>
-        <View className="py-2 bg-pink-500 items-center rounded-xl flex-1">
+        <View className="py-2 bg-primary-500 items-center rounded-xl flex-1">
           <Link href={`/appn/clinic/${data.CompanyId}`} onPress={() => dispatch(setModal({name: 'COMPANIES', state: false }))}>
               <Text className="text-white font-Poppins">View Details</Text>
           </Link>
@@ -141,15 +141,15 @@ export const DeptCard = ({ data, active }: any) => {
   const dispatch = useDispatch();
   return (
     // <TouchableOpacity onPress={() => dispatch(setDepts({selected: data}))} className='items-center'>
-    //     <View className={`p-4 rounded-full mb-2 shadow-lg shadow-gray-300 ${active ? 'border border-pink-500 bg-pink-50' : 'bg-white'}`}>
+    //     <View className={`p-4 rounded-full mb-2 shadow-lg shadow-gray-300 ${active ? 'border border-primary-500 bg-primary-50' : 'bg-white'}`}>
     //         <Heart width={30} height={30} />
     //     </View>
     //     {data.Description.length > 8 ?
-    //       <Text className={`text-[12px] ${active && 'text-pink-500 font-medium'}`}>{(data.Description).slice(0, 13)}..</Text> :
-    //       <Text className={`text-[12px] ${active && 'text-pink-500 font-medium'}`}>{data.Description}</Text> 
+    //       <Text className={`text-[12px] ${active && 'text-primary-500 font-medium'}`}>{(data.Description).slice(0, 13)}..</Text> :
+    //       <Text className={`text-[12px] ${active && 'text-primary-500 font-medium'}`}>{data.Description}</Text> 
     //     }
     // </TouchableOpacity>
-    <TouchableOpacity onPress={() => dispatch(setDepts({selected: data}))} className={`flex-row px-4 py-2 rounded-full self-start shadow-md shadow-gray-300 ${active ? 'bg-pink-500' : 'bg-white'}`}>
+    <TouchableOpacity onPress={() => dispatch(setDepts({selected: data}))} className={`flex-row px-4 py-2 rounded-full self-start shadow-md shadow-gray-300 ${active ? 'bg-primary-500' : 'bg-white'}`}>
       <Text className={`font-PoppinsMedium text-[12px] ${active ? 'text-white' : 'text-gray-500'}`}>{data.Description}</Text>
     </TouchableOpacity>
   )
@@ -182,7 +182,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
           </View>
           <View className='justify-between items-end'>
               <Ionicons name="arrow-forward-outline" size={20} color="#64748b" className='text-slate-500'/>
-              <Text className="font-PoppinsSemibold text-pink-600 text-[12px]">₹600/hr</Text>
+              <Text className="font-PoppinsSemibold text-primary-600 text-[12px]">₹600/hr</Text>
           </View>
       </View>
     </Link>
@@ -199,15 +199,15 @@ export const Card_2 = ({ data, index, active }: any) => {
     return (
       <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
           <TouchableOpacity className='flex-row gap-3 p-4 border-b border-gray-300' >
-            <FontAwesome5 name="flask" size={17} color="#ec4899" />
+            <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
           </TouchableOpacity>
           <TouchableOpacity className='flex-row gap-3 p-4 border-b border-gray-300'>
-            <FontAwesome6 name="calendar-alt" size={17} color="#ec4899" />
+            <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
           </TouchableOpacity>
           <TouchableOpacity className='flex-row gap-3 p-4'>
-            <Ionicons name="flask" size={17} color="#ec4899"/>
+            <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
           </TouchableOpacity>
       </View>
@@ -262,7 +262,7 @@ export const DayBtn = ({ data, activeDate, handleActive }: any) => {
   return (
       <TouchableOpacity onPress={() => handleActive((pre: any) => ({...pre, activeDate: data.date}))} className='gap-3 flex-1 text-center items-center'>
           <Text className={`font-PoppinsMedium pt-4 text-[12px] ${active ? 'text-gray-600' : 'text-gray-400'}`}>{day}</Text>
-          <View className={`items-center justify-center h-11 w-12 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-pink-500' : 'bg-white'}`}>
+          <View className={`items-center justify-center h-11 w-12 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-primary-500' : 'bg-white'}`}>
               <Text className={`font-PoppinsMedium text-gray-600 text-[13px] leading-5 ${active ? 'text-white' : ''}`}>{date}</Text>
           </View>
       </TouchableOpacity>
@@ -345,6 +345,7 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose }: any)
       useNativeDriver
       coverScreen={true}
       avoidKeyboard={true}
+      animationInTiming={500}
       style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center'}}
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />

@@ -35,7 +35,7 @@ const CompanySelection = ({ name }: any) => {
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
             <View className='p-4'>
                 <Pressable onPress={() => dispatch(setModal({ name: name, state: false }))}>
-                    <View className='justify-between flex-row pt-4 pb-3 items-center'>
+                    <View className='justify-between flex-row pb-1 items-center'>
                         <View className='flex-row items-center gap-3'>
                             <Ionicons name="arrow-back-outline" size={24} color="black" />
                             <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>

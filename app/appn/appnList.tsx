@@ -82,13 +82,13 @@ const AppnList = () => {
                     </View>
                 </View>
                 <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2 mt-2'>
-                    <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'PENQ' ? 'bg-pink-500' : 'bg-slate-200'}`} onPress={() => setActive('PENQ')}>
+                    <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'PENQ' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setActive('PENQ')}>
                         <Text className={`font-PoppinsMedium ${active === 'PENQ' ? 'text-white' : ''}`}>Previous</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'ENQ' ? 'bg-pink-500' : 'bg-slate-200'}`} onPress={() => setActive('ENQ')}>
+                    <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'ENQ' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setActive('ENQ')}>
                         <Text className={`font-PoppinsMedium ${active === 'ENQ' ? 'text-white' : ''}`}>Today</Text>                        
                     </TouchableOpacity>
-                    <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'UENQ' ? 'bg-pink-500' : 'bg-slate-200'}`} onPress={() => setActive('UENQ')}>
+                    <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'UENQ' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setActive('UENQ')}>
                         <Text className={`font-PoppinsMedium ${active === 'UENQ' ? 'text-white' : ''}`}>Upcoming</Text>
                     </TouchableOpacity>
                 </View>

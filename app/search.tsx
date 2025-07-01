@@ -67,7 +67,7 @@ function MainSearch() {
                     <View className='z-10'>
                         <TextInput value={searchKey.query} onChangeText={(text) => setSearchKey(pre => ({...pre, query: text }))} placeholder='Search Doctors..' className='bg-white pl-[3.5rem] pr-4 py-4 rounded-full shadow-md shadow-blue-500' />
                     </View>
-                    <Feather className='absolute z-50 top-[3px] right-[3px] bg-pink-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
+                    <Feather className='absolute z-50 top-[3px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>
                 <Text className="py-5 font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Top Searches</Text>
                 <View className="flex-wrap flex-row gap-[9px]">

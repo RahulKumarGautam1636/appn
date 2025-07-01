@@ -1,3 +1,4 @@
+import { myColors } from "@/constants";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -6,10 +7,11 @@ export default function TabsLayout() {
 
   const tabs = [
     { name: 'OPD', icon: 'home-outline', key: 'home' },
-    { name: 'Lab Test', icon: 'calendar-outline', key: 'appnList' },
+    // { name: 'Appointment', icon: 'calendar-outline', key: 'lab' },
+    { name: 'Lab Test', icon: 'flask', key: 'lab' },
     { name: 'Account', icon: 'person-outline', key: 'profile' },
     // { name: 'Dashboard', icon: 'grid-outline', key: 'bookAppn' },
-    // { name: 'Cart', icon: 'settings-outline', key: 'members' },
+    { name: 'Cart', icon: 'settings-outline', key: 'cart' },
   ]
   
   const router = useRouter()
@@ -35,12 +37,12 @@ export default function TabsLayout() {
               // };
               
               return (
-                <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px] ${isFocused ? 'border- border-pink-500' : ''}`}>
-                  <Ionicons name={tab.icon} size={18} color={isFocused ? '#e83d82' : '#6e6e6e'} />
+                <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px] ${isFocused ? 'border- border-primary-500' : ''}`}>
+                  <Ionicons name={tab.icon} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
                   <Text  style={[ styles.tabText, isFocused && styles.activeText ]}>
                     {tab.name}
                   </Text>
-                  {isFocused && <View className="absolute w-full bottom-0 left-0 h-[2px] bg-pink-500"></View>}
+                  {isFocused && <View className="absolute w-full bottom-0 left-0 h-[2px] bg-primary-500"></View>}
                 </TouchableOpacity>
               )
             })}
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   activeText: {
-    color: '#e83d82',
+    color: myColors.primary[500],
     fontWeight: 'bold',
   },
 });

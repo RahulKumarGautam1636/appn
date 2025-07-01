@@ -11,7 +11,7 @@ import { BASE_URL } from '@/constants';
 import { getFrom, GridLoader, withAutoUnmount } from '@/src/components/utils';
 import axios from 'axios';
 import { setAppnData, setCompanies, setModal } from '@/src/store/slices/slices';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import AppnPreview from '../appnPreview';
 import BookingSuccess from '../../../src/components/modals/bookingSuccess';
 import ReactNativeModal from 'react-native-modal';
@@ -296,13 +296,13 @@ const Booking = () => {
                     </View>
                 </View>
                 <View className='px-4 flex-row gap-2 justify-between bg-white border-b-2 border-gray-300'>
-                    <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center border-b-2 border-pink-600">Schedule</Text>
+                    <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center border-b-2 border-primary-600">Schedule</Text>
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">About</Text>
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Clinics</Text>
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Reviews</Text>
                 </View>
-                <View className='bg-pink-500 m-3 mb-4 rounded-3xl shadow-md shadow-pink-700 overflow-hidden'>
-                    <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-pink-300'>
+                <View className='bg-primary-500 m-3 mb-4 rounded-3xl shadow-md shadow-primary-700 overflow-hidden'>
+                    <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-primary-300'>
                         <View className='flex-row items-center gap-3'>
                             <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Clinics</Text>
                         </View>
@@ -312,7 +312,7 @@ const Booking = () => {
                         </Pressable>
                     </View>
 
-                    <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-pink-500 '>
+                    <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
                         <View className='flex-1'>
                             <Text className="font-PoppinsSemibold text-[15px] text-white">{selectedCompany.COMPNAME}</Text>
                             <View className='mt-2 '>
@@ -326,7 +326,11 @@ const Booking = () => {
                                 </View>
                             </View>
                         </View>
-                        <Feather name="chevron-right" size={24} color="#fff" className='px-[9px] py-[9px] bg-pink-400 rounded-full'  />
+                        <Link href={`/appn/clinic/${selectedCompany.CompanyId}`}>
+                            <View>
+                                <Feather name="chevron-right" size={24} color="#fff" className='px-[9px] py-[9px] bg-primary-400 rounded-full'  />
+                            </View>
+                        </Link>
                     </View>
                 </View>
 
@@ -469,13 +473,13 @@ const styles = StyleSheet.create({
 
 const SlotBtn = ({ time, active, handleSelect }: any) => {
     return (        
-        <TouchableOpacity onPress={handleSelect} className={`justify-center border-2 rounded-lg px-3 py-1 mb-3 ${active ? 'bg-pink-50 border-pink-400' : 'bg-gray-50 border-gray-300'}`} style={{
+        <TouchableOpacity onPress={handleSelect} className={`justify-center border-2 rounded-lg px-3 py-1 mb-3 ${active ? 'bg-primary-50 border-primary-400' : 'bg-gray-50 border-gray-300'}`} style={{
             width: '17.1%'     // 6 items
             // width: '21.25%' // 4 items
             // width: '26.66%'    // 3 items
         }}>
-            <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-pink-500' : 'text-gray-500'}`}>{time.split(' ')[0]}</Text>
-            <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-pink-500' : 'text-gray-500'}`}>{time.split(' ')[1]}</Text>
+            <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[0]}</Text>
+            <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[1]}</Text>
         </TouchableOpacity>
     )
 }
@@ -485,7 +489,7 @@ const DayBtn = ({ date, day, active, handleActive }: any) => {
     return (
         <TouchableOpacity onPress={handleActive} className='gap-3 flex-1 text-center items-center'>
             <Text className={`font-PoppinsMedium pt-4 text-[12px] ${active ? 'text-gray-600' : 'text-gray-400'}`}>{day}</Text>
-            <View className={`items-center justify-center h-11 w-12 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-pink-500' : 'bg-white'}`}>
+            <View className={`items-center justify-center h-11 w-12 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-primary-500' : 'bg-white'}`}>
                 <Text className={`font-PoppinsMedium text-gray-600 text-[13px] leading-5 ${active ? 'text-white' : ''}`}>{date}</Text>
             </View>
         </TouchableOpacity>

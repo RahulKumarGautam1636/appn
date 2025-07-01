@@ -1,3 +1,4 @@
+import colors from 'tailwindcss/colors.js';
 export const zero = 'tSL0lTwETc1vrrU2ZIoFFA==';
 export const defaultId = 'FFCeIi27FQMTNGpatwiktw==';  
 export const initReg = {  
@@ -301,4 +302,20 @@ export const dummyUser = {
   "InsByDesc": null,
   "CashLedgerId": 0,
   "BankLedgerId": 0
+}
+
+
+export const myColors = {
+  primary: {
+    50:  colors.gray[50],
+    100: colors.gray[100],
+    200: colors.gray[200],
+    300: colors.gray[300],
+    400: colors.gray[400],
+    500: colors.gray[500],
+    600: colors.gray[600],
+    700: colors.gray[700],
+    800: colors.gray[800],
+    900: colors.gray[900],
+  },
 }

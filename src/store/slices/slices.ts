@@ -219,8 +219,35 @@ const modalsSlice = createSlice({
 export const { setModal } = modalsSlice.actions;
 const modalsReducer = modalsSlice.reducer;
 
+const cartSlice = createSlice({
+  name: 'modals',
+  initialState: { pharmacy: {}, lab: {} },
+  reducers: {
+    addToCart: (state, action: any) => {
+      const { item, type } = action.payload;
+      return {...state, [type]: {...state[type], [item._id]: item }};
+    },
+    removeFromCart: (state, action: any) => {
+      const { item, type } = action.payload;
+      delete state[type][item._id]
+    }
+  }
+});
+
+export const { addToCart, removeFromCart } = cartSlice.actions;
+const cartReducer = cartSlice.reducer;
+
 
 
 
 export default compCodeReducer;
-export { loginReducer, userReducer, companiesReducer, deptsReducer, appnReducer, membersReducer, modalsReducer }
+export { 
+  loginReducer, 
+  userReducer, 
+  companiesReducer, 
+  deptsReducer, 
+  appnReducer, 
+  membersReducer, 
+  modalsReducer,
+  cartReducer,
+}

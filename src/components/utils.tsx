@@ -2,6 +2,7 @@ import axios, { GenericAbortSignal } from "axios";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import Carousel from "react-native-reanimated-carousel";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -100,3 +101,77 @@ export function withAutoUnmount(Component: React.ComponentType<any>) {
     return <Component {...props} />;
   };
 }
+
+
+const { width } = Dimensions.get("window");
+
+const banners = [
+  { id: 1, image: require("../../assets/images/banner-card-1.jpg") },
+  { id: 2, image: require("../../assets/images/banner-card-2.jpg") },
+  { id: 3, image: require("../../assets/images/banner-card-3.jpg") },
+];
+
+export const BannerCarousel = () => {
+  return (
+    <View className="mt-4">
+      <Carousel
+        loop
+        width={width}
+        height={178}
+        autoPlay={true}
+        data={banners}
+        pagingEnabled={true}
+        scrollAnimationDuration={2500}
+        renderItem={({ item }) => {
+          return <View className="px-4 justify-center items-center"><Image source={item.image} className="w-full h-[175px] rounded-xl border border-gray-300" /></View>
+        }}
+      />
+    </View>
+  );
+}
+
+export const getRequiredFields = (list, compCode: number) => {
+  // let { globalData } = store.getState();
+
+  return list.map((i: any) => ({ 
+    PTR: i.PTR,
+    AutoId: i.AutoId,
+    Category: i.Category, 
+    CategoryName: i.CategoryName, 
+    CompanyId: i.CompanyId,
+    Description: i.Description, 
+    Discount: i.Discount,
+    DiscountPer: i.DiscountPer,
+    ItemId: i.ItemId, 
+    ItemMRP: i.ItemMRP, 
+    PackSizeId: i.PackSizeId,
+    ItemPackSizeList: i.ItemPackSizeList, 
+    SRate: i.SRate, 
+    StockQty: i.StockQty, 
+    GroupName: i.GroupName, 
+    Parent: i.Parent, 
+    ParentDesc: i.ParentDesc, 
+    Technicalname: i.Technicalname,
+    sv_CostId: i.sv_CostId, 
+    itemmstr: i.itemmstr, 
+    LocationId: compCode, 
+    ManufacturBY: i.ManufacturBY,
+    Unit: i.Unit,
+    UnitName: i.UnitName,
+    IsVisible: i.IsVisible, 
+    ItemCode: i.ItemCode, 
+    ItemImageURL: i.ItemImageURL,    
+    CGST: i.CGST,
+    SGST: i.SGST,
+    IGST: i.IGST, 
+    CGSTRATE: i.CGSTRATE, 
+    SGSTRATE: i.SGSTRATE,
+    IGSTRATE: i.IGSTRATE, 
+    Specification: i.Specification || '', 
+
+    _id: compCode + '_' + i.ItemId,
+    count: 1,
+  }));
+}
+
+export const num = (n: any) => parseFloat(n.toFixed(2));

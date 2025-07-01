@@ -37,8 +37,8 @@ export default function RootLayout() {
     <Provider store={store}>
       <GestureHandlerRootView>
         <SafeAreaProvider>
-          <SafeAreaView className="flex-1 opacity-10">
-            <KeyboardAvoidingView className="flex-1">
+          <SafeAreaView className="flex-1">
+            <KeyboardAvoidingView className="flex-1 opacity-10">
               <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? 'light-content' : 'dark-content'} />
               <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false, animation: 'slide_from_right' }} />
@@ -48,6 +48,7 @@ export default function RootLayout() {
                 <Stack.Screen name="appnList" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="search" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="members" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="appn/cart" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 {/* <Stack.Screen name="movie/[id]" options={{ headerShown: false}} /> */}
               </Stack>
             </KeyboardAvoidingView>

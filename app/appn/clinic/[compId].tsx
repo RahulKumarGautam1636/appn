@@ -116,9 +116,9 @@ const Clinic = () => {
                     <View className="h-[150px] bg-gray-300 mt-3 rounded-xl"></View>
 
                     <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-5">Book Appointment</Text>
-                    <TouchableOpacity onPress={() => setDeptsActive(true)} className="flex-row bg-pink-500 rounded-xl mt-4 mb-2 p-4 items-center justify-between">
+                    <TouchableOpacity onPress={() => setDeptsActive(true)} className="flex-wrap gap-4 flex-row bg-primary-500 rounded-xl mt-4 mb-2 p-4 items-center justify-between">
                         <Text className="font-PoppinsSemibold text-white text-[14px]">Department</Text>   
-                        <View className="py-3 min-w-[50%] bg-pink-400 px-2 flex-row items-center justify-evenly rounded-xl">
+                        <View className="py-3 min-w-[50%] bg-primary-400 px-2 flex-row items-center justify-evenly rounded-xl">
                             <Text className="font-PoppinsMedium text-white text-[13px]" numberOfLines={1}>{selectedDept.Description} </Text>
                             <Feather name="chevron-down" size={18} color='#fff' />
                         </View> 
@@ -130,7 +130,7 @@ const Clinic = () => {
                     </View>
                     {/* <View className='justify-between flex-row py-3'>
                         <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-3">Available Doctors</Text>
-                        <Text className="font-PoppinsMedium text-pink-600 text-[15px] leading-[23px] mt-3">View All</Text>
+                        <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px] mt-3">View All</Text>
                     </View>  */}
                     <View className='mt-6 gap-4'>
                         {(() => {

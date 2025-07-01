@@ -40,18 +40,18 @@ const BookingSuccess = ({ doctor, bookingData, clinic }: any) => {
           </View>
           <View className="p-4 bg-gray-100 my-4 rounded-xl gap-6">
             <View className='flex gap-3 flex-row'>
-                <FontAwesome5 name="calendar-alt" size={17} color="#ec4899" />
+                <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
                 <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{bookingData.AppointDate}</Text>
             </View>
             <View className='flex gap-3 flex-row'>
-                <FontAwesome5 name="clock" size={17} color="#ec4899" />
+                <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} />
                 <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{bookingData.AppTime}</Text>
             </View>
           </View>
           <View className='flex-row items-center mb-4 gap-4'>
-              {/* <View className="bg-pink-500 py-[11px] px-[10px] rounded-full shadow-lg"> */}
+              {/* <View className="bg-primary-500 py-[11px] px-[10px] rounded-full shadow-lg"> */}
                 {/* <FontAwesome6 name="hospital-wide" size={35} color='#ec4899' /> */}
-                <FontAwesome5 name="hospital" size={35} color="#ec4899" />
+                <FontAwesome5 name="hospital" size={35} color={myColors.primary[500]} />
               {/* </View> */}
               <View className="flex-1">
                   <Text className="font-PoppinsSemibold text-[14px]">{clinic.COMPNAME}</Text>

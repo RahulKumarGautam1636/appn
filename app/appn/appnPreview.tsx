@@ -3,7 +3,7 @@ import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "reac
 import ButtonPrimary from "../../src/components";
 import { setModal } from "@/src/store/slices/slices";
 import { useDispatch } from "react-redux";
-// import { Link } from "expo-router";
+import { myColors } from '@/constants';
 
 const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={}, clinic={}, member={}, bookAppn }: any) => {
   
@@ -57,7 +57,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
               <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{member.GenderDesc}</Text>
           </View>
           <Text className="text-sm py-3 text-gray-500">
-            <Text className="text-pink-500 font-Poppins">Note: </Text>
+            <Text className="text-primary-500 font-Poppins">Note: </Text>
             You can submit patient details, old prescription, and test reports in the drop link.
           </Text>
            <ButtonPrimary title='Add Document' classes='p-[10px] bg-gray-50 border-dashed border border-gray-400 mt-1' textClasses='text-sm' />
@@ -79,9 +79,9 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
             </View>
 
             <View className='flex-row gap-3 p-4'>
-              <FontAwesome5 name="clock" size={17} color="#ec4899" />
+              <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} />
               <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">{bookingData.AppTime}</Text>
-              <FontAwesome5 name="calendar-alt" size={17} color="#ec4899" />
+              <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
               <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">{bookingData.AppointDate}</Text>
             </View>
         </View>
