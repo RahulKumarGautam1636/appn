@@ -1,6 +1,6 @@
 import { SRC_URL } from "@/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
-import { Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView } from "react-native"
+import { Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import Loader from '../../assets/images/loader.svg';
 import { Link } from "expo-router";
@@ -10,6 +10,8 @@ import React, { useRef, useState } from 'react';
 import Modal, { ReactNativeModal } from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 // import { RootState } from "@/src/store/store";
+
+// import MapView, { Marker } from 'react-native-maps';
 
 
 import { useEffect } from 'react';
@@ -362,5 +364,43 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose }: any)
 const styles = StyleSheet.create({
   modal: { backgroundColor: 'white', height: '100%', margin: 0 },
 });
+
+
+
+export const MapComponent = () => {
+  if (Platform.OS === 'web') {
+    return (
+      <iframe
+        width="100%"
+        height="500"
+        frameBorder="0"
+        style={{ border: 0 }}
+        src={`https://www.google.com/maps?q=28.6139,77.2090&hl=es;z=14&output=embed`}
+        allowFullScreen
+      ></iframe>
+    );
+  } else {
+    const MapView = require('react-native-maps').default;
+    const Marker = require('react-native-maps').Marker;
+  
+    return (
+      <MapView
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: 28.6139,
+          longitude: 77.2090,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }}
+      >
+        <Marker
+          coordinate={{ latitude: 28.6139, longitude: 77.2090 }}
+          title="New Delhi"
+        />
+      </MapView>
+    );
+  }
+}
+
 
 

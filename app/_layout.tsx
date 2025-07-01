@@ -38,7 +38,7 @@ export default function RootLayout() {
       <GestureHandlerRootView>
         <SafeAreaProvider>
           <SafeAreaView className="flex-1">
-            <KeyboardAvoidingView className="flex-1 opacity-10">
+            <KeyboardAvoidingView className="flex-1">
               <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? 'light-content' : 'dark-content'} />
               <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false, animation: 'slide_from_right' }} />

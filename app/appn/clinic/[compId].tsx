@@ -1,12 +1,12 @@
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { getFrom, GridLoader, NoContent } from "@/src/components/utils";
 import { BASE_URL } from "@/constants";
-import { Card_1, DayBtn, getDatesArray, MyModal } from "@/src/components";
+import { Card_1, DayBtn, getDatesArray, MapComponent, MyModal } from "@/src/components";
 import Depts from "@/app/depts";
 
 
@@ -113,7 +113,13 @@ const Clinic = () => {
                         ))}
                     </View>
                     <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-5">Location</Text>
-                    <View className="h-[150px] bg-gray-300 mt-3 rounded-xl"></View>
+                    {/* <View className="h-[150px] bg-gray-300 mt-3 rounded-xl"></View> */}
+
+                    <View className="mt-3 h-[200px] border border-gray-300">
+
+                            <MapComponent />
+      
+                    </View>
 
                     <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-5">Book Appointment</Text>
                     <TouchableOpacity onPress={() => setDeptsActive(true)} className="flex-wrap gap-4 flex-row bg-primary-500 rounded-xl mt-4 mb-2 p-4 items-center justify-between">

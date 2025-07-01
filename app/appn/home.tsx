@@ -93,7 +93,7 @@ const HomeScreen = () => {
                                 <FontAwesome name="arrow-right" size={20} color='#fff' />
                             </View>
                         </View>
-                        <View className='py-3 px-4 bg-primary-400 mt-4 rounded-2xl flex gap-3 flex-row '>
+                        <View className='p-4 bg-primary-400 mt-4 rounded-2xl flex gap-3 flex-row'>
                             <FontAwesome5 name="calendar-alt" size={17} color="#fff" />
                             <Text className="font-Poppins text-gray-100 text-[13px] me-auto leading-5">{new Date(firstAppn.NextAppDate).toLocaleDateString('en-TT')}</Text>
                             <FontAwesome5 name="clock" size={17} color="#fff" />

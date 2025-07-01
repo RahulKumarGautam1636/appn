@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { myColors } from '@/constants';
+import LabCard from '@/src/components/cards';
 
 const LabTests = ({}: any) => {
     const dispatch = useDispatch()
@@ -48,22 +49,7 @@ const LabTests = ({}: any) => {
         } else {
             return (
                 <View className='gap-4'>
-                    {productCategoryItems.map((i: any) => (     // testDate={testDate}
-                        <TouchableOpacity key={i.ItemId} onPress={() => dispatch(addToCart({type: 'lab', item: i}))} className="flex-row items-start gap-4 bg-white rounded-xl shadow-lg p-4">
-                            <View className="mt-1 uppercase h-[45px] w-[45px] items-center justify-center rounded-xl bg-primary-500">
-                                <Ionicons name={'flask'} size={21} color={'#fff'} />
-                            </View>
-                            <View className='mr-auto flex-1'>
-                                <Text className="font-PoppinsSemibold text-sky-800" numberOfLines={1}>{i.Description}</Text>
-                                <Text className="text-gray-500 mt-1 text-sm font-PoppinsMedium">{i.CategoryName}</Text>
-                                <View className='flex-row gap-4 items-end mt-1'>
-                                    <Text className="mt-2 text-[13px] text-blue-600 font-PoppinsSemibold leading-5"><FontAwesome name="rupee" size={13} color="#2563eb" /> {i.SRate}</Text>
-                                    <Text className="text-red-700 opacity-65 mt-2 text-sm font-PoppinsMedium leading-5 line-through"><FontAwesome name="rupee" size={13} color="#b91c1c" /> {i.ItemMRP}</Text>
-                                </View>
-                            </View>
-                            <Ionicons name="cart-outline" className='p-[10px] bg-sky-50 rounded-full my-auto' size={21} color="#3b82f6" />
-                        </TouchableOpacity>
-                    ))}
+                    {productCategoryItems.map((i: any) => <LabCard key={i._id} data={i} />)}
                 </View>
             ) 
         }
@@ -121,9 +107,9 @@ const LabTests = ({}: any) => {
                     </ScrollView> */}
                     
                     <Text className="font-PoppinsSemibold text-gray-700 text-[16px] mb-2">Book Lab Tests</Text> 
-                    {/* <TouchableOpacity onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))} className="bg-primary-500 gap-4 rounded-xl mb-4 p-5 shadow-lg shadow-gray-400">
+                    {/* <TouchableOpacity onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))} className="bg-primary-500 gap-4 rounded-2xl mb-4 p-5 shadow-lg shadow-gray-400">
                         <Text className="font-PoppinsSemibold text-white text-[14px] border-b border-gray-200">Select Clinic</Text>   
-                        <View className="gap-4 flex-row items-center justify-between rounded-xl flex-1">
+                        <View className="gap-4 flex-row items-center justify-between rounded-2xl flex-1">
                             <View className='flex-1'>
                                 <Text className="font-PoppinsMedium text-white text-[13px] pt-1 pb-[10px] leading-5" numberOfLines={1}>{selectedCompany.COMPNAME} </Text>
                                 <View className='mt-1 gap-2 flex-row items-center'>
@@ -137,7 +123,7 @@ const LabTests = ({}: any) => {
                         </View> 
                     </TouchableOpacity> */}
 
-                    <View className='bg-primary-500 mb-4 rounded-xl shadow-md shadow-primary-700 overflow-hidden'>
+                    <View className='bg-primary-500 mb-4 rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
                         <View className='justify-between flex-row pl-5 pr-4 pt-2 pb-[5] items-center border-b border-primary-300'>
                             <View className='flex-row items-center gap-3'>
                                 <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Select Clinic</Text>
@@ -170,16 +156,16 @@ const LabTests = ({}: any) => {
                         </View>
                     </View>
                     
-                    <View className='bg-white mb-4 rounded-xl shadow-lg shadow-gray-400'>
+                    <View className='bg-white mb-4 rounded-2xl shadow-lg'>
                         <View className='flex-row w-full p-5 border-b border-gray-200 items-center'>
                             <FontAwesome5 name="calendar-alt" size={21} color={myColors.primary[500]} />
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] leading-6 ml-4 mr-auto">Select Date:</Text>
                             <Text className="font-PoppinsMedium text-slate-500 text-[14px] leading-6 mr-2">25/08/2025</Text>
                             <Feather name="chevron-down" size={22} color='gray' />
                         </View>               
-                        <View className='flex-row gap-4 w-full p-4 border-b border-gray-200 items-center'>
+                        <View className='flex-row gap-4 w-full p-4 items-center'>
                             <View className='relative w-full'>
-                                <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' className='bg-gray-100 py-4 items-start px-5 rounded-2xl shadow-sm shadow-gray-500 w-full' />
+                                <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' className='bg-[#ebecef] py-4 items-start px-5 rounded-2xl shadow-sm shadow-gray-500 w-full' />
                                 <Feather className='absolute z-50 top-[12px] right-4' name="search" size={22} color={myColors.primary[500]} />
                             </View>
                         </View>
