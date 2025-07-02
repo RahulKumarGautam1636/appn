@@ -1,4 +1,4 @@
-import { SRC_URL } from "@/constants"
+import { myColors, SRC_URL } from "@/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
 import { Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
@@ -380,25 +380,26 @@ export const MapComponent = () => {
       ></iframe>
     );
   } else {
-    const MapView = require('react-native-maps').default;
-    const Marker = require('react-native-maps').Marker;
+    // const MapView = require('react-native-maps').default;
+    // const Marker = require('react-native-maps').Marker;
   
-    return (
-      <MapView
-        style={{ flex: 1 }}
-        initialRegion={{
-          latitude: 28.6139,
-          longitude: 77.2090,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }}
-      >
-        <Marker
-          coordinate={{ latitude: 28.6139, longitude: 77.2090 }}
-          title="New Delhi"
-        />
-      </MapView>
-    );
+    return 
+    // (
+    //   <MapView
+    //     style={{ flex: 1 }}
+    //     initialRegion={{
+    //       latitude: 28.6139,
+    //       longitude: 77.2090,
+    //       latitudeDelta: 0.05,
+    //       longitudeDelta: 0.05,
+    //     }}
+    //   >
+    //     <Marker
+    //       coordinate={{ latitude: 28.6139, longitude: 77.2090 }}
+    //       title="New Delhi"
+    //     />
+    //   </MapView>
+    // );
   }
 }
 

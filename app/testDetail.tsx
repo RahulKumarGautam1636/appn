@@ -1,116 +1,66 @@
-import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-// import { Link } from 'expo-router';
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-// import ButtonPrimary from '@/src/components';
-// import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-// import { useEffect } from 'react';
-// import { useIsFocused } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
-import { setModal } from '@/src/store/slices/slices';
+import { Link, useRouter } from 'expo-router';
+import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { myColors } from '@/constants';
 
-const { width } = Dimensions.get('window');
 
-const AppnDetail = ({ data, handleOpen }: any) => {
+const TestDetail = () => {
 
-    const dispatch = useDispatch();
-    // const isFocused = useIsFocused();
-    // const translateX = useSharedValue(width); 
+    const user = {
+        Name: 'Emma Phillips',
+        Age: 35,
+        GenderDesc: 'Female',
+        Qualification: 'Gynacologist',
+        LabTests: 7,
+        Appontments: 15,
+    }
 
-    // const animatedStyle = useAnimatedStyle(() => ({
-    //     transform: [{ translateX: translateX.value }],
-    // }));
+    const data = { IsAppConfirmed: 'Y', BillId: '46546', PrescriptionId:  '4547745', DeptName: '', TranNo: '', Status: '', NextAppTime: '09:30 AM', NextAppDate: '02/03/2025', CompanyName: 'XYZ Hospitality Solutions' }
 
-    // useEffect(() => {
-    //     if (isFocused) {
-    //     translateX.value = width;
-    //     translateX.value = withTiming(0, { duration: 500 });
-    //     }
-    // }, [isFocused]);
+    const router = useRouter();
 
     return (
-        // <Animated.View style={[{ flex: 1 }, animatedStyle]}>
-            <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
-                <View className='bg-white'>
-                    <View className='justify-between flex-row p-4 items-center'>
-                        {/* <Link href={'/login'}> */}
-                            <Pressable onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: false}))} className='flex-row items-center gap-3'>
-                                <Ionicons name="arrow-back-outline" size={24} color="black" />
-                                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment Details</Text>
-                            </Pressable>
-                        {/* </Link> */}
-                        <View className="gap-3 flex-row items-center ml-auto">
-                            <Feather name="heart" size={20} color='black' />
-                            <Feather name="share-2" size={20} color='black' />
-                        </View>
-                    </View>
-                    <View className='flex-row gap-4 p-[13px]'>
-                        <Image className='' source={require('../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
-                        <View>
-                            <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{data.AppointmentTo}</Text>
-                            <View className='flex-row gap-2'>
-                                <FontAwesome name="graduation-cap" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{data.DocQualification}</Text>
-                            </View>
-                            <View className='flex-row gap-2'>
-                                <FontAwesome5 name="stethoscope" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{data.DocSpecialistDesc}</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View className='flex-row justify-between p-4 border-y border-gray-300 border-solid'>
-                        <View className='items-center flex-1'>
-                            <Feather name="phone-call" size={24} className='mb-2' color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Call</Text>
-                        </View>
-                        <View className='items-center flex-1 border-x border-gray-300'>
-                            <MaterialCommunityIcons name="message-text-outline" size={24} className='mb-2' color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Message</Text>
-                        </View>
-                        <View className='items-center flex-1'>
-                            <Feather name="video" size={24} className='mb-2' color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Video</Text>
-                        </View>
+        <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
+            <View className='bg-white'>
+                <View className='justify-between flex-row p-4 items-center'>
+                    <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
+                        <Ionicons name="arrow-back-outline" size={24} color="black" />
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Profile</Text>
+                    </Pressable>
+                    <View className="gap-3 flex-row items-center ml-auto">
+                        <Feather name="heart" size={20} color='black' />
+                        <Feather name="share-2" size={20} color='black' />
                     </View>
                 </View>
-                <View className='justify-between flex-row px-4 pt-4 items-center'>
-                <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Patient Details</Text>
+                <View className='flex-row gap-4 p-[13px] items-center mb-2'>
+                    <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('./../assets/images/user.png')} style={{ width: 80, height: 80 }} />
+                    <View>
+                        <Text className="font-PoppinsSemibold text-slate-800 text-[15px] mb-2">{user.Name}</Text>
+                        <View className='flex-row gap-2'>
+                            <FontAwesome name="graduation-cap" size={15} color="#075985" />
+                            <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{user.Age} Year,   {user.GenderDesc}</Text>
+                        </View>
+                        {/* <View className='flex-row gap-2'>
+                            <FontAwesome5 name="stethoscope" size={15} color="#075985" />
+                            <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{user.Qualification}</Text>
+                        </View> */}
+                    </View>
                 </View>
-            </View>
-            <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
-            <View className='flex-row items-center'>
-                <Image className='shadow-lg rounded-full me-3' source={require('../assets/images/user.png')} style={{ width: 40, height: 40 }} />
-                <View>
-                    <Text className="font-PoppinsBold text-[14px]">{data.PartyName}</Text>
-                    <Text className="font-Poppins text-gray-500 text-[11px]">Myself</Text>
-                </View>
-                <FontAwesome name="chevron-down" size={20} color='gray' className="ms-auto" />
-            </View>
-            <View className='py-3 px-4 bg-gray-100 mt-4 rounded-xl'>
-                <View className='gap-3 flex-row'>
-                    <FontAwesome name="user" size={17} color="gray" />
-                    <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">28 Years, &nbsp;&nbsp; Male</Text>
-                    {/* <FontAwesome name="user" size={17} color="gray" /> */}
-                    <FontAwesome5 name="list" size={17} color="gray" />
-                    <Text className="font-Poppins text-gray-500 text-[13px] leading-5">MRD : {data.UHID}</Text>
-                </View>
-                {/* <View className='gap-3 flex-row mt-4'>
-                    <FontAwesome6 name="hourglass-half" size={17} color="gray" />
-                    <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">28 Years</Text>
-                    <FontAwesome name="user" size={17} color="gray" />
-                    <Text className="font-Poppins text-gray-500 text-[13px] leading-5">Male</Text>
+                {/* <View className='flex-row justify-between border-y border-gray-300 border-solid'>
+                    <View className='items-center flex-1 border-r border-gray-300 p-4'>
+                        <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">7</Text>
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
+                    </View>
+                    <View className='items-center flex-1 p-4'>
+                        <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">15</Text>
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
+                    </View>
                 </View> */}
             </View>
-            <Text className="text-sm pt-4 text-gray-500 leading-6">
-                <Text className="text-primary-500">Appointment Note : </Text>
-                Prescriptions, Reports and Documents added by Patient will apear here.
-            </Text>
-            </View>
-            <View className='justify-between flex-row px-4 pt-1 pb-4 items-center'>
+            <View className='justify-between flex-row px-4 pt-4 pb-4 items-center'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment</Text>
                 </View>
@@ -224,25 +174,14 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
                 </TouchableOpacity>
                 <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200' : 'bg-blue-500'}`}>
-                    <Text className={`font-PoppinsMedium ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Prescription</Text>
+                    <Text className={`font-PoppinsMedium ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Details</Text>
                 </TouchableOpacity>
                 {data.IsAppConfirmed !== 'Y' &&<TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
                     <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
                 </TouchableOpacity>}
             </View>
-            </ScrollView>
-        // </Animated.View>
+        </ScrollView>
     )
 }
 
-export default AppnDetail;
-
-const styles = StyleSheet.create({
-    screen: {
-        minHeight: "100%"
-    }
-});
-
-
-
- 
+export default TestDetail;
