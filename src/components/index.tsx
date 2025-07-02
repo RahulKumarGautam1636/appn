@@ -304,23 +304,46 @@ export const Card_3 = ({ data }: any) => {
           <Feather name="chevron-right" className='my-auto' size={30} color='#ec4899' />
         </TouchableOpacity>
       {/* </Link> */}
-      {/* <ReactNativeModal
-        isVisible={active}
-        onBackdropPress={() => setActive(false)}
-        animationIn="fadeInUp"
-        animationOut="fadeOutDown"
-        backdropOpacity={0.3}
-        useNativeDriver
-        coverScreen={true}
-        style={{margin: 0, flex: 1, height: '100%',
-        alignItems: undefined,
-        justifyContent: 'center',
-      }}
-        // deviceHeight={height}
-        // customBackdrop={<View style={{flex: 1}} />
-      >
-        <AppnDetail data={data} handleOpen={setActive} />
-      </ReactNativeModal> */}
+    </>
+  )
+}
+
+export const Card_4 = ({ data }: any) => {
+  const dispatch = useDispatch();
+  return (
+    <>
+      <View className="bg-white rounded-xl shadow-md shadow-gray-400">
+        <TouchableOpacity onPress={() => dispatch(setModal({name: 'TEST_DETAIL', state: true, data: data}))} className='p-4 flex-row gap-1 w-full'>
+          <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('./../../assets/images/user.png')} style={{ width: 60, height: 60 }} />
+          <View className='flex-1'>
+            <Text className="font-PoppinsSemibold text-sky-700 text-[15px] mb-3">
+              {data.PartyName}
+            </Text>
+            <View className='flex-row gap-3 mb-[7px]'>
+                <FontAwesome5 name="clock" size={15} color="#075985" />
+                {/* <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')},    {data.NextAppTime}</Text> */}
+                <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{data.NextAppDate.split('T')[0] + " "}</Text>
+            </View>
+            <View className='flex-row gap-3'>
+                <FontAwesome name="user-o" size={15} color="#075983" />    
+                <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{data.DeptName}</Text>
+            </View>
+          </View>
+          <Feather name="chevron-right" className='my-auto' size={30} color='#ec4899' />
+        </TouchableOpacity>
+
+        <View className="flex-row items-center gap-2 border-t border-gray-300 px-4 py-[12px]">
+          <Text className={`font-PoppinsMedium text-gray-600 text-[13px]`}>Bill : </Text>
+          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${data.IsAppConfirmed === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
+            <Text className={`font-PoppinsMedium text-[12px] ${data.IsAppConfirmed === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Processing'}</Text>
+          </View>
+
+          <Text className="font-PoppinsMedium text-gray-600 text-[13px]">Service : </Text>
+          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${data.Status === 'Y' ? 'bg-green-50' : 'bg-yellow-50'}`}>
+            <Text className={`font-PoppinsMedium text-[12px] ${data.Status === 'Y' ? 'text-green-600' : 'text-yellow-600'}`}>{data.Status === 'Y' ? 'Done' : 'Pending'}</Text>
+          </View>
+        </View>
+      </View>
     </>
   )
 }

@@ -2,12 +2,14 @@ import { Entypo, Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Link, useRouter } from 'expo-router';
+// import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { myColors } from '@/constants';
+import { setModal } from '@/src/store/slices/slices';
+import { useDispatch } from 'react-redux';
 
 
-const TestDetail = () => {
+const TestDetail = ({ data }) => {
 
     const user = {
         Name: 'Emma Phillips',
@@ -18,15 +20,15 @@ const TestDetail = () => {
         Appontments: 15,
     }
 
-    const data = { IsAppConfirmed: 'Y', BillId: '46546', PrescriptionId:  '4547745', DeptName: '', TranNo: '', Status: '', NextAppTime: '09:30 AM', NextAppDate: '02/03/2025', CompanyName: 'XYZ Hospitality Solutions' }
+    // const data = { IsAppConfirmed: 'Y', BillId: '46546', PrescriptionId:  '4547745', DeptName: '', TranNo: '', Status: '', NextAppTime: '09:30 AM', NextAppDate: '02/03/2025', CompanyName: 'XYZ Hospitality Solutions' }
 
-    const router = useRouter();
+    const dispatch = useDispatch();
 
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
             <View className='bg-white'>
                 <View className='justify-between flex-row p-4 items-center'>
-                    <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
+                    <Pressable onPress={() => dispatch(setModal({name: 'TEST_DETAIL', state: false}))} className='flex-row items-center gap-3'>
                         <Ionicons name="arrow-back-outline" size={24} color="black" />
                         <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Profile</Text>
                     </Pressable>
@@ -35,7 +37,7 @@ const TestDetail = () => {
                         <Feather name="share-2" size={20} color='black' />
                     </View>
                 </View>
-                <View className='flex-row gap-4 p-[13px] items-center mb-2'>
+                <View className='flex-row gap-4 p-[13px] items-center mb-2 border-t border-gray-200'>
                     <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('./../assets/images/user.png')} style={{ width: 80, height: 80 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-slate-800 text-[15px] mb-2">{user.Name}</Text>
@@ -60,12 +62,29 @@ const TestDetail = () => {
                     </View>
                 </View> */}
             </View>
-            <View className='justify-between flex-row px-4 pt-4 pb-4 items-center'>
+            {/* <View className='justify-between flex-row px-4 pt-4 pb-4 items-center'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment</Text>
                 </View>
+            </View> */}
+            <View className='bg-white m-4 rounded-3xl shadow-md shadow-gray-400'>
+                <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Appoitment Date</Text>
+                    </View>
+                    <View className="gap-3 flex-row items-center ml-auto">
+                        <FontAwesome name="pencil" size={18} color="#6b7280" />
+                    </View>
+                </View>
+
+                <View className='flex-row gap-3 p-4'>
+                {/* <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} /> */}
+                <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
+                <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">{new Date(data.NextAppDate).toLocaleDateString('en-TT')}</Text>
+                <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">{new Date(data.NextAppDate).toDateString()}</Text>
+                </View>
             </View>
-            <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+            <View className='bg-white mx-4 mb-safe-or-4 rounded-3xl shadow-md shadow-gray-400'>
                 {/* <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
                     <View className='flex-row items-center gap-3'>
                         <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Reference No.</Text>
@@ -91,24 +110,8 @@ const TestDetail = () => {
                     <Text className="font-PoppinsSemibold text-[14px]" style={{color: data.Status === 'Y' ? '#00ad44' : '#f29101'}}>{ data.Status === 'Y' ? 'Done' : 'Pending' }</Text>
                 </View>
             </View>
-            <View className='bg-white m-4 rounded-3xl shadow-md shadow-gray-400'>
-                <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
-                    <View className='flex-row items-center gap-3'>
-                        <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Time & Date</Text>
-                    </View>
-                    <View className="gap-3 flex-row items-center ml-auto">
-                        <FontAwesome name="pencil" size={18} color="#6b7280" />
-                    </View>
-                </View>
-
-                <View className='flex-row gap-3 p-4'>
-                <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} />
-                <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">{data.NextAppTime}</Text>
-                <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
-                <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')}</Text>
-                </View>
-            </View>
-            <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+            
+            <View className='bg-white mx-4 mt-4 rounded-3xl shadow-md shadow-gray-400'>
             <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Clinic Details</Text>

@@ -22,7 +22,7 @@ export default function App() {
           <Link className='text-[3rem]' href={'/'}>Index</Link>
           <Link className='text-[3rem]' href={'/appn/home'}>Index 1</Link>
           <Link className='text-[3rem]' href={'/appn/cart'}>Index 3</Link>
-          <Link className='text-[3rem]' href={'/profile'}>Index 4</Link>
+          <Link className='text-[3rem]' href={'/testList'}>Index 4</Link>
           <Link className='text-[3rem]' href={'/testDetail'}>Index 4</Link>
           {/* <ButtonPrimary onClick={() => setLoading(!loading)} isLoading={loading} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' /> */}
           <Modals />

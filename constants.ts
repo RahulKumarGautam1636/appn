@@ -307,16 +307,16 @@ export const dummyUser = {
 
 export const myColors = {
   primary: {
-    50:  colors.gray[50],
-    100: colors.gray[100],
-    200: colors.gray[200],
-    300: colors.gray[300],
-    400: colors.gray[400],
-    500: colors.gray[500],
-    600: colors.gray[600],
-    700: colors.gray[700],
-    800: colors.gray[800],
-    900: colors.gray[900],
+    50:  colors.pink[50],
+    100: colors.pink[100],
+    200: colors.pink[200],
+    300: colors.pink[300],
+    400: colors.pink[400],
+    500: colors.pink[500],
+    600: colors.pink[600],
+    700: colors.pink[700],
+    800: colors.pink[800],
+    900: colors.pink[900],
   },
   bahia: {
     50: '#f9fbea',
