@@ -12,12 +12,14 @@ import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View }
 import { useDispatch, useSelector } from 'react-redux';
 import { myColors } from '@/constants';
 import LabCard from '@/src/components/cards';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const LabTests = ({}: any) => {
     const dispatch = useDispatch()
     const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
     const [labData, setLabData] = useState({loading: true, data: {ParentCategoryList: [], LinkSubCategoryList: [], itemMasterCollection: []}, err: {status: false, msg: ''}});
     const [investigationItem, setInvestigationItem] = useState({});
+    const [date, setDate] = useState({ active: false, value: new Date()});
 
     useEffect(() => {
         const getLabData = async (company: any) => {                
@@ -49,7 +51,7 @@ const LabTests = ({}: any) => {
         } else {
             return (
                 <View className='gap-4'>
-                    {productCategoryItems.map((i: any) => <LabCard key={i._id} data={i} />)}
+                    {productCategoryItems.map((i: any) => <LabCard key={i._id} data={i} testDate={(date.value).toLocaleDateString('en-TT')} />)}
                 </View>
             ) 
         }
@@ -157,10 +159,13 @@ const LabTests = ({}: any) => {
                     </View>
                     
                     <View className='bg-white mb-4 rounded-2xl shadow-lg'>
-                        <View className='flex-row w-full p-5 border-b border-gray-200 items-center'>
+                        <View className='flex-row w-full px-5 py-[16px] border-b border-gray-200 items-center'>
                             <FontAwesome5 name="calendar-alt" size={21} color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-slate-700 text-[14px] leading-6 ml-4 mr-auto">Select Date:</Text>
-                            <Text className="font-PoppinsMedium text-slate-500 text-[14px] leading-6 mr-2">25/08/2025</Text>
+                            <Text className="font-PoppinsMedium text-slate-500 text-[14px] leading-6 ml-4 mr-auto">Select Date:</Text>
+                            <Pressable onPress={() => setDate(pre => ({...pre, active: true}))}>
+                                <Text className="font-PoppinsMedium text-sky-700 text-[14px] leading-6 mr-2">{new Date(date.value).toLocaleDateString('en-TT')}</Text>
+                            </Pressable>
+                            {date.active ? <DateTimePicker value={date.value} mode="date" display="default" onChange={(e, d) => setDate({active: false, value: d})} /> : null}
                             <Feather name="chevron-down" size={22} color='gray' />
                         </View>               
                         <View className='flex-row gap-4 w-full p-4 items-center'>

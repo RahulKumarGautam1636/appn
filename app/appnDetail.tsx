@@ -95,7 +95,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <FontAwesome name="user" size={17} color="gray" />
                     <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">28 Years, &nbsp;&nbsp; Male</Text>
                     {/* <FontAwesome name="user" size={17} color="gray" /> */}
-                    <FontAwesome5 name="list" size={17} color="gray" />
+                    <FontAwesome5 name="info-circle" size={17} color="gray" />
                     <Text className="font-Poppins text-gray-500 text-[13px] leading-5">MRD : {data.UHID}</Text>
                 </View>
                 {/* <View className='gap-3 flex-row mt-4'>

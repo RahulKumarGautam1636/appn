@@ -72,7 +72,7 @@ const HomeScreen = () => {
     const renderAppnData = (data: any) => {
 
         if (data.loading) {
-            return <ListLoader classes='h-[120px]' count={1}/>
+            return <ListLoader classes='h-[140px]' count={1}/>
         } else if (data.err.status) {
             return;
         } else if (data.data.PartyFollowupList.length === 0) {

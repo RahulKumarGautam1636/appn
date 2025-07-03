@@ -1,7 +1,9 @@
 import { myColors } from "@/constants";
+import { RootState } from "@/src/store/store";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 
 export default function TabsLayout() {
 
@@ -15,6 +17,8 @@ export default function TabsLayout() {
   ]
   
   const router = useRouter()
+  const lab = useSelector((i: RootState) => i.cart).lab
+  const cart = Object.values(lab);
   return (
     <Tabs
       tabBar={({ state, descriptors, navigation }: any) => {        
@@ -39,9 +43,14 @@ export default function TabsLayout() {
               return (
                 <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px] ${isFocused ? 'border- border-primary-500' : ''}`}>
                   <Ionicons name={tab.icon} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
-                  <Text  style={[ styles.tabText, isFocused && styles.activeText ]}>
+                  <Text style={[ styles.tabText, isFocused && styles.activeText ]}>
                     {tab.name}
                   </Text>
+                  {tab.key === 'cart' && cart.length ? 
+                    <View className="absolute top-[8%] right-[20%] h-[16px] w-[16px] justify-center items-center bg-emerald-600 rounded-full">
+                      <Text className="text-white text-[10px] font-PoppinsMedium">{cart.length}</Text>
+                    </View>
+                  : null}
                   {isFocused && <View className="absolute w-full bottom-0 left-0 h-[2px] bg-primary-500"></View>}
                 </TouchableOpacity>
               )

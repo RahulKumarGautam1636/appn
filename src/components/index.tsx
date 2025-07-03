@@ -1,6 +1,6 @@
 import { myColors, SRC_URL } from "@/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
-import { Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform } from "react-native"
+import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import Loader from '../../assets/images/loader.svg';
 import { Link } from "expo-router";
@@ -12,6 +12,8 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { RootState } from "@/src/store/store";
 
 // import MapView, { Marker } from 'react-native-maps';
+
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 import { useEffect } from 'react';
@@ -425,6 +427,31 @@ export const MapComponent = () => {
     // );
   }
 }
+
+export function DatePickerExample() {
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    setShow(Platform.OS === 'ios'); // iOS keeps picker visible
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
+  };
+
+  const showDatePicker = () => {
+    setShow(true);
+  };
+
+  return (
+    <View style={{ padding: 20 }}>
+      <Button title="Pick a date" onPress={showDatePicker} />
+      {show && (<DateTimePicker value={date} mode="date" display="default" onChange={onChange} />)}
+      <Text style={{ marginTop: 20 }}>Selected: {date.toDateString()}</Text>
+    </View>
+  );
+}
+
 
 
 

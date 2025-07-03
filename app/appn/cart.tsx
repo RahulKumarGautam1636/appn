@@ -8,13 +8,15 @@ import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { myColors } from '@/constants';
+import { LabCartCard } from '@/src/components/cards';
 
 const Cart = ({}: any) => {
-    const dispatch = useDispatch()
     const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
+    const { selectedMember } = useSelector((i: RootState) => i.members)
     const router = useRouter()
     const lab = useSelector((i: RootState) => i.cart).lab
     const labTests = Object.values(lab);
+    const dispatch = useDispatch();
                                                             
     const itemsLength = labTests.length;
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
@@ -49,7 +51,41 @@ const Cart = ({}: any) => {
                             <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">26/06/2025</Text>
                         </View>
                     </View> 
-                    <View className='bg-primary-500 mb-4 rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
+                    <View className='justify-between flex-row pt-1 items-center'>
+                        <View className='flex-row items-center gap-3'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Patient Details</Text>
+                        </View>
+                    </View>
+                    <View className='bg-white rounded-2xl p-5 my-4 shadow-md shadow-gray-400'>
+                        <View className='flex-row items-center'>
+                            <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                            <View>
+                            <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
+                            <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder}</Text>
+                            </View>
+                            {/* <FontAwesome name="chevron-down" size={20} color='gray' className="ms-auto" /> */}
+                            <Pressable onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} className="ms-auto">
+                            <FontAwesome name="refresh" size={24} color="#2563eb"/>
+                            </Pressable>
+                        </View>
+                        <View className='py-3 px-4 bg-gray-100 mt-4 rounded-xl flex gap-3 flex-row'>
+                            <FontAwesome5 name="calendar-alt" size={17} color="#000" />
+                            <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{selectedMember.Age} Years</Text>
+                            <FontAwesome5 name="clock" size={17} color="#000" />
+                            <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{selectedMember.GenderDesc}</Text>
+                        </View>
+                        {/* <Text className="text-sm py-3 text-gray-500">
+                        <Text className="text-primary-500 font-Poppins">Note: </Text>
+                        You can submit patient details, old prescription, and test reports in the drop link.
+                        </Text>
+                        <ButtonPrimary title='Add Document' classes='p-[10px] bg-gray-50 border-dashed border border-gray-400 mt-1' textClasses='text-sm' /> */}
+                    </View>
+                    <View className='justify-between flex-row pt-1 items-center'>
+                        <View className='flex-row items-center gap-3'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Clinic Details</Text>
+                        </View>
+                    </View>
+                    <View className='bg-primary-500 my-4 rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
                         {/* <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-primary-300'>
                             <View className='flex-row items-center gap-3'>
                                 <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Clinics</Text>
@@ -79,43 +115,14 @@ const Cart = ({}: any) => {
                             </Link>
                         </View>
                     </View>
-                    {labTests.length ? <View className='gap-4 realtive mb-4'>
-                        {labTests.map((i: any) => (
-                            <View className='bg-white rounded-2xl shadow-lg' key={i.ItemId}>
-                                <View className='p-4'>
-                                    <Text className="font-PoppinsSemibold text-sky-800">{i.Description}</Text>
-                                    <View className='flex-row gap-4 items-end justify-between w-full mt-[6px]'>
-                                        <View>
-                                            <Text className="text-gray-500 text-sm font-PoppinsMedium">{i.CategoryName}</Text>
-                                            <View className='flex-row gap-4 items-center mt-1'>
-                                                <Text className="mt-2 text-[13px] text-blue-600 font-PoppinsSemibold leading-5"><FontAwesome name="rupee" size={13} color="#2563eb" /> {i.SRate}</Text>
-                                                <Text className="text-red-700 opacity-65 mt-2 text-sm font-PoppinsSemibold leading-5">X  {i.count}</Text>
-                                            </View>
-                                        </View>
-                                        <View className='flex-row gap-4 items-center'>
-                                            <View className='px-[10px] py-[8px] bg-gray-100 rounded-full justify-between gap-4 ml-auto flex-row shadow-sm shadow-gray-500'>
-                                                <TouchableOpacity onPress={() => dispatch(addToCart({type: 'lab', item: {...i, count: i.count - 1}}))}>
-                                                    <Feather name="minus" size={16} color="#6b7280" />
-                                                </TouchableOpacity>
-                                                <Text className='leading-6 font-PoppinsSemibold'>{i.count}</Text>
-                                                <TouchableOpacity onPress={() => dispatch(addToCart({type: 'lab', item: {...i, count: i.count + 1}}))}>
-                                                    <Feather name="plus" size={16} color="#6b7280" />
-                                                </TouchableOpacity>
-                                            </View>
-                                            <TouchableOpacity onPress={() => dispatch(removeFromCart({type: 'lab', item: i}))}>
-                                                <Feather name="trash-2" size={19} color="#ef4444" />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </View>
-                                <View className='flex-row w-full p-4 border-t border-gray-200 items-center'>
-                                    <Text className="font-PoppinsMedium text-slate-700 text-[14px] leading-6 mr-auto">Test Date :</Text>
-                                    <Text className="font-PoppinsMedium text-slate-500 text-[14px] leading-6 mr-2">25/08/2025</Text>
-                                    <Feather name="chevron-down" size={22} color='gray' />
-                                </View> 
-                            </View>
-                        ))}
-                    </View> : ''}
+                    <View className='justify-between flex-row pt-1 items-center'>
+                        <View className='flex-row items-center gap-3'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Cart Contents</Text>
+                        </View>
+                    </View>
+                    {labTests.length ? <View className='gap-4 realtive my-4'>
+                        {labTests.map((i: any) => (<LabCartCard data={i} key={i._id} />))}
+                    </View> : null}
                     <View className='bg-white mb-4 rounded-2xl shadow-lg shadow-gray-400'>
                         <View className='flex-row gap-4 w-full p-4 border-b border-gray-200 items-center'>
                             <View className='relative w-full'>

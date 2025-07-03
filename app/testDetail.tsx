@@ -111,7 +111,7 @@ const TestDetail = ({ data }) => {
                 </View>
             </View>
             
-            <View className='bg-white mx-4 mt-4 rounded-3xl shadow-md shadow-gray-400'>
+            <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
             <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Clinic Details</Text>
