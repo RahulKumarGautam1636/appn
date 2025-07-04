@@ -12,9 +12,16 @@ export default function LabCard({ data, testDate }: any) {
     const lab = useSelector((i: RootState) => i.cart).lab
     const labTests = Object.values(lab);
     const isAdded = labTests.find((i: any) => i._id === data._id);
+    const handleAdd = () => {
+        if (isAdded) {
+            dispatch(removeFromCart({ type: 'lab', item: data }));
+        } else {
+            dispatch(addToCart({type: 'lab', item: {...data, testDate: testDate}}));
+        }
+    }
 
     return (
-        <TouchableOpacity key={data.ItemId} onPress={() => dispatch(addToCart({type: 'lab', item: {...data, testDate: testDate}}))} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg p-4">
+        <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg p-4">
             <View className="mt-1 uppercase h-[45px] w-[45px] items-center justify-center rounded-xl bg-primary-500">
                 <Ionicons name={'flask'} size={21} color={'#fff'} />
             </View>

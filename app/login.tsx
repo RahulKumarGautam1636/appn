@@ -173,15 +173,25 @@ const Login = () => {
         //     presentationStyle='fullScreen'
         //     className="absolute inset-0"
         // >
-            <ScrollView contentContainerClassName='bg-slate-200 min-h-full' style={{minHeight: '100%'}}>
+            <ScrollView contentContainerClassName='bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#6366f1] via-[#a5b4fc] to-[#e0e7ff] min-h-full' style={{minHeight: '100%'}}>
                 {/* <Image source={require('../assets/images/bg.jpg')} className="absolute w-full h-full z-0" resizeMode="cover" /> */}
-                <View className="w-full h-1/2 z-0 justify-center items-center relative">
-                    <Image source={require('../assets/images/bg.jpg')} className="h-full w-full" resizeMode="cover" />
-                    {/* <Image source={require('../assets/images/logo.png')} className="h-[150px] w-[150px] absolute top-[35%] left-1/2" style={{transform: 'translate(-50%, -50%)'}} resizeMode="cover" /> */}
+                {/* <View className="w-full h-1/2 z-0 justify-center items-center relative">
+                </View> */}
+                <View className="relative gap-3 flex-row items-center justify-center mb-4 flex-1">
+                    <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
+                    <Image className='' source={require('../assets/images/logo.png')} style={{ width: 75, height: 65 }} />
+                    <View>
+                        <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2">Healthify</Text>
+                        <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text>
+                    </View>
                 </View>
-                <View className='bg-white mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem] px-4 pt-6 pb-36 absolute bottom-0 w-full'>
+                <View className='bg-white shadow-lg mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem] px-4 pt-6 pb-20 w-full'>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center py-4">Welcome Back</Text>
-                    <View className="p-4 gap-6">
+                    {/* <View className="gap-3 flex-row items-center justify-center mb-4">
+                        <Image className='' source={require('../assets/images/logo.png')} style={{ width: 50, height: 40 }} />
+                        <Text className="font-PoppinsSemibold text-gray-800 text-[28px]">Healthify</Text>
+                    </View> */}
+                    <View className="p-4 gap-8">
                         <View className='z-10'>
                             <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
                             <TextInput placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
@@ -193,10 +203,10 @@ const Login = () => {
                         {/* {status === 'loading' &&
                             <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">Loading...</Text>
                         } */}
-                        <Text className="text-primary-500 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
+                        <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
                         <ButtonPrimary onClick={handleLoginFormSubmit} isLoading={loading} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
-                        <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account ? 
-                            <Text className="text-primary-500"> Register Now</Text>
+                        <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account  ? 
+                            <Text className="text-primary-500">  Register Now</Text>
                         </Text>
                     </View>
                 </View>

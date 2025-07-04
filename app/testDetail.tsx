@@ -96,6 +96,10 @@ const TestDetail = ({ data }) => {
                     <Text className="font-PoppinsSemibold text-[14px] text-slate-500">{data.DeptName}</Text>
                 </View>
                 <View className='flex-row gap-3 p-4 border-b border-gray-300'>
+                    <Text className="font-PoppinsSemibold text-slate-700 text-[14px] mr-auto">MRD No.</Text>
+                    <Text className="font-PoppinsSemibold text-[14px] text-slate-500">{data.UHID}</Text>
+                </View>
+                <View className='flex-row gap-3 p-4 border-b border-gray-300'>
                     <Text className="font-PoppinsSemibold text-slate-700 text-[14px] mr-auto">Reference No.</Text>
                     <Text className="font-PoppinsSemibold text-[14px] text-slate-500">{data.TranNo}</Text>
                 </View>

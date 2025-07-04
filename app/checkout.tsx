@@ -208,7 +208,7 @@ const Checkout = ({ handleClose }: any) => {
                             <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{selectedMember.GenderDesc}</Text>
                         </View>
                         <Text className="text-sm py-3 text-gray-500">
-                        <Text className="text-primary-500 font-Poppins">Address: </Text>{selectedMember.Address}</Text>
+                        <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
                     </View>
                     <View className='justify-between flex-row pt-1 items-center'>
                         <View className='flex-row items-center gap-3'>

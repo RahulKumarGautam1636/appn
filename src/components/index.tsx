@@ -34,7 +34,7 @@ import AppnDetail from "@/app/appnDetail";
 export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
 
   return (
-    <TouchableOpacity onPressOut={onClick} className={`p-4 items-center justify-center rounded-full shadow-sm shadow-gray-700 ${classes} ${(active && !isLoading) ? 'bg-primary-500' : 'bg-gray-300'}`} onPress={onPress}>
+    <TouchableOpacity onPressOut={onClick} className={`h-[53px] items-center justify-center rounded-full shadow-sm shadow-gray-700 ${classes} ${(active && !isLoading) ? 'bg-primary-500' : 'bg-gray-300'}`} onPress={onPress}>
       {isLoading ? 
       <SvgLoader /> : 
       <Text className={`font-PoppinsSemibold ${textClasses} ${(active && !isLoading) ? 'text-white' : 'text-slate-500'}`}>{title}</Text>

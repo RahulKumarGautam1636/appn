@@ -5,6 +5,8 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { myColors } from '@/constants';
+import { useDispatch } from 'react-redux';
+import { setLogin, setUser } from '@/src/store/slices/slices';
 
 
 const Profile = () => {
@@ -19,6 +21,7 @@ const Profile = () => {
     }
 
     const router = useRouter();
+    const dispatch = useDispatch()
 
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -77,7 +80,7 @@ const Profile = () => {
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
-                <Link href={'/'}>
+                <Link href={'/testList'}>
                     <View className='flex-row gap-4 w-full p-5 border-b border-gray-200'>
                         <Ionicons name="flask" size={22} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Lab Tests</Text>
@@ -105,7 +108,7 @@ const Profile = () => {
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
-                <Link href={'/'}>
+                <Link href={'/'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
                     <View className='flex-row gap-4 w-full p-5'>
                         <Entypo name="log-out" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Logout</Text>
