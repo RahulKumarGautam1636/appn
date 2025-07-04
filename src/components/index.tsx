@@ -273,6 +273,25 @@ export const DayBtn = ({ data, activeDate, handleActive }: any) => {
   )
 } 
 
+export const mmDDyyyyDate = (date: string, currSeperator: string, requiredSeperator: string): string | void => {                 // Convert dd/mm/yyyy to mm/dd/yyyy format because dd/mm/yyyy is not taken as Date() object to create new date.
+  if (!date.includes(currSeperator)) return console.log('CurrentSeperator does not exist in received date.');
+  const [dd, mm, yyyy] = date.split(currSeperator);
+  return mm + requiredSeperator + dd + requiredSeperator + yyyy;                  
+}
+
+export const getDateDifference = (date: string) => {
+  let x = mmDDyyyyDate(date, '/', '/');
+  let appnDate = new Date(x).getDate();
+  const currDate = new Date().getDate();
+  if (appnDate > currDate) {
+    return 'tomorrow';    
+  } else if (appnDate < currDate) {     
+    return 'yesterday';    
+  } else {
+    return 'today';      
+  }
+}  
+
 export const getDatesArray = function(start: Date, end: number) {
   const endDate = new Date(new Date().setDate(start.getDate() + end));
   for(var arr=[],dt=new Date(start); dt<=new Date(endDate); dt.setDate(dt.getDate()+1)){

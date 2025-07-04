@@ -111,21 +111,21 @@ const TestDetail = ({ data }) => {
                 </View>
             </View>
             
-            <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
-            <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
-                <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Clinic Details</Text>
+            <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400 mt-4'>
+                <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Clinic Details</Text>
+                    </View>
                 </View>
-            </View>
 
-            <View className='flex-row items-center gap-4 pl-5 pr-4 pt-3 pb-4'>
-                <View className='flex-1'>
-                <Text className="font-PoppinsMedium text-[14px]">{data.CompanyName}</Text>
-                <Text className="font-PoppinsSemibold text-slate-500 text-[11px] my-1">08:30 AM - 12:00 PM</Text>
-                <Text className="font-Poppins text-gray-500 text-[11px]" numberOfLines={1}>Ramnagar Kalitala Road, Ranaghat, Nadia</Text>
+                <View className='flex-row items-center gap-4 pl-5 pr-4 pt-3 pb-4'>
+                    <View className='flex-1'>
+                    <Text className="font-PoppinsMedium text-[14px]">{data.CompanyName}</Text>
+                    <Text className="font-PoppinsSemibold text-slate-500 text-[11px] my-1">08:30 AM - 12:00 PM</Text>
+                    <Text className="font-Poppins text-gray-500 text-[11px]" numberOfLines={1}>Ramnagar Kalitala Road, Ranaghat, Nadia</Text>
+                    </View>
+                    <Feather name="chevron-right" size={24} color="gray" className='ml-auto' />
                 </View>
-                <Feather name="chevron-right" size={24} color="gray" className='ml-auto' />
-            </View>
             </View>
             <View className='justify-between flex-row px-4 pt-5 items-center'>
                 <View className='flex-row items-center gap-3'>

@@ -1,4 +1,4 @@
-import { Feather, FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { Feather, FontAwesome, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ButtonPrimary from "../../src/components";
 import { setModal } from "@/src/store/slices/slices";
@@ -51,9 +51,9 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
               </Pressable>
           </View>
           <View className='py-3 px-4 bg-gray-100 mt-4 rounded-xl flex gap-3 flex-row'>
-              <FontAwesome5 name="calendar-alt" size={17} color="#000" />
+              <MaterialIcons name="av-timer" size={17} color="#000" />
               <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{member.Age} Years</Text>
-              <FontAwesome5 name="clock" size={17} color="#000" />
+              <Ionicons name="male-female" size={17} color="#000" />
               <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{member.GenderDesc}</Text>
           </View>
           <Text className="text-sm py-3 text-gray-500">

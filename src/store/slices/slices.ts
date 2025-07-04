@@ -231,11 +231,15 @@ const cartSlice = createSlice({
     removeFromCart: (state, action: any) => {
       const { item, type } = action.payload;
       delete state[type][item._id]
+    },
+    dumpCart: (state, action: any) => {
+      const { type } = action.payload;
+      state[type] = {}
     }
   }
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, dumpCart } = cartSlice.actions;
 const cartReducer = cartSlice.reducer;
 
 
