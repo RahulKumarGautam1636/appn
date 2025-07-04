@@ -37,7 +37,7 @@ export default function RootLayout() {
     <Provider store={store}>
       <GestureHandlerRootView>
         <SafeAreaProvider>
-          <SafeAreaView className="flex-1 opacity-10">
+          <SafeAreaView className="flex-1">
             <KeyboardAvoidingView className="flex-1">
               <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? 'light-content' : 'dark-content'} />
               <Stack>
