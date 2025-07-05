@@ -51,17 +51,21 @@ const Profile = () => {
                     </View>
                 </View>
                 <View className='flex-row justify-between border-y border-gray-300 border-solid'>
-                    <View className='items-center flex-1 border-r border-gray-300 p-4'>
-                        <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">7</Text>
-                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
+                    <View className='items-center flex-1 border-r border-gray-300'>
+                        <Link href={'/testList'}>
+                            <View className='text-center p-4'>
+                                <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">7</Text>
+                                <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
+                            </View>
+                        </Link>
                     </View>
-                    {/* <View className='items-center flex-1 '>
-                        <Text className="font-PoppinsSemibold text-gray-800 text-[14px] mb-1">2566</Text>
-                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Patients</Text>
-                    </View> */}
-                    <View className='items-center flex-1 p-4'>
-                        <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">15</Text>
-                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
+                    <View className='items-center flex-1'>
+                        <Link href={'/appn/appnList'}>
+                            <View className='text-center p-4'>
+                                <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">15</Text>
+                                <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
+                            </View>
+                        </Link>
                     </View>
                 </View>
             </View>
