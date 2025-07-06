@@ -307,16 +307,16 @@ export const dummyUser = {
 
 export const myColors = {
   primary: {
-    50:  colors.slate[50],
-    100: colors.slate[100],
-    200: colors.slate[200],
-    300: colors.slate[300],
-    400: colors.slate[400],
-    500: colors.slate[500],
-    600: colors.slate[600],
-    700: colors.slate[700],
-    800: colors.slate[800],
-    900: colors.slate[900],
+    50:  colors.pink[50],
+    100: colors.pink[100],
+    200: colors.pink[200],
+    300: colors.pink[300],
+    400: colors.pink[400],
+    500: colors.pink[500],
+    600: colors.pink[600],
+    700: colors.pink[700],
+    800: colors.pink[800],
+    900: colors.pink[900],
   },
   bahia: {
     50: '#f9fbea',
@@ -332,3 +332,65 @@ export const myColors = {
     950: '#1f290a',
   },
 }
+
+export const gender = [
+  {CodeId: 105, Description: "Female", icon: 'face-woman-outline'},
+  {CodeId: 104, Description: "Male", icon: 'face-man-outline'},
+  {CodeId: 106, Description: "Trans Gender", icon: 'account-question-outline'}
+]
+
+export const states = [
+  {CodeId: 3, Description: "West Bengal"},
+  {CodeId: 5, Description: "Andhra Pradesh"},
+  {CodeId: 1442, Description: "Arunachal Pradesh"},
+  {CodeId: 1443, Description: "Assam"},
+  {CodeId: 1444, Description: "Bihar"},
+  {CodeId: 1445, Description: "Goa"},
+  {CodeId: 1446, Description: "Gujarat"},
+  {CodeId: 1447, Description: "Haryana"},
+  {CodeId: 1448, Description: "Himachal Pradesh"},
+  {CodeId: 1449, Description: "Jammu & Kashmir"},
+  {CodeId: 1450, Description: "Karnataka"},
+  {CodeId: 1451, Description: "Kerala"},
+  {CodeId: 1452, Description: "Madhya Pradesh"},
+  {CodeId: 1453, Description: "Maharashtra"},
+  {CodeId: 1454, Description: "Meghalaya"},
+  {CodeId: 1455, Description: "Mizoram"},
+  {CodeId: 1456, Description: "Nagaland"},
+  {CodeId: 1457, Description: "Odisha"},
+  {CodeId: 1458, Description: "Punjab"},
+  {CodeId: 1459, Description: "Rajasthan"},
+  {CodeId: 1460, Description: "Sikkim"},
+  {CodeId: 1461, Description: "Tamil Nadu"},
+  {CodeId: 1462, Description: "Tripura"},
+  {CodeId: 1463, Description: "Uttar Pradesh"},
+  {CodeId: 1464, Description: "Chhattisgarh"},
+  {CodeId: 1465, Description: "Uttarakhand"},
+  {CodeId: 1466, Description: "Jharkhand"},
+  {CodeId: 1467, Description: "Telangana"},
+  {CodeId: 1541, Description: "New Delhi"},
+  {CodeId: 1542, Description: "Andaman and Nicobar Islands"},
+  {CodeId: 1543, Description: "Chandigarh"},
+  {CodeId: 1544, Description: "Dadra and Nagar Haveli"},
+  {CodeId: 1545, Description: "Daman and Diu"},
+  {CodeId: 1546, Description: "DELHI"},
+  {CodeId: 1547, Description: "Lakshadweep"},
+  {CodeId: 1548, Description: "Puducherry"},
+  {CodeId: 1569, Description: "Manipur"},
+  {CodeId: 1573, Description: "Andhra Pradesh"}
+]
+
+export const salutations = [
+  {value: 'Dr', title: 'Dr'},
+  {value: 'Mr', title: 'Mr'},
+  {value: 'Ms', title: 'Ms'},
+  {value: 'Mrs', title: 'Mrs'},
+  {value: 'Miss', title: 'Miss'},
+  {value: 'BabyOf', title: 'Baby Of'},
+  {value: 'Master', title: 'Master'},
+  {value: 'Baby', title: 'Baby'},
+  {value: 'Md', title: 'Md.'},
+  {value: 'Prof', title: 'Prof.'},
+  {value: 'Rev', title: 'Rev.'},
+  {value: 'Sk', title: 'Sk.'}
+]

@@ -177,3 +177,47 @@ export const getRequiredFields = (list, compCode: number) => {
 }
 
 export const num = (n: any) => parseFloat(n.toFixed(2));
+
+export const createDate = (days: any, months: any, years: any) => {
+  var date = new Date(); 
+  date.setDate(date.getDate() - days);
+  date.setMonth(date.getMonth() - months);
+  date.setFullYear(date.getFullYear() - years);  
+  return date.toLocaleDateString('en-TT');
+  // return date.toISOString().substr(0, 10);    
+}
+
+export const getDuration = (date: any) => {
+
+  // let [byears, bmonths, bdays] = date ? date.split('-') : new Date().toLocaleDateString('en-CA').split('-');
+  // let [years, months, days] = new Date().toLocaleDateString('en-CA').split('-');
+  let [bdays, bmonths, byears] = date ? date.split('/') : new Date().toLocaleDateString('en-TT').split('/');
+  let [days, months, years] = new Date().toLocaleDateString('en-TT').split('/');
+  
+  var by = Number.parseFloat(byears),
+      bm = Number.parseFloat(bmonths),
+      bd = Number.parseFloat(bdays),
+      ty = Number.parseFloat(years),
+      tm = Number.parseFloat(months),
+      td = Number.parseFloat(days);
+
+  if (td < bd) {
+    days = (td - bd + 30);
+    tm = tm - 1;
+  } else {
+    days = (td - bd);
+  }
+
+  if (tm < bm) {
+    months = (tm - bm + 12);
+    ty = ty - 1;
+  } else {
+    months = (tm - bm)
+  }
+  years = (ty - by);
+  return { 
+    years: years ? years : 0,
+    months: months ? months : 0,
+    days: days ? days : 0 
+  }
+}

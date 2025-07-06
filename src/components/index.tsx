@@ -392,11 +392,12 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose }: any)
       coverScreen={true}
       avoidKeyboard={true}
       animationInTiming={500}
-      style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center'}}
+      className={customClass}
+      style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', ...styles}}
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />
     >
-      <KeyboardAvoidingView className="flex-1">
+      <KeyboardAvoidingView className="flex-1 justify-center" pointerEvents="box-none">
         <View style={styles.modal}>
           {React.cloneElement(child, { name: name, modalActive: modalActive })}
         </View>
@@ -406,7 +407,7 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose }: any)
 };
 
 const styles = StyleSheet.create({
-  modal: { backgroundColor: 'white', height: '100%', margin: 0 },
+  modal: {margin: 0, justifyContent: 'center' },
 });
 
 

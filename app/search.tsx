@@ -61,13 +61,13 @@ function MainSearch() {
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
             <View className="p-4">
                 <View className='relative'>
-                    <TouchableOpacity onPress={() => router.back()} className="absolute z-50 top-[12px] left-4">
+                    <TouchableOpacity onPress={() => router.back()} className="absolute z-50 top-[13px] left-4">
                         <Ionicons name="arrow-back-outline" size={22} color="#3b82f6" />
                     </TouchableOpacity>
                     <View className='z-10'>
-                        <TextInput value={searchKey.query} onChangeText={(text) => setSearchKey(pre => ({...pre, query: text }))} placeholder='Search Doctors..' className='bg-white pl-[3.5rem] pr-4 py-4 rounded-full shadow-md shadow-blue-500' />
+                        <TextInput value={searchKey.query} onChangeText={(text) => setSearchKey(pre => ({...pre, query: text }))} placeholder='Search Doctors..' className='bg-white pl-[3.5rem] pr-4 py-[1.1rem] rounded-full shadow-md shadow-blue-500' />
                     </View>
-                    <Feather className='absolute z-50 top-[3px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
+                    <Feather className='absolute z-50 top-[4px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>
                 <Text className="py-5 font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Top Searches</Text>
                 <View className="flex-wrap flex-row gap-[9px]">

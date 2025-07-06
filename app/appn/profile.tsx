@@ -7,6 +7,9 @@ import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { myColors } from '@/constants';
 import { useDispatch } from 'react-redux';
 import { setLogin, setUser } from '@/src/store/slices/slices';
+import { useState } from 'react';
+import { Registeration } from '../login';
+import { MyModal } from '@/src/components';
 
 
 const Profile = () => {
@@ -20,10 +23,18 @@ const Profile = () => {
         Appontments: 15,
     }
 
+    const [personalInfoActive, setPersonalInfoActive] = useState(false);
+
     const router = useRouter();
     const dispatch = useDispatch()
 
     return (
+        <>
+        <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={
+            <ScrollView>
+                <Registeration isModal={true} />
+            </ScrollView>
+        } />
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
             <View className='bg-white'>
                 <View className='justify-between flex-row p-4 items-center'>
@@ -70,13 +81,13 @@ const Profile = () => {
                 </View>
             </View>
             <View className='bg-white m-3 rounded-lg shadow-lg shadow-gray-400'>
-                <Link href={'/'}>
+                <Pressable onPress={() => setPersonalInfoActive(true)}>
                     <View className='flex-row gap-4 w-full p-5 border-b border-gray-200 items-center'>
                         <FontAwesome name="user" size={24} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Personal Information</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
-                </Link>                
+                </Pressable>                
                 <Link href={'/appn/appnList'}>
                     <View className='flex-row gap-4 w-full p-5 border-b border-gray-200 items-center'>
                         <FontAwesome5 name="calendar-alt" size={22} color={myColors.primary[500]} style={{width: 26}} />
@@ -121,6 +132,7 @@ const Profile = () => {
                 </Link>
             </View>
         </ScrollView>
+        </>
     )
 }
 

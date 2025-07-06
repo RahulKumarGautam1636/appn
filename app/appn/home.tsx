@@ -138,13 +138,13 @@ const HomeScreen = () => {
                     </View>
                 }
                 <View className='relative my-3 w-full'>
-                    <Feather className='absolute z-50 top-[13px] left-4' name="search" size={22} color='gray' />
+                    <Feather className='absolute z-50 top-[12px] left-4' name="search" size={22} color='gray' />
                     <Link href={'/search'}>
                         <View className='z-10 w-full pointer-events-none'>
-                            <TextInput placeholder='Search Doctors..' className='bg-white pl-[3.3rem] pr-4 py-4 rounded-full shadow-lg shadow-blue-500' />
+                            <TextInput placeholder='Search Doctors..' className='bg-white pl-[3.3rem] pr-4 py-[1.1rem] rounded-full shadow-lg shadow-blue-500' />
                         </View>
                     </Link>
-                    <Feather className='absolute z-50 top-[3px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
+                    <Feather className='absolute z-50 top-[4px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>
                 {isLoggedIn && renderAppnData(appData)}
                 <View className='justify-between flex-row pt-1 items-center'>
