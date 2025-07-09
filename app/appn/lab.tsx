@@ -108,7 +108,7 @@ const LabTests = ({}: any) => {
                         {companyList.map((i: any) => <CompCard data={i} key={i.EncCompanyId} active={selectedCompany?.EncCompanyId === i.EncCompanyId}/>)}
                     </ScrollView> */}
                     
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[16px] mb-2">Book Lab Tests</Text> 
+                    {/* <Text className="font-PoppinsSemibold text-gray-700 text-[16px] mb-2">Book Lab Tests</Text>  */}
                     {/* <TouchableOpacity onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))} className="bg-primary-500 gap-4 rounded-2xl mb-4 p-5 shadow-lg shadow-gray-400">
                         <Text className="font-PoppinsSemibold text-white text-[14px] border-b border-gray-200">Select Clinic</Text>   
                         <View className="gap-4 flex-row items-center justify-between rounded-2xl flex-1">
@@ -125,17 +125,17 @@ const LabTests = ({}: any) => {
                         </View> 
                     </TouchableOpacity> */}
 
-                    <View className='bg-primary-500 mb-4 rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
-                        <View className='justify-between flex-row pl-5 pr-4 pt-2 pb-[5] items-center border-b border-primary-300'>
-                            <View className='flex-row items-center gap-3'>
-                                <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Select Clinic</Text>
-                            </View>
-                            <Pressable onPress={() => dispatch(setModal({ name: 'COMPANIES', state: true }))} className="gap-2 flex-row items-center ml-auto">
-                                <Text className="font-Poppins text-white text-[12px] leading-4">{companyList.length} more clinics</Text>
-                                <Feather name="chevron-down" size={24} color='#fff' />
-                            </Pressable>
+                    <View className='justify-between flex-row items-center mb-3'>
+                        <View className='flex-row items-center gap-3'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
                         </View>
+                        <Pressable onPress={() => dispatch(setModal({ name: 'COMPANIES', state: true }))} className="gap-2 flex-row items-center ml-auto">
+                            <Text className="font-PoppinsMedium text-sky-700 text-[13px] leading-4">{companyList.length} more clinics</Text>
+                            <Feather name="chevron-down" size={24} color='#0369a1' />
+                        </Pressable>
+                    </View>
 
+                    <View className='bg-primary-500 mb-[1.15rem] rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
                         <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
                             <View className='flex-1'>
                                 <Text className="font-PoppinsSemibold text-[15px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
@@ -158,7 +158,7 @@ const LabTests = ({}: any) => {
                         </View>
                     </View>
                     
-                    <View className='bg-white mb-4 rounded-2xl shadow-lg'>
+                    <View className='bg-white mb-4 rounded-2xl shadow-md shadow-gray-500'>
                         <View className='flex-row w-full px-5 py-[16px] border-b border-gray-200 items-center'>
                             <FontAwesome5 name="calendar-alt" size={21} color={myColors.primary[500]} />
                             <Text className="font-PoppinsMedium text-slate-500 text-[14px] leading-6 ml-4 mr-auto">Select Date:</Text>
@@ -173,6 +173,16 @@ const LabTests = ({}: any) => {
                                 <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' className='bg-[#ebecef] py-4 items-start px-5 rounded-2xl shadow-sm shadow-gray-500 w-full' />
                                 <Feather className='absolute z-50 top-[12px] right-4' name="search" size={22} color={myColors.primary[500]} />
                             </View>
+                        </View>
+                    </View>
+                    <View className='justify-between flex-row pt-1 pb-4 items-center'>
+                        <View className='flex-row items-center gap-3'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Popular Tests</Text>
+                        </View>
+                        <View className="gap-3 flex-row items-center ml-auto">
+                            {/* <Feather name="chevron-left" size={24} color='#6b7280' />
+                            <Feather name="chevron-right" size={24} color='#6b7280' /> */}
+                            <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
                         </View>
                     </View>
                     {renderContent(labData)}

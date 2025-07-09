@@ -57,10 +57,10 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
               <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{member.GenderDesc}</Text>
           </View>
           <Text className="text-sm py-3 text-gray-500">
-            <Text className="text-primary-500 font-Poppins">Note: </Text>
+            <Text className="text-primary-500 font-Poppins leading-6">Note: </Text>
             You can submit patient details, old prescription, and test reports in the drop link.
           </Text>
-           <ButtonPrimary title='Add Document' classes='p-[10px] bg-gray-50 border-dashed border border-gray-400 mt-1' textClasses='text-sm' />
+           <ButtonPrimary title='Add Document' classes='!h-[46px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
         </View>
         <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>

@@ -5,26 +5,18 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { myColors } from '@/constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLogin, setUser } from '@/src/store/slices/slices';
 import { useState } from 'react';
 import { Registeration } from '../login';
 import { MyModal } from '@/src/components';
+import { RootState } from '@/src/store/store';
 
 
 const Profile = () => {
 
-    const user = {
-        Name: 'Emma Phillips',
-        Age: 35,
-        GenderDesc: 'Female',
-        Qualification: 'Gynacologist',
-        LabTests: 7,
-        Appontments: 15,
-    }
-
+    const user = useSelector((state: RootState) => state.user);
     const [personalInfoActive, setPersonalInfoActive] = useState(false);
-
     const router = useRouter();
     const dispatch = useDispatch()
 
@@ -64,16 +56,16 @@ const Profile = () => {
                 <View className='flex-row justify-between border-y border-gray-300 border-solid'>
                     <View className='items-center flex-1 border-r border-gray-300'>
                         <Link href={'/testList'}>
-                            <View className='text-center p-4'>
-                                <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">7</Text>
+                            <View className='items-center p-4'>
+                                <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">7</Text>
                                 <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
                             </View>
                         </Link>
                     </View>
                     <View className='items-center flex-1'>
                         <Link href={'/appn/appnList'}>
-                            <View className='text-center p-4'>
-                                <Text className="font-PoppinsBold text-sky-600 text-[18px] mb-0">15</Text>
+                            <View className='items-center p-4'>
+                                <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">15</Text>
                                 <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
                             </View>
                         </Link>

@@ -213,11 +213,11 @@ export const Card_2 = ({ data, index, active }: any) => {
             <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSelect('appnList')} className='flex-row gap-3 p-4 border-b border-gray-300'>
+          <TouchableOpacity onPress={() => handleSelect('appn/home')} className='flex-row gap-3 p-4 border-b border-gray-300'>
             <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSelect('testList')} className='flex-row gap-3 p-4'>
+          <TouchableOpacity onPress={() => handleSelect('appn/lab')} className='flex-row gap-3 p-4'>
             <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
           </TouchableOpacity>
@@ -377,7 +377,7 @@ export const Card_4 = ({ data }: any) => {
 }
 
 
-export const MyModal = ({ modalActive, child, name, customClass, onClose }: any) => {
+export const MyModal = ({ modalActive, child, name, customClass, onClose, styles }: any) => {
   const dispatch = useDispatch();
 
   const handleClose = () => {
@@ -400,11 +400,11 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose }: any)
       avoidKeyboard={true}
       animationInTiming={500}
       className={customClass}
-      style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', opacity: blur ? 0.1 : 1 }}
+      style={{margin: 0, flex: 1, height: '100%', opacity: blur ? 0.1 : 1, ...styles }}
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />
     >
-      <KeyboardAvoidingView className="flex-1" pointerEvents="box-none">
+      <KeyboardAvoidingView className="flex-1 justify-center" pointerEvents="box-none">
         {/* <View style={styles.modal}> */}
           {React.cloneElement(child, { name: name, modalActive: modalActive })}
         {/* </View> */}
@@ -435,7 +435,11 @@ export const MapComponent = () => {
     // const MapView = require('react-native-maps').default;
     // const Marker = require('react-native-maps').Marker;
   
-    return 
+    return (
+      <View className="h-[200px] border border-gray-300">
+        <Image source={require('./../../assets/images/MAP.jpg')} resizeMode="cover" />
+      </View>
+    )
     // (
     //   <MapView
     //     style={{ flex: 1 }}

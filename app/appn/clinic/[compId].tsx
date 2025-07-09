@@ -115,7 +115,7 @@ const Clinic = () => {
                     <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-5">Location</Text>
                     {/* <View className="h-[150px] bg-gray-300 mt-3 rounded-xl"></View> */}
 
-                    <View className="mt-3 h-[200px] border border-gray-300">
+                    <View className="mt-3">
 
                             <MapComponent />
       

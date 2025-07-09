@@ -496,7 +496,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                     <TextInput placeholder='Enter your OTP..' value={otp.enteredValue} onChangeText={(text) => setOTP(pre => ({...pre, enteredValue: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                 </View> : null}
                 {!personalFields ? <>
-                    <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">We'll send you an OTP !</Text>
+                    <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto mb-10">We'll send you an OTP !</Text>
                     <ButtonPrimary onClick={handleNext} isLoading={loading} title='SUBMIT' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                 </> : null}
                 {personalFields ? <>
@@ -570,7 +570,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                     <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Please use a strong password</Text>
                     <ButtonPrimary onClick={handleRegFormSubmit} isLoading={loading} title={isModal ? 'UPDATE DETAILS' : 'REGISTER'} active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                 </> : null}
-                {isModal ? null: <Pressable onPress={() => setTab('login')}>
+                {isModal ? null: <Pressable onPress={() => setTab('login')} className="mt-4">
                     <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Already have Account  ? 
                         <Text className="text-primary-500">  Please Login</Text>
                     </Text>

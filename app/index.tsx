@@ -6,6 +6,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import './globals.css';
 import Modals from '../src/components/modals';
 import { DatePickerExample } from '@/src/components';
+import Init from '@/src/components/init';
 // import ButtonPrimary from './components';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { RootState } from './store/store';
@@ -19,6 +20,7 @@ export default function App() {
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <SafeAreaView className="flex-1">
+          <Init />
           <Text className=''>INDEX PAGE</Text>
           <Link className='text-[3rem]' href={'/'}>Index</Link>
           <Link className='text-[3rem]' href={'/appn/home'}>Index 1</Link>

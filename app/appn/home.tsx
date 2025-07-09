@@ -16,7 +16,6 @@ import { getFrom, GridLoader, ListLoader, NoContent } from '../../src/components
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
-    const compCode = useSelector((state: RootState) => state.compCode);
     const isLoggedIn = useSelector((state: RootState) => state.isLoggedIn);
     const user = useSelector((state: any) => state.user);
     const { list, selected, status, error } = useSelector((state: RootState) => state.companies);
@@ -24,16 +23,6 @@ const HomeScreen = () => {
     const [doctors, setDoctors] = useState({loading: true, data: {PartyMasterList: [], CompanyMasterList: []}, err: {status: false, msg: ''}})
     const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 30), activeDate: new Date().toLocaleDateString('en-TT')})
     const [appData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
-
-    useEffect(() => {
-        dispatch(getCompanies({ companyCode: compCode, userId: user.UserId ? user.UserId : 14701 }));
-        dispatch(getMembers(compCode, user.UserId, user.MemberId));
-    }, [user.UserId, compCode])
-
-    useEffect(() => {
-        if (!selected.EncCompanyId) return;
-        dispatch(getDepartments({ companyCode: selected.EncCompanyId }));
-    }, [selected.EncCompanyId])
 
     useEffect(() => {
         let controller = new AbortController();
