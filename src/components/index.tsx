@@ -1,9 +1,9 @@
-import { myColors, SRC_URL } from "@/constants"
+import { blur, myColors, SRC_URL } from "@/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
 import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import Loader from '../../assets/images/loader.svg';
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { setAppnData, setCompanies, setDepts, setMembers, setModal } from "@/src/store/slices/slices";
 
 import React, { useRef, useState } from 'react';
@@ -196,21 +196,28 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
 export const Card_2 = ({ data, index, active }: any) => {
 
   const dispatch = useDispatch()
-
+  const router = useRouter();
   const [dropdown, setDropdown] = useState(false);
+  
+  const handleSelect = (path: string) => {
+    dispatch(setMembers({ selectedMember: data }))
+    setDropdown(false)
+    dispatch(setModal({ name: 'MEMBERS', state: false }))
+    if (path) router.push(`/${path}`)
+  }
 
   const Dropdown = () => {
     return (
       <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
-          <TouchableOpacity className='flex-row gap-3 p-4 border-b border-gray-300' >
+          <TouchableOpacity onPress={() => handleSelect('')} className='flex-row gap-3 p-4 border-b border-gray-300' >
             <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
           </TouchableOpacity>
-          <TouchableOpacity className='flex-row gap-3 p-4 border-b border-gray-300'>
+          <TouchableOpacity onPress={() => handleSelect('appnList')} className='flex-row gap-3 p-4 border-b border-gray-300'>
             <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
           </TouchableOpacity>
-          <TouchableOpacity className='flex-row gap-3 p-4'>
+          <TouchableOpacity onPress={() => handleSelect('testList')} className='flex-row gap-3 p-4'>
             <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
           </TouchableOpacity>
@@ -219,7 +226,7 @@ export const Card_2 = ({ data, index, active }: any) => {
   }
 
   return (
-    <TouchableOpacity onPress={() => {dispatch(setMembers({ selectedMember: data })); dispatch(setModal({ name: 'MEMBERS', state: false }))}}>
+    <TouchableOpacity onPress={() => setDropdown(true)}>
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
         <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
         <View className='flex-1'>
@@ -230,9 +237,9 @@ export const Card_2 = ({ data, index, active }: any) => {
             </Text>
         </View>
         <View className='justify-between items-end'>
-          <TouchableOpacity onPress={() => setDropdown(true)} >
+          <View>
             <Entypo name="dots-three-horizontal" size={20} color="#64748b" />
-          </TouchableOpacity>
+          </View>
           {active && <Text className="font-PoppinsSemibold text-green-600 text-[13px]">
             <FontAwesome name="check" size={17} color="#16a34a" />  Selected
           </Text>}
@@ -393,22 +400,22 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose }: any)
       avoidKeyboard={true}
       animationInTiming={500}
       className={customClass}
-      style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', ...styles}}
+      style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', opacity: blur ? 0.1 : 1 }}
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />
     >
-      <KeyboardAvoidingView className="flex-1 justify-center" pointerEvents="box-none">
-        <View style={styles.modal}>
+      <KeyboardAvoidingView className="flex-1" pointerEvents="box-none">
+        {/* <View style={styles.modal}> */}
           {React.cloneElement(child, { name: name, modalActive: modalActive })}
-        </View>
+        {/* </View> */}
       </KeyboardAvoidingView>
     </ReactNativeModal>
   );
 };
 
-const styles = StyleSheet.create({
-  modal: {margin: 0, justifyContent: 'center' },
-});
+// const styles = StyleSheet.create({
+//   modal: {margin: 0, justifyContent: 'center' },
+// });
 
 
 

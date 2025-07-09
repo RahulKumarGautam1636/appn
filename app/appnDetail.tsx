@@ -1,4 +1,4 @@
-import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -32,54 +32,53 @@ const AppnDetail = ({ data, handleOpen }: any) => {
     // }, [isFocused]);
 
     return (
-        // <Animated.View style={[{ flex: 1 }, animatedStyle]}>
-            <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
-                <View className='bg-white'>
-                    <View className='justify-between flex-row p-4 items-center'>
-                        {/* <Link href={'/login'}> */}
-                            <Pressable onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: false}))} className='flex-row items-center gap-3'>
-                                <Ionicons name="arrow-back-outline" size={24} color="black" />
-                                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment Details</Text>
-                            </Pressable>
-                        {/* </Link> */}
-                        <View className="gap-3 flex-row items-center ml-auto">
-                            <Feather name="heart" size={20} color='black' />
-                            <Feather name="share-2" size={20} color='black' />
-                        </View>
+        <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
+            <View className='bg-white'>
+                <View className='justify-between flex-row p-4 items-center'>
+                    {/* <Link href={'/login'}> */}
+                        <Pressable onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: false}))} className='flex-row items-center gap-3'>
+                            <Ionicons name="arrow-back-outline" size={24} color="black" />
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment Details</Text>
+                        </Pressable>
+                    {/* </Link> */}
+                    <View className="gap-3 flex-row items-center ml-auto">
+                        <Feather name="heart" size={20} color='black' />
+                        <Feather name="share-2" size={20} color='black' />
                     </View>
-                    <View className='flex-row gap-4 p-[13px]'>
-                        <Image className='' source={require('../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
-                        <View>
-                            <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{data.AppointmentTo}</Text>
-                            <View className='flex-row gap-2'>
-                                <FontAwesome name="graduation-cap" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{data.DocQualification}</Text>
-                            </View>
-                            <View className='flex-row gap-2'>
-                                <FontAwesome5 name="stethoscope" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{data.DocSpecialistDesc}</Text>
-                            </View>
+                </View>
+                <View className='flex-row gap-4 p-[13px]'>
+                    <Image className='' source={require('../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
+                    <View>
+                        <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{data.AppointmentTo}</Text>
+                        <View className='flex-row gap-2'>
+                            <FontAwesome name="graduation-cap" size={15} color="#075985" />
+                            <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{data.DocQualification}</Text>
                         </View>
-                    </View>
-                    <View className='flex-row justify-between p-4 border-y border-gray-300 border-solid'>
-                        <View className='items-center flex-1'>
-                            <Feather name="phone-call" size={24} className='mb-2' color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Call</Text>
-                        </View>
-                        <View className='items-center flex-1 border-x border-gray-300'>
-                            <MaterialCommunityIcons name="message-text-outline" size={24} className='mb-2' color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Message</Text>
-                        </View>
-                        <View className='items-center flex-1'>
-                            <Feather name="video" size={24} className='mb-2' color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Video</Text>
+                        <View className='flex-row gap-2'>
+                            <FontAwesome5 name="stethoscope" size={15} color="#075985" />
+                            <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{data.DocSpecialistDesc}</Text>
                         </View>
                     </View>
                 </View>
-                <View className='justify-between flex-row px-4 pt-4 items-center'>
-                <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Patient Details</Text>
+                <View className='flex-row justify-between p-4 border-y border-gray-300 border-solid'>
+                    <View className='items-center flex-1'>
+                        <Feather name="phone-call" size={24} className='mb-2' color={myColors.primary[500]} />
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Call</Text>
+                    </View>
+                    <View className='items-center flex-1 border-x border-gray-300'>
+                        <MaterialCommunityIcons name="message-text-outline" size={24} className='mb-2' color={myColors.primary[500]} />
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Message</Text>
+                    </View>
+                    <View className='items-center flex-1'>
+                        <Feather name="video" size={24} className='mb-2' color={myColors.primary[500]} />
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Video</Text>
+                    </View>
                 </View>
+            </View>
+            <View className='justify-between flex-row px-4 pt-4 items-center'>
+            <View className='flex-row items-center gap-3'>
+                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Patient Details</Text>
+            </View>
             </View>
             <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
             <View className='flex-row items-center'>
@@ -95,8 +94,8 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <FontAwesome name="user" size={17} color="gray" />
                     <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">28 Years, &nbsp;&nbsp; Male</Text>
                     {/* <FontAwesome name="user" size={17} color="gray" /> */}
-                    <FontAwesome5 name="info-circle" size={17} color="gray" />
-                    <Text className="font-Poppins text-gray-500 text-[13px] leading-5">MRD : {data.UHID}</Text>
+                    {data.UHID ? <><FontAwesome5 name="info-circle" size={17} color="gray" />
+                    <Text className="font-Poppins text-gray-500 text-[13px] leading-5">MRD : {data.UHID}</Text></> : null}
                 </View>
                 {/* <View className='gap-3 flex-row mt-4'>
                     <FontAwesome6 name="hourglass-half" size={17} color="gray" />
@@ -230,8 +229,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
                 </TouchableOpacity>}
             </View>
-            </ScrollView>
-        // </Animated.View>
+        </ScrollView>
     )
 }
 

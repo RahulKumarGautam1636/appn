@@ -6,6 +6,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import store from "@/src/store/store";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
+import { blur } from "@/constants";
 
 export default function RootLayout() {
   const theme = useColorScheme();
@@ -37,7 +38,7 @@ export default function RootLayout() {
     <Provider store={store}>
       <GestureHandlerRootView>
         <SafeAreaProvider>
-          <SafeAreaView className="flex-1">
+          <SafeAreaView className={`flex-1 ${blur && 'opacity-10'}`}>
             <KeyboardAvoidingView className="flex-1">
               <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? 'light-content' : 'dark-content'} />
               <Stack>
