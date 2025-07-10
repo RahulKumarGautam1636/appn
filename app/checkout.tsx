@@ -251,7 +251,7 @@ const Checkout = ({ handleClose }: any) => {
                         <Text className="font-PoppinsSemibold text-slate-800 text-[14px] leading-5">{cartTotal}</Text>
                     </View>
                 </View>
-                <ButtonPrimary title='Book Lab Tests' isLoading={false} active={true} onPress={handleBookingFormSubmit} classes='m-4' />
+                <ButtonPrimary title='Confirm Booking' isLoading={false} active={true} onPress={handleBookingFormSubmit} classes='m-4' />
             </View>
         </ScrollView>
     )

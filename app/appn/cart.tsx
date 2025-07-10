@@ -18,6 +18,7 @@ const Cart = ({}: any) => {
     const labTests = Object.values(lab)
     const dispatch = useDispatch()
     const [checkout, setCheckout] = useState(false)
+    const router = useRouter();
                                                             
     const itemsLength = labTests.length;
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
@@ -93,7 +94,7 @@ const Cart = ({}: any) => {
                     <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} onPress={handleCheckout} classes='m-4' />
                 </View>
             </ScrollView>
-            <MyModal modalActive={checkout} name='CHECKOUT' child={<Checkout handleClose={setCheckout} />} />
+            <MyModal modalActive={checkout} name='CHECKOUT' onClose={() => setCheckout(false)} child={<Checkout handleClose={setCheckout} />} />
         </>
     )
 }

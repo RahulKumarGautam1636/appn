@@ -3,7 +3,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ButtonPrimary from '@/src/components';
+import ButtonPrimary, { MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
@@ -306,13 +306,23 @@ const Booking = () => {
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Clinics</Text>
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Reviews</Text>
                 </View>
+
+                {/* <View className='justify-between flex-row items-center px-4 pt-4'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                    </View>
+                    <Pressable onPress={() => dispatch(setModal({ name: 'COMPANIES', state: true }))} className="gap-2 flex-row items-center ml-auto">
+                        <Text className="font-PoppinsMedium text-sky-700 text-[13px] leading-5">17 more clinics</Text>
+                        <Feather name="chevron-down" size={24} color='#0369a1' />
+                    </Pressable>
+                </View> */}
                 <View className='bg-primary-500 m-3 mb-4 rounded-3xl shadow-md shadow-primary-700 overflow-hidden'>
                     <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-primary-300'>
                         <View className='flex-row items-center gap-3'>
                             <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Clinics</Text>
                         </View>
                         <Pressable onPress={() => dispatch(setModal({ name: 'COMPANIES', state: true }))} className="gap-3 flex-row items-center ml-auto">
-                            <Text className="font-Poppins text-white text-[12px] leading-4">2 more clinics</Text>
+                            <Text className="font-Poppins text-white text-[12px] leading-4">{companiesList.length} more clinics</Text>
                             <Feather name="chevron-down" size={24} color='#fff' />
                         </Pressable>
                     </View>
@@ -388,19 +398,22 @@ const Booking = () => {
             <ReactNativeModal
                 isVisible={confirmation}
                 onBackdropPress={() => setConfirmation(false)}
+                onBackButtonPress={() => setConfirmation(false)}
                 animationIn="fadeInUp"
                 animationOut="fadeOutDown"
                 backdropOpacity={0.3}
                 useNativeDriver
                 coverScreen={true}
                 style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
-            >
+            >   
+                {/* <MyModal modalActive={confirmation} name='LOGIN' child={<AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />} /> */}
                 <AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
             </ReactNativeModal>
 
             <ReactNativeModal
                 isVisible={success}
                 onBackdropPress={() => setSuccess(false)}
+                onBackButtonPress={() => setSuccess(false)}
                 animationIn="fadeInDown"
                 animationOut="fadeOutUp"
                 backdropOpacity={0.3}

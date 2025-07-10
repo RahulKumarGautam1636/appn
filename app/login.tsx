@@ -295,6 +295,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                 LicenceNo: user.LicenceNo,
                 ContactPerson: user.ContactPerson,
                 BusinessType: user.BusinessType,
+                UserRegTypeId: 43198
             })))
             setOTP({isOpen: false, recievedValue: 'null', enteredValue: '', sent: false, verified: true, read_only: false})
             setPersonalFields(true);
@@ -321,7 +322,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
 
     const handleRegFormSubmit = async () => {
         console.log(regData);        
-        if (!isLoggedIn && otp.verified) {
+        if (otp.verified) {
             if (regData.RegMob1.length < 10) return alert('phone number is invalid, please try again.');
             if (regData.UserPassword.length < 4) return alert('Minimum length for password is 4.');
             let status = await makeRegisterationRequest({ ...regData });

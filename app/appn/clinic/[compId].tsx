@@ -127,16 +127,25 @@ const Clinic = () => {
                             <Feather name="chevron-down" size={18} color='#fff' />
                         </View> 
                     </TouchableOpacity>
+                    <View className='justify-between flex-row pt-2 items-center mt-1'>
+                        <View className='flex-row items-center gap-3'>
+                            <Text className="font-PoppinsSemibold text-gray-800 text-[15px] items-center leading-5">Select Date</Text>
+                        </View>
+                        <View className="gap-3 flex-row items-center ml-auto">
+                            <Feather name="chevron-left" size={24} color='#6b7280' />
+                            <Feather name="chevron-right" size={24} color='#6b7280' />
+                        </View>
+                    </View>
                     <View className='flex-row justify-around'>
                         <ScrollView horizontal={true} contentContainerClassName='items-start flex-row gap-4 pb-1' showsHorizontalScrollIndicator={false}>
                             {filterdates.dates.map((i: any) => <DayBtn data={i} key={i.date} activeDate={filterdates.activeDate} handleActive={setFilterDates} />)}
                         </ScrollView>
                     </View>
-                    {/* <View className='justify-between flex-row py-3'>
-                        <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-3">Available Doctors</Text>
-                        <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px] mt-3">View All</Text>
-                    </View>  */}
-                    <View className='mt-6 gap-4'>
+                    <View className='justify-between flex-row mt-2'>
+                        <Text className="font-PoppinsSemibold text-gray-800 text-[15px] leading-[23px] mt-3">Available Doctors</Text>
+                        <Text className="font-PoppinsMedium text-primary-600 text-[14px] leading-[23px] mt-3">View All</Text>
+                    </View> 
+                    <View className='mt-4 gap-4'>
                         {(() => {
                             if (doctors.loading) {
                                 return <GridLoader />

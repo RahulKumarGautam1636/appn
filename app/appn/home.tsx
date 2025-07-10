@@ -102,7 +102,7 @@ const HomeScreen = () => {
                         <Image className='shadow-lg rounded-full' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                         <View>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{user.Name}</Text>
-                            <Text className="font-Poppins text-gray-600 text-[11px]">{user.GenderDesc}, {user.Age} Years</Text>
+                            <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
                         </View>
                         <View className="gap-3 flex-row items-center ml-auto">
                             <View className="bg-white p-3 rounded-full shadow-lg">

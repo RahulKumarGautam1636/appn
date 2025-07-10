@@ -1,6 +1,6 @@
 import { blur, myColors, SRC_URL } from "@/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
-import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform } from "react-native"
+import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
 import Loader from '../../assets/images/loader.svg';
 import { Link, useRouter } from "expo-router";
@@ -179,7 +179,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
           <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
           <View className='flex-1'>
-              <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.Name}</Text>
+              <Text className="font-PoppinsSemibold text-sky-800 text-[14px]" numberOfLines={1}>{data.Name}</Text>
               <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.SpecialistDesc}</Text>
               <Text className="font-PoppinsMedium text-gray-800 text-[11px]">⭐ 4.9 
                   &nbsp;<Text className='text-gray-500'>(2435 Reviews)</Text>
@@ -388,11 +388,26 @@ export const Card_4 = ({ data }: any) => {
 export const MyModal = ({ modalActive, child, name, customClass, onClose, styles }: any) => {
   const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   alert('Back Pressed')
+  //   if (modalActive) {
+  //     const backAction = () => {
+  //       handleClose();
+  //       return true; // prevent default behavior
+  //     };
+  //     const backHandler = BackHandler.addEventListener(
+  //       'hardwareBackPress',
+  //       backAction
+  //     );
+  //     return () => backHandler.remove();
+  //   }
+  // }, [modalActive]);
+
   const handleClose = () => {
     if (onClose) {
       onClose();
     } else {
-      dispatch(setModal(name))
+      dispatch(setModal({name: name, state: false }))
     }
   }
 
@@ -400,6 +415,7 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose, styles
     <ReactNativeModal
       isVisible={modalActive}
       onBackdropPress={handleClose}
+      onBackButtonPress={handleClose}
       animationIn="fadeInUp"
       animationOut="fadeOutDown"
       backdropOpacity={0.3}
@@ -413,17 +429,11 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose, styles
       // customBackdrop={<View style={{flex: 1}} />
     >
       <KeyboardAvoidingView className="flex-1 justify-center" pointerEvents="box-none">
-        {/* <View style={styles.modal}> */}
-          {React.cloneElement(child, { name: name, modalActive: modalActive })}
-        {/* </View> */}
+        {React.cloneElement(child, { name: name, modalActive: modalActive })}
       </KeyboardAvoidingView>
     </ReactNativeModal>
   );
 };
-
-// const styles = StyleSheet.create({
-//   modal: {margin: 0, justifyContent: 'center' },
-// });
 
 
 
