@@ -230,7 +230,7 @@ const Checkout = ({ handleClose }: any) => {
                                     </View>
                                 </View>
                             </View>
-                            <Link href={`/appn/clinic/${selectedCompany.CompanyId}`} className='px-[9px] py-[9px] bg-primary-400 rounded-full'>
+                            <Link onPress={() => handleClose(false)} href={`/appn/clinic/${selectedCompany.CompanyId}`} className='px-[9px] py-[9px] bg-primary-400 rounded-full'>
                                 <Feather name="chevron-right" size={24} color="#fff" className=''  />
                             </Link>
                         </View>

@@ -112,16 +112,14 @@ const Clinic = () => {
                             </View>
                         ))}
                     </View>
-                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-5">Location</Text>
+                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-6">Location</Text>
                     {/* <View className="h-[150px] bg-gray-300 mt-3 rounded-xl"></View> */}
 
-                    <View className="mt-3">
-
-                            <MapComponent />
-      
+                    <View className="mt-3 h-[170px] border border-gray-300">
+                        <MapComponent coords={{lat: parseFloat(company.latitude), lng: parseFloat(company.longitude)}} />
                     </View>
 
-                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-5">Book Appointment</Text>
+                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-6">Book Appointment</Text>
                     <TouchableOpacity onPress={() => setDeptsActive(true)} className="flex-wrap gap-4 flex-row bg-primary-500 rounded-xl mt-4 mb-2 p-4 items-center justify-between">
                         <Text className="font-PoppinsSemibold text-white text-[14px]">Department</Text>   
                         <View className="py-3 min-w-[50%] bg-primary-400 px-2 flex-row items-center justify-evenly rounded-xl">

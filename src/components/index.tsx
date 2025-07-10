@@ -11,7 +11,7 @@ import Modal, { ReactNativeModal } from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 // import { RootState } from "@/src/store/store";
 
-// import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -29,6 +29,7 @@ import Animated, {
   withDelay
 } from 'react-native-reanimated';
 import AppnDetail from "@/app/appnDetail";
+import { RootState } from "../store/store";
 
 
 export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
@@ -198,26 +199,33 @@ export const Card_2 = ({ data, index, active }: any) => {
   const dispatch = useDispatch()
   const router = useRouter();
   const [dropdown, setDropdown] = useState(false);
+  const isModal = useSelector((i : RootState) => i.modals.MEMBERS.state);
   
-  const handleSelect = (path: string) => {
+  const handleTask = (path: string) => {
     dispatch(setMembers({ selectedMember: data }))
     setDropdown(false)
     dispatch(setModal({ name: 'MEMBERS', state: false }))
     if (path) router.push(`/${path}`)
   }
 
+  const handleSelect = () => {
+    if (!isModal) return setDropdown(true);
+    dispatch(setMembers({ selectedMember: data }))
+    dispatch(setModal({ name: 'MEMBERS', state: false }))
+  }
+
   const Dropdown = () => {
     return (
       <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
-          <TouchableOpacity onPress={() => handleSelect('')} className='flex-row gap-3 p-4 border-b border-gray-300' >
+          <TouchableOpacity onPress={() => handleTask('')} className='flex-row gap-3 p-4 border-b border-gray-300' >
             <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSelect('appn/home')} className='flex-row gap-3 p-4 border-b border-gray-300'>
+          <TouchableOpacity onPress={() => handleTask('appn/home')} className='flex-row gap-3 p-4 border-b border-gray-300'>
             <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSelect('appn/lab')} className='flex-row gap-3 p-4'>
+          <TouchableOpacity onPress={() => handleTask('appn/lab')} className='flex-row gap-3 p-4'>
             <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
           </TouchableOpacity>
@@ -226,7 +234,7 @@ export const Card_2 = ({ data, index, active }: any) => {
   }
 
   return (
-    <TouchableOpacity onPress={() => setDropdown(true)}>
+    <TouchableOpacity onPress={handleSelect}>
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
         <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
         <View className='flex-1'>
@@ -419,7 +427,7 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose, styles
 
 
 
-export const MapComponent = () => {
+export const MapComponent = ({ coords }: any) => {
   if (Platform.OS === 'web') {
     return (
       <iframe
@@ -435,27 +443,28 @@ export const MapComponent = () => {
     // const MapView = require('react-native-maps').default;
     // const Marker = require('react-native-maps').Marker;
   
+    // return (
+    //   <View className="border border-gray-300 overflow-hidden">
+    //     <Image className="h-[200px] w-full" source={require('./../../assets/images/MAP.jpg')} resizeMode="cover" />
+    //   </View>
+    // )
+    
     return (
-      <View className="h-[200px] border border-gray-300">
-        <Image source={require('./../../assets/images/MAP.jpg')} resizeMode="cover" />
-      </View>
-    )
-    // (
-    //   <MapView
-    //     style={{ flex: 1 }}
-    //     initialRegion={{
-    //       latitude: 28.6139,
-    //       longitude: 77.2090,
-    //       latitudeDelta: 0.05,
-    //       longitudeDelta: 0.05,
-    //     }}
-    //   >
-    //     <Marker
-    //       coordinate={{ latitude: 28.6139, longitude: 77.2090 }}
-    //       title="New Delhi"
-    //     />
-    //   </MapView>
-    // );
+      <MapView
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: coords.lat || 22.595532,
+          longitude: 88.375243,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }}
+      >
+        <Marker
+          coordinate={{ latitude: coords.lat || 22.595532 , longitude: coords.lng || 88.375243}}
+          title="New Delhi"
+        />
+      </MapView>
+    );
   }
 }
 

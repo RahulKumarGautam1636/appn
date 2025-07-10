@@ -18,7 +18,7 @@ const Modals = () => {
         <>
             <MyModal modalActive={modals.COMPANIES.state} name='COMPANIES' child={<CompanySelection />} />
             <MyModal modalActive={modals.MEMBERS.state} name='MEMBERS' child={<Members />} />
-            <MyModal modalActive={modals.LOGIN.state} name='LOGIN' child={<Login />} />
+            <MyModal modalActive={modals.LOGIN.state} name='LOGIN' child={<Login modal />} />
             <MyModal modalActive={modals.APPN_DETAIL.state} name='APPN_DETAIL' child={<AppnDetail data={modals.APPN_DETAIL.data} />} />
             <MyModal modalActive={modals.TEST_DETAIL.state} name='TEST_DETAIL' child={<TestDetail data={modals.TEST_DETAIL.data} />} />
             <MyModal modalActive={modals.DEPTS.state} name='DEPTS' child={<DeptsModal />} />

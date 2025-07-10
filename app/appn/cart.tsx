@@ -13,18 +13,21 @@ import Checkout from '../checkout';
 import { useState } from 'react';
 
 const Cart = ({}: any) => {
-    const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
-    const { selectedMember } = useSelector((i: RootState) => i.members)
-    const router = useRouter()
     const lab = useSelector((i: RootState) => i.cart).lab
-    const labTests = Object.values(lab);
-    const dispatch = useDispatch();
-    const [checkout, setCheckout] = useState(false);
+    const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
+    const labTests = Object.values(lab)
+    const dispatch = useDispatch()
+    const [checkout, setCheckout] = useState(false)
                                                             
     const itemsLength = labTests.length;
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
     let cartTotal = itemsLength !== 0 ? itemsValue.reduce((total, item) => total+item).toFixed(2) : '00';
 
+    const handleCheckout = () => {
+        if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
+        setCheckout(true)
+    }
+    
     return (
         <>
             <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -87,7 +90,7 @@ const Cart = ({}: any) => {
                             <Text className="font-PoppinsSemibold text-slate-800 text-[14px] leading-5">{cartTotal}</Text>
                         </View>
                     </View>
-                    <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} onPress={() => setCheckout(true)} classes='m-4' />
+                    <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} onPress={handleCheckout} classes='m-4' />
                 </View>
             </ScrollView>
             <MyModal modalActive={checkout} name='CHECKOUT' child={<Checkout handleClose={setCheckout} />} />

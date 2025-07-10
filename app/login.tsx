@@ -18,7 +18,7 @@ interface loginType {
     EncCompanyId: string
 }
 
-const Login = () => {
+const Login = ({ modal }: any) => {
 
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
@@ -159,8 +159,11 @@ const Login = () => {
             // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: res.data.UserPassword, compCode: params.companyCode }));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
-            // dispatch(setModal({ name: 'LOGIN', state: false }))
-            router.back();
+            if (modal) {
+                dispatch(setModal({ name: 'LOGIN', state: false }))
+            } else {
+                router.back();
+            }
             
             // modalAction('LOGIN_MODAL', false, { mode: res.data.UserType });
             // stringToast("Wellcome, You successfully logged in.", { type: 'success', autoClose: 5000 });
@@ -194,7 +197,7 @@ const Login = () => {
                     return (
                         <View className='bg-white shadow-lg mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem] px-4 pt-6 pb-28 w-full'>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center py-4">Welcome Back</Text>
-                            <View className="p-4 gap-8">
+                            <View className="p-4 gap-8 min-h-[60%]">
                                 <View className='z-10'>
                                     <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
                                     <TextInput placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
@@ -486,7 +489,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     return (
         <View className={`bg-white shadow-lg px-4 pt-6 pb-6 w-full ${isModal ? 'h-full' : 'mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem]'}`}> 
             <Text className={`font-PoppinsSemibold text-gray-800 text-[24px] text-center ${isModal ? 'py-3' : 'py-4'}`}>{isModal ? 'Personal Details' : 'Please Register'}</Text>
-            <View className="gap-6 mt-4 min-h-[400px]">
+            <View className="gap-6 mt-4 min-h-[60%]">
                 <View className='z-10'>
                     <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
                     <TextInput placeholder='Phone Number' maxLength={10} value={regData.RegMob1} onChangeText={(text) => setRegData(pre => ({...pre, RegMob1: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />

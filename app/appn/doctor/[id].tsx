@@ -252,6 +252,11 @@ const Booking = () => {
         setSuccess(true);
     }
 
+    const handleBooking = () => {
+        if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}));
+        setConfirmation(true);
+    }
+
     return (
         <>
             <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
@@ -378,85 +383,35 @@ const Booking = () => {
                         })()}
                     </View>
                 </View>
-                <ButtonPrimary title='Book Appointment' isLoading={loading} active={true} onPress={() => setConfirmation(true)} classes='m-4' />
+                <ButtonPrimary title='Book Appointment' isLoading={loading} active={true} onPress={handleBooking} classes='m-4' />
             </ScrollView>
-            {/* <Animated.View 
-                style={[{ flex: 1 }, animatedStyle]} className='absolute z-30 inset-0'
-                pointerEvents="box-none"                     
-                onStartShouldSetResponder={() => {
-                    console.log('Animated View caught touch');
-                    return false;
-                }}
-                > */}
+            <ReactNativeModal
+                isVisible={confirmation}
+                onBackdropPress={() => setConfirmation(false)}
+                animationIn="fadeInUp"
+                animationOut="fadeOutDown"
+                backdropOpacity={0.3}
+                useNativeDriver
+                coverScreen={true}
+                style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
+            >
+                <AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
+            </ReactNativeModal>
 
-                {/* <ReactNativeModal
-                    isVisible={confirmation}
-                    onBackdropPress={() => setConfirmation(false)}
-                    animationIn="fadeInUp"
-                    animationOut="fadeOutDown"
-                    backdropOpacity={0.3}
-                    useNativeDriver
-                    coverScreen={true}
-                    style={{backgroundColor: 'white', margin: 0, padding: 0, flex: 1, height: '100%',
-                    alignItems: undefined,
-                    justifyContent: undefined,
-                    }}
-                    deviceHeight={height}
-                customBackdrop={<View style={{flex: 1}} />}
-                >
-                    <SafeAreaProvider>
-                        <SafeAreaView className='flex-1 justify-start' style={{minHeight: '100%'}}>
-                            <AppnPreview bookAppn={handleBookingFormSubmit} handleOpen={toggleConfirmation} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
-                        </SafeAreaView>
-                    </SafeAreaProvider>
-                </ReactNativeModal> */}
-
-                {/* With in-build modal */}
-                {/* <Modal
-                    transparent={true}
-                    visible={confirmation}
-                    animationType="slide"
-                    onRequestClose={() => setConfirmation(false)}
-                    presentationStyle='overFullScreen'
-                >
-                    <AppnPreview bookAppn={handleBookingFormSubmit} handleOpen={setConfirmation} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
-                </Modal> */}
-
-                <ReactNativeModal
-                    isVisible={confirmation}
-                    onBackdropPress={() => setConfirmation(false)}
-                    animationIn="fadeInUp"
-                    animationOut="fadeOutDown"
-                    backdropOpacity={0.3}
-                    useNativeDriver
-                    coverScreen={true}
-                    style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
-                >
-                    {/* <View className={`absolute inset-0 bg-white ${confirmation ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}> */}
-                        <AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
-                    {/* </View> */}
-                </ReactNativeModal>
-
-                <ReactNativeModal
-                    isVisible={success}
-                    onBackdropPress={() => setSuccess(false)}
-                    animationIn="fadeInDown"
-                    animationOut="fadeOutUp"
-                    backdropOpacity={0.3}
-                    useNativeDriver
-                    coverScreen={true}
-                    style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
-                >
-                    <View className={`absolute inset-0 bg-white ${success ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}>
-                        <BookingSuccess doctor={doctor} bookingData={bookingData} clinic={selectedCompany} />
-                    </View>
-                </ReactNativeModal>
-
-
-            {/* </Animated.View> */}
-            {/* <Animated.View style={[{ flex: 1 }, animatedStyle2]} pointerEvents="box-none" className='absolute z-30 inset-0'> */}
-                {/* <BookingSuccess bookAppn={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} /> */}
-            {/* </Animated.View> */}
+            <ReactNativeModal
+                isVisible={success}
+                onBackdropPress={() => setSuccess(false)}
+                animationIn="fadeInDown"
+                animationOut="fadeOutUp"
+                backdropOpacity={0.3}
+                useNativeDriver
+                coverScreen={true}
+                style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
+            >
+                <View className={`absolute inset-0 bg-white ${success ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}>
+                    <BookingSuccess doctor={doctor} bookingData={bookingData} clinic={selectedCompany} />
+                </View>
+            </ReactNativeModal>
         </>
     )
 }

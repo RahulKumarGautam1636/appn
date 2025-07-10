@@ -6,19 +6,13 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { myColors } from '@/constants';
 import { setModal } from '@/src/store/slices/slices';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/src/store/store';
 
 
-const TestDetail = ({ data }) => {
+const TestDetail = ({ data }: any) => {
 
-    const user = {
-        Name: 'Emma Phillips',
-        Age: 35,
-        GenderDesc: 'Female',
-        Qualification: 'Gynacologist',
-        LabTests: 7,
-        Appontments: 15,
-    }
+    const user = useSelector((i: RootState) => i.user);
 
     // const data = { IsAppConfirmed: 'Y', BillId: '46546', PrescriptionId:  '4547745', DeptName: '', TranNo: '', Status: '', NextAppTime: '09:30 AM', NextAppDate: '02/03/2025', CompanyName: 'XYZ Hospitality Solutions' }
 
