@@ -170,7 +170,7 @@ const LabTests = ({}: any) => {
                         </View>               
                         <View className='flex-row gap-4 w-full p-4 items-center'>
                             <View className='relative w-full'>
-                                <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' className='bg-[#ebecef] py-4 items-start px-5 rounded-2xl shadow-sm shadow-gray-500 w-full' />
+                                <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' className='bg-[#ebecef] text-gray-700 py-4 items-start px-5 rounded-2xl shadow-sm shadow-gray-500 w-full' />
                                 <Feather className='absolute z-50 top-[12px] right-4' name="search" size={22} color={myColors.primary[500]} />
                             </View>
                         </View>

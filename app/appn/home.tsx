@@ -247,12 +247,12 @@ const HomeScreen = () => {
                 <View className='justify-between flex-row py-3 items-end'>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-3">Available Doctors</Text>
                     {/* <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px] mt-3">View All</Text> */}
-                    <View className='bg-primary-500 rounded-full flex-row shadow-sm shadow-gray-300'>
+                    <View className='rounded-full flex-row shadow-sm shadow-gray-300'>
                         <TouchableOpacity onPress={() => setDoctorTab('active_date')}>
-                            <Text className={`font-PoppinsxM4dpy-2 ium text-[13px] leading-[23px] px-3 py-1 rounded-tl-full rounded-bl-full ${doctorTab === 'active_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-600'}`}>{formattedDate}</Text>
+                            <Text className={`text-[13px] leading-[23px] px-3 py-1 rounded-tl-2xl rounded-bl-2xl ${doctorTab === 'active_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-500'}`}>{formattedDate}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setDoctorTab('all_date')}>
-                            <Text className={`font-PoppinsxM4dpy-2 ium text-[13px] leading-[23px] px-3 py-1 rounded-tr-full rounded-br-full ${doctorTab === 'all_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-600'}`}>Other Days</Text>
+                            <Text className={`text-[13px] leading-[23px] px-3 py-1 rounded-tr-2xl rounded-br-2xl ${doctorTab === 'all_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-500'}`}>Other Days</Text>
                         </TouchableOpacity>
                         {/* <Text className="font-PoppinsMedium text-white text-[15px] leading-[23px]">All</Text> */}
                     </View>

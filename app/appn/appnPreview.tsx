@@ -60,7 +60,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
             <Text className="text-primary-500 font-Poppins leading-6">Note: </Text>
             You can submit patient details, old prescription, and test reports in the drop link.
           </Text>
-           <ButtonPrimary title='Add Document' classes='!h-[46px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
+           <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[46px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
         </View>
         <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>

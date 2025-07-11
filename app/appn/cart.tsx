@@ -26,6 +26,7 @@ const Cart = ({}: any) => {
 
     const handleCheckout = () => {
         if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
+        if (!itemsLength) return alert('Please add some items to your cart before making order.')
         setCheckout(true)
     }
     
@@ -70,7 +71,7 @@ const Cart = ({}: any) => {
                         <View className='bg-white mt-4 rounded-2xl shadow-lg shadow-gray-400'>
                             <View className='flex-row gap-4 w-full p-4 border-b border-gray-200 items-center'>
                                 <View className='relative w-full'>
-                                    <TextInput placeholder='Add More Tests..' className='z-10 bg-[#ebecef] py-4 items-start px-5 rounded-2xl shadow-sm shadow-gray-500 w-full' />
+                                    <TextInput placeholder='Add More Tests..' className='z-10 bg-[#ebecef] py-4 items-start px-5 text-gray-700 rounded-2xl shadow-sm shadow-gray-500 w-full' />
                                     <Feather className='absolute z-50 top-[12px] right-4' name="search" size={22} color={myColors.primary[500]} />
                                 </View>
                             </View>

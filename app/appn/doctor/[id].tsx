@@ -254,6 +254,7 @@ const Booking = () => {
 
     const handleBooking = () => {
         if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}));
+        if (!bookingData.TimeSlotId) return alert('Please select a Time slot first.')
         setConfirmation(true);
     }
 
@@ -352,7 +353,7 @@ const Booking = () => {
                 <View className='justify-between flex-row px-4 pt-1 items-center'>
                     <View className='flex-row items-center gap-3'>
                         {/* <Ionicons name="arrow-back-outline" size={24} color="black" /> */}
-                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Today's Schedule</Text>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Schedule Appointment</Text>
                     </View>
                     <View className="gap-3 flex-row items-center ml-auto">
                         <Feather name="chevron-left" size={24} color='#6b7280' />

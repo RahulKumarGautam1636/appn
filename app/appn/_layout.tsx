@@ -14,10 +14,10 @@ export default function TabsLayout() {
   const dispatch = useDispatch();
 
   const tabs = [
-    { name: 'OPD', icon: 'home-outline', key: 'home' },
+    { name: 'OPD', icon: 'home', key: 'home' },
     { name: 'Lab Test', icon: 'flask', key: 'lab' },
-    { name: 'Account', icon: 'person-outline', key: 'profile' },
-    { name: 'Cart', icon: 'settings-outline', key: 'cart' },
+    { name: 'Account', icon: 'person', key: 'profile' },
+    { name: 'Cart', icon: 'cart', key: 'cart' },
   ];
 
   const lab = useSelector((i: RootState) => i.cart).lab;
@@ -78,7 +78,7 @@ export default function TabsLayout() {
 
             return (
               <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px] ${isFocused ? 'border-b border-primary-500' : ''}`} >
-                <Ionicons name={tab.icon} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
+                <Ionicons name={isFocused ? tab.icon : tab.icon+'-outline'} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
                 <Text style={[styles.tabText, isFocused && styles.activeText]}>
                   {tab.name}
                 </Text>
