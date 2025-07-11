@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
 import { getCompanies, getDepartments, getMembers, setModal } from '@/src/store/slices/slices';
-import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray } from '../../src/components';
+import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '../../src/components';
 import { BASE_URL } from '@/constants';
-import { getFrom, GridLoader, ListLoader, NoContent } from '../../src/components/utils';
+import { formatted, getFrom, GridLoader, ListLoader, NoContent } from '../../src/components/utils';
 
 
 const HomeScreen = () => {
@@ -21,8 +21,10 @@ const HomeScreen = () => {
     const { list, selected, status, error } = useSelector((state: RootState) => state.companies);
     const depts = useSelector((state: RootState) => state.depts);
     const [doctors, setDoctors] = useState({loading: true, data: {PartyMasterList: [], CompanyMasterList: []}, err: {status: false, msg: ''}})
+    const [otherDayDoctors, setOtherDayDoctors] = useState({loading: true, data: {PartyMasterList: [], CompanyMasterList: []}, err: {status: false, msg: ''}})
     const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 30), activeDate: new Date().toLocaleDateString('en-TT')})
     const [appData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
+    const [doctorTab, setDoctorTab] = useState('active_date')
 
     useEffect(() => {
         let controller = new AbortController();
@@ -38,6 +40,21 @@ const HomeScreen = () => {
         getDoctors(selected.EncCompanyId, depts.selected?.SubCode, filterdates.activeDate);  
         return () => controller.abort();
     }, [selected.EncCompanyId, depts.selected?.SubCode, filterdates.activeDate])
+
+    useEffect(() => {
+        let controller = new AbortController();
+        const getOtherDayDoctors = async (companyCode: string, subCode: string) => {
+            if (!companyCode || subCode === undefined) return;
+            const res = await getFrom(`${BASE_URL}/api/Values/GetAllDoctors?CID=${companyCode}&SID=${subCode}`, {}, setOtherDayDoctors, controller.signal);                                                        
+            if (res) {
+                setTimeout(() => {
+                    setOtherDayDoctors(pre => ({loading: false, data: {...pre.data, PartyMasterList: res.data}, err: {status: false, msg: ''}}));
+                }, 500)
+            }                                                                                                   
+        } 
+        getOtherDayDoctors(selected.EncCompanyId, depts.selected?.SubCode);  
+        return () => controller.abort();
+    }, [selected.EncCompanyId, depts.selected?.SubCode])
 
     useEffect(() => {
         const getAppnData = async (query: string, userId: string, companyId: string) => {
@@ -93,6 +110,10 @@ const HomeScreen = () => {
             )
         }
     }
+
+    const [day, month, year] = filterdates.activeDate.split('/').map(Number);
+    let parsedActiveDate = new Date(year, month - 1, day);
+    let formattedDate = formatted(parsedActiveDate);
 
     return (
         <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
@@ -223,9 +244,18 @@ const HomeScreen = () => {
                         {filterdates.dates.map((i: any) => <DayBtn data={i} key={i.date} activeDate={filterdates.activeDate} handleActive={setFilterDates} />)}
                     </ScrollView>
                 </View>
-                <View className='justify-between flex-row py-3'>
+                <View className='justify-between flex-row py-3 items-end'>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-3">Available Doctors</Text>
-                    <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px] mt-3">View All</Text>
+                    {/* <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px] mt-3">View All</Text> */}
+                    <View className='bg-primary-500 rounded-full flex-row shadow-sm shadow-gray-300'>
+                        <TouchableOpacity onPress={() => setDoctorTab('active_date')}>
+                            <Text className={`font-PoppinsxM4dpy-2 ium text-[13px] leading-[23px] px-3 py-1 rounded-tl-full rounded-bl-full ${doctorTab === 'active_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-600'}`}>{formattedDate}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setDoctorTab('all_date')}>
+                            <Text className={`font-PoppinsxM4dpy-2 ium text-[13px] leading-[23px] px-3 py-1 rounded-tr-full rounded-br-full ${doctorTab === 'all_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-600'}`}>Other Days</Text>
+                        </TouchableOpacity>
+                        {/* <Text className="font-PoppinsMedium text-white text-[15px] leading-[23px]">All</Text> */}
+                    </View>
                 </View> 
                 <View className='mt-2 gap-4'>
                     {(() => {
@@ -236,7 +266,11 @@ const HomeScreen = () => {
                         } else if (!doctors.data.PartyMasterList.length) {
                             return <NoContent label='No Doctors Found' />;
                         } else {
-                            return doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />)
+                            if (doctorTab === 'active_date') {
+                                return doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />)
+                            } else {
+                                return otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} />)
+                            }
                         }
                     })()}
                 </View>

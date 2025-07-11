@@ -221,3 +221,12 @@ export const getDuration = (date: any) => {
     days: days ? days : 0 
   }
 }
+
+export const formatted = (date: string) => {
+  if (!date) return;
+  let formattedDate = new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'long'
+  }).format(new Date(date));
+  return formattedDate;
+}

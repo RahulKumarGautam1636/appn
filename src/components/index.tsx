@@ -11,7 +11,7 @@ import Modal, { ReactNativeModal } from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
 // import { RootState } from "@/src/store/store";
 
-import MapView, { Marker } from 'react-native-maps';
+// import MapView, { Marker } from 'react-native-maps';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -453,28 +453,31 @@ export const MapComponent = ({ coords }: any) => {
     // const MapView = require('react-native-maps').default;
     // const Marker = require('react-native-maps').Marker;
   
-    // return (
-    //   <View className="border border-gray-300 overflow-hidden">
-    //     <Image className="h-[200px] w-full" source={require('./../../assets/images/MAP.jpg')} resizeMode="cover" />
-    //   </View>
-    // )
-    
     return (
-      <MapView
-        style={{ flex: 1 }}
-        initialRegion={{
-          latitude: coords.lat || 22.595532,
-          longitude: 88.375243,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }}
-      >
-        <Marker
-          coordinate={{ latitude: coords.lat || 22.595532 , longitude: coords.lng || 88.375243}}
-          title="New Delhi"
-        />
-      </MapView>
-    );
+      <View className="border border-gray-300 overflow-hidden">
+        <Image className="h-[200px] w-full" source={require('./../../assets/images/MAP.jpg')} resizeMode="cover" />
+      </View>
+    )
+
+    // const lat = coords?.lat || 22.595532;
+    // const lng = coords?.lng || 88.375243;
+    
+    // return (
+    //   <MapView
+    //     style={{ flex: 1 }}
+    //     initialRegion={{
+    //       latitude: lat,
+    //       longitude: lng,
+    //       latitudeDelta: 0.05,
+    //       longitudeDelta: 0.05,
+    //     }}
+    //   >
+    //     <Marker
+    //       coordinate={{ latitude: lat , longitude: lng}}
+    //       title="New Delhi"
+    //     />
+    //   </MapView>
+    // );
   }
 }
 
