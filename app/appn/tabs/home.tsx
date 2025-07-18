@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
 import { getCompanies, getDepartments, getMembers, setModal } from '@/src/store/slices/slices';
-import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '../../src/components';
+import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '@/src/components';
 import { BASE_URL } from '@/constants';
-import { formatted, getFrom, GridLoader, ListLoader, NoContent } from '../../src/components/utils';
+import { formatted, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
 
 
 const HomeScreen = () => {
@@ -90,7 +90,7 @@ const HomeScreen = () => {
                     <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-2">Upcoming Schedule</Text>
                     <View className='bg-primary-500 rounded-3xl p-5 my-3'>
                         <View className='flex-row'>
-                            <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                            <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View>
                                 <Text className="font-PoppinsBold text-white text-[14px]">{firstAppn.AppointmentTo}</Text>
                                 <Text className="font-Poppins text-gray-200 text-[11px]">{firstAppn.DocSpecialistDesc}</Text>
@@ -120,7 +120,7 @@ const HomeScreen = () => {
             <View className='p-4'>
                 {isLoggedIn ? 
                     <View className="gap-3 flex-row items-center">
-                        <Image className='shadow-lg rounded-full' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                        <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                         <View>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{user.Name}</Text>
                             <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
@@ -132,7 +132,7 @@ const HomeScreen = () => {
                         </View>
                     </View> :
                     <View className="gap-3 flex-row items-center">
-                        <Image className='rounded-full' source={require('../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
+                        <Image className='rounded-full' source={require('../../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
                         <View className='mr-auto'>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
                             <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text>

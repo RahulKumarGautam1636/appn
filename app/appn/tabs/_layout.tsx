@@ -45,7 +45,7 @@ export default function TabsLayout() {
         tabHistory.current.pop();                              // Remove current tab
         const previousTab = tabHistory.current[tabHistory.current.length - 1];
         if (previousTab) {
-          router.push(`/appn/${previousTab}`);
+          router.push(`/appn/tabs/${previousTab}`);
           return true;                                         // prevent default
         }
       }
@@ -69,7 +69,7 @@ export default function TabsLayout() {
               if (tab.key === 'profile') {
                 if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
               } 
-              router.push(`/appn/${tab.key}`);
+              router.push(`/appn/tabs/${tab.key}`);
               const last = tabHistory.current[tabHistory.current.length - 1];     // Add manually to history
               if (last !== tab.key) {
                 tabHistory.current.push(tab.key);

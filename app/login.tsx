@@ -29,7 +29,7 @@ const Login = ({ modal }: any) => {
     const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });
     
     const [loading, setLoading] = useState(false);
-    const [tab, setTab] = useState('register');
+    const [tab, setTab] = useState('login');
  
 
     const handleLoginFormSubmit = () => {

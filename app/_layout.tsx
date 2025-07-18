@@ -43,15 +43,16 @@ export default function RootLayout() {
               <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? 'light-content' : 'dark-content'} />
               <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="appn" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="appn/tabs" options={{ headerShown: false, animation: 'slide_from_left' }} />
                 <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="profile" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="appnList" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="appn/appnList" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="search" options={{ headerShown: false, animation: 'slide_from_left' }} />
                 <Stack.Screen name="members" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/cart" options={{ headerShown: false, animation: 'slide_from_left' }} />
                 <Stack.Screen name="testDetail" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="testList" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 {/* <Stack.Screen name="movie/[id]" options={{ headerShown: false}} /> */}
               </Stack>
             </KeyboardAvoidingView>

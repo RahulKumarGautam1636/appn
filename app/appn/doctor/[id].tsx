@@ -258,6 +258,9 @@ const Booking = () => {
         setConfirmation(true);
     }
 
+    const slotReminder = dateSlotsList.data.length % 5;
+    const blankSlot = 5 - slotReminder;
+
     return (
         <>
             <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
@@ -308,7 +311,7 @@ const Booking = () => {
                     <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Reviews</Text>
                 </View>
 
-                {/* <View className='justify-between flex-row items-center px-4 pt-4'>
+                <View className='justify-between flex-row items-center px-4 pt-4'>
                     <View className='flex-row items-center gap-3'>
                         <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
                     </View>
@@ -316,9 +319,9 @@ const Booking = () => {
                         <Text className="font-PoppinsMedium text-sky-700 text-[13px] leading-5">17 more clinics</Text>
                         <Feather name="chevron-down" size={24} color='#0369a1' />
                     </Pressable>
-                </View> */}
+                </View>
                 <View className='bg-primary-500 m-3 mb-4 rounded-3xl shadow-md shadow-primary-700 overflow-hidden'>
-                    <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-primary-300'>
+                    {/* <View className='justify-between flex-row px-5 pt-2 pb-[5] items-center border-b border-primary-300'>
                         <View className='flex-row items-center gap-3'>
                             <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Clinics</Text>
                         </View>
@@ -326,7 +329,7 @@ const Booking = () => {
                             <Text className="font-Poppins text-white text-[12px] leading-4">{companiesList.length} more clinics</Text>
                             <Feather name="chevron-down" size={24} color='#fff' />
                         </Pressable>
-                    </View>
+                    </View> */}
 
                     <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
                         <View className='flex-1'>
@@ -371,7 +374,7 @@ const Booking = () => {
                         } else {
                             return (
                                 <ScrollView horizontal={true} contentContainerClassName='gap-4 pb-2' showsHorizontalScrollIndicator={false}>
-                                    {dateTabsList.data.slice(0, 6).map((i: any) => <DayBtn key={i.SDateStr} date={i.Day} day={i.DName.substring(0, 3)} active={i.SDateStr === selectedDate} handleActive={() => handleDateChange(i)} />)}
+                                    {dateTabsList.data.map((i: any) => <DayBtn key={i.SDateStr} date={i.Day} day={i.DName.substring(0, 3)} active={i.SDateStr === selectedDate} handleActive={() => handleDateChange(i)} />)}
                                 </ScrollView>
                             ) 
                         }
@@ -389,9 +392,10 @@ const Booking = () => {
                             } else if (dateSlotsList.err.status) {
                                 return;
                             } else {
-                                return dateSlotsList.data.slice(0, 3).map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr)}/>))
+                                return dateSlotsList.data.map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr)}/>))
                             }
                         })()}
+                        {Array.from(Array(blankSlot).keys()).map(i => (<SlotBtn time={'00:00 PM - 00:00 PM'} blank={true} key={i} />))}
                     </View>
                 </View>
                 <ButtonPrimary title='Book Appointment' isLoading={loading} active={true} onPress={handleBooking} classes='m-4' />
@@ -440,15 +444,15 @@ const styles = StyleSheet.create({
     }
 });
 
-const SlotBtn = ({ time, active, handleSelect }: any) => {
+const SlotBtn = ({ time, active, handleSelect, blank }: any) => {
     return (        
-        <TouchableOpacity onPress={handleSelect} className={`justify-center border-2 rounded-lg px-3 py-1 mb-3 ${active ? 'bg-primary-50 border-primary-400' : 'bg-gray-50 border-gray-300'}`} style={{
+        <TouchableOpacity onPress={handleSelect} className={`${blank ? 'opacity-60' : ''} justify-center border-2 rounded-lg px-3 py-1 mb-3 ${active ? 'bg-primary-50 border-primary-400' : 'bg-gray-50 border-gray-300'}`} style={{
             width: '17.1%'     // 6 items
             // width: '21.25%' // 4 items
             // width: '26.66%'    // 3 items
         }}>
-            <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[0]}</Text>
-            <Text className={`font-Poppins text-[11px] leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[1]}</Text>
+            <Text className={`${blank ? 'opacity-0' : ''} font-Poppins text-[11px] leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[0]}</Text>
+            <Text className={`${blank ? 'opacity-0' : ''} font-Poppins text-[11px] leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[1]}</Text>
         </TouchableOpacity>
     )
 }

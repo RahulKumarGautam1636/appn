@@ -9,7 +9,7 @@ import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View }
 import { useDispatch, useSelector } from 'react-redux';
 import { myColors } from '@/constants';
 import { LabCartCard } from '@/src/components/cards';
-import Checkout from '../checkout';
+import Checkout from '../../checkout';
 import { useState } from 'react';
 
 const Cart = ({}: any) => {
