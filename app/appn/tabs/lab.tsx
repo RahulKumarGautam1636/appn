@@ -158,7 +158,7 @@ const LabTests = ({}: any) => {
                         </View>
                     </View>
                     
-                    <View className='bg-white mb-4 rounded-2xl shadow-md shadow-gray-500'>
+                    <View className='bg-white mb-4 rounded-2xl shadow-lg border-b-2 border-gray-300'>
                         <View className='flex-row w-full px-5 py-[16px] border-b border-gray-200 items-center'>
                             <FontAwesome5 name="calendar-alt" size={21} color={myColors.primary[500]} />
                             <Text className="font-PoppinsMedium text-slate-500 text-[14px] leading-6 ml-4 mr-auto">Select Date:</Text>

@@ -1,5 +1,5 @@
 import ButtonPrimary, { MyModal } from '@/src/components';
-import { BannerCarousel, num } from '@/src/components/utils';
+import { BannerCarousel, NoContent, num } from '@/src/components/utils';
 import { addToCart, removeFromCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -67,9 +67,9 @@ const Cart = ({}: any) => {
                         </View>
                         {labTests.length ? <View className='gap-4 realtive mt-4'>
                             {labTests.map((i: any) => (<LabCartCard data={i} key={i._id} />))}
-                        </View> : null}
-                        <View className='bg-white mt-4 rounded-2xl shadow-lg shadow-gray-400'>
-                            <View className='flex-row gap-4 w-full p-4 border-b border-gray-200 items-center'>
+                        </View> : <NoContent label='Your Cart is Empty' containerClass='py-8' />}
+                        <View className='bg-white mt-4 rounded-2xl shadow-lg border-b-2 border-gray-300'>
+                            <View className='flex-row gap-4 w-full p-4 items-center'>
                                 <View className='relative w-full'>
                                     <TextInput placeholder='Add More Tests..' className='z-10 bg-[#ebecef] py-4 items-start px-5 text-gray-700 rounded-2xl shadow-sm shadow-gray-500 w-full' />
                                     <Feather className='absolute z-50 top-[12px] right-4' name="search" size={22} color={myColors.primary[500]} />

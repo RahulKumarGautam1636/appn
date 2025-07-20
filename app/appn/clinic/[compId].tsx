@@ -84,9 +84,9 @@ const Clinic = () => {
                     <Image source={require('../../../assets/images/clinic.jpeg')} className="w-full" resizeMode="contain" />  
                     {/* max-h-full for web */}
                 </View>
-                <View className='bg-slate-50 rounded-tl-[2.7rem] rounded-tr-[2.7rem] p-5' style={{ marginTop: -45}}>
+                <View className='bg-slate-50 rounded-tl-[2.7rem] rounded-tr-[2.7rem] p-6 pt-7' style={{ marginTop: -45}}>
                     <Text className="font-PoppinsSemibold text-sky-800 text-[22px]">{clinic.COMPNAME}</Text>
-                    <View className="gap-3 mt-3">
+                    <View className="gap-[0.9rem] mt-3">
                         <View className='flex-row gap-3'>
                             <FontAwesome5 name="clock" size={17} color="#075985" />   
                             <Text className="font-PoppinsMedium text-blue-700 text-[13px]">08:00 AM  -  06:00 PM</Text>
@@ -112,7 +112,7 @@ const Clinic = () => {
                             </View>
                         ))}
                     </View>
-                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-6">Location</Text>
+                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-6 mb-4">Location</Text>
                     {/* <View className="h-[150px] bg-gray-300 mt-3 rounded-xl"></View> */}
 
                     {/* <View className="mt-3 h-[170px] border border-gray-300">
@@ -120,14 +120,17 @@ const Clinic = () => {
                     </View> */}
                     <MapComponent />
 
-                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] mt-6">Book Appointment</Text>
-                    <TouchableOpacity onPress={() => setDeptsActive(true)} className="flex-wrap gap-4 flex-row bg-primary-500 rounded-xl mt-4 mb-2 p-4 items-center justify-between">
+                    
+                </View>
+                    <Text className="font-PoppinsSemibold text-sky-800 text-[18px] bg-slate-50 p-4 border-t border-gray-200">Book Appointment</Text>
+                    <TouchableOpacity onPress={() => setDeptsActive(true)} className="flex-wrap gap-4 flex-row bg-primary-500 p-4 items-center justify-between">
                         <Text className="font-PoppinsSemibold text-white text-[14px]">Department</Text>   
                         <View className="py-3 min-w-[50%] bg-primary-400 px-2 flex-row items-center justify-evenly rounded-xl">
                             <Text className="font-PoppinsMedium text-white text-[13px]" numberOfLines={1}>{selectedDept.Description} </Text>
                             <Feather name="chevron-down" size={18} color='#fff' />
                         </View> 
                     </TouchableOpacity>
+                <View className='bg-slate-50 p-4'>
                     <View className='justify-between flex-row pt-2 items-center mt-1'>
                         <View className='flex-row items-center gap-3'>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[15px] items-center leading-5">Select Date</Text>

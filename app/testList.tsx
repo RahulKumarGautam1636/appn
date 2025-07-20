@@ -6,10 +6,11 @@ import { Link, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Card_3, Card_4 } from '@/src/components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { BASE_URL } from '@/constants';
+import { BASE_URL, myColors } from '@/constants';
 import { getFrom, ListLoader, NoContent } from '@/src/components/utils';
+import { setModal } from '@/src/store/slices/slices';
 
 
 const TestList = () => {
@@ -67,21 +68,70 @@ const TestList = () => {
         }
     }
 
+    const dispatch = useDispatch();
+    const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
     
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
-            <View className='bg-white'>
-                <View className='justify-between flex-row p-4 items-center'>
-                    <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
-                        <Ionicons name="arrow-back-outline" size={24} color="black" />
-                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Appointments</Text>
+            <View className='justify-between flex-row p-4 items-center'>
+                <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
+                    <Ionicons name="arrow-back-outline" size={24} color="black" />
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Appointments</Text>
+                </Pressable>
+                <View className="gap-3 flex-row items-center ml-auto">
+                    <Feather name="heart" size={20} color='black' />
+                    <Feather name="share-2" size={20} color='black' />
+                </View>
+            </View>
+            <View className='px-4 pt-1'>
+                <View className='bg-white mb-4 rounded-2xl shadow-md shadow-gray-400'>
+                    <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
+                        <View className='flex-row items-center gap-3'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Total Tests</Text>
+                        </View>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">{labData.data.PartyFollowupList.length} Items</Text>
+                    </View>
+
+                    <View className='flex-row gap-3 p-4'>
+                        <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Booking Date</Text>
+                        <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
+                        <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">26/06/2025</Text>
+                    </View>
+                </View> 
+                <View className='justify-between flex-row items-center mb-3'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                    </View>
+                    <Pressable onPress={() => dispatch(setModal({ name: 'COMPANIES', state: true }))} className="gap-2 flex-row items-center ml-auto">
+                        <Text className="font-PoppinsMedium text-sky-700 text-[13px] leading-4">{companyList.length} more clinics</Text>
+                        <Feather name="chevron-down" size={24} color='#0369a1' />
                     </Pressable>
-                    <View className="gap-3 flex-row items-center ml-auto">
-                        <Feather name="heart" size={20} color='black' />
-                        <Feather name="share-2" size={20} color='black' />
+                </View>
+                <View className='bg-primary-500 mb-[1.15rem] rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
+                    <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
+                        <View className='flex-1'>
+                            <Text className="font-PoppinsSemibold text-[15px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
+                            <View className='mt-[10px]'>
+                                <View className='flex gap-3 flex-row items-center'>
+                                    <FontAwesome5 name="clock" size={14} color="#fff" />
+                                    <Text className="font-PoppinsMedium text-gray-100 text-[11px] leading-5">08:30 AM - 12:00 PM</Text>
+                                </View>
+                                <View className='flex gap-3 flex-row items-center mt-2'>
+                                    <FontAwesome5 name="map-marker-alt" size={14} color="#fff" />
+                                    <Text className="font-Poppins text-gray-100 text-[11px] leading-5" numberOfLines={1}>{selectedCompany.ADDRESS}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <Link href={`/appn/clinic/${selectedCompany.CompanyId}`}>
+                            <View>
+                                <Feather name="chevron-right" size={24} color="#fff" className='px-[9px] py-[9px] bg-primary-400 rounded-full'  />
+                            </View>
+                        </Link>
                     </View>
                 </View>
-                <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2 mt-2'>
+            </View>
+            <View className='bg-white'>
+                <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>
                     <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'PENQ' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setActive('PENQ')}>
                         <Text className={`font-PoppinsMedium ${active === 'PENQ' ? 'text-white' : ''}`}>Previous</Text>
                     </TouchableOpacity>

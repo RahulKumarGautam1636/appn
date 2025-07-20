@@ -52,7 +52,8 @@ export default function RootLayout() {
                 <Stack.Screen name="appn/cart" options={{ headerShown: false, animation: 'slide_from_left' }} />
                 <Stack.Screen name="testDetail" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="testList" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="appn/clinic/[compId]" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false, animation: 'slide_from_left' }} />
                 {/* <Stack.Screen name="movie/[id]" options={{ headerShown: false}} /> */}
               </Stack>
             </KeyboardAvoidingView>

@@ -3,8 +3,9 @@ import { Pressable, Text, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import { addToCart, removeFromCart } from "../store/slices/slices";
 import { RootState } from "../store/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { mmDDyyyyDate } from ".";
 
 export default function LabCard({ data, testDate }: any) {
 
@@ -21,7 +22,7 @@ export default function LabCard({ data, testDate }: any) {
     }
 
     return (
-        <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg p-4">
+        <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg border-b-2 border-gray-300 p-4">
             <View className="mt-1 uppercase h-[45px] w-[45px] items-center justify-center rounded-xl bg-primary-500">
                 <Ionicons name={'flask'} size={21} color={'#fff'} />
             </View>
@@ -44,8 +45,17 @@ export default function LabCard({ data, testDate }: any) {
 export const LabCartCard = ({ data }: any) => {
     const dispatch = useDispatch()
     const [date, setDate] = useState({ active: false, value: new Date()});
+
+    const [day, month, year] = data.testDate.split('/').map(Number);
+    let parsedActiveDate = new Date(year, month - 1, day);
+    let formattedDate = new Date(parsedActiveDate);
+
+    useEffect(() => {
+        setDate(pre => ({...pre, value: formattedDate}))
+    }, [])
+
     return (
-        <View className='bg-white rounded-2xl shadow-lg' key={data.ItemId}>
+        <View className='bg-white rounded-2xl shadow-lg border-b-2 border-gray-300' key={data.ItemId}>
             <View className='p-4'>
                 <Text className="font-PoppinsSemibold text-sky-800">{data.Description}</Text>
                 <View className='flex-row gap-4 items-end justify-between w-full mt-[6px]'>

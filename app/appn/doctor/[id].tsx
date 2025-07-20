@@ -238,12 +238,6 @@ const Booking = () => {
     //     }
     // } 
 
-    // const mmDDyyyyDate = (date: string, currSeperator: string, requiredSeperator: string) => {                 // Convert dd/mm/yyyy to mm/dd/yyyy format because dd/mm/yyyy is not taken as Date() object to create new date.
-    //     if (!date.includes(currSeperator)) return console.log('CurrentSeperator does not exist in received date.');
-    //     const [dd, mm, yyyy] = date.split(currSeperator);
-    //     return mm + requiredSeperator + dd + requiredSeperator + yyyy;                  
-    // }
-
     const [confirmation, setConfirmation] = useState(false);
     const [success, setSuccess] = useState(false);
 
@@ -392,10 +386,14 @@ const Booking = () => {
                             } else if (dateSlotsList.err.status) {
                                 return;
                             } else {
-                                return dateSlotsList.data.map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr)}/>))
+                                return (
+                                    <>
+                                        {dateSlotsList.data.map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr)}/>))}
+                                        {Array.from(Array(blankSlot).keys()).map(i => (<SlotBtn time={'00:00 PM - 00:00 PM'} blank={true} key={i} />))}
+                                    </>
+                                )
                             }
                         })()}
-                        {Array.from(Array(blankSlot).keys()).map(i => (<SlotBtn time={'00:00 PM - 00:00 PM'} blank={true} key={i} />))}
                     </View>
                 </View>
                 <ButtonPrimary title='Book Appointment' isLoading={loading} active={true} onPress={handleBooking} classes='m-4' />

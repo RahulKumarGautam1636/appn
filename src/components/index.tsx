@@ -113,9 +113,9 @@ export const CompCard = ({ data, active, details }: any) => {
     }
   }
   return (
-    <View className={`items-center p-[13px] rounded-xl shadow-lg ${active ? 'border border-primary-500 bg-primary-50' : 'bg-white'}`}>
+    <View className={`items-center p-[13px] rounded-xl shadow-lg border-b-2 ${active ? 'border border-primary-500 bg-primary-50' : 'bg-white border-gray-300'}`}>
       <View className="flex-row gap-4">
-        <Image className='shadow-lg rounded-xl' src={`${SRC_URL}/Content/CompanyLogo/${data.LogoUrl}`} style={{ width: 65, height: 65 }} />
+        <Image className='shadow-md rounded-xl' src={`${SRC_URL}/Content/CompanyLogo/${data.LogoUrl}`} style={{ width: 65, height: 65 }} />
         <TouchableOpacity onPress={handleSelect} className="flex-1 min-w-0">  
             <Text className="font-PoppinsSemibold text-sky-800 text-[13px]" numberOfLines={0} style={{flexShrink: 1, flexWrap: 'wrap'}}>{data.COMPNAME}</Text>
             <View className='mt-1 gap-2 flex-row items-center'>
@@ -129,14 +129,14 @@ export const CompCard = ({ data, active, details }: any) => {
         </TouchableOpacity>
       </View>
       {details &&<View className="flex-row gap-2 mt-5">
-        <TouchableOpacity className={`py-2 items-center rounded-xl flex-1 ${active ? 'bg-gray-400' : 'bg-sky-500'}`} onPress={handleSelect}>
-          <Text className="text-white font-Poppins">{active ? 'Selected' : 'Select Clinic'}</Text>
+        <TouchableOpacity className={`py-2 items-center rounded-xl flex-1 border ${active ? 'border-gray-400' : 'border-sky-500'}`} onPress={handleSelect}>
+          <Text className={`font-Poppins leading-7 ${active ? 'text-stone-400' : 'text-sky-600'}`}>{active ? 'Selected' : 'Select Clinic'}</Text>
         </TouchableOpacity>
         <View className="py-2 bg-primary-500 items-center rounded-xl flex-1">
           <Link href={`/appn/clinic/${data.CompanyId}`} onPress={() => dispatch(setModal({name: 'COMPANIES', state: false }))}>
-              <Text className="text-white font-Poppins">View Details</Text>
+              <Text className="text-white font-Poppins leading-7">View Details</Text>
           </Link>
-          </View>
+        </View>
       </View>}
     </View>
   )
@@ -154,7 +154,7 @@ export const DeptCard = ({ data, active }: any) => {
     //       <Text className={`text-[12px] ${active && 'text-primary-500 font-medium'}`}>{data.Description}</Text> 
     //     }
     // </TouchableOpacity>
-    <TouchableOpacity onPress={() => dispatch(setDepts({selected: data}))} className={`flex-row px-4 py-2 rounded-full self-start shadow-md shadow-gray-300 ${active ? 'bg-primary-500' : 'bg-white'}`}>
+    <TouchableOpacity onPress={() => dispatch(setDepts({selected: data}))} className={`flex-row px-4 py-2 rounded-full self-start shadow-md border-b-2 border-gray-300 ${active ? 'bg-primary-500' : 'bg-white'}`}>
       <Text className={`font-PoppinsMedium text-[12px] ${active ? 'text-white' : 'text-gray-500'}`}>{data.Description}</Text>
     </TouchableOpacity>
   )
@@ -176,7 +176,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
 
   return (
     <Link href={`/appn/doctor/${data.PartyCode}`} onPress={handleBooking}>
-      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
+      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg border-b-2 border-gray-300 w-full'>
           <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
           <View className='flex-1'>
               <Text className="font-PoppinsSemibold text-sky-800 text-[14px]" numberOfLines={1}>{data.Name}</Text>
@@ -221,11 +221,11 @@ export const Card_2 = ({ data, index, active }: any) => {
             <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleTask('appn/home')} className='flex-row gap-3 p-4 border-b border-gray-300'>
+          <TouchableOpacity onPress={() => handleTask('appn/tabs/home')} className='flex-row gap-3 p-4 border-b border-gray-300'>
             <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleTask('appn/lab')} className='flex-row gap-3 p-4'>
+          <TouchableOpacity onPress={() => handleTask('appn/tabs/lab')} className='flex-row gap-3 p-4'>
             <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
             <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
           </TouchableOpacity>
@@ -319,13 +319,13 @@ export const getDatesArray = function(start: Date, end: number) {
 export const Card_3 = ({ data }: any) => {
   const dispatch = useDispatch();
   return (
-    <>
-      {/* <Link href={`/appn/appnDetail/${data.}`}> */}
-        <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: data}))} className='flex-row gap-1 p-4 bg-white rounded-xl shadow-md shadow-gray-400 w-full'>
+    <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: data}))}>
+      <View className="bg-white rounded-xl shadow-md shadow-gray-400">
+        <View className='flex-row gap-1 w-full p-4'>
           <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('./../../assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
           <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-700 text-[15px] mb-3">{data.AppointmentTo}</Text>
-            <View className='flex-row gap-3 mb-[7px]'>
+            <View className='flex-row gap-3 mb-[8px]'>
                 <FontAwesome5 name="clock" size={15} color="#075985" />
                 <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')},    {data.NextAppTime}</Text>
             </View>
@@ -333,14 +333,25 @@ export const Card_3 = ({ data }: any) => {
                 <FontAwesome name="user-o" size={15} color="#075983" />    
                 <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{data.PartyName}</Text>
             </View>
-            <View className='flex-row px-4 py-2 rounded-full mt-4 bg-sky-400 self-start'>
+            {/* <View className='flex-row px-4 py-2 rounded-full mt-4 bg-sky-400 self-start'>
                 <Text className="font-PoppinsMedium text-[12px] text-white">Clinic Consultation</Text>
-            </View>
+            </View> */}
           </View>
           <Feather name="chevron-right" className='my-auto' size={30} color='#ec4899' />
-        </TouchableOpacity>
-      {/* </Link> */}
-    </>
+        </View>
+        <View className="flex-row items-center gap-2 border-t border-gray-300 px-4 py-[12px]">
+          <Text className={`font-PoppinsMedium text-gray-600 text-[13px]`}>Status : </Text>
+          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${data.IsAppConfirmed === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
+            <Text className={`font-PoppinsMedium text-[12px] ${data.IsAppConfirmed === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Booked'}</Text>
+          </View>
+
+          <Text className="font-PoppinsMedium text-gray-600 text-[13px]">Service : </Text>
+          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${data.Status === 'Y' ? 'bg-green-50' : 'bg-yellow-50'}`}>
+            <Text className={`font-PoppinsMedium text-[12px] ${data.Status === 'Y' ? 'text-green-600' : 'text-yellow-600'}`}>{data.Status === 'Y' ? 'Done' : 'Pending'}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
   )
 }
 
