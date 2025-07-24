@@ -23,7 +23,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
             <TouchableOpacity onPress={() => handleClose(false)}>
               <View className='flex-row items-center gap-3'>
                   <Ionicons name="arrow-back-outline" size={24} color="black" />
-                  <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Review & Pay</Text>
+                  <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Review & Confirm</Text>
               </View>
             </TouchableOpacity>
             <View className="gap-3 flex-row items-center ml-auto">

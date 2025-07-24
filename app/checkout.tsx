@@ -209,6 +209,7 @@ const Checkout = ({ handleClose }: any) => {
                         </View>
                         <Text className="text-sm py-3 text-gray-500">
                         <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
+                        <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
                     </View>
                     <View className='justify-between flex-row pt-1 items-center'>
                         <View className='flex-row items-center gap-3'>
