@@ -108,14 +108,14 @@ const Profile = () => {
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link> */}
-                <Link href={'/appn/home'}>
+                <Link href={'/appn/tabs/home'}>
                     <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5'>
                         <FontAwesome5 name="headset" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Get Support</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
-                <Link href={'/appn/home'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
+                <Link href={'/appn/tabs/home'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
                     <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5'>
                         <Entypo name="log-out" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Logout</Text>
