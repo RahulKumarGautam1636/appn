@@ -22,8 +22,9 @@ export default function App() {
       <SafeAreaProvider>
         <SafeAreaView className="flex-1">
           <Init />
-          <View className='flex-1 w-full items-center justify-center p-5'>
-              <ButtonPrimary title='OPEN APP' onPress={() => router.push('./appn/tabs/home')} active={true} classes='rounded-2xl w-full' textClasses='tracking-widest' />
+          <View className='flex-1 w-full items-center justify-center p-5 gap-4'>
+              <ButtonPrimary title='OPEN OPD' onPress={() => router.push('./appn/tabs/home')} active={true} classes='rounded-2xl w-full' textClasses='tracking-widest' />
+              <ButtonPrimary title='OPEN PHARMACY' onPress={() => router.push('./shop/home')} active={true} classes='rounded-2xl w-full' textClasses='tracking-widest' />
           </View>
           <Modals />
         </SafeAreaView>
