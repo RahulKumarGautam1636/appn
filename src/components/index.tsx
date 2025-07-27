@@ -176,7 +176,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
 
   return (
     <Link href={`/appn/doctor/${data.PartyCode}`} onPress={handleBooking}>
-      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg border-b-2 border-gray-300 w-full'>
+      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-sm w-full'>
           <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
           <View className='flex-1'>
               <Text className="font-PoppinsSemibold text-sky-800 text-[14px]" numberOfLines={1}>{data.Name}</Text>

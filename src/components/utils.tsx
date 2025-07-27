@@ -1,6 +1,6 @@
 import axios, { GenericAbortSignal } from "axios";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text } from 'react-native';
+import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
 
@@ -229,4 +229,17 @@ export const formatted = (date: string) => {
     month: 'long'
   }).format(new Date(date));
   return formattedDate;
+}
+
+export const GradientBG = ({ children }: any) => {
+  return (
+    <ImageBackground
+        imageStyle={{opacity: 0.6}}
+        source={require('../../assets/images/glass-bg.png')}
+        resizeMode="cover"
+        className='flex-1'
+    >
+      {children}
+    </ImageBackground>
+  )
 }

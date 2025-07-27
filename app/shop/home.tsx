@@ -1,249 +1,185 @@
 import React from 'react';
-import { 
-  View, 
-  Text, 
-  ScrollView, 
-  Image, 
-  TextInput, 
-  TouchableOpacity,
-  StatusBar,
-  SafeAreaView
-} from 'react-native';
-import { Feather, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, StatusBar, Image } from 'react-native';
+import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-const HealthDashboard = () => {
+const CatCard = ({ data }: any) => {
   return (
-    <SafeAreaView className="flex-1 bg-green-100">
-      <StatusBar barStyle="dark-content" />
-      
+    <TouchableOpacity className="items-center bg-white rounded-xl shadow-sm overflow-hidden">
+      <Image className='' source={{uri: data}} style={{ width: 135, height: 100 }} />
+      <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 py-2">Garments</Text>
+    </TouchableOpacity>
+  )
+}
+
+const ShoppingAppScreen = () => {
+  const brandLogos = [
+    { name: 'Nike', icon: 'checkroom' },
+    { name: 'Macy\'s', icon: 'star', color: '#dc2626' },
+    { name: 'Levi\'s', icon: 'straighten', color: '#dc2626' },
+    { name: 'Adidas', icon: 'sports-soccer' },
+    { name: 'Chanel', icon: 'diamond' },
+    { name: 'Pepsi', icon: 'local-drink', color: '#2563eb' },
+    { name: 'Starbucks', icon: 'local-cafe', color: '#059669' },
+    { name: 'Puma', icon: 'pets' },
+    { name: 'Ferrari', icon: 'directions-car', color: '#dc2626' },
+    { name: 'Dell', icon: 'computer', color: '#2563eb' },
+  ];
+
+  return (
+    <ScrollView className="flex-1 bg-purple-50">      
       {/* Header */}
-      <View className="flex-row items-center justify-between px-4 py-2">
-        <Text className="text-lg font-semibold">9:41</Text>
-        <View className="flex-row items-center space-x-1">
+      <StatusBar barStyle="dark-content" backgroundColor="#f3e8ff" />
+      <View className="bg-purple-100 pt-5 pb-5 px-5">
+
+        
+        <View className="flex-row justify-between items-center mb-5">
+          <View className="flex-row items-center gap-3">
+            <Image className='shadow-lg rounded-full' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+            <View>
+              <Text className="text-xs text-gray-600 mb-1">Welcome back</Text>
+              <Text className="text-xl font-PoppinsSemibold text-gray-800">Rahul Kumar</Text>
+            </View>
+          </View>
           <View className="flex-row">
-            <View className="w-1 h-1 bg-black rounded-full mx-0.5" />
-            <View className="w-1 h-1 bg-black rounded-full mx-0.5" />
-            <View className="w-1 h-1 bg-black rounded-full mx-0.5" />
-            <View className="w-1 h-1 bg-gray-400 rounded-full mx-0.5" />
+            <TouchableOpacity className="mr-4">
+              <Feather name="bell" size={24} color="#2563eb" />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Feather name="settings" size={24} color="#2563eb" />
+            </TouchableOpacity>
           </View>
-          <Feather name="wifi" size={16} color="black" />
-          <View className="w-6 h-3 border border-black rounded-sm">
-            <View className="w-4 h-2 bg-black rounded-sm m-0.5" />
-          </View>
-        </View>
-      </View>
-
-      <ScrollView className="flex-1 px-4">
-        {/* Date */}
-        <Text className="text-gray-600 text-sm mb-4">SAT, 25 FEB 2025</Text>
-
-        {/* User Profile */}
-        <View className="bg-white rounded-2xl p-4 mb-6 flex-row items-center">
-          <Image 
-            source={{ uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face' }}
-            className="w-12 h-12 rounded-full mr-3"
-          />
-          <View className="flex-1">
-            <Text className="text-lg font-semibold">Hello, Isabell</Text>
-            <View className="flex-row items-center mt-1">
-              <Text className="text-orange-500 font-medium">87% Healthy</Text>
-              <View className="bg-orange-100 px-2 py-1 rounded-full ml-2">
-                <Text className="text-orange-600 text-xs font-medium">Pro Member</Text>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity>
-            <View className="w-6 h-6 bg-red-500 rounded-full items-center justify-center">
-              <Text className="text-white text-xs font-bold">1</Text>
-            </View>
-          </TouchableOpacity>
         </View>
 
         {/* Search Bar */}
-        <View className="bg-white rounded-xl p-3 mb-6 flex-row items-center">
+        <View className="bg-white rounded-full px-4 py-[0.42rem] flex-row items-center mb-5">
+          <Feather name="search" size={20} color="#9CA3AF" />
           <TextInput 
-            placeholder="Search here..."
-            className="flex-1 text-gray-600"
+            placeholder="Search..." 
+            className="flex-1 ml-3 text-gray-700"
             placeholderTextColor="#9CA3AF"
           />
-          <Feather name="search" size={20} color="#9CA3AF" />
+          <Feather name="sliders" size={20} color="#9CA3AF" />
         </View>
 
-        {/* Browse by Specializations */}
-        <View className="mb-6">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-lg font-semibold">Browse by Specializations</Text>
-            <Text className="text-blue-500 font-medium">See All</Text>
-          </View>
-          <View className="flex-row justify-between">
-            <TouchableOpacity className="items-center">
-              <View className="w-12 h-12 bg-pink-500 rounded-xl items-center justify-center mb-2">
-                <Feather name="heart" size={24} color="white" />
-              </View>
-              <Text className="text-xs text-gray-600">Heart</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="items-center">
-              <View className="w-12 h-12 bg-orange-400 rounded-xl items-center justify-center mb-2">
-                <MaterialIcons name="accessibility" size={24} color="white" />
-              </View>
-              <Text className="text-xs text-gray-600">Bone</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="items-center">
-              <View className="w-12 h-12 bg-green-500 rounded-xl items-center justify-center mb-2">
-                <FontAwesome5 name="apple-alt" size={20} color="white" />
-              </View>
-              <Text className="text-xs text-gray-600">Nutrition</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="items-center">
-              <View className="w-12 h-12 bg-blue-500 rounded-xl items-center justify-center mb-2">
-                <MaterialIcons name="local-hospital" size={24} color="white" />
-              </View>
-              <Text className="text-xs text-gray-600">Tooth</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="items-center">
-              <View className="w-12 h-12 bg-purple-500 rounded-xl items-center justify-center mb-2">
-                <MaterialIcons name="coronavirus" size={24} color="white" />
-              </View>
-              <Text className="text-xs text-gray-600">Disease</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="items-center">
-              <View className="w-12 h-12 bg-red-400 rounded-xl items-center justify-center mb-2">
-                <MaterialIcons name="medical-services" size={20} color="white" />
-              </View>
-              <Text className="text-xs text-gray-600">Sur...</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Health Overview */}
-        <View className="mb-6">
-          <Text className="text-lg font-semibold mb-4">Health Overview</Text>
+        {/* Category Icons */}
+        <View className="flex-row justify-around py-4 bg-white rounded-2xl">
+          <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-purple-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="play" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Garments</Text>
+          </TouchableOpacity>
           
-          <View className="flex-row mb-4">
-            {/* Heart Rate */}
-            <View className="flex-1 bg-white rounded-2xl p-4 mr-2">
-              <View className="flex-row items-center justify-between mb-2">
-                <Text className="text-gray-600 text-sm">Heart Rate</Text>
-                <Feather name="heart" size={16} color="#EF4444" />
-              </View>
-              <Text className="text-2xl font-bold mb-2">97 <Text className="text-sm font-normal text-gray-500">bpm</Text></Text>
-              <View className="h-8 flex-row items-end">
-                {[20, 30, 25, 35, 30, 40, 35, 30].map((height, index) => (
-                  <View 
-                    key={index}
-                    className="flex-1 bg-pink-200 rounded-t mx-0.5"
-                    style={{ height: height }}
-                  />
-                ))}
-              </View>
+          <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-red-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="shopping-bag" size={20} color="white" />
             </View>
-
-            {/* Blood Pressure */}
-            <View className="flex-1 bg-white rounded-2xl p-4 ml-2">
-              <View className="flex-row items-center justify-between mb-2">
-                <Text className="text-gray-600 text-sm">Blood Pressure</Text>
-                <View className="w-4 h-4 bg-purple-500 rounded-full" />
-              </View>
-              <Text className="text-2xl font-bold mb-2">112 <Text className="text-sm font-normal text-gray-500">mmHg</Text></Text>
-              <View className="h-8 flex-row items-end">
-                {[25, 20, 30, 35, 25, 40, 30, 35].map((height, index) => (
-                  <View 
-                    key={index}
-                    className="flex-1 bg-purple-200 rounded-t mx-0.5"
-                    style={{ height: height }}
-                  />
-                ))}
-              </View>
-            </View>
-          </View>
-
-          <View className="flex-row">
-            {/* Weight */}
-            <View className="flex-1 bg-white rounded-2xl p-4 mr-2">
-              <View className="flex-row items-center justify-between mb-2">
-                <Text className="text-gray-600 text-sm">Weight</Text>
-                <MaterialIcons name="monitor-weight" size={16} color="#6B7280" />
-              </View>
-              <Text className="text-2xl font-bold mb-2">97 <Text className="text-sm font-normal text-gray-500">lbs</Text></Text>
-              <View className="h-8 flex-row items-end">
-                {[30, 25, 20, 35, 25, 30, 35, 25].map((height, index) => (
-                  <View 
-                    key={index}
-                    className="flex-1 bg-gray-200 rounded-t mx-0.5"
-                    style={{ height: height }}
-                  />
-                ))}
-              </View>
-            </View>
-
-            {/* Nutrition */}
-            <View className="flex-1 bg-white rounded-2xl p-4 ml-2">
-              <View className="flex-row items-center justify-between mb-2">
-                <Text className="text-gray-600 text-sm">Nutrition</Text>
-                <FontAwesome5 name="apple-alt" size={14} color="#10B981" />
-              </View>
-              <Text className="text-2xl font-bold mb-2">158 <Text className="text-sm font-normal text-gray-500">mg</Text></Text>
-              <View className="h-8 flex-row items-end">
-                {[20, 35, 25, 30, 40, 25, 35, 30].map((height, index) => (
-                  <View 
-                    key={index}
-                    className="flex-1 bg-green-200 rounded-t mx-0.5"
-                    style={{ height: height }}
-                  />
-                ))}
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Doctors Near You */}
-        <View className="mb-6">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-lg font-semibold">Doctors Near You (55)</Text>
-            <TouchableOpacity>
-              <Feather name="more-horizontal" size={20} color="#6B7280" />
-            </TouchableOpacity>
-          </View>
+            <Text className="text-xs text-gray-600">Grocery</Text>
+          </TouchableOpacity>
           
-          <View className="bg-white rounded-2xl p-4">
-            <View className="flex-row items-center">
-              <Image 
-                source={{ uri: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face' }}
-                className="w-12 h-12 rounded-full mr-3"
-              />
-              <View className="flex-1">
-                <Text className="font-semibold text-base">Dr. Mikasa Yellow</Text>
-                <Text className="text-gray-600 text-sm">Orthopedic</Text>
-                <Text className="text-gray-500 text-xs mt-1">8:01am</Text>
-              </View>
-              <TouchableOpacity>
-                <Feather name="chevron-right" size={20} color="#6B7280" />
-              </TouchableOpacity>
+          <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="gift" size={20} color="white" />
             </View>
-          </View>
+            <Text className="text-xs text-gray-600">Medicines</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-purple-600 rounded-2xl items-center justify-center mb-2">
+              <Feather name="percent" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Property</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-
-      {/* Bottom Navigation */}
-      <View className="bg-black rounded-t-3xl px-4 py-3 flex-row justify-around items-center">
-        <TouchableOpacity className="items-center">
-          <Feather name="home" size={24} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity className="items-center bg-green-500 p-3 rounded-2xl">
-          <MaterialIcons name="bar-chart" size={24} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity className="items-center">
-          <Feather name="message-square" size={24} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity className="items-center">
-          <Feather name="calendar" size={24} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity className="items-center">
-          <Feather name="user" size={24} color="white" />
-        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+      <View className='py-5'>
+        <View className="flex-row justify-between items-center mb-4 px-5">
+          <Text className="text-lg font-bold text-gray-800">Featured Categories</Text>
+          <TouchableOpacity>
+            <Text className="text-purple-600 font-medium">See All</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView contentContainerClassName="flex-row justify-between gap-3 px-5 py-1" horizontal showsHorizontalScrollIndicator={false}>
+          {[
+            'https://agro.takehome.live/assets/img/agro/categories/Milk-Ghee.png', 'https://agro.takehome.live/assets/img/agro/categories/Agri-Tools.png',
+            'https://admin.takehome.live/Content/Attachments/ProjectDoc/Comp_907/20256415012_Natural%20Juice-112kb.png', 
+            'https://agro.takehome.live/assets/img/agro/categories/Tea-Cofee.png', 
+            'https://admin.takehome.live/Content/Attachments/ProjectDoc/Comp_752/20256112516_Cream.jpg',
+            'https://admin.takehome.live/Content/Attachments/ProjectDoc/Comp_752/20256211335_Schedule-h1-drug-B.jpg'
+            ].map((i, n) => (<CatCard data={i} key={n} />))}
+          
+          {/* <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-red-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="shopping-bag" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Grocery</Text> 
+          </TouchableOpacity>
+          
+          <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="gift" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Medicines</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-purple-600 rounded-2xl items-center justify-center mb-2">
+              <Feather name="percent" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Property</Text>
+          </TouchableOpacity> */}
+        </ScrollView>
+      </View>
+
+      <View className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+        <View className="mb-4">
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
+            <TouchableOpacity>
+              <Text className="text-purple-600 font-medium">See All</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <View className="flex-row flex-wrap justify-between">
+            {brandLogos.map((brand, index) => (
+              <TouchableOpacity key={index} className="items-center mb-4" style={{width: '18%'}}>
+                <View className="w-14 h-14 bg-white rounded-full items-center justify-center mb-2 shadow-sm">
+                  <MaterialIcons 
+                    name={brand.icon} 
+                    size={24} 
+                    color={brand.color || '#374151'} 
+                  />
+                </View>
+                <Text className="text-xs text-gray-600 text-center">{brand.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Price Compare Banner */}
+        <View className="bg-blue-400 rounded-2xl p-4 mb-6 flex-row items-center justify-between">
+          <View className="flex-row items-center flex-1">
+            <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center mr-3">
+              <Feather name="upload" size={20} color="#3b82f6" />
+            </View>
+            <View className="flex-1">
+              <Text className="font-semibold text-white mb-2">Upload your prescription.</Text>
+              <Text className="text-sm text-gray-100">Get medicines delivered your doorstep.</Text>
+            </View>
+          </View>
+          <TouchableOpacity>
+            <Feather name="chevron-right" size={23} color="white" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Product Cards Preview */}
+        <View className="flex-row mb-20">
+          <View className="w-32 h-32 bg-green-800 rounded-2xl mr-3" />
+          <View className="w-32 h-32 bg-gray-400 rounded-2xl" />
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
-export default HealthDashboard;
+export default ShoppingAppScreen;

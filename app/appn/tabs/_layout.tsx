@@ -14,7 +14,8 @@ export default function TabsLayout() {
   const dispatch = useDispatch();
 
   const tabs = [
-    { name: 'OPD', icon: 'home', key: 'home' },
+    // { name: 'Home', icon: 'home', key: 'home' },
+    { name: 'Doctors', icon: 'calendar', key: 'opd' },
     { name: 'Lab Test', icon: 'flask', key: 'lab' },
     { name: 'Account', icon: 'person', key: 'profile' },
     { name: 'Cart', icon: 'cart', key: 'cart' },
@@ -63,6 +64,12 @@ export default function TabsLayout() {
     <Tabs tabBar={({ state, descriptors, navigation }: any) => {
       return (
         <View style={styles.tabBar} className='border-y border-slate-200'>
+          <TouchableOpacity onPress={() => router.push('/')} style={styles.tabItem} className={`flex-1 py-[10px]`} >
+            <Ionicons name='home-outline' size={18} color='#6e6e6e' />
+              <Text style={[styles.tabText]}>
+                Home
+              </Text>
+          </TouchableOpacity>
           {tabs.map((tab, index) => {
             const isFocused = state.routes[state.index]?.name === tab.key;
             const onPress = () => {
@@ -77,20 +84,20 @@ export default function TabsLayout() {
             };
 
             return (
-              <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px]`} >
-                <Ionicons name={isFocused ? tab.icon : tab.icon+'-outline'} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
-                <Text style={[styles.tabText, isFocused && styles.activeText]}>
-                  {tab.name}
-                </Text>
-                {tab.key === 'cart' && cart.length ? (
-                  <View className="absolute top-[8%] right-[20%] h-[16px] w-[16px] justify-center items-center bg-emerald-600 rounded-full">
-                    <Text className="text-white text-[10px] font-PoppinsMedium">{cart.length}</Text>
-                  </View>
-                ) : null}
-                {isFocused && (
-                  <View className="absolute w-full bottom-0 left-0 h-[2px] bg-primary-500 rounded-tl-full rounded-tr-full"></View>
-                )}
-              </TouchableOpacity>
+                <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px]`} >
+                  <Ionicons name={isFocused ? tab.icon : tab.icon+'-outline'} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
+                  <Text style={[styles.tabText, isFocused && styles.activeText]}>
+                    {tab.name}
+                  </Text>
+                  {tab.key === 'cart' && cart.length ? (
+                    <View className="absolute top-[8%] right-[20%] h-[16px] w-[16px] justify-center items-center bg-emerald-600 rounded-full">
+                      <Text className="text-white text-[10px] font-PoppinsMedium">{cart.length}</Text>
+                    </View>
+                  ) : null}
+                  {isFocused && (
+                    <View className="absolute w-full bottom-0 left-0 h-[2px] bg-primary-500 rounded-tl-full rounded-tr-full"></View>
+                  )}
+                </TouchableOpacity>
             );
           })}
         </View>

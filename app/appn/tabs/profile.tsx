@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { Registeration } from '../../login';
 import { MyModal } from '@/src/components';
 import { RootState } from '@/src/store/store';
+import { GradientBG } from '@/src/components/utils';
 
 
 const Profile = () => {
@@ -28,6 +29,7 @@ const Profile = () => {
             </ScrollView>
         } />
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
+            <GradientBG>
             <View className='bg-white'>
                 <View className='justify-between flex-row p-4 items-center'>
                     <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
@@ -72,57 +74,58 @@ const Profile = () => {
                     </View>
                 </View>
             </View>
-            <View className='p-3 gap-2'>
+            <View className='m-4 gap-3'>
                 <Pressable onPress={() => setPersonalInfoActive(true)}>
-                    <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5 items-center'>
+                    <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5 items-center'>
                         <FontAwesome name="user" size={24} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Personal Information</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Pressable>                
                 <Link href={'/appn/appnList'}>
-                    <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5 items-center'>
+                    <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5 items-center'>
                         <FontAwesome5 name="calendar-alt" size={22} color={myColors.primary[500]} style={{width: 26}} />
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Appointments</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
                 <Link href={'/testList'}>
-                    <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5'>
+                    <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                         <Ionicons name="flask" size={22} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Lab Tests</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
                 <Link href={'/members'}>
-                    <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5'>
+                    <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                         <FontAwesome5 name="users" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Members</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
                 {/* <Link href={'/login'}>
-                    <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5'>
+                    <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                         <FontAwesome5 name="history" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Patient History</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link> */}
                 <Link href={'/appn/tabs/home'}>
-                    <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5'>
+                    <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                         <FontAwesome5 name="headset" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Get Support</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
                 <Link href={'/appn/tabs/home'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
-                    <View className='flex-row gap-4 w-full bg-white rounded-lg border border-gray-300 p-5'>
+                    <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                         <Entypo name="log-out" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                         <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Logout</Text>
                         <Feather name="chevron-right" size={24} color='#6b7280' />
                     </View>
                 </Link>
             </View>
+            </GradientBG>
         </ScrollView>
         </>
     )

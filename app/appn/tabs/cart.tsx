@@ -1,5 +1,5 @@
 import ButtonPrimary, { MyModal } from '@/src/components';
-import { BannerCarousel, NoContent, num } from '@/src/components/utils';
+import { BannerCarousel, GradientBG, NoContent, num } from '@/src/components/utils';
 import { addToCart, removeFromCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -33,6 +33,7 @@ const Cart = ({}: any) => {
     return (
         <>
             <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
+                <GradientBG>
                 <View className=''>
                     <View className='p-4'>
                         <Pressable onPress={() => router.back()} className='justify-between flex-row pb-4 items-center'>
@@ -94,6 +95,7 @@ const Cart = ({}: any) => {
                     </View>
                     <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} onPress={handleCheckout} classes='m-4' />
                 </View>
+                </GradientBG>
             </ScrollView>
             <MyModal modalActive={checkout} name='CHECKOUT' onClose={() => setCheckout(false)} child={<Checkout handleClose={setCheckout} />} />
         </>

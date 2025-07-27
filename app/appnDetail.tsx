@@ -13,6 +13,7 @@ import { setModal } from '@/src/store/slices/slices';
 import { myColors } from '@/constants';
 import { Link } from 'expo-router';
 import { RootState } from '@/src/store/store';
+import { GradientBG } from '@/src/components/utils';
 
 const { width } = Dimensions.get('window');
 
@@ -36,6 +37,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
 
     return (
         <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
+            <GradientBG>
             <View className='bg-white'>
                 <View className='justify-between flex-row p-4 items-center'>
                     {/* <Link href={'/login'}> */}
@@ -243,6 +245,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
                 </TouchableOpacity>}
             </View>
+            </GradientBG>
         </ScrollView>
     )
 }

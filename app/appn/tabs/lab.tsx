@@ -1,6 +1,6 @@
 import { BASE_URL } from '@/constants';
 import { CompCard } from '@/src/components';
-import { BannerCarousel, getFrom, getRequiredFields, getRequiredFieldsOnly, GridLoader, ListLoader } from '@/src/components/utils';
+import { BannerCarousel, getFrom, getRequiredFields, getRequiredFieldsOnly, GradientBG, GridLoader, ListLoader } from '@/src/components/utils';
 import { addToCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
@@ -90,6 +90,7 @@ const LabTests = ({}: any) => {
 
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
+            <GradientBG>
             <View className=''>
                 <BannerCarousel />
                 <View className='p-4'>
@@ -188,6 +189,7 @@ const LabTests = ({}: any) => {
                     {renderContent(labData)}
                 </View>
             </View>
+            </GradientBG>
         </ScrollView>
     )
 }
