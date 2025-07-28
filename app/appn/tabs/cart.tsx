@@ -33,7 +33,7 @@ const Cart = ({}: any) => {
     return (
         <>
             <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
-                <GradientBG>
+                <GradientBG imgStyles={{opacity: 0.5}}>
                 <View className=''>
                     <View className='p-4'>
                         <Pressable onPress={() => router.back()} className='justify-between flex-row pb-4 items-center'>
@@ -71,9 +71,9 @@ const Cart = ({}: any) => {
                         </View> : <NoContent label='Your Cart is Empty' containerClass='py-8' />}
                         <View className='bg-white mt-4 rounded-2xl shadow-lg border-b-2 border-gray-300'>
                             <View className='flex-row gap-4 w-full p-4 items-center'>
-                                <View className='relative w-full'>
-                                    <TextInput placeholder='Add More Tests..' className='z-10 bg-[#ebecef] py-4 items-start px-5 text-gray-700 rounded-2xl shadow-sm shadow-gray-500 w-full' />
-                                    <Feather className='absolute z-50 top-[12px] right-4' name="search" size={22} color={myColors.primary[500]} />
+                                <View className='w-full items-center flex-row rounded-2xl shadow-sm shadow-gray-500 bg-[#ebecef] pr-4'>
+                                    <TextInput placeholder='Search Lab Tests..' className='text-gray-700 py-4 items-start px-5 flex-1' />
+                                    <Feather className='' name="search" size={24} color={myColors.primary[500]} />
                                 </View>
                             </View>
                         </View>

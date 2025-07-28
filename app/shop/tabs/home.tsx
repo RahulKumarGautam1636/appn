@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, StatusBar, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 const CatCard = ({ data }: any) => {
@@ -28,13 +28,12 @@ const ShoppingAppScreen = () => {
   return (
     <ScrollView className="flex-1 bg-purple-50">      
       {/* Header */}
-      <StatusBar barStyle="dark-content" backgroundColor="#f3e8ff" />
       <View className="bg-purple-100 pt-5 pb-5 px-5">
 
         
         <View className="flex-row justify-between items-center mb-5">
           <View className="flex-row items-center gap-3">
-            <Image className='shadow-lg rounded-full' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+            <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
             <View>
               <Text className="text-xs text-gray-600 mb-1">Welcome back</Text>
               <Text className="text-xl font-PoppinsSemibold text-gray-800">Rahul Kumar</Text>
@@ -131,7 +130,7 @@ const ShoppingAppScreen = () => {
         </ScrollView>
       </View>
 
-      <View className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+      <View className="flex-1 px-5">
         <View className="mb-4">
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
@@ -140,7 +139,7 @@ const ShoppingAppScreen = () => {
             </TouchableOpacity>
           </View>
           
-          <View className="flex-row flex-wrap justify-between">
+          {/* <View className="flex-row flex-wrap justify-between">
             {brandLogos.map((brand, index) => (
               <TouchableOpacity key={index} className="items-center mb-4" style={{width: '18%'}}>
                 <View className="w-14 h-14 bg-white rounded-full items-center justify-center mb-2 shadow-sm">
@@ -153,7 +152,17 @@ const ShoppingAppScreen = () => {
                 <Text className="text-xs text-gray-600 text-center">{brand.name}</Text>
               </TouchableOpacity>
             ))}
-          </View>
+          </View> */}
+          <ScrollView contentContainerClassName="flex-row gap-3 py-1" horizontal showsHorizontalScrollIndicator={false}>
+            {brands.map((brand, index) => (
+              <TouchableOpacity key={index} className="items-center mb-4 justify-center">
+                <View className="bg-white rounded-full items-center justify-center mb-2 shadow-sm p-4">
+                  <Image className='' resizeMode='contain' source={{uri: `https://pharma.takehome.live/assets/img/ePharma/brands-logo/${brand}`}} style={{ width: 80, height: 80 }} />
+                </View>
+                <Text className="text-sm text-gray-600 text-center">{brand.slice(0, 18)}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
 
         {/* Price Compare Banner */}
@@ -183,3 +192,59 @@ const ShoppingAppScreen = () => {
 };
 
 export default ShoppingAppScreen;
+
+let brands = [
+  "Abbott Healthcare Pvt. Ltd..png",
+  "Abbott India Limited(Novo Nordisk).png",
+  "Adonis Laboratories Pvt. Ltd..png",
+  "Ajanta Pharma Limited.png",
+  "Alcon Laboratories (India) Pvt. Ltd..png",
+  "Allen Laboratories Ltd..png",
+  "Allergan India Pvt. Ltd..png",
+  "Alteus Biogenics Pvt.Ltd..png",
+  "Bayer Pharmaceuticals Pvt Ltd.png",
+  "Becton Dickinson India Pvt. Ltd..png",
+  "Beiersdorf India Pvt. Ltd..png",
+  "Cadila Pharmaceuticals Limited.png",
+  "Cipla Ltd..png",
+  "Corona Remedies Private. Limited. (H).png",
+  "Dabur India Ltd..png",
+  "Dr. Reddy's Laboratories Ltd..png",
+  "Duckbill Drugs Pvt. Ltd..png",
+  "Glaxo Smithkline Asia Pvt. Ltd..png",
+  "Glenmark Pharmaceuticals Ltd..png",
+  "Hegde & Hegde Pharmaceutical LLP.png",
+  "Himalayan Organics.png",
+  "Icpa Health Products Limited.png",
+  "Indchemic Life Sciences.png",
+  "Indchemie Health Specialities Pvt..png",
+  "Indoco Remedies Ltd..png",
+  "Intas Pharmaceuticals Ltd..png",
+  "Ipca Laboratories Ltd..png",
+  "Lupin Ltd..png",
+  "Macleods Pharmaceuticals Ltd..png",
+  "Mankind Pharma Ltd..png",
+  "Med Manor Organics Pvt. Ltd.png",
+  "Micro Labs Limited.png",
+  "NOVO NORDISK.png",
+  "Pfizer Limited.png",
+  "Procter & Gamble Health Ltd..png",
+  "Raptakos Brett & Co. Ltd.png",
+  "Reckitt Benckiser (India) Pvt. Ltd.png",
+  "Roche Diabetes Care India Pvt Ltd.png",
+  "Sanofi India Limited..png",
+  "Sentiss Pharma.png",
+  "Sharnay Food Products.png",
+  "Sheth Brothers.png",
+  "Shine Pharmaceuticals Limited.png",
+  "Strassenburg Pharmaceuticals Ltd.png",
+  "Sun Pharmaceutical Ind.Ltd.png",
+  "Torrent Pharmaceuticals Ltd.png",
+  "Universal Nutriscience Private Limited.png",
+  "White & Trust Pharmaceuticals (India) Pvt. Ltd..png",
+  "Win Medicare Pvt. Ltd..png",
+  "Zandu.png",
+  "Zuventus Healthcare Ltd..png",
+  "Zydus Healthcare Limited.png",
+  "Zydus Wellness Limited.png",
+]

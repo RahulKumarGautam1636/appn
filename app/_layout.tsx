@@ -41,6 +41,7 @@ export default function RootLayout() {
           <SafeAreaView className={`flex-1 ${blur && 'opacity-10'}`}>
             <KeyboardAvoidingView className="flex-1">
               <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? 'light-content' : 'dark-content'} />
+              {/* <StatusBar barStyle="dark-content" backgroundColor="#f3e8ff" /> */}
               <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/tabs" options={{ headerShown: false, animation: 'slide_from_left' }} />
@@ -56,7 +57,8 @@ export default function RootLayout() {
                 <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false, animation: 'slide_from_left' }} />
 
 
-                <Stack.Screen name="shop/home" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                {/* <Stack.Screen name="shop" options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
+                <Stack.Screen name="shop/tabs" options={{ headerShown: false, animation: 'slide_from_right' }} />
               </Stack>
             </KeyboardAvoidingView>
           </SafeAreaView>

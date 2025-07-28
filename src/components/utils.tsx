@@ -231,13 +231,13 @@ export const formatted = (date: string) => {
   return formattedDate;
 }
 
-export const GradientBG = ({ children }: any) => {
+export const GradientBG = ({ children, imgStyles={opacity: 0.8}, classes }: any) => {
   return (
     <ImageBackground
-        imageStyle={{opacity: 0.6}}
-        source={require('../../assets/images/glass-bg.png')}
+        imageStyle={imgStyles}
+        source={require('../../assets/images/Glass-BG2.png')}
         resizeMode="cover"
-        className='flex-1'
+        className={`flex-1 ${classes}`}
     >
       {children}
     </ImageBackground>

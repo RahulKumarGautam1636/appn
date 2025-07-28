@@ -54,7 +54,7 @@ export default function App() {
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.push('./shop/home')} className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
+              <TouchableOpacity onPress={() => router.push('./shop/tabs/home')} className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
                 <View className="flex-row items-center">
                   <View className="bg-red-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                     <FontAwesome6 name="capsules" size={33} color="white" />
