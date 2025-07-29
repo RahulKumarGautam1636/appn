@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 const CatCard = ({ data }: any) => {
   return (
-    <TouchableOpacity className="items-center bg-white rounded-xl shadow-sm overflow-hidden">
+    <TouchableOpacity className="items-center bg-white rounded-xl shadow-lg overflow-hidden">
       <Image className='' source={{uri: data}} style={{ width: 135, height: 100 }} />
       <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 py-2">Garments</Text>
     </TouchableOpacity>
@@ -12,25 +12,24 @@ const CatCard = ({ data }: any) => {
 }
 
 const ShoppingAppScreen = () => {
-  const brandLogos = [
-    { name: 'Nike', icon: 'checkroom' },
-    { name: 'Macy\'s', icon: 'star', color: '#dc2626' },
-    { name: 'Levi\'s', icon: 'straighten', color: '#dc2626' },
-    { name: 'Adidas', icon: 'sports-soccer' },
-    { name: 'Chanel', icon: 'diamond' },
-    { name: 'Pepsi', icon: 'local-drink', color: '#2563eb' },
-    { name: 'Starbucks', icon: 'local-cafe', color: '#059669' },
-    { name: 'Puma', icon: 'pets' },
-    { name: 'Ferrari', icon: 'directions-car', color: '#dc2626' },
-    { name: 'Dell', icon: 'computer', color: '#2563eb' },
-  ];
+  // const brandLogos = [
+  //   { name: 'Nike', icon: 'checkroom' },
+  //   { name: 'Macy\'s', icon: 'star', color: '#dc2626' },
+  //   { name: 'Levi\'s', icon: 'straighten', color: '#dc2626' },
+  //   { name: 'Adidas', icon: 'sports-soccer' },
+  //   { name: 'Chanel', icon: 'diamond' },
+  //   { name: 'Pepsi', icon: 'local-drink', color: '#2563eb' },
+  //   { name: 'Starbucks', icon: 'local-cafe', color: '#059669' },
+  //   { name: 'Puma', icon: 'pets' },
+  //   { name: 'Ferrari', icon: 'directions-car', color: '#dc2626' },
+  //   { name: 'Dell', icon: 'computer', color: '#2563eb' },
+  // ];
+
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   return (
-    <ScrollView className="flex-1 bg-purple-50">      
-      {/* Header */}
-      <View className="bg-purple-100 pt-5 pb-5 px-5">
-
-        
+    <ScrollView className="flex-1 bg-purple-50">   
+      <View className="bg-purple-100 pt-5 pb-5 px-5">        
         <View className="flex-row justify-between items-center mb-5">
           <View className="flex-row items-center gap-3">
             <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
@@ -48,8 +47,6 @@ const ShoppingAppScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* Search Bar */}
         <View className="bg-white rounded-full px-4 py-[0.42rem] flex-row items-center mb-5">
           <Feather name="search" size={20} color="#9CA3AF" />
           <TextInput 
@@ -59,8 +56,6 @@ const ShoppingAppScreen = () => {
           />
           <Feather name="sliders" size={20} color="#9CA3AF" />
         </View>
-
-        {/* Category Icons */}
         <View className="flex-row justify-around py-4 bg-white rounded-2xl">
           <TouchableOpacity className="items-center">
             <View className="w-12 h-12 bg-purple-500 rounded-2xl items-center justify-center mb-2">
@@ -129,62 +124,94 @@ const ShoppingAppScreen = () => {
           </TouchableOpacity> */}
         </ScrollView>
       </View>
-
-      <View className="flex-1 px-5">
-        <View className="mb-4">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
-            <TouchableOpacity>
-              <Text className="text-purple-600 font-medium">See All</Text>
-            </TouchableOpacity>
+      <View className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
+        <View className="flex-row items-center flex-1">
+          <View className="w-12 h-12 bg-purple-400 rounded-full items-center justify-center mr-4">
+            <Feather name="upload" size={20} color="#ffffff" />
           </View>
-          
-          {/* <View className="flex-row flex-wrap justify-between">
-            {brandLogos.map((brand, index) => (
-              <TouchableOpacity key={index} className="items-center mb-4" style={{width: '18%'}}>
-                <View className="w-14 h-14 bg-white rounded-full items-center justify-center mb-2 shadow-sm">
-                  <MaterialIcons 
-                    name={brand.icon} 
-                    size={24} 
-                    color={brand.color || '#374151'} 
-                  />
-                </View>
-                <Text className="text-xs text-gray-600 text-center">{brand.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View> */}
-          <ScrollView contentContainerClassName="flex-row gap-3 py-1" horizontal showsHorizontalScrollIndicator={false}>
-            {brands.map((brand, index) => (
-              <TouchableOpacity key={index} className="items-center mb-4 justify-center">
-                <View className="bg-white rounded-full items-center justify-center mb-2 shadow-sm p-4">
-                  <Image className='' resizeMode='contain' source={{uri: `https://pharma.takehome.live/assets/img/ePharma/brands-logo/${brand}`}} style={{ width: 80, height: 80 }} />
-                </View>
-                <Text className="text-sm text-gray-600 text-center">{brand.slice(0, 18)}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <View className="flex-1">
+            <Text className="font-semibold text-white mb-2">Upload your prescription.</Text>
+            <Text className="text-sm text-gray-100">Get medicines delivered your doorstep.</Text>
+          </View>
         </View>
-
-        {/* Price Compare Banner */}
-        <View className="bg-blue-400 rounded-2xl p-4 mb-6 flex-row items-center justify-between">
-          <View className="flex-row items-center flex-1">
-            <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center mr-3">
-              <Feather name="upload" size={20} color="#3b82f6" />
-            </View>
-            <View className="flex-1">
-              <Text className="font-semibold text-white mb-2">Upload your prescription.</Text>
-              <Text className="text-sm text-gray-100">Get medicines delivered your doorstep.</Text>
-            </View>
-          </View>
+        <TouchableOpacity>
+          <Feather name="chevron-right" size={23} color="white" />
+        </TouchableOpacity>
+      </View>
+      <View className="flex-1 px-5 mb-4">
+        <View className="flex-row justify-between items-center mb-4">
+          <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
           <TouchableOpacity>
-            <Feather name="chevron-right" size={23} color="white" />
+            <Text className="text-purple-600 font-medium">See All</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Product Cards Preview */}
-        <View className="flex-row mb-20">
-          <View className="w-32 h-32 bg-green-800 rounded-2xl mr-3" />
-          <View className="w-32 h-32 bg-gray-400 rounded-2xl" />
+        
+        {/* <View className="flex-row flex-wrap justify-between">
+          {brandLogos.map((brand, index) => (
+            <TouchableOpacity key={index} className="items-center mb-4" style={{width: '18%'}}>
+              <View className="w-14 h-14 bg-white rounded-full items-center justify-center mb-2 shadow-sm">
+                <MaterialIcons 
+                  name={brand.icon} 
+                  size={24} 
+                  color={brand.color || '#374151'} 
+                />
+              </View>
+              <Text className="text-xs text-gray-600 text-center">{brand.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View> */}
+        <ScrollView contentContainerClassName="flex-row gap-3 pb-3" horizontal showsHorizontalScrollIndicator={false}>
+          {brands.map((brand, index) => (
+            <TouchableOpacity key={index} className="items-center justify-center">
+              <View className="bg-white rounded-full items-center justify-center mb-3 shadow-sm border-b-2 border-gray-200 p-4">
+                <Image className='' resizeMode='contain' source={{uri: `https://pharma.takehome.live/assets/img/ePharma/brands-logo/${brand}`}} style={{ width: 75, height: 75 }} />
+              </View>
+              <Text className="text-sm text-gray-600 text-center">{brand.slice(0, 18)}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>       
+      </View>
+      <View className="flex-1 px-5 mb-5">
+        <ScrollView contentContainerClassName="flex-row mb-5" horizontal showsHorizontalScrollIndicator={false}>
+          {categories.map((category) => (
+              <CategoryButton
+                key={category}
+                title={category}
+                isSelected={selectedCategory === category}
+                onPress={() => setSelectedCategory(category)}
+              />
+          ))}
+        </ScrollView>
+        <View className="flex-row justify-between items-center mb-4">
+          <Text className="text-lg font-bold text-gray-800">Pharmacy</Text>
+          <TouchableOpacity>
+            <Text className="text-purple-600 font-medium">See All</Text>
+          </TouchableOpacity>
+        </View> 
+        <View className='flex-row flex-wrap' style={{ gap: 15}}>
+          {[1, 2, 3, 4].map(i => (
+            <View key={i} className='items-start w-[48%] bg-white p-3 rounded-xl shadow-sm'>
+              <View className='items-center justify-center w-full p-4 rounded-xl bg-slate-100'>
+                <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 100, height: 100 }} />
+              </View>
+              <View className='flex-1 items-start mt-3'>
+                <Text className="text-[1.05rem] font-semibold text-gray-900 mb-2">Fujifilm Camera</Text>
+                <View className='flex-row gap-4'>
+                  <Text className="text-[0.99rem] font-semibold text-green-700">550.23</Text>
+                  <Text className="text-[0.8rem] mt-1 font-medium text-rose-500 mb-2 line-through">250.60</Text>
+                </View>
+                {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+                <View className='justify-between flex-row items-center w-full'>
+                  <View className='px-3 py-[0.45rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
+                    <Text className='text-gray-700 text-[0.85rem]'>10 Tab</Text>
+                  </View>
+                  {/* <View className=''> */}
+                    <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
+                  {/* </View> */}
+                </View>
+              </View>
+            </View>
+          ))}
         </View>
       </View>
     </ScrollView>
@@ -192,6 +219,13 @@ const ShoppingAppScreen = () => {
 };
 
 export default ShoppingAppScreen;
+
+const categories = ['All', 'Clothes', 'Shoes', 'Bags', 'Electronics', 'Alls', 'Clothess', 'Shoess', 'Bagss', 'Electronicss'];
+const CategoryButton = ({ title, isSelected, onPress }: any) => (
+  <TouchableOpacity onPress={onPress} className={`px-4 py-[0.7rem] mx-1 rounded-full border transition-colors ${ isSelected ? 'bg-blue-500 border-blue-600 ' : 'bg-white border-gray-200' }`}>
+    <Text className={`text-[0.95rem] font-medium ${isSelected ? 'text-white' : 'text-gray-700'}`}>{title}</Text>
+  </TouchableOpacity>
+);
 
 let brands = [
   "Abbott Healthcare Pvt. Ltd..png",

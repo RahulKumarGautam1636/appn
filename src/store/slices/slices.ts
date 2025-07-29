@@ -242,6 +242,30 @@ const cartSlice = createSlice({
 export const { addToCart, removeFromCart, dumpCart } = cartSlice.actions;
 const cartReducer = cartSlice.reducer;
 
+// const dataSlice = createSlice({
+//   name: 'appnData',
+//   initialState: {     
+//     membersList: [],
+//     selectedMember: {},
+//     status: 'loading', error: null
+//   },
+//   reducers: {
+//     setMembers: (state, action: any) => {
+//       state = Object.assign(state, action.payload);
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     requestStatusHandlers(builder, getMembers, {
+//       onSuccess: (state: any, action: any) => {
+//         Object.assign(state, action.payload);
+//       },
+//     });
+//   },
+// });
+
+// export const { setMembers } = dataSlice.actions;
+// const membersReducer = dataSlice.reducer;
+
 
 
 
