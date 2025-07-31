@@ -171,8 +171,8 @@ const ShoppingAppScreen = () => {
           ))}
         </ScrollView>       
       </View>
-      <View className="flex-1 px-5 mb-5">
-        <ScrollView contentContainerClassName="flex-row mb-5" horizontal showsHorizontalScrollIndicator={false}>
+      <View className="flex-1 border-y border-gray-200">
+        <ScrollView contentContainerClassName="flex-row p-5" horizontal showsHorizontalScrollIndicator={false}>
           {categories.map((category) => (
               <CategoryButton
                 key={category}
@@ -182,28 +182,30 @@ const ShoppingAppScreen = () => {
               />
           ))}
         </ScrollView>
-        <View className="flex-row justify-between items-center mb-4">
+      </View>
+      <View>
+        <View className="flex-row justify-between items-center mt-5 mb-4 px-5">
           <Text className="text-lg font-bold text-gray-800">Pharmacy</Text>
           <TouchableOpacity>
             <Text className="text-purple-600 font-medium">See All</Text>
           </TouchableOpacity>
         </View> 
-        <View className='flex-row flex-wrap' style={{ gap: 15}}>
+        <View className='flex-row flex-wrap'>
           {[1, 2, 3, 4].map(i => (
-            <View key={i} className='items-start w-[48%] bg-white p-3 rounded-xl shadow-sm'>
+            <View key={i} className='items-start w-[50%] bg-white p-3 border border-gray-100'>
               <View className='items-center justify-center w-full p-4 rounded-xl bg-slate-100'>
                 <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 100, height: 100 }} />
               </View>
               <View className='flex-1 items-start mt-3'>
-                <Text className="text-[1.05rem] font-semibold text-gray-900 mb-2">Fujifilm Camera</Text>
+                <Text className="text-[1rem] font-semibold text-gray-900 mb-2">Fujifilm Camera</Text>
                 <View className='flex-row gap-4'>
-                  <Text className="text-[0.99rem] font-semibold text-green-700">550.23</Text>
-                  <Text className="text-[0.8rem] mt-1 font-medium text-rose-500 mb-2 line-through">250.60</Text>
+                  <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
+                  <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
                 </View>
                 {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
                 <View className='justify-between flex-row items-center w-full'>
-                  <View className='px-3 py-[0.45rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
-                    <Text className='text-gray-700 text-[0.85rem]'>10 Tab</Text>
+                  <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
+                    <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
                   </View>
                   {/* <View className=''> */}
                     <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />

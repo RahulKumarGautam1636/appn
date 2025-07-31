@@ -4,7 +4,7 @@ import { ScrollView, View } from "react-native";
 import { Card_1 } from "../src/components";
 import { RootState } from "@/src/store/store";
 import { useSelector } from "react-redux";
-import { getFrom, GradientBG, GridLoader } from "../src/components/utils";
+import { getFrom, GridLoader } from "../src/components/utils";
 import { BASE_URL, defaultId, zero } from "@/constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
@@ -59,7 +59,6 @@ function MainSearch() {
 
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
-            <GradientBG>
             <View className="p-4">
                 <View className='relative'>
                     <TouchableOpacity onPress={() => router.back()} className="absolute z-50 top-[13px] left-4">
@@ -85,7 +84,6 @@ function MainSearch() {
                     {renderDoctors(doctors)}
                 </View>
             </View>
-            </GradientBG>
         </ScrollView>
     )
 }

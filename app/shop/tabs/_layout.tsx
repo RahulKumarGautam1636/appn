@@ -69,7 +69,7 @@ export default function TabsLayout() {
             <TouchableOpacity onPress={() => router.push('/')} style={styles.tabItem} className={`flex-1 py-[10px]`} >
               <Ionicons name='arrow-back' size={20} color='#6e6e6e' />
                 <Text style={[styles.tabText]}>
-                  Home
+                  Back
                 </Text>
             </TouchableOpacity>
             {tabs.map((tab, index) => {

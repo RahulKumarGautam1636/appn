@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Link } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { getCompanies, getDepartments, getMembers, setModal } from '@/src/store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '@/src/components';
 import { BASE_URL } from '@/constants';
-import { formatted, getFrom, GradientBG, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
+import { formatted, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
 
 
 const HomeScreen = () => {
@@ -117,7 +117,7 @@ const HomeScreen = () => {
 
     return (
         <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100 relative'>
-            <GradientBG>
+            {/* <GradientBG> */}
                 <View className='p-4'>
                     {isLoggedIn ? 
                         <View className="gap-3 flex-row items-center">
@@ -276,7 +276,7 @@ const HomeScreen = () => {
                         })()}
                     </View>
                 </View>
-            </GradientBG>
+            {/* </GradientBG> */}
         </ScrollView>
     )
 }
