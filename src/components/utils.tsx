@@ -130,7 +130,7 @@ export const BannerCarousel = () => {
   );
 }
 
-export const getRequiredFields = (list, compCode: number) => {
+export const getRequiredFields = (list=[], compCode: number) => {
   // let { globalData } = store.getState();
 
   return list.map((i: any) => ({ 
@@ -156,7 +156,7 @@ export const getRequiredFields = (list, compCode: number) => {
     Technicalname: i.Technicalname,
     sv_CostId: i.sv_CostId, 
     itemmstr: i.itemmstr, 
-    LocationId: compCode, 
+    LocationId: i.LocationId, 
     ManufacturBY: i.ManufacturBY,
     Unit: i.Unit,
     UnitName: i.UnitName,
@@ -171,8 +171,20 @@ export const getRequiredFields = (list, compCode: number) => {
     IGSTRATE: i.IGSTRATE, 
     Specification: i.Specification || '', 
 
-    _id: compCode + '_' + i.ItemId,
+    LocationName: i.LocationName || '',
+    LocationItemId: i.LocationItemId,
     count: 1,
+  }));
+}
+
+export const getCategoryRequiredFieldsOnly = (list) => {
+
+  return list.map(i => ({ 
+    Parent: i.Parent,
+    ParentDesc: i.ParentDesc,
+    Text: i.ParentDesc,
+    Value: String(i.Parent),
+    ImageURL: i.ImageURL
   }));
 }
 

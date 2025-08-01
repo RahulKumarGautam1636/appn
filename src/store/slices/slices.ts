@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestStatusHandlers } from './statusHandler';
 import axios from 'axios';
 import { BASE_URL, dummyUser } from '@/constants';
+import { getCategoryRequiredFieldsOnly } from '@/src/components/utils';
 
 const compCodeSlice = createSlice({
   name: 'compCode',
@@ -134,10 +135,10 @@ const deptsReducer = deptsSlice.reducer;
 const appnDataSlice = createSlice({
   name: 'appnData',
   initialState: {     
-    selectedAppnDate: "",                                                         // used to detect active item of date button slider in bookingForm.
     docCompId: "", 
+    selectedAppnDate: "",                                                     // used to detect active item of date button slider in bookingForm.                                               
+    doctor: { Name: "", SpecialistDesc: "", Qualification: "", RegMob1: "" },
     // UnderDoctId: "", AppointDate: "", AppTime: "", TimeSlotId: "",
-    doctor: { Name: "", SpecialistDesc: "", Qualification: "", RegMob1: "" }
   },
   reducers: {
     setAppnData: (state, action: any) => {
@@ -174,11 +175,7 @@ export const getMembers = createAsyncThunk(
 
 const membersSlice = createSlice({
   name: 'appnData',
-  initialState: {     
-    membersList: [],
-    selectedMember: {},
-    status: 'loading', error: null
-  },
+  initialState: { membersList: [], selectedMember: {}, status: 'loading', error: null },
   reducers: {
     setMembers: (state, action: any) => {
       state = Object.assign(state, action.payload);
@@ -226,11 +223,11 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: any) => {
       const { item, type } = action.payload;
-      return {...state, [type]: {...state[type], [item._id]: item }};
+      return {...state, [type]: {...state[type], [item.LocationItemId]: item }};
     },
     removeFromCart: (state, action: any) => {
       const { item, type } = action.payload;
-      delete state[type][item._id]
+      delete state[type][item.LocationItemId]
     },
     dumpCart: (state, action: any) => {
       const { type } = action.payload;
@@ -242,20 +239,96 @@ const cartSlice = createSlice({
 export const { addToCart, removeFromCart, dumpCart } = cartSlice.actions;
 const cartReducer = cartSlice.reducer;
 
-// const dataSlice = createSlice({
+
+let LID = 0;
+
+const getUserLocation = () => {
+  if (LID) return { LocationId: LID };
+  return { required: true, LocationId: 0 };
+}
+
+const appDataSlice = createSlice({
+  name: 'APP_DATA',
+  initialState: { 
+    focusArea: '0',
+    location: getUserLocation(),
+    prescription: { required: true, patient: { docName: '', docAddress: '' } },
+    restaurant: { table: {  } },
+    businessType: { Description: '', CodeValue: '', CodeId: '' },
+    userRegType:
+                  { CodeId: 43198, Description: 'Customer', CodeValue: 'Customer', for: 'B2C / Patient' }
+                  // { CodeId: 43194, Description: 'Retailer', CodeValue: 'Retailer', for: 'B2B / Retailer' }
+                  // { CodeId: 43195, Description: 'Strategic Partner', CodeValue: 'SP', for: 'Doctor' }
+                  // { CodeId: 43196, Description: 'Master Partner', CodeValue: 'MP', for: 'Referrer' }
+                  // { CodeId: 43197, Description: 'Associate Partner', CodeValue: 'AP', for: 'Provider' }
+  },
+  reducers: {
+    setLocation: (state, action: any) => {
+      const { item, type } = action.payload;
+      return {...state, [type]: {...state[type], [item.LocationItemId]: item }};
+    },
+    removeFromCart: (state, action: any) => {
+      const { item, type } = action.payload;
+      delete state[type][item.LocationItemId]
+    },
+    dumpCart: (state, action: any) => {
+      const { type } = action.payload;
+      state[type] = {}
+    }
+  }
+});
+
+export const { addToCart, removeFromCart, dumpCart } = appDataSlice.actions;
+const appDataReducer = appDataSlice.reducer;
+
+// export const getSiteData = createAsyncThunk(
+//   'auth/getMembers',
+//   async (params: any, { dispatch, rejectWithValue, getState }) => {
+
+//     const compCode = getState().compCode;
+
+//     // if (vType === 'ErpPharma' || vType === 'agro' || vType === 'ErpManufacturing') {
+//         const getCategories = async () => {         
+//             // siteDataAction({ catLoading: true, productLoading: true });
+//             const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatSubCat?CID=${compCode}&LOCID=${locationId}`);
+//             if (res.status === 200) {
+//                 const categories = getCategoryRequiredFieldsOnly(res.data.LinkCategoryList);
+//                 // siteDataAction({ LinkCategoryList: categories, catLoading: false, LinkSubCategoryList: res.data.LinkSubCategoryList });   
+//             }
+//         }
+//         getCategories(controller.signal)
+//     // } else if (vType === 'rent') {
+//     //     siteDataAction({isLoading: false, itemMasterCollection: rentSaleProducts, LinkCategoryList: rentCategories, LinkSubCategoryList: [], ItemBrandList: []}); 
+//     //     return;
+//     // } 
+
+//     try {              
+//       const res = await axios.get(`${BASE_URL}/api/member/Get?UserId=${user.UserId}&CID=${compCode}`, {});
+//       if (res.data) {
+//           const parentMember = res.data.AccPartyMemberMasterList.find((i: any) => i.MemberId === user.MemberId);
+//           if (parentMember) {
+//             return {membersList: res.data.AccPartyMemberMasterList, selectedMember: parentMember};
+//           } else {
+//             console.log('No parent member found');
+//             return {membersList: res.data.AccPartyMemberMasterList};
+//           }
+//       }
+//     } catch (err: any) {
+//       return rejectWithValue(err.message || 'Something went wrong');
+//     }
+//   }
+// );
+
+// const siteDataSlice = createSlice({
 //   name: 'appnData',
-//   initialState: {     
-//     membersList: [],
-//     selectedMember: {},
-//     status: 'loading', error: null
-//   },
+//   initialState: {isLoading: true, catLoading: true, productLoading: true, itemMasterCollection: [], ItemBrandList: [], LinkCategoryList: [], LinkSubCategoryList: []},
 //   reducers: {
 //     setMembers: (state, action: any) => {
 //       state = Object.assign(state, action.payload);
 //     },
 //   },
 //   extraReducers: (builder) => {
-//     requestStatusHandlers(builder, getMembers, {
+//     requestStatusHandlers(builder, getSiteData, {
 //       onSuccess: (state: any, action: any) => {
 //         Object.assign(state, action.payload);
 //       },
@@ -265,8 +338,6 @@ const cartReducer = cartSlice.reducer;
 
 // export const { setMembers } = dataSlice.actions;
 // const membersReducer = dataSlice.reducer;
-
-
 
 
 export default compCodeReducer;

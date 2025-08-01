@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions, Platform } from 'react-native';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 const CatCard = ({ data }: any) => {
@@ -11,20 +11,12 @@ const CatCard = ({ data }: any) => {
   )
 }
 
-const ShoppingAppScreen = () => {
-  // const brandLogos = [
-  //   { name: 'Nike', icon: 'checkroom' },
-  //   { name: 'Macy\'s', icon: 'star', color: '#dc2626' },
-  //   { name: 'Levi\'s', icon: 'straighten', color: '#dc2626' },
-  //   { name: 'Adidas', icon: 'sports-soccer' },
-  //   { name: 'Chanel', icon: 'diamond' },
-  //   { name: 'Pepsi', icon: 'local-drink', color: '#2563eb' },
-  //   { name: 'Starbucks', icon: 'local-cafe', color: '#059669' },
-  //   { name: 'Puma', icon: 'pets' },
-  //   { name: 'Ferrari', icon: 'directions-car', color: '#dc2626' },
-  //   { name: 'Dell', icon: 'computer', color: '#2563eb' },
-  // ];
+const web = Platform.OS === 'web';
+const windowWidth = Dimensions.get('window').width;
 
+const ShoppingAppScreen = () => {
+  
+  const deviceWidth = web ? document.documentElement.clientWidth : windowWidth;
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   return (
@@ -172,7 +164,7 @@ const ShoppingAppScreen = () => {
         </ScrollView>       
       </View>
       <View className="flex-1 border-y border-gray-200">
-        <ScrollView contentContainerClassName="flex-row p-5" horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView contentContainerClassName="flex-row p-5 items-center" horizontal showsHorizontalScrollIndicator={false}>
           {categories.map((category) => (
               <CategoryButton
                 key={category}
@@ -183,39 +175,89 @@ const ShoppingAppScreen = () => {
           ))}
         </ScrollView>
       </View>
-      <View>
-        <View className="flex-row justify-between items-center mt-5 mb-4 px-5">
-          <Text className="text-lg font-bold text-gray-800">Pharmacy</Text>
-          <TouchableOpacity>
-            <Text className="text-purple-600 font-medium">See All</Text>
-          </TouchableOpacity>
-        </View> 
-        <View className='flex-row flex-wrap'>
-          {[1, 2, 3, 4].map(i => (
-            <View key={i} className='items-start w-[50%] bg-white p-3 border border-gray-100'>
-              <View className='items-center justify-center w-full p-4 rounded-xl bg-slate-100'>
-                <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 100, height: 100 }} />
-              </View>
-              <View className='flex-1 items-start mt-3'>
-                <Text className="text-[1rem] font-semibold text-gray-900 mb-2">Fujifilm Camera</Text>
-                <View className='flex-row gap-4'>
-                  <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
-                  <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
-                </View>
-                {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-                <View className='justify-between flex-row items-center w-full'>
-                  <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
-                    <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
+      {[1,2,3,4].map(i => (
+        <View key={i}>
+          <View className="flex-row justify-between items-center pt-4 pb-3 px-5">
+            <Text className="text-lg font-bold text-gray-800">Pharmacy</Text>
+            <TouchableOpacity>
+              <Text className="text-purple-600 font-medium">See All</Text>
+            </TouchableOpacity>
+          </View> 
+          <View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName='flex-row'>
+              {[1, 2, 3, 4].map(i => (
+                <View key={i} className={`items-start bg-white p-4 border border-gray-100`} style={{width: deviceWidth / 2 }}>
+                  <View className='items-center justify-center w-full p-4 rounded-xl bg-slate-100'>
+                    <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 100, height: 140 }} />
                   </View>
-                  {/* <View className=''> */}
-                    <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
-                  {/* </View> */}
+                  <View className='flex-1 items-start mt-3'>
+                    <Text className="text-[1rem] font-semibold text-gray-900 mb-2">Fujifilm Camera</Text>
+                    <View className='flex-row gap-4'>
+                      <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
+                      <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
+                    </View>
+                    {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+                    <View className='justify-between flex-row items-center w-full'>
+                      <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
+                        <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
+                      </View>
+                      {/* <View className=''> */}
+                        <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
+                      {/* </View> */}
+                    </View>
+                  </View>
                 </View>
-              </View>
+              ))}
+            </ScrollView>
+            <View className='flex-row justify-center gap-4 py-3 bg-white'>
+              <View className='h-2 w-2 bg-gray-500 rounded-full'></View>
+              <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
+              <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
             </View>
-          ))}
+          </View>
         </View>
-      </View>
+        // Version 2
+        // <View key={i}>
+        //   <View className="flex-row justify-between items-center pt-4 pb-3 px-5 bg-white border-t border-gray-100">
+        //     <Text className="text-lg font-bold text-gray-800">Pharmacy</Text>
+        //     <TouchableOpacity>
+        //       <Text className="text-purple-600 font-medium">See All</Text>
+        //     </TouchableOpacity>
+        //   </View> 
+        //   <View>
+        //     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName='flex-row'>
+        //       {[1, 2, 3, 4].map(i => (
+        //         <View key={i} className={`items-start bg-white p-4 border border-gray-100`} style={{width: cardWidth}}>
+        //           <View className='items-center justify-center w-full p-4 rounded-xl bg-slate-100'>
+        //             <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 100, height: 140 }} />
+        //           </View>
+        //           <View className='flex-1 items-start mt-3'>
+        //             <Text className="text-[1rem] font-semibold text-gray-900 mb-2">Fujifilm Camera</Text>
+        //             <View className='flex-row gap-4'>
+        //               <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
+        //               <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
+        //             </View>
+        //             {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+        //             <View className='justify-between flex-row items-center w-full'>
+        //               <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
+        //                 <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
+        //               </View>
+        //               {/* <View className=''> */}
+        //                 <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
+        //               {/* </View> */}
+        //             </View>
+        //           </View>
+        //         </View>
+        //       ))}
+        //     </ScrollView>
+        //     <View className='flex-row justify-center gap-4 py-3 bg-white'>
+        //       <View className='h-2 w-2 bg-gray-500 rounded-full'></View>
+        //       <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
+        //       <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
+        //     </View>
+        //   </View>
+        // </View>
+      ))}
     </ScrollView>
   );
 };
@@ -228,6 +270,19 @@ const CategoryButton = ({ title, isSelected, onPress }: any) => (
     <Text className={`text-[0.95rem] font-medium ${isSelected ? 'text-white' : 'text-gray-700'}`}>{title}</Text>
   </TouchableOpacity>
 );
+
+// const brandLogos = [
+//   { name: 'Nike', icon: 'checkroom' },
+//   { name: 'Macy\'s', icon: 'star', color: '#dc2626' },
+//   { name: 'Levi\'s', icon: 'straighten', color: '#dc2626' },
+//   { name: 'Adidas', icon: 'sports-soccer' },
+//   { name: 'Chanel', icon: 'diamond' },
+//   { name: 'Pepsi', icon: 'local-drink', color: '#2563eb' },
+//   { name: 'Starbucks', icon: 'local-cafe', color: '#059669' },
+//   { name: 'Puma', icon: 'pets' },
+//   { name: 'Ferrari', icon: 'directions-car', color: '#dc2626' },
+//   { name: 'Dell', icon: 'computer', color: '#2563eb' },
+// ];
 
 let brands = [
   "Abbott Healthcare Pvt. Ltd..png",

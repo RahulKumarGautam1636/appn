@@ -240,7 +240,7 @@ const Checkout = ({ handleClose }: any) => {
                 <Text className="font-PoppinsSemibold text-gray-700 text-[15px] mx-4 mt-1 mb-3">Order Summary</Text>
                 <View className='bg-white shadow-sm shadow-gray-400'>
                     {labTests.map((i: any) => (
-                        <View key={i._id} className='flex-row gap-2 w-full px-5 py-4 border-b border-gray-200 items-center'>
+                        <View key={i.LocationItemId} className='flex-row gap-2 w-full px-5 py-4 border-b border-gray-200 items-center'>
                             <Text className="font-PoppinsMedium text-gray-500 text-[13px] mr-auto leading-6 flex-1 pr-4">{i.Description}  X  {i.count}</Text>
                             <FontAwesome name="rupee" size={13} color="#2563eb" />
                             <Text className="font-PoppinsMedium text-slate-700 text-[13px] leading-5">{num(i.SRate * i.count)}</Text>

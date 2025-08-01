@@ -12,7 +12,7 @@ export default function LabCard({ data, testDate }: any) {
     const dispatch = useDispatch();
     const lab = useSelector((i: RootState) => i.cart).lab
     const labTests = Object.values(lab);
-    const isAdded = labTests.find((i: any) => i._id === data._id);
+    const isAdded = labTests.find((i: any) => i.LocationItemId === data.LocationItemId);
     const handleAdd = () => {
         if (isAdded) {
             dispatch(removeFromCart({ type: 'lab', item: data }));

@@ -51,7 +51,7 @@ const LabTests = ({}: any) => {
         } else {
             return (
                 <View className='gap-4'>
-                    {productCategoryItems.map((i: any) => <LabCard key={i._id} data={i} testDate={(date.value).toLocaleDateString('en-TT')} />)}
+                    {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(date.value).toLocaleDateString('en-TT')} />)}
                 </View>
             ) 
         }

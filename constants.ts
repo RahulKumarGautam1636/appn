@@ -1,7 +1,7 @@
 import colors from 'tailwindcss/colors.js';
 export const zero = 'tSL0lTwETc1vrrU2ZIoFFA==';
 export const defaultId = 'FFCeIi27FQMTNGpatwiktw==';  
-export const blur = false;
+export const blur = true;
 export const initReg = {  
   Name: '',        
   EncCompanyId: '',
