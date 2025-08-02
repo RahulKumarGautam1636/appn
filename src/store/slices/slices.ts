@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestStatusHandlers } from './statusHandler';
 import axios from 'axios';
-import { BASE_URL, dummyUser } from '@/constants';
+import { BASE_URL, dummyUser, rent, TAKEHOME_AGRO } from '@/constants';
 import { getCategoryRequiredFieldsOnly } from '@/src/components/utils';
 
 const compCodeSlice = createSlice({
@@ -85,8 +85,7 @@ const companiesSlice = createSlice({
   extraReducers: (builder) => {
     requestStatusHandlers(builder, getCompanies, {
       onSuccess: (state: any, action: any) => {
-        // Additional logic after successful fetch
-        Object.assign(state, action.payload);
+        Object.assign(state, action.payload);            // Additional logic after successful fetch
       },
     });
   },
@@ -94,6 +93,66 @@ const companiesSlice = createSlice({
 
 export const { setCompanies } = companiesSlice.actions;
 const companiesReducer = companiesSlice.reducer;
+
+export const getCompanyInfo = createAsyncThunk(
+  'auth/getCompanyInfo',
+  async (params: any, { dispatch, rejectWithValue, getState }) => {
+    const compCode = getState().compCode;
+    const locationId = getState().location.LocationId;
+    try {              
+      const res = await axios.get(`${BASE_URL}/api/CompMast/GetCompDetails?CID=${params.companyCode}&LOCID=${params.locationId}`, {});
+
+      if (res.data.COMPNAME && res.data.EncCompanyId) {  
+        // return { info: res.data, vType: '' };
+        let vertical = ''
+        if (rent) {
+          dispatch(setLocation({ required: false, LocationId: 1293 }))
+          return { info: res.data, vType: 'rent' }
+        } else if (res.data.VerticleType === 'RESTAURANT' || res.data.VerticleType === 'HOTEL' || res.data.VerticleType === 'RESORT') {
+          dispatch(setLocation({ required: false, LocationId: res.data.LocationId }))
+        } else if (res.data.VerticleType === 'ErpPharma' || res.data.VerticleType === 'ErpManufacturing') {
+          if (compCode === TAKEHOME_AGRO) {
+            vertical = 'agro'                    
+          } else {  
+            vertical = res.data.VerticleType      
+          }
+          return { info: res.data, vType: vertical };
+        } 
+        vertical = res.data.VerticleType          
+        if (!locationId) {                                     
+          dispatch(setLocation({ LocationId: res.data.LocationId }))
+        } 
+        return { info: res.data, vType: vertical }              
+      } else {
+        throw new Error('Invalid Company ! Please try later.');
+      }
+    } catch (err: any) {
+      return rejectWithValue(err.message || 'Something went wrong please Refresh or try after some time.');
+    }
+  }
+);
+
+const companySlice = createSlice({
+  name: 'company',
+  initialState: { 
+    info: {}, vType: '', status: 'loading', error: null
+  },
+  reducers: {
+    setCompany: (state, action: any) => {
+      Object.assign(state, action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    requestStatusHandlers(builder, getCompanyInfo, {
+      onSuccess: (state: any, action: any) => {
+        Object.assign(state, action.payload);
+      },
+    });
+  },
+});
+
+export const { setCompany } = companySlice.actions;
+const companyReducer = companySlice.reducer;
 
 
 export const getDepartments = createAsyncThunk(
@@ -239,7 +298,6 @@ const cartSlice = createSlice({
 export const { addToCart, removeFromCart, dumpCart } = cartSlice.actions;
 const cartReducer = cartSlice.reducer;
 
-
 let LID = 0;
 
 const getUserLocation = () => {
@@ -264,21 +322,29 @@ const appDataSlice = createSlice({
   },
   reducers: {
     setLocation: (state, action: any) => {
-      const { item, type } = action.payload;
-      return {...state, [type]: {...state[type], [item.LocationItemId]: item }};
+      state.location = { ...state.location, ...action.payload};
+      return state;
     },
-    removeFromCart: (state, action: any) => {
-      const { item, type } = action.payload;
-      delete state[type][item.LocationItemId]
+    setPrescription: (state, action: any) => {
+      state.prescription = { ...state.prescription, ...action.payload };
+      return state;
     },
-    dumpCart: (state, action: any) => {
-      const { type } = action.payload;
-      state[type] = {}
-    }
+    setRestaurant: (state, action: any) => {
+      state.restaurant = { ...state.restaurant, ...action.payload };
+      return state;
+    },
+    setBusinessType: (state, action: any) => {
+      state.businessType = { ...state.businessType, ...action.payload };
+      return state;
+    },
+    setUserRegType: (state, action: any) => {
+      state.userRegType = { ...state.userRegType, ...action.payload };
+      return state;
+    },    
   }
 });
 
-export const { addToCart, removeFromCart, dumpCart } = appDataSlice.actions;
+export const { setLocation, setPrescription, setRestaurant, setBusinessType, setUserRegType } = appDataSlice.actions;
 const appDataReducer = appDataSlice.reducer;
 
 // export const getSiteData = createAsyncThunk(
@@ -350,4 +416,6 @@ export {
   membersReducer, 
   modalsReducer,
   cartReducer,
+  appDataReducer,
+  companyReducer
 }

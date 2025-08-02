@@ -1,7 +1,11 @@
 import colors from 'tailwindcss/colors.js';
 export const zero = 'tSL0lTwETc1vrrU2ZIoFFA==';
 export const defaultId = 'FFCeIi27FQMTNGpatwiktw==';  
-export const blur = true;
+export const blur = false;
+export const rent = false;
+export const TAKEHOME_AGRO = '5KR8RKKh%2BtHG4iszAzAjJQ== ';
+export const TAKEHOME_GARMENTS = 't0ZL5KiikMgM1YeyB68a1w== ';
+export const TAKEHOME_ELECTRONICS = 'QqFodfpxRStiGjTKTYE/hA==';
 export const initReg = {  
   Name: '',        
   EncCompanyId: '',
