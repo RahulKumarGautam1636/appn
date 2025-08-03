@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getCompanies, getDepartments, getMembers } from "../store/slices/slices";
+import { getCompanies, setCompany, getDepartments, getMembers, getCompanyDetails, getProducts, getCategories } from "../store/slices/slices";
 import { useEffect } from "react";
 import { RootState } from "../store/store";
 
@@ -9,6 +9,12 @@ const Init = () => {
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
     const { selected } = useSelector((state: RootState) => state.companies);
+    const { location } = useSelector((state: RootState) => state.appData);
+    const locationId = location.LocationId;
+
+    useEffect(() => {
+        dispatch(getCompanyDetails({ compCode: compCode, locationId: locationId }))
+    }, [compCode, locationId])
 
     useEffect(() => {
         dispatch(getCompanies({ companyCode: compCode, userId: user.UserId || 0 }));
@@ -19,6 +25,14 @@ const Init = () => {
         if (!selected.EncCompanyId) return;
         dispatch(getDepartments({ companyCode: selected.EncCompanyId }));
     }, [selected.EncCompanyId])
+
+    useEffect(() => {
+        dispatch(getCategories({ compCode: compCode, locationId: 1293 }));
+    }, [compCode, locationId])
+
+    useEffect(() => {
+        dispatch(getProducts({ compCode: compCode, locationId: 1293 }));
+    }, [compCode, locationId])
 
     // useEffect(() => {
     //     if ((vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT') || globalData.userRegType.CodeValue === 'Retailer' || vType === 'rent' || vType === 'agro' || vType === 'garments') {

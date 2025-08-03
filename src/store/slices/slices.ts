@@ -2,11 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestStatusHandlers } from './statusHandler';
 import axios from 'axios';
 import { BASE_URL, dummyUser, rent, TAKEHOME_AGRO } from '@/constants';
-import { getCategoryRequiredFieldsOnly } from '@/src/components/utils';
+import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/components/utils';
 
 const compCodeSlice = createSlice({
   name: 'compCode',
-  initialState: 'FFCeIi27FQMTNGpatwiktw==',
+  initialState: 'yFObpUjTIGhK9%2B4bFmadRg==', // '5KR8RKKh%2BtHG4iszAzAjJQ==', // 'FFCeIi27FQMTNGpatwiktw==',
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {
       state = action.payload;
@@ -16,7 +16,6 @@ const compCodeSlice = createSlice({
 
 export const { setCompCode } = compCodeSlice.actions;
 const compCodeReducer = compCodeSlice.reducer;
-
 
 const loginSlice = createSlice({
   name: 'login',
@@ -94,14 +93,11 @@ const companiesSlice = createSlice({
 export const { setCompanies } = companiesSlice.actions;
 const companiesReducer = companiesSlice.reducer;
 
-export const getCompanyInfo = createAsyncThunk(
-  'auth/getCompanyInfo',
+export const getCompanyDetails = createAsyncThunk(
+  'auth/getCompanyDetails',
   async (params: any, { dispatch, rejectWithValue, getState }) => {
-    const compCode = getState().compCode;
-    const locationId = getState().location.LocationId;
     try {              
-      const res = await axios.get(`${BASE_URL}/api/CompMast/GetCompDetails?CID=${params.companyCode}&LOCID=${params.locationId}`, {});
-
+      const res = await axios.get(`${BASE_URL}/api/CompMast/GetCompDetails?CID=${params.compCode}&LOCID=${params.locationId}`, {});
       if (res.data.COMPNAME && res.data.EncCompanyId) {  
         // return { info: res.data, vType: '' };
         let vertical = ''
@@ -119,7 +115,7 @@ export const getCompanyInfo = createAsyncThunk(
           return { info: res.data, vType: vertical };
         } 
         vertical = res.data.VerticleType          
-        if (!locationId) {                                     
+        if (!params.locationId) {                                     
           dispatch(setLocation({ LocationId: res.data.LocationId }))
         } 
         return { info: res.data, vType: vertical }              
@@ -143,7 +139,7 @@ const companySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    requestStatusHandlers(builder, getCompanyInfo, {
+    requestStatusHandlers(builder, getCompanyDetails, {
       onSuccess: (state: any, action: any) => {
         Object.assign(state, action.payload);
       },
@@ -347,63 +343,110 @@ const appDataSlice = createSlice({
 export const { setLocation, setPrescription, setRestaurant, setBusinessType, setUserRegType } = appDataSlice.actions;
 const appDataReducer = appDataSlice.reducer;
 
-// export const getSiteData = createAsyncThunk(
-//   'auth/getMembers',
-//   async (params: any, { dispatch, rejectWithValue, getState }) => {
+export const getCategories = createAsyncThunk(
+  'auth/getCategories',
+  async (params: any, { dispatch, rejectWithValue, getState }) => {
+    try {              
+      const getCategories = async () => {         
+        const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatSubCat?CID=${params.compCode}&LOCID=${params.locationId}`);
+        if (res.status === 200) {
+          const categories = getCategoryRequiredFieldsOnly(res.data.LinkCategoryList);
+          return { loading: false, LinkCategoryList: categories, LinkSubCategoryList: res.data.LinkSubCategoryList }
+        }
+      }
+      const categories = await getCategories();
+      return categories
+    } catch (err: any) {
+      return rejectWithValue(err.message || 'Something went wrong');
+    }
+  }
+);
 
-//     const compCode = getState().compCode;
+export const getProducts = createAsyncThunk(
+  'auth/getProducts',
+  async (params: any, { dispatch, rejectWithValue, getState }) => {
+    try {              
+      const getProducts = async () => {         
+        const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatItemsWithBrand?CID=${params.compCode}&LOCID=${params.locationId}`);
+        if (res.status === 200) {
+          const products = getRequiredFields(res.data.itemMasterCollection);
+          return { loading: false, itemMasterCollection: products, ItemBrandList: res.data.ItemBrandList }
+        }
+      }
+      const products = await getProducts();
+      return products
+    } catch (err: any) {
+      return rejectWithValue(err.message || 'Something went wrong');
+    }
+  }
+);
 
-//     // if (vType === 'ErpPharma' || vType === 'agro' || vType === 'ErpManufacturing') {
-//         const getCategories = async () => {         
-//             // siteDataAction({ catLoading: true, productLoading: true });
-//             const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatSubCat?CID=${compCode}&LOCID=${locationId}`);
-//             if (res.status === 200) {
-//                 const categories = getCategoryRequiredFieldsOnly(res.data.LinkCategoryList);
-//                 // siteDataAction({ LinkCategoryList: categories, catLoading: false, LinkSubCategoryList: res.data.LinkSubCategoryList });   
-//             }
-//         }
-//         getCategories(controller.signal)
-//     // } else if (vType === 'rent') {
-//     //     siteDataAction({isLoading: false, itemMasterCollection: rentSaleProducts, LinkCategoryList: rentCategories, LinkSubCategoryList: [], ItemBrandList: []}); 
-//     //     return;
-//     // } 
+const siteDataSlice = createSlice({
+  name: 'siteData',
+  initialState: { 
+    categories: {loading: true, error: '', LinkCategoryList: [], LinkSubCategoryList: []},
+    products: {loading: true, error: '', itemMasterCollection: [], ItemBrandList: []}
+  },
+  reducers: {
+    setSiteCategories: (state, action: any) => {
+      state = Object.assign(state, action.payload);
+    },
+    setSiteProducts: (state, action: any) => {
+      state = Object.assign(state, action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCategories.pending, (state) => {
+        state.categories.loading = true;
+        state.categories.error = '';
+      })
+      .addCase(getCategories.fulfilled, (state, action) => {
+        state.categories = {
+          loading: false,
+          error: '',
+          ...action.payload
+        };
+      })
+      .addCase(getCategories.rejected, (state, action) => {
+        state.categories.loading = false;
+        state.categories.error = action.payload || action.error.message;
+      });
 
-//     try {              
-//       const res = await axios.get(`${BASE_URL}/api/member/Get?UserId=${user.UserId}&CID=${compCode}`, {});
-//       if (res.data) {
-//           const parentMember = res.data.AccPartyMemberMasterList.find((i: any) => i.MemberId === user.MemberId);
-//           if (parentMember) {
-//             return {membersList: res.data.AccPartyMemberMasterList, selectedMember: parentMember};
-//           } else {
-//             console.log('No parent member found');
-//             return {membersList: res.data.AccPartyMemberMasterList};
-//           }
-//       }
-//     } catch (err: any) {
-//       return rejectWithValue(err.message || 'Something went wrong');
-//     }
+    builder
+      .addCase(getProducts.pending, (state) => {
+        state.products.loading = true;
+        state.products.error = '';
+      })
+      .addCase(getProducts.fulfilled, (state, action) => {
+        state.products = {
+          loading: false,
+          error: '',
+          ...action.payload
+        };
+      })
+      .addCase(getProducts.rejected, (state, action) => {
+        state.products.loading = false;
+        state.products.error = action.payload || action.error.message;
+      });
+  },
+});
+
+export const { setSiteProducts } = siteDataSlice.actions;
+const siteDataReducer = siteDataSlice.reducer;
+
+
+
+// export const fetchUserAndPosts = () => async (dispatch, getState) => {     // ⭐⭐⭐ dispatch action and use it's result to do anything immedeately.
+//   const userResult = await dispatch(fetchUser());
+
+//   if (fetchUser.fulfilled.match(userResult)) {
+//     const userId = userResult.payload.id;
+//     await dispatch(fetchUserPosts(userId));
+//   } else {
+//     return thunkAPI.rejectWithValue('Failed to fetch user');
 //   }
-// );
-
-// const siteDataSlice = createSlice({
-//   name: 'appnData',
-//   initialState: {isLoading: true, catLoading: true, productLoading: true, itemMasterCollection: [], ItemBrandList: [], LinkCategoryList: [], LinkSubCategoryList: []},
-//   reducers: {
-//     setMembers: (state, action: any) => {
-//       state = Object.assign(state, action.payload);
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     requestStatusHandlers(builder, getSiteData, {
-//       onSuccess: (state: any, action: any) => {
-//         Object.assign(state, action.payload);
-//       },
-//     });
-//   },
-// });
-
-// export const { setMembers } = dataSlice.actions;
-// const membersReducer = dataSlice.reducer;
+// };
 
 
 export default compCodeReducer;
@@ -417,5 +460,6 @@ export {
   modalsReducer,
   cartReducer,
   appDataReducer,
-  companyReducer
+  companyReducer,
+  siteDataReducer
 }

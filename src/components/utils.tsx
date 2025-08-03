@@ -130,7 +130,7 @@ export const BannerCarousel = () => {
   );
 }
 
-export const getRequiredFields = (list=[], compCode: number) => {
+export const getRequiredFields = (list=[]) => {
   // let { globalData } = store.getState();
 
   return list.map((i: any) => ({ 
