@@ -4,6 +4,7 @@ import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { GridLoader } from '@/src/components/utils';
+import { Link } from 'expo-router';
 
 const CatCard = ({ data }: any) => {
   return (
@@ -216,9 +217,9 @@ const ShoppingAppScreen = () => {
       <View className='py-5'>
         <View className="flex-row justify-between items-center mb-4 px-5">
           <Text className="text-lg font-bold text-gray-800">Featured Categories</Text>
-          <TouchableOpacity>
+          <Link href={'/'}>
             <Text className="text-purple-600 font-medium">See All</Text>
-          </TouchableOpacity>
+          </Link>
         </View>
         {(() => {
           if (categoriesData.loading) {

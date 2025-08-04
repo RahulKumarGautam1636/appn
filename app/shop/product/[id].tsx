@@ -1,9 +1,12 @@
-import { myColors } from '@/constants';
+import { BASE_URL, myColors } from '@/constants';
 import ButtonPrimary from '@/src/components';
+import { getFrom } from '@/src/components/utils';
+import { RootState } from '@/src/store/store';
 import { Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import { Link, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import colors from 'tailwindcss/colors';
 
 const ProductPage = () => {
@@ -13,6 +16,43 @@ const ProductPage = () => {
 
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
+
+  const [productData, setProductData] = useState({loading: false, data: {ImageMasterCollection: [], ItemMaster: {}, itemMasterCollection: []}, err: {status: false, msg: ''}});     
+	const [counter, setCounter] = useState(1);
+	const [activePackSize, setPackSize] = useState('');
+  const { location } = useSelector((state: RootState) => state.appData);
+  const locationId = location.LocationId;
+  const { id } = useLocalSearchParams();
+  const compCode = useSelector((state: RootState) => state.compCode);
+
+  console.log(id);
+
+  // useEffect(() => {
+  //   async function getSliderItemImges() {
+  //     // loaderAction(true);
+  //     const res = await getFrom(`${BASE_URL}/api/Pharma/Get?CID=${compCode}&PID=${id}&LOCID=${locationId}`, {}, setProductData);
+  //     if (res) {
+  //       setProductData(res); 
+  //     } else {
+  //       console.log('No data received');
+  //     }
+  //     // loaderAction(false);
+  //   }
+  //   getSliderItemImges();
+  // },[id, compCode, locationId])
+
+  // useEffect(() => {
+	// 	const packSizeList = productData.data.ItemMaster?.ItemPackSizeList;
+	// 	if (packSizeList && packSizeList?.length) {
+	// 		const firstSizeId = packSizeList[0];
+	// 		setPackSize(firstSizeId);
+	// 	} else {
+	// 		setPackSize('');
+	// 	}
+	// },[productData.data.ItemMaster])
+
+  // const isAddedToCart = Object.values(cart.pharmacy).filter(i => i.LocationItemId === productData.data.ItemMaster.LocationItemId).length;
+	// const isAddedToWishlist = Object.values(wishlist.pharmacy).filter(i => i.LocationItemId === productData.data.ItemMaster.LocationItemId).length;
 
   return (
     <ScrollView contentContainerClassName='bg-purple-100 min-h-full'>
@@ -125,24 +165,23 @@ const ProductPage = () => {
           </View>
 
           {/* Quantity */}
-          {/* <View className="mb-8">
-            <Text className="text-lg font-semibold text-gray-900 mb-3">Quantity</Text>
-            <View className="flex-row items-center">
+            {/* <Text className="text-lg font-semibold text-gray-900 mb-3">Quantity</Text> */}
+            <View className="flex-row items-center gap-6 justify-between mt-5 mb-1">
               <TouchableOpacity 
                 onPress={decrementQuantity}
-                className="w-10 h-10 rounded-full border border-gray-300 flex-row items-center justify-center hover:bg-gray-50"
+                className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center"
               >
                 <Feather name="minus" size={20} color="#6B7280" />
               </TouchableOpacity>
-              <Text className="text-xl font-semibold mx-8 text-gray-900">{quantity}</Text>
+              <Text className="text-xl font-semibold text-gray-900">{quantity}</Text>
               <TouchableOpacity 
                 onPress={incrementQuantity}
-                className="w-10 h-10 rounded-full border border-gray-300 flex-row items-center justify-center hover:bg-gray-50"
+                className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center"
               >
                 <Feather name="plus"  size={20} color="#6B7280" />
               </TouchableOpacity>
+              <ButtonPrimary title='ADD TO CART' isLoading={false} active={true} classes='flex-1 !rounded-2xl' />
             </View>
-          </View> */}
 
           {/* Price and Add to Cart */}
         </View>

@@ -32,9 +32,6 @@ const Booking = () => {
     const router = useRouter();
     const [activeCompany, setActiveCompany] = useState({});
     const [loading, setLoading] = useState(false);
-    const params = useLocalSearchParams();
-
-    console.log(params);
 
     useEffect(() => {
         setSelectedDate(selectedAppnDate);
