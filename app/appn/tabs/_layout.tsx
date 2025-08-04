@@ -21,7 +21,7 @@ export default function TabsLayout() {
     { name: 'Cart', icon: 'cart', key: 'cart' },
   ];
 
-  const lab = useSelector((i: RootState) => i.cart).lab;
+  const lab = useSelector((i: RootState) => i.cart);
   const cart = Object.values(lab);
 
 

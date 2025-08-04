@@ -10,14 +10,14 @@ import { mmDDyyyyDate } from ".";
 export default function LabCard({ data, testDate }: any) {
 
     const dispatch = useDispatch();
-    const lab = useSelector((i: RootState) => i.cart).lab
+    const lab = useSelector((i: RootState) => i.cart)
     const labTests = Object.values(lab);
     const isAdded = labTests.find((i: any) => i.LocationItemId === data.LocationItemId);
     const handleAdd = () => {
         if (isAdded) {
-            dispatch(removeFromCart({ type: 'lab', item: data }));
+            dispatch(removeFromCart(data.LocationItemId));
         } else {
-            dispatch(addToCart({type: 'lab', item: {...data, testDate: testDate}}));
+            dispatch(addToCart({...data, testDate: testDate}));
         }
     }
 
@@ -68,15 +68,15 @@ export const LabCartCard = ({ data }: any) => {
                     </View>
                     <View className='flex-row gap-4 items-center'>
                         <View className='px-[10px] py-[8px] bg-gray-100 rounded-full justify-between gap-4 ml-auto flex-row shadow-sm shadow-gray-500'>
-                            <TouchableOpacity onPress={() => {if (data.count !== 1) dispatch(addToCart({type: 'lab', item: {...data, count: data.count - 1}}))}}>
+                            <TouchableOpacity onPress={() => {if (data.count !== 1) dispatch(addToCart({...data, count: data.count - 1}))}}>
                                 <Feather name="minus" size={16} color="#6b7280" />
                             </TouchableOpacity>
                             <Text className='leading-6 font-PoppinsSemibold'>{data.count}</Text>
-                            <TouchableOpacity onPress={() => dispatch(addToCart({type: 'lab', item: {...data, count: data.count + 1}}))}>
+                            <TouchableOpacity onPress={() => dispatch(addToCart({...data, count: data.count + 1}))}>
                                 <Feather name="plus" size={16} color="#6b7280" />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity onPress={() => dispatch(removeFromCart({type: 'lab', item: data}))}>
+                        <TouchableOpacity onPress={() => dispatch(removeFromCart(data.LocationItemId))}>
                             <Feather name="trash-2" size={19} color="#ef4444" />
                         </TouchableOpacity>
                     </View>

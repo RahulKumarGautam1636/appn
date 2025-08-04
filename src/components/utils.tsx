@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
+import { addToCart, dumpCart, removeFromCart } from "../store/slices/slices";
+import store from "../store/store";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -255,3 +257,46 @@ export const GradientBG = ({ children, imgStyles={opacity: 0.8}, classes }: any)
     </ImageBackground>
   )
 }
+
+export const add2Cart = (isAdded, data, dispatch, computeWithPackSize, count=1) => {
+  const state = store.getState();
+  const locationId = state.appData.location.LocationId;
+  if (!locationId) return alert('Please choose a Location.');
+  if (isAdded) return dispatch(removeFromCart(data.LocationItemId));
+  dispatch(addToCart({...data, count: count, ...computeWithPackSize()})); 
+  // let productToastData = { msg: 'Added to Cart', product: {name: data.Description, price: computeWithPackSize().SRate}, button: {text: 'Visit Cart', link: '/cartPage'} };
+  // productToast(productToastData);
+}
+
+export const buyNow = (dispatch, data, router, computeWithPackSize, ) => {
+  const state = store.getState();
+  const locationId = state.appData.location.LocationId;
+  if (!locationId) return alert('Please choose a Location.');
+  dispatch(dumpCart());
+  dispatch(addToCart({...data, count: 1, ...computeWithPackSize()})); 
+  router.push('/checkout');
+}
+
+// export const addToWishlist2 = (computeWithPackSize, dispatch, data, isAddedToWishlist) => {
+//   const state = store.getState();
+//   const locationId = state.appData.location.LocationId;
+//   if (!locationId) return alert('Please choose a Location.');
+//   if (isAddedToWishlist) return wishlistAction('REMOVE_WISH_ITEM', data.LocationItemId, 'pharmacy');
+//   wishlistAction('ADD_WISH_ITEM', {...data, count: 1, ...computeWithPackSize()}, 'pharmacy');
+//   dispatch(removeFromCart(data.LocationItemId));
+//   let productToastData = { msg: 'Added to Wishlist', product: {name: data.Description, price: computeWithPackSize().SRate}, button: {text: 'View Wishlist', link: '/wishlist'} };
+//   // productToast(productToastData); 
+// }
+
+export const computeWithPackSize = (data, activePackSize, vType) => {      
+  if (vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT') return data;
+  if (!activePackSize) {
+      return data;     // { ItemMRP: data.ItemMRP, SRate: data.SRate, StockQty: data.StockQty, DiscountPer: data.DiscountPer, PackSizeId: data.PackSizeId };
+  } else {
+    if (activePackSize.MRP) {
+      return { ItemMRP: activePackSize.MRP, SRate: activePackSize.SRate, StockQty: activePackSize.StockQty, DiscountPer: activePackSize.MRPDisPer, PackSizeId: activePackSize.CodeId, PTR: activePackSize.PTR };  
+    } else {
+      return data;     // { ItemMRP: data.ItemMRP, SRate: data.SRate, StockQty: data.StockQty, DiscountPer: data.DiscountPer, PackSizeId: data.PackSizeId };
+    }
+  }
+} 

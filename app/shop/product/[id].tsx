@@ -1,12 +1,13 @@
 import { BASE_URL, myColors } from '@/constants';
-import ButtonPrimary from '@/src/components';
-import { getFrom } from '@/src/components/utils';
+import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
+import { add2Cart, buyNow, computeWithPackSize, getFrom } from '@/src/components/utils';
+import { removeFromCart } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import colors from 'tailwindcss/colors';
 
 const ProductPage = () => {
@@ -24,35 +25,62 @@ const ProductPage = () => {
   const locationId = location.LocationId;
   const { id } = useLocalSearchParams();
   const compCode = useSelector((state: RootState) => state.compCode);
+  const cart = useSelector((i: RootState) => i.cart);
+  const { vType } = useSelector((i: RootState) => i.company);
+  const dispatch = useDispatch();
+  const product = productData.data.ItemMaster;
+  const router = useRouter()
 
-  console.log(id);
+  useEffect(() => {
+    async function getSliderItemImges() {
+      // loaderAction(true);
+      const res = await getFrom(`${BASE_URL}/api/Pharma/Get?CID=${compCode}&PID=${id}&LOCID=${locationId}`, {}, setProductData);
+      if (res) {
+        setProductData(res); 
+      } else {
+        console.log('No data received');
+      }
+      // loaderAction(false);
+    }
+    getSliderItemImges();
+  },[id, compCode, locationId])
 
-  // useEffect(() => {
-  //   async function getSliderItemImges() {
-  //     // loaderAction(true);
-  //     const res = await getFrom(`${BASE_URL}/api/Pharma/Get?CID=${compCode}&PID=${id}&LOCID=${locationId}`, {}, setProductData);
-  //     if (res) {
-  //       setProductData(res); 
-  //     } else {
-  //       console.log('No data received');
-  //     }
-  //     // loaderAction(false);
-  //   }
-  //   getSliderItemImges();
-  // },[id, compCode, locationId])
+  useEffect(() => {
+		const packSizeList = product?.ItemPackSizeList;
+		if (packSizeList && packSizeList?.length) {
+			const firstSizeId = packSizeList[0];
+			setPackSize(firstSizeId);
+		} else {
+			setPackSize('');
+		}
+	},[product])
 
-  // useEffect(() => {
-	// 	const packSizeList = productData.data.ItemMaster?.ItemPackSizeList;
-	// 	if (packSizeList && packSizeList?.length) {
-	// 		const firstSizeId = packSizeList[0];
-	// 		setPackSize(firstSizeId);
-	// 	} else {
-	// 		setPackSize('');
-	// 	}
-	// },[productData.data.ItemMaster])
+  const isAdded = Object.values(cart).filter(i => i.LocationItemId === product.LocationItemId).length;
 
-  // const isAddedToCart = Object.values(cart.pharmacy).filter(i => i.LocationItemId === productData.data.ItemMaster.LocationItemId).length;
-	// const isAddedToWishlist = Object.values(wishlist.pharmacy).filter(i => i.LocationItemId === productData.data.ItemMaster.LocationItemId).length;
+  const packSize = () => {      
+    return computeWithPackSize(product, activePackSize, vType);
+  }
+
+  const handlePackSize = (i: any) => {
+		if (i.CodeId === packSize().PackSizeId) return;
+		setPackSize(i);
+    if (isAdded) return dispatch(removeFromCart(i.LocationItemId));
+	}
+
+  const packSizeList = product?.ItemPackSizeList?.map(i => <Text className={i.CodeId === packSize().PackSizeId ? 'current' : ''} key={i.CodeId} onClick={() => handlePackSize(i)} role='button'>{i.Description}</Text>);
+
+  const handleAdd = () => {
+    add2Cart(isAdded, product, dispatch, packSize);
+  }
+
+  const handleBuyNow = () => {
+    buyNow(dispatch, product, router, packSize);
+  }
+
+  console.log(productData, id)
+  let bestBeforeDate = product?.EXPDate;
+  bestBeforeDate = mmDDyyyyDate(bestBeforeDate, '/', '/');																		
+  let bestBeforeDateString = bestBeforeDate ? new Date(bestBeforeDate).toDateString().split(' ').slice(1, 4).join(' ') : '';
 
   return (
     <ScrollView contentContainerClassName='bg-purple-100 min-h-full'>
@@ -85,7 +113,7 @@ const ProductPage = () => {
         <View className="bg-white p-6 shadow-sm">
           {/* Title and Favorite */}
           <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-2xl font-bold text-gray-900">Vinia Headphone</Text>
+            <Text className="text-2xl font-bold text-gray-900">{product.Description}</Text>
             <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
               <Feather 
                 name="heart"
@@ -99,8 +127,8 @@ const ProductPage = () => {
           <View className="flex-row items-center mb-6">
             <View className='gap-2 flex-row items-center'>
               <FontAwesome name="rupee" size={19} color="#6b21a8" />
-              <Text className="text-[1.3rem] font-bold text-purple-800 mr-4 gap-3 leading-7">240</Text>
-              <Text className="text-[1rem] font-semibold line-through text-red-600 mr-4 gap-3">200.25</Text>
+              <Text className="text-[1.3rem] font-bold text-purple-800 mr-4 gap-3 leading-7">{packSize().SRate}</Text>
+              <Text className="text-[1rem] font-semibold line-through text-red-600 mr-4 gap-3">{packSize().ItemMRP}</Text>
             </View>
             <View className='gap-1 flex-row items-center'>
               {/* <Feather name="star" size={16} color="#FCD34D" /> */}
@@ -110,7 +138,7 @@ const ProductPage = () => {
                 {/* <FontAwesome6 name="check" size={16} color={'#0ea5e9'} /> */}
               {/* </View> */}
 
-              <Text className="text-[1rem] font-semibold text-gray-900 ml-1">25% Off</Text>
+              <Text className="text-[1rem] font-semibold text-gray-900 ml-1">{packSize().DiscountPer}% Off</Text>
             </View>
           </View>
           <View className="flex-row gap-5 items-center border-y border-gray-200 py-5 mb-5">
@@ -139,7 +167,8 @@ const ProductPage = () => {
           <View className="mb-6">
             <Text className="text-lg font-semibold text-gray-900 mb-2">Description</Text>
             <Text className="text-gray-600 leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
+              {product?.Technicalname}
+              {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. */}
             </Text>
           </View>
 
@@ -150,7 +179,7 @@ const ProductPage = () => {
               </View>
               <View>
                 <Text className="font-medium text-slate-700 text-[12px] mr-auto mb-2">Best Before</Text>
-                <Text className="font-medium text-slate-700 text-[14px] mr-auto">May 31 2026</Text>
+                <Text className="font-medium text-slate-700 text-[14px] mr-auto">{bestBeforeDateString}</Text>
               </View>
             </View>
             <View className='flex-row gap-4 flex-1 border border-gray-200 p-4 items-center rounded-xl'>
@@ -159,7 +188,7 @@ const ProductPage = () => {
               </View>
               <View>
                 <Text className="font-medium text-slate-700 text-[12px] mr-auto mb-2">MFD By.</Text>
-                <Text className="font-medium text-slate-700 text-[14px] mr-auto">Zydus Wellness Limited</Text>
+                <Text className="font-medium text-slate-700 text-[14px] mr-auto">{product?.ManufacturBY}</Text>
               </View>
             </View>
           </View>

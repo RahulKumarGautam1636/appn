@@ -6,7 +6,7 @@ import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/componen
 
 const compCodeSlice = createSlice({
   name: 'compCode',
-  initialState: 'yFObpUjTIGhK9%2B4bFmadRg==', // '5KR8RKKh%2BtHG4iszAzAjJQ==', // 'FFCeIi27FQMTNGpatwiktw==',
+  initialState: 'yFObpUjTIGhK9%2B4bFmadRg==', // 'FFCeIi27FQMTNGpatwiktw==', // '5KR8RKKh%2BtHG4iszAzAjJQ==',
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {
       state = action.payload;
@@ -274,19 +274,18 @@ const modalsReducer = modalsSlice.reducer;
 
 const cartSlice = createSlice({
   name: 'modals',
-  initialState: { pharmacy: {}, lab: {} },
+  initialState: {},
   reducers: {
     addToCart: (state, action: any) => {
-      const { item, type } = action.payload;
-      return {...state, [type]: {...state[type], [item.LocationItemId]: item }};
+      const item = action.payload;
+      return {...state, [item.LocationItemId]: item }
     },
     removeFromCart: (state, action: any) => {
-      const { item, type } = action.payload;
-      delete state[type][item.LocationItemId]
+      const id = action.payload;
+      delete state[id]
     },
     dumpCart: (state, action: any) => {
-      const { type } = action.payload;
-      state[type] = {}
+      state = {}
     }
   }
 });
@@ -298,7 +297,7 @@ let LID = 0;
 
 const getUserLocation = () => {
   if (LID) return { LocationId: LID };
-  return { required: true, LocationId: 0 };
+  return { required: true, LocationId: 1293 };
 }
 
 const appDataSlice = createSlice({

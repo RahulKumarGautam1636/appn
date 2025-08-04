@@ -13,7 +13,7 @@ import Checkout from '../../checkout';
 import { useState } from 'react';
 
 const Cart = ({}: any) => {
-    const lab = useSelector((i: RootState) => i.cart).lab
+    const lab = useSelector((i: RootState) => i.cart)
     const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
     const labTests = Object.values(lab)
     const dispatch = useDispatch()

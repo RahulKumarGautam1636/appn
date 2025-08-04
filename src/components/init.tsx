@@ -26,13 +26,13 @@ const Init = () => {
         dispatch(getDepartments({ companyCode: selected.EncCompanyId }));
     }, [selected.EncCompanyId])
 
-    // useEffect(() => {
-    //     dispatch(getCategories({ compCode: compCode, locationId: 1293 }));
-    // }, [compCode, locationId])
+    useEffect(() => {
+        dispatch(getCategories({ compCode: compCode, locationId: locationId }));
+    }, [compCode, locationId])
 
-    // useEffect(() => {
-    //     dispatch(getProducts({ compCode: compCode, locationId: 1293 }));
-    // }, [compCode, locationId])
+    useEffect(() => {
+        dispatch(getProducts({ compCode: compCode, locationId: locationId }));
+    }, [compCode, locationId])
 
     // useEffect(() => {
     //     if ((vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT') || globalData.userRegType.CodeValue === 'Retailer' || vType === 'rent' || vType === 'agro' || vType === 'garments') {

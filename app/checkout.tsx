@@ -16,7 +16,7 @@ const Checkout = ({ handleClose }: any) => {
     const { selected: selectedCompany } = useSelector((state: RootState) => state.companies);
     const { selectedMember } = useSelector((i: RootState) => i.members)
     const router = useRouter()
-    const lab = useSelector((i: RootState) => i.cart).lab
+    const lab = useSelector((i: RootState) => i.cart)
     const labTests = Object.values(lab);
     const dispatch = useDispatch();
     const [bookingData, setBookingData] = useState({ AppointDate: '', AppTime: '', TimeSlotId: null }); 
@@ -147,7 +147,7 @@ const Checkout = ({ handleClose }: any) => {
         if (res.status === 200) {
             // bookingToast(res.data, { position: "top-center", autoClose: 4000, closeButton: false, className: 'booking-reference-toast' });
             // modalAction('LABTEST_BOOK_MODAL', false);          
-            dispatch(dumpCart({type: 'lab'}));
+            dispatch(dumpCart());
             handleBack();
             router.push('/testList')
         } else {
