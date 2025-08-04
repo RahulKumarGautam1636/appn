@@ -1,152 +1,208 @@
-import { Feather, Ionicons } from '@expo/vector-icons';
+import { myColors } from '@/constants';
+import ButtonPrimary from '@/src/components';
+import { Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { Link } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import colors from 'tailwindcss/colors';
 
 const ProductPage = () => {
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(2);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const colors = [
-    { color: '#000000', name: 'Black' },
-    { color: '#6B7280', name: 'Gray' },
-    { color: '#4B5563', name: 'Dark Gray' },
-    { color: '#92400E', name: 'Brown' },
-    { color: '#7C3AED', name: 'Purple' },
-    { color: '#C026D3', name: 'Magenta' }
-  ];
-
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
   return (
-    <ScrollView contentContainerClassName='bg-gray-50 min-h-screen'>
+    <ScrollView contentContainerClassName='bg-purple-100 min-h-full'>
+      {/* Header */}
       <View className="">
-        {/* Header */}
-        <View className="flex-row items-center justify-between px-4 py-3 bg-gray-50">
-          <TouchableOpacity className="p-2">
-            <Ionicons name="arrow-back-outline" size={24} color="black" />
-          </TouchableOpacity>
-          <View className="text-lg font-medium">9:41</View>
-          <View className="flex-row items-center space-x-1">
-            <View className="flex-row space-x-1">
-              <View className="w-1 h-1 bg-black rounded-full"></View>
-              <View className="w-1 h-1 bg-black rounded-full"></View>
-              <View className="w-1 h-1 bg-black rounded-full"></View>
+        {/* Product Image */}
+        <View className="bg-white p-8 items-center border-b border-gray-200">
+          <View className="bg-gray-50">
+            <TouchableOpacity className="p-2">
+              <Ionicons name="arrow-back-outline" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View className="w-64 h-64 flex-row items-center justify-center mb-6">
+            {/* Headphone illustration */}
+            <View className="relative">
+
             </View>
-            <View className="ml-2 w-6 h-3 border border-black rounded-sm relative">
-              <View className="w-4 h-2 bg-black rounded-sm absolute top-0.5 left-0.5"></View>
-            </View>
+          </View>
+          
+          {/* Page indicators */}
+          <View className="flex-row space-x-2">
+            <View className="w-8 h-1 bg-black rounded-full"></View>
+            <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
+            <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
+            <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
           </View>
         </View>
 
-        <View className="px-4 pb-4">
-          {/* Product Image */}
-          <View className="bg-white rounded-2xl p-8 mb-6 flex-row flex-col items-center">
-            <View className="w-64 h-64 flex-row items-center justify-center mb-6">
-              {/* Headphone illustration */}
-              <View className="relative">
-
-              </View>
-            </View>
-            
-            {/* Page indicators */}
-            <View className="flex-row space-x-2">
-              <View className="w-8 h-1 bg-black rounded-full"></View>
-              <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
-              <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
-              <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
-            </View>
+        {/* Product Info */}
+        <View className="bg-white p-6 shadow-sm">
+          {/* Title and Favorite */}
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className="text-2xl font-bold text-gray-900">Vinia Headphone</Text>
+            <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
+              <Feather 
+                name="heart"
+                size={24} 
+                color={isFavorite ? "#f43f5e" : "#f43f5e"} 
+              />
+            </TouchableOpacity>
           </View>
 
-          {/* Product Info */}
-          <View className="bg-white rounded-2xl p-6">
-            {/* Title and Favorite */}
-            <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-2xl font-bold text-gray-900">Vinia Headphone</Text>
-              <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
-                <Feather 
-                  name="heart"
-                  size={24} 
-                  color={isFavorite ? "#EF4444" : "#6B7280"} 
-                />
-              </TouchableOpacity>
+          {/* Rating and Sales */}
+          <View className="flex-row items-center mb-6">
+            <View className='gap-2 flex-row items-center'>
+              <FontAwesome name="rupee" size={19} color="#6b21a8" />
+              <Text className="text-[1.3rem] font-bold text-purple-800 mr-4 gap-3 leading-7">240</Text>
+              <Text className="text-[1rem] font-semibold line-through text-red-600 mr-4 gap-3">200.25</Text>
             </View>
+            <View className='gap-1 flex-row items-center'>
+              {/* <Feather name="star" size={16} color="#FCD34D" /> */}
 
-            {/* Rating and Sales */}
-            <View className="flex-row items-center mb-6">
-              <View className="text-sm text-gray-600 mr-4">7,474 sold</View>
-              <Feather name="star" size={16} color="#FCD34D" />
-              <View className="text-sm text-gray-900 ml-1">4.9 (5,389 reviews)</View>
+              {/* <Ionicons name="checkmark-circle-sharp" size={24} color='#f97316' /> */}
+              {/* <View className='bg-sky-100 rounded-full h-[2rem] w-[1.9rem] justify-center items-center'> */}
+                {/* <FontAwesome6 name="check" size={16} color={'#0ea5e9'} /> */}
+              {/* </View> */}
+
+              <Text className="text-[1rem] font-semibold text-gray-900 ml-1">25% Off</Text>
             </View>
-
-            {/* Description */}
-            <View className="mb-6">
-              <Text className="text-lg font-semibold text-gray-900 mb-2">Description</Text>
-              <Text className="text-gray-600 leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
-              </Text>
-            </View>
-
-            {/* Color Selection */}
-            <View className="mb-6">
-              <Text className="text-lg font-semibold text-gray-900 mb-3">Color</Text>
-              <View className="flex-row space-x-3">
-                {colors.map((colorOption, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => setSelectedColor(index)}
-                    className={`w-10 h-10 rounded-full flex-row items-center justify-center ${
-                      selectedColor === index ? 'ring-2 ring-gray-400 ring-offset-2' : ''
-                    }`}
-                  >
-                    <View 
-                      className="w-8 h-8 rounded-full relative"
-                      style={{ backgroundColor: colorOption.color }}
-                    >
-                      {selectedColor === index && (
-                        <View className="absolute inset-0 flex-row items-center justify-center">
-                          <View className="w-3 h-3 rounded-full bg-white"></View>
-                        </View>
-                      )}
+          </View>
+          <View className="flex-row gap-5 items-center border-y border-gray-200 py-5 mb-5">
+            <Text className="text-lg font-semibold text-gray-900 mb-3">Pack Size :</Text>
+            <View className="flex-row gap-5">
+              {[1,2].map((colorOption, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => setSelectedColor(index)}
+                  className={`rounded-2xl flex-row items-center justify-center px-4 py-3 ${
+                    selectedColor === index ? 'border border-purple-300 bg-purple-50' : 'bg-gray-50 border border-gray-200'
+                  }`}
+                >
+                  <View className="">
+                    <Text className='text-[0.9rem] mb-1'>10 Tabs</Text>
+                    <View className='flex-row gap-2 items-end'>
+                      <Text className='text-[0.9rem]'>₹ 200</Text>
+                      {/* <Text className='line-through text-rose-500 text-sm'>240</Text> */}
                     </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            {/* Quantity */}
-            <View className="mb-8">
-              <Text className="text-lg font-semibold text-gray-900 mb-3">Quantity</Text>
-              <View className="flex-row items-center">
-                <TouchableOpacity 
-                  onPress={decrementQuantity}
-                  className="w-10 h-10 rounded-full border border-gray-300 flex-row items-center justify-center hover:bg-gray-50"
-                >
-                  <Feather name="minus" size={20} color="#6B7280" />
+                  </View>
                 </TouchableOpacity>
-                <View className="text-xl font-semibold mx-8 text-gray-900">{quantity}</View>
-                <TouchableOpacity 
-                  onPress={incrementQuantity}
-                  className="w-10 h-10 rounded-full border border-gray-300 flex-row items-center justify-center hover:bg-gray-50"
-                >
-                  <Feather name="plus"  size={20} color="#6B7280" />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Price and Add to Cart */}
-            <View className="flex-row items-center justify-between">
-              <View>
-                <Text className="text-sm text-gray-600 mb-1">Total price</Text>
-                <Text className="text-3xl font-bold text-gray-900">${(720 * quantity).toFixed(2)}</Text>
-              </View>
-              <TouchableOpacity className="bg-black px-8 py-4 rounded-full flex-row items-center hover:bg-gray-800 transition-colors">
-                <Ionicons name="bag-check" size={20} color="white" />
-                <View className="text-white font-semibold ml-2">Add to Cart</View>
-              </TouchableOpacity>
+              ))}
             </View>
           </View>
+          {/* Description */}
+          <View className="mb-6">
+            <Text className="text-lg font-semibold text-gray-900 mb-2">Description</Text>
+            <Text className="text-gray-600 leading-relaxed">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
+            </Text>
+          </View>
+
+          <View className='gap-4'>
+            <View className='flex-row gap-4 flex-1 border border-gray-200 p-4 items-center rounded-xl'>
+              <View className='h-14  w-14 rounded-xl justify-center items-center bg-teal-100'>
+                <FontAwesome name="check" size={26} color={colors.teal[700]} />
+              </View>
+              <View>
+                <Text className="font-medium text-slate-700 text-[12px] mr-auto mb-2">Best Before</Text>
+                <Text className="font-medium text-slate-700 text-[14px] mr-auto">May 31 2026</Text>
+              </View>
+            </View>
+            <View className='flex-row gap-4 flex-1 border border-gray-200 p-4 items-center rounded-xl'>
+              <View className='h-14  w-14 rounded-xl justify-center items-center bg-fuchsia-100'>
+                <FontAwesome name="shield" size={26} color={colors.fuchsia[600]} />
+              </View>
+              <View>
+                <Text className="font-medium text-slate-700 text-[12px] mr-auto mb-2">MFD By.</Text>
+                <Text className="font-medium text-slate-700 text-[14px] mr-auto">Zydus Wellness Limited</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Quantity */}
+          {/* <View className="mb-8">
+            <Text className="text-lg font-semibold text-gray-900 mb-3">Quantity</Text>
+            <View className="flex-row items-center">
+              <TouchableOpacity 
+                onPress={decrementQuantity}
+                className="w-10 h-10 rounded-full border border-gray-300 flex-row items-center justify-center hover:bg-gray-50"
+              >
+                <Feather name="minus" size={20} color="#6B7280" />
+              </TouchableOpacity>
+              <Text className="text-xl font-semibold mx-8 text-gray-900">{quantity}</Text>
+              <TouchableOpacity 
+                onPress={incrementQuantity}
+                className="w-10 h-10 rounded-full border border-gray-300 flex-row items-center justify-center hover:bg-gray-50"
+              >
+                <Feather name="plus"  size={20} color="#6B7280" />
+              </TouchableOpacity>
+            </View>
+          </View> */}
+
+          {/* Price and Add to Cart */}
+        </View>
+
+      </View>
+      <View>
+          <View className='m-4 shadow-sm rounded-2xl overflow-hidden'>
+            <Link href={'/appn/appnList'}>
+                <View className='flex-row gap-4 w-full bg-white p-5 items-center'>
+                    <FontAwesome name="shield" size={22} color={myColors.primary[500]} style={{width: 26}} />
+                    <Text className="font-medium text-slate-600 text-[16px] mr-auto">Shipping Details</Text>
+                    <Feather name="chevron-right" size={24} color='#6b7280' />
+                </View>
+            </Link>
+            <Pressable onPress={() => {}}>
+                <View className='flex-row gap-4 w-full bg-white p-5 items-center border-y border-gray-200'>
+                    <FontAwesome name="user" size={24} color={myColors.primary[500]} style={{width: 26}}/>
+                    <Text className="font-medium text-slate-600 text-[16px] mr-auto">Return Policy</Text>
+                    <Feather name="chevron-right" size={24} color='#6b7280' />
+                </View>
+            </Pressable>                
+            <Link href={'/appn/appnList'}>
+                <View className='flex-row gap-4 w-full bg-white p-5 items-center'>
+                    <FontAwesome name="shield" size={22} color={myColors.primary[500]} style={{width: 26}} />
+                    <Text className="font-medium text-slate-600 text-[16px] mr-auto">Privacy Policy</Text>
+                    <Feather name="chevron-right" size={24} color='#6b7280' />
+                </View>
+            </Link>
+        </View>
+        <View className="flex-row justify-between items-center pt-4 pb-3 px-5 bg-white">
+          <Text className="text-lg font-bold text-gray-800">Similar Products</Text>
+          <TouchableOpacity>
+            <Text className="text-purple-600 font-medium">See All</Text>
+          </TouchableOpacity>
+        </View> 
+        <View className='flex-row flex-wrap'>
+          {[1,2,3,4,5,6].map(item => (
+            <View key={item} className={`items-start bg-white p-4 border border-gray-100 w-1/2`}>
+              <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
+                <Image className='shadow-sm' source={{uri: 'https://admin.takehome.live//Content/ImageMaster/250309141146_1.jpg'}} style={{ width: 100, height: 140 }} />
+              </View>
+              <View className='flex-1 items-start mt-3'>
+                <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{'Glucon D Regular Refill 1 kg'.slice(0, 20)}</Text>
+                <View className='flex-row gap-4'>
+                  <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
+                  <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
+                </View>
+                {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+                <View className='justify-between flex-row items-center w-full'>
+                  <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
+                    <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
+                  </View>
+                  {/* <View className=''> */}
+                    <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
+                  {/* </View> */}
+                </View>
+              </View>
+            </View>
+          ))}
+
         </View>
       </View>
     </ScrollView>
