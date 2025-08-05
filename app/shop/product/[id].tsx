@@ -1,7 +1,7 @@
 import { BASE_URL, myColors } from '@/constants';
 import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
-import { add2Cart, buyNow, computeWithPackSize, getFrom } from '@/src/components/utils';
+import { add2Cart, buyNow, computeWithPackSize, getFrom, ProductCard } from '@/src/components/utils';
 import { removeFromCart } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
@@ -71,11 +71,11 @@ const ProductPage = () => {
   const packSizeList = product?.ItemPackSizeList?.map(i => <Text className={i.CodeId === packSize().PackSizeId ? 'current' : ''} key={i.CodeId} onClick={() => handlePackSize(i)} role='button'>{i.Description}</Text>);
 
   const handleAdd = () => {
-    add2Cart(isAdded, product, dispatch, packSize);
+    add2Cart(isAdded, product, packSize, dispatch);
   }
 
   const handleBuyNow = () => {
-    buyNow(dispatch, product, router, packSize);
+    buyNow(product, packSize, router, dispatch);
   }
 
   const input = product?.EXPDate || '';
@@ -233,29 +233,30 @@ const ProductPage = () => {
 
           {productData.data.itemMasterCollection.map((data, index) => {
             return (
-              <Link href={`/shop/product/${data.ItemId}`} className='w-1/2' key={data.LocationItemId}>
-                <View className={`items-start bg-white p-4 border border-gray-100`}>
-                  <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
-                    <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
-                  </View>
-                  <View className='flex-1 items-start mt-3'>
-                    <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
-                    <View className='flex-row gap-4'>
-                      <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
-                      <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
-                    </View>
-                    {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-                    <View className='justify-between flex-row items-center w-full'>
-                      <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
-                        <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
-                      </View>
-                      {/* <View className=''> */}
-                        <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
-                      {/* </View> */}
-                    </View>
-                  </View>
-                </View>
-              </Link>
+              <ProductCard data={data} width={'50%'} />
+              // <Link href={`/shop/product/${data.ItemId}`} className='w-1/2' key={data.LocationItemId}>
+              //   <View className={`items-start bg-white p-4 border border-gray-100`}>
+              //     <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
+              //       <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
+              //     </View>
+              //     <View className='flex-1 items-start mt-3'>
+              //       <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
+              //       <View className='flex-row gap-4'>
+              //         <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
+              //         <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
+              //       </View>
+              //       {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+              //       <View className='justify-between flex-row items-center w-full'>
+              //         <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
+              //           <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
+              //         </View>
+              //         {/* <View className=''> */}
+              //           <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
+              //         {/* </View> */}
+              //       </View>
+              //     </View>
+              //   </View>
+              // </Link>
             )
           })}
 

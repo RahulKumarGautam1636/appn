@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions,
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { GridLoader } from '@/src/components/utils';
+import { GridLoader, ProductCard } from '@/src/components/utils';
 import { Link } from 'expo-router';
 
 const CatCard = ({ data }: any) => {
@@ -49,31 +49,7 @@ const ShoppingAppScreen = () => {
               contentContainerClassName="flex-row"
               scrollEnabled={true}
               horizontal
-              renderItem={({item}: any) => (
-                <Link href={`/shop/product/${item.ItemId}`}>
-                  <View className={`items-start bg-white p-4 border border-gray-100`} style={{width: deviceWidth / 2 }}>
-                    <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
-                      <Image className='shadow-sm' resizeMode='contain' source={{uri: item.ItemImageURL}} style={{ width: '100%', height: 140 }} />
-                    </View>
-                    <View className='flex-1 items-start mt-3'>
-                      <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{item.Description.slice(0, 20)}</Text>
-                      <View className='flex-row gap-4'>
-                        <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
-                        <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
-                      </View>
-                      {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-                      <View className='justify-between flex-row items-center w-full'>
-                        <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
-                          <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
-                        </View>
-                        {/* <View className=''> */}
-                          <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
-                        {/* </View> */}
-                      </View>
-                    </View>
-                  </View>
-                </Link>
-              )}
+              renderItem={({item}: any) => (<ProductCard data={item} width={deviceWidth / 2} />)}
             />
             <View className='flex-row justify-center gap-4 py-3 bg-white'>
               <View className='h-2 w-2 bg-gray-500 rounded-full'></View>

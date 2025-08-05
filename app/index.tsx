@@ -1,6 +1,6 @@
 import { Link, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import './globals.css';
@@ -24,11 +24,8 @@ export default function App() {
       <SafeAreaProvider>
         <SafeAreaView className="flex-1">
           <Init />
-          {/* <View className='flex-1 w-full items-center justify-center p-5 gap-4'>
-              <ButtonPrimary title='OPEN OPD' onPress={() => router.push('./appn/tabs/home')} active={true} classes='rounded-2xl w-full' textClasses='tracking-widest' />
-              <ButtonPrimary title='OPEN PHARMACY' onPress={() => router.push('./shop/home')} active={true} classes='rounded-2xl w-full' textClasses='tracking-widest' />
-          </View> */}
-
+          
+          <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
           <View className="relative gap-4 flex-row items-center justify-center py-[6rem]">
               <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
               <Image className='' source={require('../assets/images/logo.png')} style={{ width: 75, height: 65 }} />
@@ -80,6 +77,8 @@ export default function App() {
               </TouchableOpacity>
             </View>
           </View>
+          </ScrollView>
+
           <Modals />
         </SafeAreaView>
       </SafeAreaProvider>

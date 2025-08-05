@@ -1,10 +1,13 @@
 import axios, { GenericAbortSignal } from "axios";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text, ImageBackground } from 'react-native';
+import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
 import { addToCart, dumpCart, removeFromCart } from "../store/slices/slices";
-import store from "../store/store";
+import store, { RootState } from "../store/store";
+import { Link, useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -258,7 +261,7 @@ export const GradientBG = ({ children, imgStyles={opacity: 0.8}, classes }: any)
   )
 }
 
-export const add2Cart = (isAdded, data, dispatch, computeWithPackSize, count=1) => {
+export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count=1) => {
   const state = store.getState();
   const locationId = state.appData.location.LocationId;
   if (!locationId) return alert('Please choose a Location.');
@@ -277,17 +280,6 @@ export const buyNow = (dispatch, data, router, computeWithPackSize, ) => {
   router.push('/checkout');
 }
 
-// export const addToWishlist2 = (computeWithPackSize, dispatch, data, isAddedToWishlist) => {
-//   const state = store.getState();
-//   const locationId = state.appData.location.LocationId;
-//   if (!locationId) return alert('Please choose a Location.');
-//   if (isAddedToWishlist) return wishlistAction('REMOVE_WISH_ITEM', data.LocationItemId, 'pharmacy');
-//   wishlistAction('ADD_WISH_ITEM', {...data, count: 1, ...computeWithPackSize()}, 'pharmacy');
-//   dispatch(removeFromCart(data.LocationItemId));
-//   let productToastData = { msg: 'Added to Wishlist', product: {name: data.Description, price: computeWithPackSize().SRate}, button: {text: 'View Wishlist', link: '/wishlist'} };
-//   // productToast(productToastData); 
-// }
-
 export const computeWithPackSize = (data, activePackSize, vType) => {      
   if (vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT') return data;
   if (!activePackSize) {
@@ -300,3 +292,75 @@ export const computeWithPackSize = (data, activePackSize, vType) => {
     }
   }
 } 
+
+
+export const ProductCard = ({ data, width }) => {
+
+  const compCode = useSelector((i: RootState) => i.compCode);
+  // const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+  const { vType } = useSelector((i: RootState) => i.company);
+  const cart = useSelector((i: RootState) => i.cart);
+  const isAdded = Object.values(cart).find((i: any) => i.LocationItemId === data.LocationItemId)
+
+  const [activePackSize, setPackSize] = useState('');
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+		const packSizeList = data.ItemPackSizeList;
+		if (packSizeList && packSizeList?.length) {
+			const firstSizeId = packSizeList[0];
+			setPackSize(firstSizeId);
+		} else {
+			setPackSize('');
+		}
+	},[data])
+
+  const handlePackSize = (i) => {
+		if (i.CodeId === packSize().PackSizeId) return;
+		setPackSize(i);
+	}
+
+  const packSize = () => {      
+    return computeWithPackSize(data, activePackSize, vType);
+  }
+
+  const packSizeList = data.ItemPackSizeList?.map(i => (
+    <TouchableOpacity onPress={() => handlePackSize(i)} key={i.CodeId} className={`px-3 py-[0.4rem] shadow-sm rounded-xl mt-2 ${i.CodeId === packSize().PackSizeId ? 'bg-blue-50' : 'bg-slate-100'}`} >
+      <Text className={`text-[0.8rem] ${i.CodeId === packSize().PackSizeId ? 'text-blue-600' : 'text-gray-700'}`}>{i.Description}</Text>
+    </TouchableOpacity>
+  ));
+
+  const handleAdd = () => {
+    add2Cart(isAdded, data, packSize, dispatch);
+  }
+
+  const handleBuyNow = () => {
+    buyNow(data, packSize, dispatch, router);
+  }
+
+  // Link href={`/shop/product/${data.ItemId}`}
+  return (
+    <View style={{width: width }}>
+      <View className={`items-start bg-white p-4 border border-gray-100 w-full`}>
+        <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
+          <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
+        </View>
+        <View className='flex-1 items-start mt-3'>
+          <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
+          <View className='flex-row gap-4'>
+            <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
+            <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
+          </View>
+          {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+          <View className='justify-between flex-row items-center w-full'>
+            {packSizeList}
+            <TouchableOpacity onPress={handleAdd}>
+              <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+}
