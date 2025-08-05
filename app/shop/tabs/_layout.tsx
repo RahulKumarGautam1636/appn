@@ -16,7 +16,7 @@ export default function TabsLayout() {
   const tabs = [
     // { name: 'Home', icon: 'home', key: 'home' },
     { name: 'Home', icon: 'home', key: 'home' },
-    { name: 'Category', icon: 'grid', key: 'product' },
+    // { name: 'Category', icon: 'grid', key: 'product' },
     { name: 'Account', icon: 'person', key: 'profile' },
     { name: 'Cart', icon: 'cart', key: 'cart' },
   ];

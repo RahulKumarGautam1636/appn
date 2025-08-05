@@ -1,5 +1,6 @@
 import { BASE_URL, myColors } from '@/constants';
 import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
+import ProductImagePreview from '@/src/components/previewBox';
 import { add2Cart, buyNow, computeWithPackSize, getFrom } from '@/src/components/utils';
 import { removeFromCart } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
@@ -34,7 +35,7 @@ const ProductPage = () => {
   useEffect(() => {
     async function getSliderItemImges() {
       // loaderAction(true);
-      const res = await getFrom(`${BASE_URL}/api/Pharma/Get?CID=${compCode}&PID=${id}&LOCID=${locationId}`, {}, setProductData);
+      const res = await getFrom(`${BASE_URL}/api/Pharma/GetProductDetails?CID=${compCode}&PID=${id}&LOCID=${locationId}`, {}, setProductData);
       if (res) {
         setProductData(res); 
       } else {
@@ -77,43 +78,41 @@ const ProductPage = () => {
     buyNow(dispatch, product, router, packSize);
   }
 
-  console.log(productData, id)
-  let bestBeforeDate = product?.EXPDate;
-  bestBeforeDate = mmDDyyyyDate(bestBeforeDate, '/', '/');																		
-  let bestBeforeDateString = bestBeforeDate ? new Date(bestBeforeDate).toDateString().split(' ').slice(1, 4).join(' ') : '';
+  const input = product?.EXPDate || '';
+  const [day, month, year] = input.split("/");
+  const date = new Date(`${year}-${month}-${day}`).toDateString().split(' ').slice(1, 4).join(' ');
+
+  const images = [
+    { uri: 'https://admin.takehome.live/Content/ImageMaster/856441_2.jpg' },
+    { uri: 'https://admin.takehome.live/Content/ImageMaster/250506161756_1.png' },
+    { uri: 'https://admin.takehome.live/Content/ImageMaster/860872_2.png' },
+  ];
+
+  const images2 = productData.data.ImageMasterCollection.map((i: any) => ({uri: i.ImgURL}));
+  console.log(images2)
 
   return (
-    <ScrollView contentContainerClassName='bg-purple-100 min-h-full'>
-      {/* Header */}
+    <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
       <View className="">
-        {/* Product Image */}
-        <View className="bg-white p-8 items-center border-b border-gray-200">
-          <View className="bg-gray-50">
-            <TouchableOpacity className="p-2">
+        <View className="bg-white p-8 items-center relative">
+          <TouchableOpacity onPress={() => router.back()} className="p-2 bg-gray-100 rounded-full absolute top-[2rem] left-[2rem] z-20">
               <Ionicons name="arrow-back-outline" size={24} color="black" />
             </TouchableOpacity>
-          </View>
-          <View className="w-64 h-64 flex-row items-center justify-center mb-6">
-            {/* Headphone illustration */}
-            <View className="relative">
-
-            </View>
+          <View className="items-start flex-row mb-2">
+            <ProductImagePreview images={images2} />
           </View>
           
-          {/* Page indicators */}
-          <View className="flex-row space-x-2">
+          {/* <View className="flex-row space-x-2">
             <View className="w-8 h-1 bg-black rounded-full"></View>
             <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
             <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
             <View className="w-2 h-1 bg-gray-300 rounded-full"></View>
-          </View>
+          </View> */}
         </View>
 
-        {/* Product Info */}
-        <View className="bg-white p-6 shadow-sm">
-          {/* Title and Favorite */}
+        <View className="bg-white px-6 pb-6 shadow-sm">
           <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-2xl font-bold text-gray-900">{product.Description}</Text>
+            <Text className="text-2xl font-bold text-gray-700">{product.Description}</Text>
             <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
               <Feather 
                 name="heart"
@@ -122,13 +121,10 @@ const ProductPage = () => {
               />
             </TouchableOpacity>
           </View>
-
-          {/* Rating and Sales */}
           <View className="flex-row items-center mb-6">
             <View className='gap-2 flex-row items-center'>
-              <FontAwesome name="rupee" size={19} color="#6b21a8" />
-              <Text className="text-[1.3rem] font-bold text-purple-800 mr-4 gap-3 leading-7">{packSize().SRate}</Text>
-              <Text className="text-[1rem] font-semibold line-through text-red-600 mr-4 gap-3">{packSize().ItemMRP}</Text>
+              <Text className="text-[1.3rem] font-bold text-purple-800 mr-4 gap-3 leading-7">₹ {packSize().SRate}</Text>
+              <Text className="text-[1rem] font-semibold line-through text-red-600 mr-4 gap-3">₹ {packSize().ItemMRP}</Text>
             </View>
             <View className='gap-1 flex-row items-center'>
               {/* <Feather name="star" size={16} color="#FCD34D" /> */}
@@ -138,7 +134,7 @@ const ProductPage = () => {
                 {/* <FontAwesome6 name="check" size={16} color={'#0ea5e9'} /> */}
               {/* </View> */}
 
-              <Text className="text-[1rem] font-semibold text-gray-900 ml-1">{packSize().DiscountPer}% Off</Text>
+              <Text className="text-[1rem] font-semibold text-green-800 ml-1">{packSize().DiscountPer}% Off</Text>
             </View>
           </View>
           <View className="flex-row gap-5 items-center border-y border-gray-200 py-5 mb-5">
@@ -163,82 +159,69 @@ const ProductPage = () => {
               ))}
             </View>
           </View>
-          {/* Description */}
-          <View className="mb-6">
-            <Text className="text-lg font-semibold text-gray-900 mb-2">Description</Text>
+          <View className={`mb-6 ${product?.Technicalname?.length > 30 ? 'gap-2' : 'flex-row items-center gap-4'}`}>
+            <Text className="text-lg font-semibold text-gray-900">Description</Text>
             <Text className="text-gray-600 leading-relaxed">
               {product?.Technicalname}
               {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. */}
             </Text>
-          </View>
+          </View>         
 
           <View className='gap-4'>
-            <View className='flex-row gap-4 flex-1 border border-gray-200 p-4 items-center rounded-xl'>
+            <View className='flex-row gap-4 flex-1 border border-gray-200 bg-slate-50 p-4 items-center rounded-xl'>
               <View className='h-14  w-14 rounded-xl justify-center items-center bg-teal-100'>
                 <FontAwesome name="check" size={26} color={colors.teal[700]} />
               </View>
               <View>
-                <Text className="font-medium text-slate-700 text-[12px] mr-auto mb-2">Best Before</Text>
-                <Text className="font-medium text-slate-700 text-[14px] mr-auto">{bestBeforeDateString}</Text>
+                <Text className="font-medium text-gray-500 text-[13px] mr-auto mb-2">Best Before</Text>
+                <Text className="font-medium text-slate-700 text-[14px] mr-auto">{date}</Text>
               </View>
             </View>
-            <View className='flex-row gap-4 flex-1 border border-gray-200 p-4 items-center rounded-xl'>
+            <View className='flex-row gap-4 flex-1 border border-gray-200 bg-slate-50 p-4 items-center rounded-xl'>
               <View className='h-14  w-14 rounded-xl justify-center items-center bg-fuchsia-100'>
                 <FontAwesome name="shield" size={26} color={colors.fuchsia[600]} />
               </View>
               <View>
-                <Text className="font-medium text-slate-700 text-[12px] mr-auto mb-2">MFD By.</Text>
+                <Text className="font-medium text-gray-500 text-[13px] mr-auto mb-2">MFD By.</Text>
                 <Text className="font-medium text-slate-700 text-[14px] mr-auto">{product?.ManufacturBY}</Text>
               </View>
             </View>
           </View>
-
-          {/* Quantity */}
-            {/* <Text className="text-lg font-semibold text-gray-900 mb-3">Quantity</Text> */}
-            <View className="flex-row items-center gap-6 justify-between mt-5 mb-1">
-              <TouchableOpacity 
-                onPress={decrementQuantity}
-                className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center"
-              >
-                <Feather name="minus" size={20} color="#6B7280" />
-              </TouchableOpacity>
-              <Text className="text-xl font-semibold text-gray-900">{quantity}</Text>
-              <TouchableOpacity 
-                onPress={incrementQuantity}
-                className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center"
-              >
-                <Feather name="plus"  size={20} color="#6B7280" />
-              </TouchableOpacity>
-              <ButtonPrimary title='ADD TO CART' isLoading={false} active={true} classes='flex-1 !rounded-2xl' />
-            </View>
-
-          {/* Price and Add to Cart */}
+          <View className="flex-row items-center gap-6 justify-between mt-6 mb-1">
+            <TouchableOpacity onPress={decrementQuantity} className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center">
+              <Feather name="minus" size={20} color="#6B7280" />
+            </TouchableOpacity>
+            <Text className="text-xl font-semibold text-gray-900">{quantity}</Text>
+            <TouchableOpacity onPress={incrementQuantity} className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center">
+              <Feather name="plus"  size={20} color="#6B7280" />
+            </TouchableOpacity>
+            <ButtonPrimary title='ADD TO CART' isLoading={false} active={true} classes='flex-1 !rounded-2xl' />
+          </View>
         </View>
-
       </View>
       <View>
-          <View className='m-4 shadow-sm rounded-2xl overflow-hidden'>
-            <Link href={'/appn/appnList'}>
-                <View className='flex-row gap-4 w-full bg-white p-5 items-center'>
-                    <FontAwesome name="shield" size={22} color={myColors.primary[500]} style={{width: 26}} />
-                    <Text className="font-medium text-slate-600 text-[16px] mr-auto">Shipping Details</Text>
-                    <Feather name="chevron-right" size={24} color='#6b7280' />
-                </View>
-            </Link>
-            <Pressable onPress={() => {}}>
-                <View className='flex-row gap-4 w-full bg-white p-5 items-center border-y border-gray-200'>
-                    <FontAwesome name="user" size={24} color={myColors.primary[500]} style={{width: 26}}/>
-                    <Text className="font-medium text-slate-600 text-[16px] mr-auto">Return Policy</Text>
-                    <Feather name="chevron-right" size={24} color='#6b7280' />
-                </View>
-            </Pressable>                
-            <Link href={'/appn/appnList'}>
-                <View className='flex-row gap-4 w-full bg-white p-5 items-center'>
-                    <FontAwesome name="shield" size={22} color={myColors.primary[500]} style={{width: 26}} />
-                    <Text className="font-medium text-slate-600 text-[16px] mr-auto">Privacy Policy</Text>
-                    <Feather name="chevron-right" size={24} color='#6b7280' />
-                </View>
-            </Link>
+        <View className='m-4 shadow-sm rounded-2xl overflow-hidden'>
+          <Link href={'/appn/appnList'}>
+              <View className='flex-row gap-4 w-full bg-white p-5 items-center'>
+                  <FontAwesome name="shield" size={22} color={myColors.primary[500]} style={{width: 26}} />
+                  <Text className="font-medium text-slate-600 text-[15px] mr-auto">Shipping Details</Text>
+                  <Feather name="chevron-right" size={24} color='#6b7280' />
+              </View>
+          </Link>
+          <Pressable onPress={() => {}}>
+              <View className='flex-row gap-4 w-full bg-white p-5 items-center border-y border-gray-200'>
+                  <FontAwesome name="user" size={24} color={myColors.primary[500]} style={{width: 26}}/>
+                  <Text className="font-medium text-slate-600 text-[15px] mr-auto">Return Policy</Text>
+                  <Feather name="chevron-right" size={24} color='#6b7280' />
+              </View>
+          </Pressable>                
+          <Link href={'/appn/appnList'}>
+              <View className='flex-row gap-4 w-full bg-white p-5 items-center'>
+                  <FontAwesome name="shield" size={22} color={myColors.primary[500]} style={{width: 26}} />
+                  <Text className="font-medium text-slate-600 text-[15px] mr-auto">Privacy Policy</Text>
+                  <Feather name="chevron-right" size={24} color='#6b7280' />
+              </View>
+          </Link>
         </View>
         <View className="flex-row justify-between items-center pt-4 pb-3 px-5 bg-white">
           <Text className="text-lg font-bold text-gray-800">Similar Products</Text>
@@ -247,29 +230,34 @@ const ProductPage = () => {
           </TouchableOpacity>
         </View> 
         <View className='flex-row flex-wrap'>
-          {[1,2,3,4,5,6].map(item => (
-            <View key={item} className={`items-start bg-white p-4 border border-gray-100 w-1/2`}>
-              <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
-                <Image className='shadow-sm' source={{uri: 'https://admin.takehome.live//Content/ImageMaster/250309141146_1.jpg'}} style={{ width: 100, height: 140 }} />
-              </View>
-              <View className='flex-1 items-start mt-3'>
-                <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{'Glucon D Regular Refill 1 kg'.slice(0, 20)}</Text>
-                <View className='flex-row gap-4'>
-                  <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
-                  <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
-                </View>
-                {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-                <View className='justify-between flex-row items-center w-full'>
-                  <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
-                    <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
+
+          {productData.data.itemMasterCollection.map((data, index) => {
+            return (
+              <Link href={`/shop/product/${data.ItemId}`} className='w-1/2' key={data.LocationItemId}>
+                <View className={`items-start bg-white p-4 border border-gray-100`}>
+                  <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
+                    <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
                   </View>
-                  {/* <View className=''> */}
-                    <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
-                  {/* </View> */}
+                  <View className='flex-1 items-start mt-3'>
+                    <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
+                    <View className='flex-row gap-4'>
+                      <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
+                      <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
+                    </View>
+                    {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+                    <View className='justify-between flex-row items-center w-full'>
+                      <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
+                        <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
+                      </View>
+                      {/* <View className=''> */}
+                        <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
+                      {/* </View> */}
+                    </View>
+                  </View>
                 </View>
-              </View>
-            </View>
-          ))}
+              </Link>
+            )
+          })}
 
         </View>
       </View>
