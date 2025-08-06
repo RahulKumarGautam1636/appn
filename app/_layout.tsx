@@ -60,6 +60,7 @@ export default function RootLayout() {
                 {/* <Stack.Screen name="shop" options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
                 <Stack.Screen name="shop/tabs" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="shop/product/[id]" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="shop/cart" options={{ headerShown: false, animation: 'slide_from_left' }} />
               </Stack>
             </KeyboardAvoidingView>
           </SafeAreaView>

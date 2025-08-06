@@ -339,9 +339,9 @@ export const ProductCard = ({ data, width }) => {
     buyNow(data, packSize, dispatch, router);
   }
 
-  // Link href={`/shop/product/${data.ItemId}`}
+  // 
   return (
-    <View style={{width: width }}>
+    <Link href={`/shop/product/${data.ItemId}`} style={{width: width }} asChild>
       <View className={`items-start bg-white p-4 border border-gray-100 w-full`}>
         <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
           <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
@@ -349,8 +349,8 @@ export const ProductCard = ({ data, width }) => {
         <View className='flex-1 items-start mt-3'>
           <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
           <View className='flex-row gap-4'>
-            <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
-            <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
+            <Text className="text-[0.92rem] font-semibold text-green-700">₹ 550.23</Text>
+            <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ 250.60</Text>
           </View>
           {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
           <View className='justify-between flex-row items-center w-full'>
@@ -361,6 +361,6 @@ export const ProductCard = ({ data, width }) => {
           </View>
         </View>
       </View>
-    </View>
+    </Link>
   )
 }
