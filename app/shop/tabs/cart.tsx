@@ -153,7 +153,7 @@ const Cart = () => {
                 <Text className="text-2xl font-bold text-sky-800">₹ {totalPrice.toFixed(2)}</Text>
             </View>
             
-            <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} classes='flex-1 !rounded-2xl bg-gray-700' />
+            <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
         </View>
       </ScrollView>
   );

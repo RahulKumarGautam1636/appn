@@ -6,7 +6,7 @@ import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/componen
 
 const compCodeSlice = createSlice({
   name: 'compCode',
-  initialState: 'yFObpUjTIGhK9%2B4bFmadRg==', // 'FFCeIi27FQMTNGpatwiktw==', // '5KR8RKKh%2BtHG4iszAzAjJQ==',
+  initialState: 'FFCeIi27FQMTNGpatwiktw==', //'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==',
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {
       state = action.payload;

@@ -68,41 +68,40 @@ const Cart = () => {
           <Text className="text-lg font-semibold text-black">Chckout</Text>
         </View>
       </View>
-      <View className='bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200'>
-        <View className="flex-row items-center gap-4 mb-4">
-          <View className='w-[4rem] h-[4rem] bg-purple-50 shadow-sm rounded-2xl items-center justify-center'>
-            {/* <FontAwesome6 name="location-arrow" size={34} color={colors.purple[600]} /> */}
-            <Ionicons name="person" size={31} color={colors.purple[600]} />
+      <View className="bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200 flex-row items-center gap-4">
+        <View className='w-[4rem] h-[4rem] bg-purple-50 shadow-sm rounded-2xl items-center justify-center'>
+          {/* <FontAwesome6 name="location-arrow" size={34} color={colors.purple[600]} /> */}
+          <Ionicons name="person" size={31} color={colors.purple[600]} />
+        </View>
+        <View className="flex-1">
+          <View className='justify-between flex-row mb-2'>
+              <Text className="text-base font-medium text-black">Sameer Singh</Text>
+              <TouchableOpacity onPress={() => {}} className="">
+                <FontAwesome name="pencil" size={20} color={colors.blue[500]} />
+              </TouchableOpacity>
           </View>
-          <View className="flex-1">
-            <View className='justify-between flex-row mb-2'>
-                <Text className="text-base font-medium text-black">Sameer Singh</Text>
-                <TouchableOpacity onPress={() => {}} className="">
-                  <FontAwesome name="pencil" size={20} color={colors.blue[500]} />
-                </TouchableOpacity>
-            </View>
-            <View className="flex-row items-center gap-3  mb-1">
-              <FontAwesome6 name="phone-volume" size={12} color={colors.orange[500]} />
-              <Text className="text-gray-600">70032909820</Text>
-            </View>
+          <View className="flex-row items-center gap-3  mb-1">
+            <FontAwesome6 name="phone-volume" size={12} color={colors.orange[500]} />
+            <Text className="text-gray-600">70032909820</Text>
           </View>
         </View>
-        <View className='bg-white rounded-3xl mt-1'>
-            <View className='justify-between flex-row px-1 py-[0.9rem] items-center border-t border-gray-100 gap-4'>
-                <View className='flex-row items-center gap-3'>
-                    <Text className="text-slate-600 font-bold text-[12px] items-center leading-5">Address :</Text>
-                </View>
-                <Text className="text-slate-700 text-[12px] ml-auto leading-5 flex-1 text-end">Labonya Apartment, Flat No. GA, Chittaranjan Park, B-1/312, Kalyani,</Text>
-            </View>
-            <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
-                <Text className="text-slate-600 font-bold text-[12px] mr-auto">Pin Code :</Text>
-                <Text className="text-[12px] text-slate-700">741235</Text>
-            </View>
-            <View className='flex-row gap-3 px-1 py-[0.9rem]'>
-                <Text className="text-slate-600 font-bold text-[12px] mr-auto">E-mail :</Text>
-                <Text className="text-[12px] text-slate-700">ssameer7071@gmail.com</Text>
-            </View>
-        </View>
+      </View>
+      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Address Details</Text>
+      <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
+          <View className='justify-between flex-row px-1 py-[0.9rem] items-start gap-4'>
+              <View className='flex-row items-center gap-3'>
+                  <Text className="text-slate-600 font-bold text-[12px] items-center leading-5">Address :</Text>
+              </View>
+              <Text className="text-slate-700 text-[12px] ml-auto leading-5 flex-1 text-end">Labonya Apartment, Flat No. GA, Chittaranjan Park, B-1/312, Kalyani,</Text>
+          </View>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+              <Text className="text-slate-600 font-bold text-[12px] mr-auto">Pin Code :</Text>
+              <Text className="text-[12px] text-slate-700">741235</Text>
+          </View>
+          <View className='flex-row gap-3 px-1 py-[0.9rem]'>
+              <Text className="text-slate-600 font-bold text-[12px] mr-auto">E-mail :</Text>
+              <Text className="text-[12px] text-slate-700">ssameer7071@gmail.com</Text>
+          </View>
       </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Service Location</Text>
       <View className='bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200'>
@@ -200,7 +199,7 @@ const Cart = () => {
                 <Text className="text-2xl font-bold text-sky-800">₹ {totalPrice.toFixed(2)}</Text>
             </View>
             
-            <ButtonPrimary title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl bg-gray-700' />
+            <ButtonPrimary title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
         </View>
       </ScrollView>
   );
