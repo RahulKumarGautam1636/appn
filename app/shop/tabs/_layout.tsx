@@ -19,6 +19,7 @@ export default function TabsLayout() {
     { name: 'Checkout', icon: 'grid', key: 'checkout' },
     { name: 'Account', icon: 'person', key: 'profile' },
     { name: 'Cart', icon: 'cart', key: 'cart' },
+    { name: 'Orders', icon: 'gift', key: 'orders' },
   ];
 
   const lab = useSelector((i: RootState) => i.cart);

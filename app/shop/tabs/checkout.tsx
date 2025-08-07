@@ -201,7 +201,7 @@ const Cart = () => {
             
             <ButtonPrimary title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
         </View>
-      </ScrollView>
+    </ScrollView>
   );
 };
 
