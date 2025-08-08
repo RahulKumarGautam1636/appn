@@ -6,8 +6,9 @@ import Carousel from "react-native-reanimated-carousel";
 import { addToCart, dumpCart, removeFromCart } from "../store/slices/slices";
 import store, { RootState } from "../store/store";
 import { Link, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
+import colors from "tailwindcss/colors";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -331,7 +332,8 @@ export const ProductCard = ({ data, width }) => {
     </TouchableOpacity>
   ));
 
-  const handleAdd = () => {
+  const handleAdd = (e) => {
+    e.stopPropagation();
     add2Cart(isAdded, data, packSize, dispatch);
   }
 
@@ -341,7 +343,7 @@ export const ProductCard = ({ data, width }) => {
 
   // 
   return (
-    <Link href={`/shop/product/${data.ItemId}`} style={{width: width }} asChild>
+    <TouchableOpacity onPress={() => router.push(`/shop/product/${data.ItemId}`)} style={{width: width }}>
       <View className={`items-start bg-white p-4 border border-gray-100 w-full`}>
         <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
           <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
@@ -361,6 +363,46 @@ export const ProductCard = ({ data, width }) => {
           </View>
         </View>
       </View>
-    </Link>
+    </TouchableOpacity>
   )
 }
+
+export const OrderCard = ({ data }) => {
+  return (
+    <View className="bg-white rounded-2xl p-4 shadow-sm border-b border-gray-200">
+      {/* Header with airline info and price */}
+      <View className="flex-row justify-between items-center pb-4">
+        <View className="flex-row items-center gap-3">
+          <Feather name="gift" size={21} color={colors.purple[100]} className='bg-gray-600 p-[0.7rem] rounded-full' />
+          <View>
+            <Text className="text-gray-500 text-sm">ORDER ID</Text>
+            <Text className="font-semibold text-[1.05rem] text-gray-800 mt-1">S500000521</Text>
+          </View>
+        </View>
+        <Feather name="arrow-right" size={24} color={colors.slate[600]} />
+      </View>
+      <View className="flex-row items-center justify-between mb-4 py-4 px-5 bg-slate-100 rounded-2xl">
+        <View className="items-center">
+          <Text className="text-gray-500 font-medium text-[0.95rem]">Order Value</Text>
+          <Text className="text-[1.1rem] font-semibold text-sky-700 mt-4">₹ 2025.25</Text>
+        </View>
+        <Text className="font-semibold text-pink-600 mb-auto my-auto">3 Items</Text>
+        <View className="items-center">
+          <Text className="text-gray-500 font-medium text-[0.95rem]">Order Date</Text>
+          <Text className="text-[1.05rem] font-semibold text-sky-700 mt-4">17-05-2025</Text>
+        </View>
+      </View>
+      <View className="flex-row items-center gap-2 py-1">
+        <Text className={`text-gray-600 text-[14px] font-semibold`}>Status : </Text>
+        <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${true ? 'bg-green-50' : 'bg-sky-50'}`}>
+            <Text className={`text-[13px] font-medium ${true ? 'text-green-600' : 'text-sky-600'}`}>{true ? 'Confirmed' : 'Booked'}</Text>
+        </View>
+
+        <Text className="text-gray-600 text-[14px] font-semibold">Service : </Text>
+        <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${false ? 'bg-green-50' : 'bg-yellow-50'}`}>
+            <Text className={`text-[13px] font-medium ${false ? 'text-green-600' : 'text-yellow-600'}`}>{false ? 'Done' : 'Pending'}</Text>
+        </View>
+      </View>
+    </View>
+  );
+};

@@ -92,7 +92,7 @@ const OrderStatus = () => {
       <View className="flex-row items-center justify-between pb-3 border-b border-gray-100">
         <View className="flex-row items-center">
           <Ionicons name="chevron-back" size={22} color="#000" className="mr-2" />
-          <Text className="text-lg font-semibold text-black">Chckout</Text>
+          <Text className="text-lg font-semibold text-black">Order Details</Text>
         </View>
       </View>
       <View className="bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200 flex-row items-center gap-4">
@@ -117,17 +117,17 @@ const OrderStatus = () => {
       <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
           <View className='justify-between flex-row px-1 py-[0.9rem] items-start gap-4'>
               <View className='flex-row items-center gap-3'>
-                  <Text className="text-slate-600 font-bold text-[12px] items-center leading-5">Address :</Text>
+                  <Text className="text-slate-600 font-bold text-[13px] items-center leading-6">Address :</Text>
               </View>
-              <Text className="text-slate-700 text-[12px] ml-auto leading-5 flex-1 text-end">Labonya Apartment, Flat No. GA, Chittaranjan Park, B-1/312, Kalyani,</Text>
+              <Text className="text-slate-700 text-[13px] ml-auto leading-6 flex-1 text-right">Labonya Apartment, Flat No. GA, Chittaranjan Park, B-1/312, Kalyani,</Text>
           </View>
           <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
-              <Text className="text-slate-600 font-bold text-[12px] mr-auto">Pin Code :</Text>
-              <Text className="text-[12px] text-slate-700">741235</Text>
+              <Text className="text-slate-600 font-bold text-[13px] mr-auto">Pin Code :</Text>
+              <Text className="text-[13px] text-slate-700">741235</Text>
           </View>
           <View className='flex-row gap-3 px-1 py-[0.9rem]'>
-              <Text className="text-slate-600 font-bold text-[12px] mr-auto">E-mail :</Text>
-              <Text className="text-[12px] text-slate-700">ssameer7071@gmail.com</Text>
+              <Text className="text-slate-600 font-bold text-[13px] mr-auto">E-mail :</Text>
+              <Text className="text-[13px] text-slate-700">ssameer7071@gmail.com</Text>
           </View>
       </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Service Location</Text>
@@ -230,26 +230,23 @@ const OrderStatus = () => {
                             <Feather name={step.icon} size={16} color={step.completed ? 'white' : '#9CA3AF'} />
                         </View>
                         <View className="flex-1 ml-4">
-                            <Text className={`font-semibold text-base mb-1 ${step.completed ? 'text-gray-900' : 'text-gray-400'}`}>
+                            <Text className={`font-semibold text-base mb-[0.4rem] ${step.completed ? 'text-gray-900' : 'text-gray-500'}`}>
                                 {step.title}
                             </Text>
-                            <Text className={`text-sm ${step.completed ? 'text-gray-600' : 'text-gray-400'}`}>
+                            <Text className={`text-sm ${step.completed ? 'text-gray-600' : 'text-gray-500'}`}>
                                 {step.date}
                             </Text>
                         </View>
                         <View className="my-auto">
-                            <Feather name={getStatusIcon(step.title)} size={20} color={step.completed ? '#D97706' : '#D1D5DB'} />
+                            <Feather name={getStatusIcon(step.title)} size={20} color={step.completed ? '#D97706' : '#9ca3af'} />
                         </View>
                     </View>
                 ))}
             </View>
         </View>
-        <View className="">
-            <View className="flex-row justify-between items-center mt-2 mb-4">
-                <Text className="text-md text-gray-600">Grand Total</Text>
-                <Text className="text-2xl font-bold text-sky-800">₹ {totalPrice.toFixed(2)}</Text>
-            </View>
-            <ButtonPrimary title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
+        <View className="flex-row gap-4 mt-4">
+            <ButtonPrimary title='NEED HELP' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-gray-700' />
+            <ButtonPrimary title='CANCEL' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' />
         </View>
     </ScrollView>
   );
