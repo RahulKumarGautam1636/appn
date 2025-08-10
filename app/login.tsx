@@ -26,7 +26,7 @@ const Login = ({ modal }: any) => {
     const user = useSelector((state: RootState) => state.user);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
-    const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });
+    const [loginData, setLoginData] = useState({ phone: '9330241456', password: '8583814626', EncCompanyId: compCode });
     
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');

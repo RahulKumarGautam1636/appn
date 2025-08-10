@@ -9,6 +9,7 @@ import { Link, useRouter } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "tailwindcss/colors";
+import ButtonPrimary from ".";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -351,8 +352,8 @@ export const ProductCard = ({ data, width }) => {
         <View className='flex-1 items-start mt-3'>
           <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
           <View className='flex-row gap-4'>
-            <Text className="text-[0.92rem] font-semibold text-green-700">₹ 550.23</Text>
-            <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ 250.60</Text>
+            <Text className="text-[0.92rem] font-semibold text-green-700">₹ {packSize().SRate}</Text>
+            <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
           </View>
           {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
           <View className='justify-between flex-row items-center w-full'>
@@ -367,42 +368,127 @@ export const ProductCard = ({ data, width }) => {
   )
 }
 
-export const OrderCard = ({ data }) => {
+export const CartCard = ({ data }) => {
+  const dispatch = useDispatch();
+  const activeItem = data.ItemPackSizeList.find(i => i.CodeId === data.PackSizeId);
+  const activePackSize = activeItem ? activeItem.Description : 'N/A';
   return (
-    <View className="bg-white rounded-2xl p-4 shadow-sm border-b border-gray-200">
-      {/* Header with airline info and price */}
-      <View className="flex-row justify-between items-center pb-4">
-        <View className="flex-row items-center gap-3">
-          <Feather name="gift" size={21} color={colors.purple[100]} className='bg-gray-600 p-[0.7rem] rounded-full' />
-          <View>
-            <Text className="text-gray-500 text-sm">ORDER ID</Text>
-            <Text className="font-semibold text-[1.05rem] text-gray-800 mt-1">S500000521</Text>
+    <View key={data.LocationItemId} className="flex-row items-center bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200">
+      <Image source={{ uri: data.ItemImageURL }} className="w-[5.5rem] h-[5.9rem] rounded-2xl border border-gray-100 mr-4" resizeMode="cover" />
+      <View className="flex-1">
+          <View className='justify-between flex-row mb-2'>
+              <Text className="text-base font-medium text-sky-800 flex-1">{data.Description}</Text>
+              <TouchableOpacity onPress={() => dispatch(removeFromCart(data.LocationItemId))} className="">
+                  <Ionicons name="trash-outline" size={20} color={colors.rose[500]} />
+              </TouchableOpacity>
           </View>
+        
+        <View className="flex-row items-center mb-3">
+          {/* <ColorIndicator color={data.color} /> */}
+          <Text className="text-sm text-gray-600 mr-3">₹ {data.SRate}</Text>
+          {/* {data.size && (
+            <> */}
+              <View className="w-1 h-1 bg-gray-400 rounded-full mr-3" />
+              <Text className="text-sm text-gray-600">Pack : {activePackSize}</Text>
+            {/* </>
+          )} */}
         </View>
-        <Feather name="arrow-right" size={24} color={colors.slate[600]} />
-      </View>
-      <View className="flex-row items-center justify-between mb-4 py-4 px-5 bg-slate-100 rounded-2xl">
-        <View className="items-center">
-          <Text className="text-gray-500 font-medium text-[0.95rem]">Order Value</Text>
-          <Text className="text-[1.1rem] font-semibold text-sky-700 mt-4">₹ 2025.25</Text>
-        </View>
-        <Text className="font-semibold text-pink-600 mb-auto my-auto">3 Items</Text>
-        <View className="items-center">
-          <Text className="text-gray-500 font-medium text-[0.95rem]">Order Date</Text>
-          <Text className="text-[1.05rem] font-semibold text-sky-700 mt-4">17-05-2025</Text>
-        </View>
-      </View>
-      <View className="flex-row items-center gap-2 py-1">
-        <Text className={`text-gray-600 text-[14px] font-semibold`}>Status : </Text>
-        <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${true ? 'bg-green-50' : 'bg-sky-50'}`}>
-            <Text className={`text-[13px] font-medium ${true ? 'text-green-600' : 'text-sky-600'}`}>{true ? 'Confirmed' : 'Booked'}</Text>
-        </View>
-
-        <Text className="text-gray-600 text-[14px] font-semibold">Service : </Text>
-        <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${false ? 'bg-green-50' : 'bg-yellow-50'}`}>
-            <Text className={`text-[13px] font-medium ${false ? 'text-green-600' : 'text-yellow-600'}`}>{false ? 'Done' : 'Pending'}</Text>
+        
+        <View className="flex-row items-center justify-between">
+          <Text className="text-lg font-semibold text-gray-700">₹ {(data.count * data.SRate).toFixed(2)}</Text>
+          
+          <View className="flex-row items-center bg-gray-100 rounded-2xl">
+            <TouchableOpacity onPress={() => {if (data.count !== 1) dispatch(addToCart({...data, count: data.count - 1}))}} className="w-9 h-9 items-center justify-center">
+              <Ionicons name="remove" size={16} color="#666" />
+            </TouchableOpacity>
+            
+            <Text className="mx-2 text-base font-medium text-black">{data.count}</Text>
+            
+            <TouchableOpacity onPress={() => dispatch(addToCart({...data, count: data.count + 1}))} className="w-9 h-9 items-center justify-center">
+              <Ionicons name="add" size={16} color="#666" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
+  )
+}
+
+export const OrderCard = ({ data }: any) => {
+
+  return (
+    <Link href={`/shop/orderDetails/${data.BillId}?pane=${'active'}`} className="w-full">
+      <View className="bg-white w-full rounded-2xl p-4 shadow-sm border-b border-gray-200">
+        {/* Header with airline info and price */}
+        <View className="flex-row justify-between items-center pb-4">
+          <View className="flex-row items-center gap-3">
+            <Feather name="gift" size={21} color={colors.purple[100]} className='bg-gray-600 p-[0.7rem] rounded-full' />
+            <View>
+              <Text className="text-gray-500 text-sm">ORDER ID</Text>
+              <Text className="font-semibold text-[1.05rem] text-gray-800 mt-1">{data.VchNo}</Text>
+            </View>
+          </View>
+          <Feather name="arrow-right" size={24} color={colors.slate[600]} />
+        </View>
+        <View className="flex-row items-center justify-between mb-4 py-4 px-5 bg-slate-100 rounded-2xl">
+          <View className="items-center">
+            <Text className="text-gray-500 font-medium text-[0.95rem]">Order Value</Text>
+            <Text className="text-[1.1rem] font-semibold text-sky-700 mt-4">₹ {parseFloat(data.Amount).toFixed(2)}</Text>
+          </View>
+          <Text className="font-semibold text-pink-600 mb-auto my-auto">3 Items</Text>
+          <View className="items-center">
+            <Text className="text-gray-500 font-medium text-[0.95rem]">Order Date</Text>
+            <Text className="text-[1.05rem] font-semibold text-sky-700 mt-4">{data.VchDate.slice(0, 10).split('-').reverse().join('-')}</Text>
+          </View>
+        </View>
+        <View className="flex-row items-center gap-2 py-1">
+          <Text className={`text-gray-600 text-[14px] font-semibold`}>Status : </Text>
+          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${data.ApprovalStatus === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
+              <Text className={`text-[13px] font-medium ${data.ApprovalStatus === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.ApprovalStatus === 'Y' ? 'Processed' : 'Order Placed'}</Text>
+          </View>
+
+          <Text className="text-gray-600 text-[14px] font-semibold">Service : </Text>
+          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${data.BillStatus === 'PENDING' ? 'bg-green-50' : 'bg-yellow-50'}`}>
+              <Text className={`text-[13px] font-medium ${data.BillStatus === 'PENDING' ? 'text-green-600' : 'text-yellow-600'}`}>{data.BillStatus === 'PENDING' ? 'Closed' : 'Done'}</Text>
+          </View>
+        </View>
+      </View>
+    </Link>
   );
 };
+
+export const AddToCartBtn = ({ type, product, useAuth, qty, addCart, buyNow, classes, styles }: any) => {
+
+  const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+  const vType = useSelector((i: RootState) => i.company.vType);
+  const cart = useSelector((i: RootState) => i.cart);
+  const inCart = Object.values(cart).find(i => i.LocationItemId === product.LocationItemId);
+  const isAdded = inCart?.LocationItemId;
+  const dispatch = useDispatch();
+
+  let isValid;    
+  if (useAuth) isValid = !locationId || qty;
+  else isValid = true;
+  const isRestaurant = (vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT');
+
+  if (type === 'productCard1') {
+      return (
+          <>
+              {isAdded ? 
+                  <View className={`btn btn-outline-primary`}> 
+                      <TouchableOpacity onPress={() => {if (inCart.count !== 1) dispatch(addToCart({...inCart, count: inCart.count - 1}))}} className='bx bx-minus align-middle'>-</TouchableOpacity>
+                      <Text>{inCart.count} &nbsp;</Text>
+                      <TouchableOpacity className='bx bx-plus align-middle' onPress={() => dispatch(addToCart({...inCart, count: inCart.count + 1}))}></TouchableOpacity>
+                  </View> :
+                  <TouchableOpacity onPress={addCart} className={`btn btn-outline-primary ${isValid ? '' : 'opacity-50 pe-none'}`}>{isAdded ? 'Remove' : 'Add to cart'}</TouchableOpacity> 
+              }
+              {isRestaurant || <TouchableOpacity onPress={buyNow} className={`btn btn-outline-primary ${isValid ? '' : 'opacity-50 pe-none'}`}>Buy now</TouchableOpacity>}    
+          </>
+      )
+  } else if (type === 'type_1') {
+    return (
+      <ButtonPrimary title={isAdded ? 'REMOVE FROM CART' : 'ADD TO CART'} onPress={addCart} isLoading={false} active={true} classes={`flex-1 !rounded-2xl ${isValid ? '' : 'opacity-50 pointer-events-none'}`} />
+    )
+  }
+
+}

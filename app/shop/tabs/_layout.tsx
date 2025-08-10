@@ -17,7 +17,7 @@ export default function TabsLayout() {
     // { name: 'Home', icon: 'home', key: 'home' },
     { name: 'Home', icon: 'home', key: 'home' },
     { name: 'Checkout', icon: 'grid', key: 'checkout' },
-    { name: 'Account', icon: 'person', key: 'orderDetails' },
+    { name: 'Account', icon: 'person', key: 'profile' },
     { name: 'Cart', icon: 'cart', key: 'cart' },
     { name: 'Orders', icon: 'gift', key: 'orders' },
   ];
@@ -76,9 +76,9 @@ export default function TabsLayout() {
             {tabs.map((tab, index) => {
               const isFocused = state.routes[state.index]?.name === tab.key;
               const onPress = () => {
-                // if (tab.key === 'profile') {
-                //   if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
-                // } 
+                if (tab.key === 'profile') {
+                  if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
+                } 
                 router.push(`/shop/tabs/${tab.key}`);
                 const last = tabHistory.current[tabHistory.current.length - 1];     // Add manually to history
                 if (last !== tab.key) {

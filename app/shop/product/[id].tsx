@@ -1,7 +1,7 @@
 import { BASE_URL, myColors } from '@/constants';
 import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
-import { add2Cart, buyNow, computeWithPackSize, getFrom, ProductCard } from '@/src/components/utils';
+import { add2Cart, AddToCartBtn, buyNow, computeWithPackSize, getFrom, getRequiredFields, ProductCard } from '@/src/components/utils';
 import { removeFromCart } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
@@ -12,15 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import colors from 'tailwindcss/colors';
 
 const ProductPage = () => {
-  const [selectedColor, setSelectedColor] = useState(0);
-  const [quantity, setQuantity] = useState(2);
-  const [isFavorite, setIsFavorite] = useState(false);
-
+  const [quantity, setQuantity] = useState(1);
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
   const [productData, setProductData] = useState({loading: false, data: {ImageMasterCollection: [], ItemMaster: {}, itemMasterCollection: []}, err: {status: false, msg: ''}});     
-	const [counter, setCounter] = useState(1);
 	const [activePackSize, setPackSize] = useState('');
   const { location } = useSelector((state: RootState) => state.appData);
   const locationId = location.LocationId;
@@ -37,7 +33,10 @@ const ProductPage = () => {
       // loaderAction(true);
       const res = await getFrom(`${BASE_URL}/api/Pharma/GetProductDetails?CID=${compCode}&PID=${id}&LOCID=${locationId}`, {}, setProductData);
       if (res) {
-        setProductData(res); 
+        const mainProduct = getRequiredFields([res.data.ItemMaster]);
+        const relatedProducts = getRequiredFields(res.data.itemMasterCollection);
+        console.log(mainProduct, relatedProducts);
+        setProductData({...res, data: {ImageMasterCollection: res.data.ImageMasterCollection, ItemMaster: mainProduct[0], itemMasterCollection: relatedProducts}}); 
       } else {
         console.log('No data received');
       }
@@ -68,10 +67,8 @@ const ProductPage = () => {
     if (isAdded) return dispatch(removeFromCart(i.LocationItemId));
 	}
 
-  const packSizeList = product?.ItemPackSizeList?.map(i => <Text className={i.CodeId === packSize().PackSizeId ? 'current' : ''} key={i.CodeId} onClick={() => handlePackSize(i)} role='button'>{i.Description}</Text>);
-
   const handleAdd = () => {
-    add2Cart(isAdded, product, packSize, dispatch);
+    add2Cart(isAdded, product, packSize, dispatch, quantity);
   }
 
   const handleBuyNow = () => {
@@ -89,7 +86,6 @@ const ProductPage = () => {
   ];
 
   const images2 = productData.data.ImageMasterCollection.map((i: any) => ({uri: i.ImgURL}));
-  console.log(images2)
 
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -113,51 +109,47 @@ const ProductPage = () => {
         <View className="bg-white px-6 pb-6 shadow-sm">
           <View className="flex-row items-center justify-between mb-4">
             <Text className="text-2xl font-bold text-gray-700">{product.Description}</Text>
-            <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
+            {/* <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
               <Feather 
                 name="heart"
                 size={24} 
                 color={isFavorite ? "#f43f5e" : "#f43f5e"} 
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-          <View className="flex-row items-center mb-6">
-            <View className='gap-2 flex-row items-center'>
-              <Text className="text-[1.3rem] font-bold text-purple-800 mr-4 gap-3 leading-7">₹ {packSize().SRate}</Text>
-              <Text className="text-[1rem] font-semibold line-through text-red-600 mr-4 gap-3">₹ {packSize().ItemMRP}</Text>
+          <View className="flex-row items-center mb-6 gap-4">
+            <View className='gap-5 flex-row items-center'>
+              <Text className="text-[1.3rem] font-bold text-purple-800 gap-3 leading-7">₹ {packSize().SRate}</Text>
+              <Text className="text-[1rem] font-semibold line-through text-red-600 gap-3">₹ {packSize().ItemMRP}</Text>
+              <Text className="text-[1rem] font-semibold text-sky-600 ml-1">{packSize().DiscountPer}% Off</Text>
             </View>
-            <View className='gap-1 flex-row items-center'>
-              {/* <Feather name="star" size={16} color="#FCD34D" /> */}
-
-              {/* <Ionicons name="checkmark-circle-sharp" size={24} color='#f97316' /> */}
-              {/* <View className='bg-sky-100 rounded-full h-[2rem] w-[1.9rem] justify-center items-center'> */}
-                {/* <FontAwesome6 name="check" size={16} color={'#0ea5e9'} /> */}
-              {/* </View> */}
-
-              <Text className="text-[1rem] font-semibold text-green-800 ml-1">{packSize().DiscountPer}% Off</Text>
-            </View>
+            {/* <Text className="text-[1rem] font-semibold text-green-600 ml-auto">{locationId && !packSize().StockQty ? '' : 'In Stock'}</Text> */}
           </View>
           <View className="flex-row gap-5 items-center border-y border-gray-200 py-5 mb-5">
             <Text className="text-lg font-semibold text-gray-900 mb-3">Pack Size :</Text>
             <View className="flex-row gap-5">
-              {[1,2].map((colorOption, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => setSelectedColor(index)}
-                  className={`rounded-2xl flex-row items-center justify-center px-4 py-3 ${
-                    selectedColor === index ? 'border border-purple-300 bg-purple-50' : 'bg-gray-50 border border-gray-200'
-                  }`}
-                >
+              {product?.ItemPackSizeList?.map((pack) => (
+                <TouchableOpacity key={pack.CodeId} onPress={() => handlePackSize(pack)} className={`rounded-2xl flex-row items-center justify-center px-4 py-3 ${ pack.CodeId === packSize().PackSizeId ? 'border border-purple-300 bg-purple-50' : 'bg-gray-50 border border-gray-200' }`}>
                   <View className="">
-                    <Text className='text-[0.9rem] mb-1'>10 Tabs</Text>
+                    <Text className='text-[0.9rem] mb-1 font-semibold'>{pack.Description}</Text>
                     <View className='flex-row gap-2 items-end'>
-                      <Text className='text-[0.9rem]'>₹ 200</Text>
+                      <Text className='text-[0.9rem]'>₹ {pack.SRate ? pack.SRate : product?.SRate}</Text>
                       {/* <Text className='line-through text-rose-500 text-sm'>240</Text> */}
                     </View>
                   </View>
                 </TouchableOpacity>
               ))}
             </View>
+            {locationId && !packSize().StockQty ?
+              <View className='flex-row ml-auto items-center gap-[0.4rem]'>
+                <FontAwesome name="close" size={18}  color={colors.rose[600]} />
+                <Text className="text-[1rem] font-semibold text-rose-600 ml-auto">Out of Stock</Text> 
+              </View> :
+              <View className='items-center flex-row gap-[0.4rem] ml-auto'>
+                <FontAwesome name="check" size={18}  color={colors.green[600]} />
+                <Text className="text-[1rem] font-semibold text-green-600">In Stock</Text>
+              </View>
+            }
           </View>
           <View className={`mb-6 ${product?.Technicalname?.length > 30 ? 'gap-2' : 'flex-row items-center gap-4'}`}>
             <Text className="text-lg font-semibold text-gray-900">Description</Text>
@@ -195,7 +187,7 @@ const ProductPage = () => {
             <TouchableOpacity onPress={incrementQuantity} className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center">
               <Feather name="plus"  size={20} color="#6B7280" />
             </TouchableOpacity>
-            <ButtonPrimary title='ADD TO CART' isLoading={false} active={true} classes='flex-1 !rounded-2xl' />
+            <AddToCartBtn type='type_1' product={product} useAuth={true} qty={packSize().StockQty} addCart={handleAdd} buyNow={buyNow} />
           </View>
         </View>
       </View>
@@ -233,7 +225,7 @@ const ProductPage = () => {
 
           {productData.data.itemMasterCollection.map((data, index) => {
             return (
-              <ProductCard data={data} width={'50%'} />
+              <ProductCard data={data} width={'50%'} key={data.LocationItemId} />
               // <Link href={`/shop/product/${data.ItemId}`} className='w-1/2' key={data.LocationItemId}>
               //   <View className={`items-start bg-white p-4 border border-gray-100`}>
               //     <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>

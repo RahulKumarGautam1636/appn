@@ -44,6 +44,16 @@ export default function ButtonPrimary({ title, onPress, isLoading, active, class
   )
 }
 
+export const LinkBtn = ({ title, href, classes, textClasses }: any) => {
+  return (
+    <Link href={href} className="w-full">
+      <View className={`h-[53px] items-center justify-center rounded-full w-full shadow-sm shadow-gray-700 ${classes}`}>
+        <Text className={`font-PoppinsSemibold text-white ${textClasses}`}>{title}</Text>
+      </View>
+    </Link>
+  )
+}
+
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
