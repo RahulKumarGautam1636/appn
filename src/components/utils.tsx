@@ -11,6 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "tailwindcss/colors";
 import ButtonPrimary from ".";
 
+import { Button, Alert } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import { FileText } from "lucide-react-native";
+
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
   setStateName((preValue: any) => {
@@ -536,3 +541,105 @@ export const AddToCartBtn = ({ type, product, useAuth, qty, addCart, buyNow, cla
   }
 
 }
+
+
+export function FileUploader() {
+  const [file, setFile] = useState(null);
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Only images
+      allowsEditing: false,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const img = result.assets[0];
+      setFile({
+        name: img.fileName || 'image.jpg',
+        uri: img.uri,
+        type: img.type || 'image/jpeg',
+      });
+    }
+  };
+
+  const pickDocument = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+      ],
+      copyToCacheDirectory: true,
+    });
+
+    if (result.type === 'success') {
+      setFile({
+        name: result.name,
+        uri: result.uri,
+        type: result.mimeType || 'application/octet-stream',
+      });
+    }
+  };
+
+  const uploadFile = async () => {
+    if (!file) {
+      Alert.alert('No file selected');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: file.uri,
+      name: file.name,
+      type: file.type,
+    });
+
+    const res = await fetch('https://your-server.com/upload', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    const data = await res.json();
+    console.log('Upload response:', data);
+  };
+
+  return (
+    // <View style={styles2.container}>
+    //   <Button title="Pick Image" onPress={pickImage} />
+    //   <Button title="Pick PDF/DOCX" onPress={pickDocument} />
+    //   {file && <Text style={styles2.fileInfo}>Selected: {file.name}</Text>}
+    //   <Button title="Upload File" onPress={uploadFile} />
+    // </View>
+    <>
+      <View className='flex-row gap-4 mb-4'>
+        {file ? 
+          <View className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1">
+            <FileText size={30} color="#F97316" />
+            <Text style={styles2.fileInfo}>Selected : {file.name}</Text>
+          </View> :
+        <>
+          <TouchableOpacity onPress={pickImage} className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1">
+            <FileText size={30} color="#F97316" />
+            <Text className="text-orange-500 mt-3 text-base">Image</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={pickDocument} className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1">
+            <FileText size={30} color="#F97316" />
+            <Text className="text-orange-500 mt-3 text-base">PDF / DOC</Text>
+          </TouchableOpacity>
+        </>}
+      </View>
+
+      <TouchableOpacity onPress={uploadFile} className="bg-blue-500 rounded-lg py-3 items-center">
+        <Text className="text-white font-semibold text-base">
+          Upload File
+        </Text>
+      </TouchableOpacity>
+    </>
+  );
+}
+
+const styles2 = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 },
+  fileInfo: { marginTop: 10, fontSize: 14 },
+});

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { CartCard } from '@/src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
+import { useRouter } from 'expo-router';
 
 const Checkout = () => {
 
@@ -14,7 +15,8 @@ const Checkout = () => {
   const selectedMember = useSelector((i: RootState) => i.members.selectedMember);
   const cart = useSelector((i: RootState) => i.cart);
   const cartItems = Object.values(cart);   
-  const dispatch = useDispatch();        
+  const dispatch = useDispatch();  
+  const router = useRouter()     
 
   const cartItemsValueList = cartItems.map(item => item.count * item.SRate);                    
   const cartSubtotal = cartItemsValueList.reduce((total, num) => total + num, 0).toFixed(2);           
@@ -28,10 +30,10 @@ const Checkout = () => {
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
       <View className="flex-row items-center justify-between pb-3 border-b border-gray-100">
-        <View className="flex-row items-center">
+        <TouchableOpacity onPress={() => router.back()} className="flex-row items-center">
           <Ionicons name="chevron-back" size={22} color="#000" className="mr-2" />
-          <Text className="text-lg font-semibold text-black">Chckout</Text>
-        </View>
+          <Text className="text-lg font-semibold text-black">Checkout</Text>
+        </TouchableOpacity>
       </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Bill To</Text>
       <View className="bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200 flex-row items-center gap-4">
@@ -131,34 +133,35 @@ const Checkout = () => {
       <View className='gap-3'>
         {cartItems.map((item) => (<CartCard data={item} key={item.LocationItemId} />))}
       </View>
-        <View className='bg-white rounded-3xl shadow-sm mb-4 border-b border-gray-200'>
-            <View className='justify-between flex-row px-5 py-4 items-center'>
-                <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-500 text-[13px] items-center leading-5">Gross Amount</Text>
-                </View>
-                <Text className="font-PoppinsSemibold text-slate-700 text-[13px] ml-auto leading-5">{grossTotal}</Text>
-            </View>
-            <View className='flex-row gap-3 px-5 py-4 border-y border-gray-200'>
-                <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Less Discount</Text>
-                <Text className="font-PoppinsSemibold text-[13px] text-slate-700">- {discountTotal}</Text>
-            </View>
-            <View className='flex-row gap-3 px-5 py-4 border-y border-gray-200'>
-                <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Service Charge</Text>
-                <Text className="font-PoppinsSemibold text-[13px] text-slate-700">+ 58.88</Text>
-            </View>
-            <View className='flex-row gap-3 px-5 py-4'>
-                <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Payable Amount</Text>
-                <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ {cartSubtotal}</Text>
-            </View>
-        </View>
-        <View className="">
-            <View className="flex-row justify-between items-center mt-2 mb-4">
-                <Text className="text-md text-gray-600 font-semibold">Grand Total</Text>
-                <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
-            </View>
-            {/* <ButtonPrimary title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
-            <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
-        </View>
+      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Billing Details</Text>
+      <View className='bg-white rounded-3xl shadow-sm mb-4 border-b border-gray-200'>
+          <View className='justify-between flex-row px-5 py-4 items-center'>
+              <View className='flex-row items-center gap-3'>
+                  <Text className="font-PoppinsSemibold text-gray-500 text-[13px] items-center leading-5">Gross Amount</Text>
+              </View>
+              <Text className="font-PoppinsSemibold text-slate-700 text-[13px] ml-auto leading-5">{grossTotal}</Text>
+          </View>
+          <View className='flex-row gap-3 px-5 py-4 border-y border-gray-200'>
+              <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Less Discount</Text>
+              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">- {discountTotal}</Text>
+          </View>
+          <View className='flex-row gap-3 px-5 py-4 border-y border-gray-200'>
+              <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Service Charge</Text>
+              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">+ 58.88</Text>
+          </View>
+          <View className='flex-row gap-3 px-5 py-4'>
+              <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Payable Amount</Text>
+              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ {cartSubtotal}</Text>
+          </View>
+      </View>
+      <View className="">
+          <View className="flex-row justify-between items-center mt-2 mb-4">
+              <Text className="text-md text-gray-600 font-semibold">Grand Total</Text>
+              <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
+          </View>
+          {/* <ButtonPrimary title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
+          <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
+      </View>
     </ScrollView>
   );
 };

@@ -26,7 +26,7 @@ const Login = ({ modal }: any) => {
     const user = useSelector((state: RootState) => state.user);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
-    const [loginData, setLoginData] = useState({ phone: '9330241456', password: '8583814626', EncCompanyId: compCode });
+    const [loginData, setLoginData] = useState({ phone: '9330241456', password: '8583814626', EncCompanyId: compCode });        // 9330241456 // 8583814626
     
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
@@ -179,6 +179,8 @@ const Login = ({ modal }: any) => {
             setLoginData(pre => ({ ...pre, phone: user.RegMob1, password: user.UserPassword, EncCompanyId: user.EncCompanyId }));
         }
     }, [isLoggedIn, user]);
+
+    const comp = { name: 'TakeHome', tag: 'Simplifying Your Searches'}
     
     return (
         <ScrollView contentContainerClassName='bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#6366f1] via-[#a5b4fc] to-[#e0e7ff] min-h-full' style={{minHeight: '100%'}}>
@@ -189,8 +191,8 @@ const Login = ({ modal }: any) => {
                 <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
                 <Image className='' source={require('../assets/images/logo.png')} style={{ width: 75, height: 65 }} />
                 <View>
-                    <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2 pt-3">Healthify</Text>
-                    <Text className="font-Poppins text-gray-600 text-[13px]">Healthcare at it's best.</Text>
+                    <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2 pt-3">{comp.name}</Text>
+                    <Text className="font-Poppins text-gray-600 text-[13px]">{comp.tag}</Text>
                 </View>
             </View>
             {(() => {

@@ -260,6 +260,7 @@ const modalsSlice = createSlice({
     APPN_DETAIL: { state: false, data: '' },
     TEST_DETAIL: { state: false, data: '' },
     DEPTS: { state: false, data: '' },
+    PRESC: { state: false, data: '' },
   },
   reducers: {
     setModal: (state, action: any) => {

@@ -64,10 +64,10 @@ const Cart = () => {
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
       <View className="flex-row items-center justify-between pb-4 border-b border-gray-100">
-        <View className="flex-row items-center">
+        <TouchableOpacity onPress={() => router.back()} className="flex-row items-center">
           <Ionicons name="chevron-back" size={24} color="#000" className="mr-2" />
           <Text className="text-lg font-semibold text-black">My Cart</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View className='gap-3'>
         {cartItems.map((data) => <CartCard data={data} key={data.LocationItemId} />)}

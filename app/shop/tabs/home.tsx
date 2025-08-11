@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions, Platform, FlatList } from 'react-native';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { GridLoader, ProductCard } from '@/src/components/utils';
 import { Link } from 'expo-router';
+import { setModal } from '@/src/store/slices/slices';
 
 const CatCard = ({ data }: any) => {
   return (
@@ -25,6 +26,7 @@ const ShoppingAppScreen = () => {
   const { products: productsData, categories: categoriesData } = useSelector((i: RootState) => i.siteData);
   const user = useSelector((i: RootState) => i.user);
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
+  const dispatch = useDispatch();
 
   const renderProductSection = (data: any, parentId: number) => {
     const productCategoryItems = data.itemMasterCollection.filter((i: any) => i.Category === parentId).slice(0, 20);   
@@ -139,34 +141,36 @@ const ShoppingAppScreen = () => {
     <ScrollView className="flex-1 bg-purple-50">   
       <View className="bg-purple-100 pt-5 pb-5 px-5">
       {isLoggedIn ? 
-            <View className="gap-3 flex-row items-center mb-5">
-                <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
-                <View>
-                    <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{user.Name}</Text>
-                    <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
-                </View>
-                <View className="flex-row ml-auto">
-                  <TouchableOpacity className="mr-4">
-                    <Feather name="bell" size={24} color="#2563eb" />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Feather name="settings" size={24} color="#2563eb" />
-                  </TouchableOpacity>
-                </View>
-            </View> :
-            <View className="gap-3 flex-row items-center mb-5">
-                <Image className='rounded-full' source={require('../../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
-                <View className='mr-auto'>
-                    <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
-                    <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text>
-                </View>
-                <Link href={'/login'}>
-                    <View className="gap-2 flex-row items-center bg-white p-2 rounded-full shadow-lg">
-                        <Ionicons name="enter" size={25} color='#3b82f6' className='text-blue-500' />
-                        <Text className='font-PoppinsMedium leading-5 text-slate-700'>Login </Text>
-                    </View>
-                </Link>
-            </View>
+          <View className="gap-3 flex-row items-center mb-5">
+              <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+              <View>
+                  <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{user.Name}</Text>
+                  <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
+              </View>
+              <View className="flex-row ml-auto">
+                <TouchableOpacity className="mr-4">
+                  <Feather name="bell" size={24} color="#2563eb" />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Feather name="settings" size={24} color="#2563eb" />
+                </TouchableOpacity>
+              </View>
+          </View> :
+          <View className="gap-3 flex-row items-center mb-5">
+              <Image className='rounded-full' source={require('../../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
+              <View className='mr-auto'>
+                  {/* <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
+                  <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text> */}
+                <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">TakeHome</Text>
+                <Text className="font-Poppins text-gray-600 text-[11px]">Simplifying Your Searches</Text>
+              </View>
+              <Link href={'/login'}>
+                  <View className="gap-2 flex-row items-center bg-white p-2 rounded-full shadow-lg">
+                      <Ionicons name="enter" size={25} color='#3b82f6' className='text-blue-500' />
+                      <Text className='font-PoppinsMedium leading-5 text-slate-700'>Login </Text>
+                  </View>
+              </Link>
+          </View>
         }
         <View className="bg-white rounded-full px-4 py-[0.42rem] flex-row items-center mb-5">
           <Feather name="search" size={20} color="#9CA3AF" />
@@ -228,7 +232,7 @@ const ShoppingAppScreen = () => {
           }
         })()}
       </View>
-      <View className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
+      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
         <View className="flex-row items-center flex-1">
           <View className="w-12 h-12 bg-purple-400 rounded-full items-center justify-center mr-4">
             <Feather name="upload" size={20} color="#ffffff" />
@@ -238,10 +242,10 @@ const ShoppingAppScreen = () => {
             <Text className="text-sm text-gray-100">Get medicines delivered your doorstep.</Text>
           </View>
         </View>
-        <TouchableOpacity>
+        <View>
           <Feather name="chevron-right" size={23} color="white" />
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
       <View className="flex-1 mb-4">
         <View className="flex-row justify-between items-center mb-4 px-5 ">
           <Text className="text-lg font-bold text-gray-800">Top Brands</Text>

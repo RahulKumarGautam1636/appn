@@ -46,10 +46,10 @@ const Orders = () => {
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full">
       <View className="flex-row items-center justify-between pb-3 border-b border-gray-100 p-4">
-        <View className="flex-row items-center">
+        <TouchableOpacity onPress={() => router.back()} className="flex-row items-center">
           <Ionicons name="chevron-back" size={24} color="#000" className="mr-2" />
           <Text className="text-lg font-semibold text-black">Your Orders</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View className='bg-white'>
           <View className='flex-row justify-between border-y border-gray-200 border-solid p-4 bg-white gap-2'>

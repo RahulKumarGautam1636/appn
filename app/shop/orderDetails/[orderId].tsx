@@ -104,10 +104,10 @@ const OrderStatus = () => {
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
       <View className="flex-row items-center justify-between pb-3 border-b border-gray-100">
-        <View className="flex-row items-center">
+        <TouchableOpacity onPress={() => router.back()} className="flex-row items-center">
           <Ionicons name="chevron-back" size={22} color="#000" className="mr-2" />
           <Text className="text-lg font-semibold text-black">Order Details</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View className='bg-white rounded-3xl shadow-sm border-b border-gray-200'>
         <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
@@ -119,7 +119,7 @@ const OrderStatus = () => {
 
         <View className='flex-row gap-3 p-4'>
           {/* <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} /> */}
-          <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Order Status</Text>
+          <Text className="font-PoppinsSemibold text-slate-700 text-[14px] mr-auto">Billing Status</Text>
           {/* <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} /> */}
           {/* <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">
             {new Date(data.NextAppDate).toLocaleDateString('en-TT')}
@@ -203,7 +203,7 @@ const OrderStatus = () => {
       </View> */}
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Order List</Text>
       <View className='gap-3'>
-        {order?.SalesDetailsList?.map((item) => <OrderItemCard data={item} key={item.LocationItemId} />)}
+        {order?.SalesDetailsList?.map((item, index) => <OrderItemCard data={item} key={index} />)}
       </View>
         <View className='bg-white rounded-3xl shadow-sm my-4 border-b border-gray-200'>
             <View className='justify-between flex-row px-5 py-4 items-center'>
