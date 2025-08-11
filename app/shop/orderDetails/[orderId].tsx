@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
-import { Entypo, Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import ButtonPrimary from '@/src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { BASE_URL } from '@/constants';
-import { CartCard, getFrom } from '@/src/components/utils';
+import { BASE_URL, myColors } from '@/constants';
+import { OrderItemCard, getFrom } from '@/src/components/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const OrderStatus = () => {
@@ -109,6 +109,28 @@ const OrderStatus = () => {
           <Text className="text-lg font-semibold text-black">Order Details</Text>
         </View>
       </View>
+      <View className='bg-white rounded-3xl shadow-sm border-b border-gray-200'>
+        <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
+            <View className='flex-row items-center gap-3'>
+                <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Order ID</Text>
+            </View>
+            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">{order.VchNo}</Text>
+        </View>
+
+        <View className='flex-row gap-3 p-4'>
+          {/* <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} /> */}
+          <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Order Status</Text>
+          {/* <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} /> */}
+          {/* <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">
+            {new Date(data.NextAppDate).toLocaleDateString('en-TT')}
+            In Process{order.OrderStatus}
+          </Text> */}
+          <View className={`px-3 py-[4px] rounded-xl shadow-sm ${order.ApprovalStatus === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
+              <Text className={`text-[13px] font-medium ${order.ApprovalStatus === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{order.ApprovalStatus === 'Y' ? 'Processed' : 'Order Placed'}</Text>
+          </View>
+        </View>
+      </View>
+      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Deliver To</Text>
       <View className="bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200 flex-row items-center gap-4">
         <View className='w-[4rem] h-[4rem] bg-purple-50 shadow-sm rounded-2xl items-center justify-center'>
           {/* <FontAwesome6 name="location-arrow" size={34} color={colors.purple[600]} /> */}
@@ -128,37 +150,37 @@ const OrderStatus = () => {
         </View>
       </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Address Details</Text>
-      <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+      <View className='bg-white rounded-3xl px-4 py-2 shadow-sm0'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order ID :</Text>
               <Text className="text-[13px] text-slate-700">{order.VchNo}</Text>
           </View>
 
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order Date :</Text>
               <Text className="text-[13px] text-slate-700">{order?.VchDate?.slice(0, 10)?.split('-').reverse().join('-')}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Payment Method :</Text>
               <Text className="text-[13px] text-slate-700">{order.PaymentMethod}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order Value :</Text>
               <Text className="text-[13px] text-slate-700">{parseFloat(order.Amount).toFixed(2)}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Service Location :</Text>
               <Text className="text-[13px] text-slate-700">{order.LocationName}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Delivery Address :</Text>
               <Text className="text-[13px] text-slate-700">{order.PartyAddress}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order Status :</Text>
               <Text className="text-[13px] text-slate-700">{order.OrderStatus}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem]'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Billing Status :</Text>
               <Text className="text-[13px] text-slate-700">{order.ApprovalStatus === 'Y' ? 'PROCESSED' : 'ORDER PLACED'}</Text>
           </View>
@@ -181,7 +203,7 @@ const OrderStatus = () => {
       </View> */}
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Order List</Text>
       <View className='gap-3'>
-        {order?.SalesDetailsList?.map((item) => <CartCard data={item} key={item.LocationItemId} />)}
+        {order?.SalesDetailsList?.map((item) => <OrderItemCard data={item} key={item.LocationItemId} />)}
       </View>
         <View className='bg-white rounded-3xl shadow-sm my-4 border-b border-gray-200'>
             <View className='justify-between flex-row px-5 py-4 items-center'>

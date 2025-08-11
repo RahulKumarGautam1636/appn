@@ -1,17 +1,20 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { Entypo, Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, ScrollView, Image, Pressable } from 'react-native';
+import { Entypo, Feather, FontAwesome, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import ButtonPrimary, { LinkBtn } from '@/src/components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { CartCard } from '@/src/components/utils';
+import { setModal } from '@/src/store/slices/slices';
 
 const Checkout = () => {
 
   const location = useSelector((i: RootState) => i.appData.location);
   const user = useSelector((i: RootState) => i.user);
+  const selectedMember = useSelector((i: RootState) => i.members.selectedMember);
   const cart = useSelector((i: RootState) => i.cart);
-  const cartItems = Object.values(cart);           
+  const cartItems = Object.values(cart);   
+  const dispatch = useDispatch();        
 
   const cartItemsValueList = cartItems.map(item => item.count * item.SRate);                    
   const cartSubtotal = cartItemsValueList.reduce((total, num) => total + num, 0).toFixed(2);           
@@ -30,6 +33,7 @@ const Checkout = () => {
           <Text className="text-lg font-semibold text-black">Chckout</Text>
         </View>
       </View>
+      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Bill To</Text>
       <View className="bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200 flex-row items-center gap-4">
         <View className='w-[4rem] h-[4rem] bg-purple-50 shadow-sm rounded-2xl items-center justify-center'>
           {/* <FontAwesome6 name="location-arrow" size={34} color={colors.purple[600]} /> */}
@@ -48,6 +52,42 @@ const Checkout = () => {
           </View>
         </View>
       </View>
+      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Patient Details</Text>
+      <View className='bg-white rounded-2xl p-5 shadow-md shadow-gray-400'>
+          <View className='flex-row items-center'>
+              <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+              <View>
+                  <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
+                  <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder}</Text>
+              </View>
+              <Pressable onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} className="ms-auto">
+                  <FontAwesome name="pencil" size={24} color="#2563eb"/>
+              </Pressable>
+          </View>
+          <View className='py-3 px-4 bg-gray-100 mt-4 rounded-xl flex gap-3 flex-row'>
+              <MaterialIcons name="av-timer" size={17} color="#000" />
+              <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{selectedMember.Age} Years</Text>
+              <Ionicons name="male-female" size={17} color="#000" />
+              <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{selectedMember.GenderDesc}</Text>
+          </View>
+          <Text className="text-sm py-3 text-gray-500">
+          <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
+          <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
+      </View>
+      <View className="bg-indigo-500 rounded-2xl p-5 mt-4 flex-row items-center justify-between">
+        <View className="flex-row items-center flex-1">
+          <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
+            <Feather name="plus" size={28} color="#ffffff" />
+          </View>
+          <View className="flex-1">
+            <Text className="font-semibold text-white mb-2">Please Attach your prescription.</Text>
+            <Text className="text-sm text-gray-100">In order to place your order.</Text>
+          </View>
+        </View>
+        <TouchableOpacity>
+          <Feather name="chevron-right" size={23} color="white" />
+        </TouchableOpacity>
+      </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Address Details</Text>
       <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
           <View className='justify-between flex-row px-1 py-[0.9rem] items-start gap-4'>
@@ -56,14 +96,19 @@ const Checkout = () => {
               </View>
               <Text className="text-slate-700 text-[12px] ml-auto leading-5 flex-1 text-right">{user.Address2}, {user.Address}, {user.City}, {user.StateName}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem] border-y border-gray-100'>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[12px] mr-auto">Pin Code :</Text>
               <Text className="text-[12px] text-slate-700">{user.Pin}</Text>
           </View>
-          <View className='flex-row gap-3 px-1 py-[0.9rem]'>
-              <Text className="text-slate-600 font-bold text-[12px] mr-auto">{user.Email ? 'E-mail' : 'Phone Number'} :</Text>
-              <Text className="text-[12px] text-slate-700">{user.Email ? user.Email : user.RegMob1}</Text>
+          <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
+              <Text className="text-slate-600 font-bold text-[12px] mr-auto">Phone Number</Text>
+              <Text className="text-[12px] text-slate-700">{user.RegMob1}</Text>
           </View>
+          {user.Email ? <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
+              <Text className="text-slate-600 font-bold text-[12px] mr-auto">E-mail :</Text>
+              <Text className="text-[12px] text-slate-700">{user.Email}</Text>
+          </View> : null}
+          <ButtonPrimary onClick={() => {}} title='Edit Address' active={true} classes='!rounded-2xl !h-[43px] mt-4 mb-2 w-fit px-10 ml-auto' textClasses='tracking-widest' />
       </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Service Location</Text>
       <View className='bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200'>
@@ -86,7 +131,7 @@ const Checkout = () => {
       <View className='gap-3'>
         {cartItems.map((item) => (<CartCard data={item} key={item.LocationItemId} />))}
       </View>
-        <View className='bg-white rounded-3xl shadow-sm my-4 border-b border-gray-200'>
+        <View className='bg-white rounded-3xl shadow-sm mb-4 border-b border-gray-200'>
             <View className='justify-between flex-row px-5 py-4 items-center'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-500 text-[13px] items-center leading-5">Gross Amount</Text>
@@ -105,20 +150,6 @@ const Checkout = () => {
                 <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Payable Amount</Text>
                 <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ {cartSubtotal}</Text>
             </View>
-        </View>
-        <View className="bg-indigo-500 rounded-2xl p-5 mb-4 flex-row items-center justify-between">
-          <View className="flex-row items-center flex-1">
-            <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
-              <Feather name="upload" size={20} color="#ffffff" />
-            </View>
-            <View className="flex-1">
-              <Text className="font-semibold text-white mb-2">Please Attach your prescription.</Text>
-              <Text className="text-sm text-gray-100">In order to place your order.</Text>
-            </View>
-          </View>
-          <TouchableOpacity>
-            <Feather name="chevron-right" size={23} color="white" />
-          </TouchableOpacity>
         </View>
         <View className="">
             <View className="flex-row justify-between items-center mt-2 mb-4">

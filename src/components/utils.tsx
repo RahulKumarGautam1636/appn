@@ -368,7 +368,7 @@ export const ProductCard = ({ data, width }) => {
   )
 }
 
-export const CartCard = ({ data }) => {
+export const CartCard = ({ data }: any) => {
   const dispatch = useDispatch();
   const activeItem = data.ItemPackSizeList.find(i => i.CodeId === data.PackSizeId);
   const activePackSize = activeItem ? activeItem.Description : 'N/A';
@@ -407,6 +407,50 @@ export const CartCard = ({ data }) => {
             <TouchableOpacity onPress={() => dispatch(addToCart({...data, count: data.count + 1}))} className="w-9 h-9 items-center justify-center">
               <Ionicons name="add" size={16} color="#666" />
             </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+export const OrderItemCard = ({ data }: any) => {
+  return (
+    <View key={data.LocationItemId} className="flex-row items-center bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200">
+      <Image source={{ uri: data.ItemImageURL }} className="w-[5.5rem] h-[5.9rem] rounded-2xl border border-gray-100 mr-4" resizeMode="cover" />
+      <View className="flex-1">
+          <View className='justify-between flex-row mb-2'>
+              <Text className="text-base font-medium text-sky-800 flex-1">{data.Description}</Text>
+              {/* <TouchableOpacity className="">
+                  <Ionicons name="trash-outline" size={20} color={colors.rose[500]} />
+              </TouchableOpacity> */}
+          </View>
+        
+        <View className="flex-row items-center mb-3">
+          {/* <ColorIndicator color={data.color} /> */}
+          <Text className="text-sm text-gray-600 mr-3">₹ {num(data.Amount/data.BillQty)}</Text>
+          {/* {data.size && (
+            <> */}
+              <View className="w-1 h-1 bg-gray-400 rounded-full mr-3" />
+              <Text className="text-sm text-gray-600">Pack : {data.PackSizeId ? data.PackSizeDesc : 'No pack size'}</Text>
+            {/* </>
+          )} */}
+        </View>
+        
+        <View className="flex-row items-center justify-between">
+          <Text className="text-lg font-semibold text-gray-700">₹ {num(data.Amount)}</Text>
+          
+          <View className="flex-row items-center bg-gray-100 rounded-2xl">
+            {/* <TouchableOpacity className="w-9 h-9 items-center justify-center">
+              <Ionicons name="remove" size={16} color="#666" />
+            </TouchableOpacity> */}
+            
+            <Text className="mx-2 text-sm font-medium text-black">QTY :</Text>
+            <Text className="mx-2 text-base font-medium text-black">{data.BillQty}</Text>
+            
+            {/* <TouchableOpacity className="w-9 h-9 items-center justify-center">
+              <Ionicons name="add" size={16} color="#666" />
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>

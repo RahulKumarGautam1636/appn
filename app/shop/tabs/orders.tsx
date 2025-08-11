@@ -39,7 +39,7 @@ const Orders = () => {
   useEffect(() => {
       if (!isLoggedIn) return router.push('/');
       getMyOrders(user.PartyCode, locationId);
-  }, [compCode, getMyOrders, isLoggedIn, history, user.PartyCode, locationId])
+  }, [compCode, getMyOrders, isLoggedIn, user.PartyCode, locationId])
 
   console.log(orders)
 

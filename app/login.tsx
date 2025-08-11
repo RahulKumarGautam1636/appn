@@ -111,6 +111,7 @@ const Login = ({ modal }: any) => {
             let userLoginData = {
                 Name: res.data.UserFullName,
                 RegMob1: params.phone,
+                Email: res.data.Email,
                 UserId: res.data.UserId,
                 UserType: res.data.UserType,
                 PartyCode: res.data.PartyCode,
