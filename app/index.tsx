@@ -6,7 +6,6 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import './globals.css';
 import Modals from '../src/components/modals';
 import Init from '@/src/components/init';
-import ButtonPrimary from '@/src/components';
 import { TouchableOpacity } from 'react-native';
 import { Feather, FontAwesome6 } from '@expo/vector-icons';
 // import ButtonPrimary from './components';

@@ -315,7 +315,7 @@ const appDataSlice = createSlice({
   initialState: { 
     focusArea: '0',
     location: getUserLocation(),
-    prescription: { required: true, patient: { docName: '', docAddress: '' } },
+    prescription: { required: true, patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '' } },
     restaurant: { table: {  } },
     businessType: { Description: '', CodeValue: '', CodeId: '' },
     userRegType:

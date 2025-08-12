@@ -93,7 +93,7 @@ const ProductPage = () => {
         <View className="bg-white p-8 items-center relative">
           <TouchableOpacity onPress={() => router.back()} className="p-2 bg-gray-100 rounded-full absolute top-[2rem] left-[2rem] z-20">
               <Ionicons name="arrow-back-outline" size={24} color="black" />
-            </TouchableOpacity>
+          </TouchableOpacity>
           <View className="items-start flex-row mb-2">
             <ProductImagePreview images={images2} />
           </View>

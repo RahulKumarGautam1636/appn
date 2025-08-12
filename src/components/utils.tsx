@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
-import { addToCart, dumpCart, removeFromCart } from "../store/slices/slices";
+import { addToCart, dumpCart, removeFromCart, setPrescription } from "../store/slices/slices";
 import store, { RootState } from "../store/store";
 import { Link, useRouter } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -542,11 +542,16 @@ export const AddToCartBtn = ({ type, product, useAuth, qty, addCart, buyNow, cla
 
 }
 
-
-export function FileUploader() {
-  const [file, setFile] = useState(null);
-
+export function FileUploader({ file, setFile, removeFile }: any) {
+  
   const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert('Permission to access camera and Gallery is required!');
+      return;
+    }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images, // Only images
       allowsEditing: false,
@@ -559,6 +564,7 @@ export function FileUploader() {
         name: img.fileName || 'image.jpg',
         uri: img.uri,
         type: img.type || 'image/jpeg',
+        fileType: 'image',
       });
     }
   };
@@ -571,38 +577,24 @@ export function FileUploader() {
       ],
       copyToCacheDirectory: true,
     });
-
-    if (result.type === 'success') {
+    console.log(result);
+    if (result.canceled === false) {
       setFile({
-        name: result.name,
-        uri: result.uri,
-        type: result.mimeType || 'application/octet-stream',
+        name: result.assets[0].name,
+        uri: result.assets[0].uri,
+        type: result.assets[0].mimeType || 'application/octet-stream',
+        fileType: 'document',
       });
     }
   };
 
-  const uploadFile = async () => {
-    if (!file) {
-      Alert.alert('No file selected');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', {
-      uri: file.uri,
-      name: file.name,
-      type: file.type,
-    });
-
-    const res = await fetch('https://your-server.com/upload', {
-      method: 'POST',
-      body: formData,
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-
-    const data = await res.json();
-    console.log('Upload response:', data);
-  };
+  // const uploadFile = async () => {
+  //   if (!file) {
+  //     Alert.alert('No file selected');
+  //     return;
+  //   }
+  //   setFile({ file: file });
+  // };
 
   return (
     // <View style={styles2.container}>
@@ -613,11 +605,20 @@ export function FileUploader() {
     // </View>
     <>
       <View className='flex-row gap-4 mb-4'>
-        {file ? 
-          <View className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1">
-            <FileText size={30} color="#F97316" />
+        {file.type ? 
+          <View className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1 relative">
+            <TouchableOpacity onPress={removeFile} className="p-2 bg-gray-100 rounded-full absolute top-[1rem] right-[1rem] z-20">
+                <Ionicons name="close" size={24} color="black" />
+            </TouchableOpacity>
+            {file.fileType === 'image' ? 
+              <Image source={{ uri: file.uri }} className="w-[6.6rem] h-[7rem] rounded-2xl border border-gray-100 mb-2" resizeMode="cover" />
+            : 
+              <FileText size={30} color="#F97316" />
+            }
+            
             <Text style={styles2.fileInfo}>Selected : {file.name}</Text>
-          </View> :
+          </View> 
+          :
         <>
           <TouchableOpacity onPress={pickImage} className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1">
             <FileText size={30} color="#F97316" />
@@ -630,11 +631,11 @@ export function FileUploader() {
         </>}
       </View>
 
-      <TouchableOpacity onPress={uploadFile} className="bg-blue-500 rounded-lg py-3 items-center">
+      {/* <TouchableOpacity onPress={uploadFile} className="bg-blue-500 rounded-lg py-3 items-center">
         <Text className="text-white font-semibold text-base">
           Upload File
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </>
   );
 }
@@ -643,3 +644,38 @@ const styles2 = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 },
   fileInfo: { marginTop: 10, fontSize: 14 },
 });
+
+
+export const useFetch = (url: string, isValid: string) => {          // isValid is taken to ensure correct params for API calls.
+
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [data, setData] = useState([]);
+
+  const fetchData = useCallback(async () => {
+    if (isValid) {
+      try {
+        const res = await fetch(url);
+        if (res.status === 500) {            // Status 500 called internal server error is not an error it's a responce.
+          setError(true);                    // hence it can't be catched by try catch statement hence handling it mannually.
+          return;
+        }
+        const json = await res.json();
+        setData(json);          
+      } catch (err) {
+        setError(err);
+      }
+      setLoading(false);
+    }
+
+  }, [url, isValid]);
+
+  useEffect(() => {
+    setLoading(true);
+    // setTimeout(() => {                        // turn on Timeout to test Skeleton loading.
+      fetchData();
+    // }, 5000);
+  }, [fetchData]);
+
+  return [data, isLoading, error]
+}

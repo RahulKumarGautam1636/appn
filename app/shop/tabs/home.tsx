@@ -29,7 +29,7 @@ const ShoppingAppScreen = () => {
   const dispatch = useDispatch();
 
   const renderProductSection = (data: any, parentId: number) => {
-    const productCategoryItems = data.itemMasterCollection.filter((i: any) => i.Category === parentId).slice(0, 20);   
+    const productCategoryItems = data.itemMasterCollection.filter((i: any) => i.Category === parentId).slice(0, 8);   
     const parentCategoryName = categoriesData.LinkCategoryList.filter((i: any) => i.Parent === parentId)[0]?.ParentDesc;
     // const subLinks = categoriesData.LinkSubCategoryList.filter((i: any) => parentId === i.Parent);
     if (data.loading) {
@@ -319,7 +319,7 @@ const ShoppingAppScreen = () => {
         })()}
       </View>
       <FlatList
-          data={categoriesData.LinkCategoryList.slice(0.3)}
+          data={categoriesData.LinkCategoryList}
           renderItem={({ item }) =>  (
             <View>
               {renderProductSection(productsData, parseInt(item.Parent))}
