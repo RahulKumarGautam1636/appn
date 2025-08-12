@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
-  Pressable,
-  Button,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Pressable, Button } from 'react-native';
 import { X, Plus, User, MapPin, Upload, FileText } from 'lucide-react-native';
 import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { setModal, setPrescription } from '@/src/store/slices/slices';
@@ -48,7 +39,7 @@ const GenderDropdown = ({ handler }: any) => {
     )
 }
 
-const initFile = { name: '', uri: '', type: '', fileType: '' };
+const initFile = { name: '', uri: '', type: '', fileType: '', extn: '' };
 
 const PrescriptionForm = () => {
 

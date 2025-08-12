@@ -1,17 +1,20 @@
 import { View, Text, TouchableOpacity, ScrollView, Image, Pressable } from 'react-native';
 import { Entypo, Feather, FontAwesome, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
-import ButtonPrimary, { LinkBtn } from '@/src/components';
+import ButtonPrimary, { LinkBtn, MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { CartCard } from '@/src/components/utils';
+import { CartCard, createDate, num } from '@/src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 import { useRouter } from 'expo-router';
-
+import { useEffect, useMemo, useState } from 'react';
+import CheckDelivery from '../checkDelivery';
 const Checkout = () => {
 
   const location = useSelector((i: RootState) => i.appData.location);
   const user = useSelector((i: RootState) => i.user);
+  const compInfo = useSelector((i: RootState) => i.company.info);
+  const compCode = useSelector((i: RootState) => i.compCode);
   const selectedMember = useSelector((i: RootState) => i.members.selectedMember);
   const cart = useSelector((i: RootState) => i.cart);
   const cartItems = Object.values(cart);   
@@ -25,7 +28,197 @@ const Checkout = () => {
   const grossTotal = cartItemsMRPList.reduce((total, num) => total + num, 0).toFixed(2);  
   
   const cartItemsDiscountList = cartItems.map(item => ((item.ItemMRP * item.DiscountPer) / 100) * item.count);                  
-  const discountTotal = cartItemsDiscountList.reduce((total, num) => total + num, 0).toFixed(2);  
+  const discountTotal = cartItemsDiscountList.reduce((total, num) => total + num, 0).toFixed(2); 
+  
+  // NEW WORK ===================================================================================================================================
+
+  const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
+  // const vType = useSelector((i: RootState) => i.company.vType);
+  const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+  const prescription = useSelector((i: RootState) => i.appData.prescription);
+  const [orderData, setOrderData] = useState({
+    PartyCode: '',
+    InsBy: '',              
+    PaymentMethod: 'COD',
+    Amount: '',
+    EncCompanyId: '',
+    SalesDetailsList: [],                               
+
+    BillingState: user.State,
+    BillingAddress: user.Address + ' ' + user.Address2 + ' ' + user.Pin,
+    DeliveryParty: user.PartyCode,
+    DeliveryState: user.State,
+    DeliveryAddress : user.Address + ' ' + user.Address2 + ' ' + user.Pin,
+  });
+
+  const [isDeliverable, setDeliverable] = useState(false);
+  const [locationModalActive, setLocationModalActive] = useState(false);
+  const closeModal = () => setLocationModalActive(false);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      dispatch(setModal({name: 'LOGIN', state: true}))
+      return;
+    } else {
+      dispatch(setModal({name: 'LOGIN', state: false}))
+      setLocationModalActive(true);
+    }
+  }, [user.Pin, isLoggedIn, locationId])
+
+
+
+  let orderList = useMemo(() => {
+      let items = cartItems.map(i => ({             
+        Description: i.Description,      
+        BillQty: i.count,                                                              
+        ItemId: i.ItemId,                                                              
+        AutoId: i.AutoId,
+        Unit: i.Unit,
+        MRP: i.ItemMRP,
+        PackSizeId: i.PackSizeId ? i.PackSizeId : 0,
+        MRPOnDisPer: i.DiscountPer,
+        Rate: num(((i.count * i.SRate) - (((i.count * i.SRate * i.IGSTRATE) / (i.IGSTRATE + 100))))/i.count),
+        TaxableAmount: num((i.count * i.SRate) - ((i.count * i.SRate * i.IGSTRATE) / (i.IGSTRATE + 100))),
+        Amount: i.count * i.SRate,
+        CGSTRATE: i.CGSTRATE,
+        SGSTRATE: i.SGSTRATE,
+        IGSTRATE: i.IGSTRATE,
+        Specification: i.Specification,
+        LocationId: i.LocationId
+    }))
+    return items;
+  } ,[cart])   
+  
+  useEffect(() => {
+      async function init() {   
+          if (isLoggedIn) {
+              let cashPartyName;
+              let cashPartyMobile; 
+              let partyCode;
+              let billingState;
+              let deliveryState;
+
+              cashPartyName = prescription.patient.name || user.Name;
+              cashPartyMobile = prescription.patient.phone || user.RegMob1;  
+              partyCode = user.PartyCode;
+              billingState = user.State;
+              deliveryState = prescription.patient.state.CodeId || user.State;
+
+              setOrderData((preValues) => ({
+                  ...preValues,
+                  InsBy: user.UserId,              
+                  PaymentMethod: 'COD',
+                  Amount: cartSubtotal,
+                  EncCompanyId: compCode,
+                  SalesDetailsList: orderList, 
+
+                  BillingState: billingState,
+                  DeliveryState: deliveryState,
+
+                  BillingAddress: user.Address + ' ' + user.Address2 + ' ' + user.Pin,
+                  DeliveryAddress : user.Address + ' ' + user.Address2 + ' ' + user.Pin,
+                  LocationId: locationId,
+                  filesToUpload: prescription,
+
+                  PartyCode : partyCode,
+                  DeliveryParty: selectedMember.PartyCode || user.PartyCode,
+                  ReferenceBy: prescription.patient.docName || '',
+                  DoctorLocation: prescription.patient.docAddress || '',
+
+                  CashPartyName: cashPartyName,
+                  CashPartyMobile: cashPartyMobile,
+
+                  // --------- NEW FIELDS FOR RESTAURANT STARTS ---------------------------------------
+
+                  BillId: '',
+                  BedId: '',
+                  CollectedById: '',
+                  
+                  // --------- NEW FIELDS FOR RESTAURANT ENDS ---------------------------------------
+
+                  AccPartyMemberMaster: {
+                    Salutation: '',
+                    MemberName : prescription.patient.name || user.Name,
+                    EncCompanyId: compCode,    
+                    RegMob1: user.RegMob1,
+                    Gender: prescription.patient.gender?.CodeId || user.Gender,
+                    GenderDesc: prescription.patient.gender?.GenderDesc || user.GenderDesc,
+                    Address: prescription.patient.address || user.Address,
+                    Age: prescription.patient.age || user.Age,
+                    AgeMonth: '0',
+                    AgeDay: '0',           
+
+                    State: prescription.patient.state?.CodeId || user.State,
+                    City: prescription.patient.city || user.City,
+                    Pin: prescription.patient.pinCode || user.Pin,
+                    Landmark: '',
+
+                    ParentUserId: user.UserId,
+                    MemberId: prescription.patient.memberId || user.MemberId,
+                    MemberTypeId : 0,
+                    UserType: user.UserType,
+                    UID: '',
+                    UserId: 0,
+                    
+                    DOB: prescription.patient.age ? createDate(0, 0, prescription.patient.age) : new Date(user.DOB).toLocaleDateString('en-TT'),
+                    DOBstr: prescription.patient.age ? createDate(0, 0, prescription.patient.age) : new Date(user.DOB).toLocaleDateString('en-TT'),
+                    IsDOBCalculated: 'N',
+                    Aadhaar: '',
+                    ParentAadhaar1: '',
+                    ParentAadhaar2: '',
+                    RelationShipWithHolder: '',
+                    Mobile: prescription.patient.phone || user.RegMob1,
+                    Country: 1
+                  },
+
+                  EnclosedDocObj: {
+                    EnclosedDocList: [
+                      {
+                        EnclosedId: '0',
+                        AppId: '0',
+                        EmpId: prescription.patient.memberId || user.MemberId,              
+                        AppType: 'Order',
+                        EncloserType: '',
+                        EncloserTypeDesc: '',
+                        FileName: '',
+                        FilePath: '',
+                        Description: 'Prescription',
+                        EnclosedDate: '',
+                        EnclosedTime: '',
+                        EnclosedDocList: '',
+                        EnclosedDeleteDocList: '',
+                        Remarks: prescription.file.name || '',           
+                        FileExtension: prescription.file.name,
+                        filesToUpload: ''
+                      }
+                    ]
+                  }
+              }))
+
+          } else {
+              setOrderData((preValues) => ({
+                  ...preValues,
+                  PartyCode: '0',
+                  InsBy: '0',
+                  BillingState: '',
+                  BillingAddress: '',
+                  DeliveryParty: '',
+                  DeliveryState: '',
+                  DeliveryAddress : '',
+                  filesToUpload: {},
+                  
+                  PartyCode : '',
+                  DeliveryParty: '',
+                  ReferenceBy: '',
+                  DoctorLocation: '',
+              }))
+          }
+      }
+      init();
+  },[isLoggedIn, user, cartSubtotal, compCode, orderList, locationId, prescription.file.uri])
+  
+  
+
 
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
@@ -159,9 +352,11 @@ const Checkout = () => {
               <Text className="text-md text-gray-600 font-semibold">Grand Total</Text>
               <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
           </View>
-          {/* <ButtonPrimary title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
-          <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
+          <ButtonPrimary onClick={() => console.log(orderData)} title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
+          {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
+
       </View>
+      <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />
     </ScrollView>
   );
 };

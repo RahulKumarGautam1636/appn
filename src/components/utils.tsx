@@ -560,11 +560,14 @@ export function FileUploader({ file, setFile, removeFile }: any) {
 
     if (!result.canceled) {
       const img = result.assets[0];
+      console.log(img);
+      const name = img.fileName || 'image.jpg';
       setFile({
-        name: img.fileName || 'image.jpg',
+        name: name,
         uri: img.uri,
         type: img.type || 'image/jpeg',
         fileType: 'image',
+        extn: '.' + name.split('.').pop(),
       });
     }
   };
@@ -577,13 +580,15 @@ export function FileUploader({ file, setFile, removeFile }: any) {
       ],
       copyToCacheDirectory: true,
     });
-    console.log(result);
-    if (result.canceled === false) {
+
+    if (result.canceled === false) {   
+      const name = result.assets[0].name;
       setFile({
-        name: result.assets[0].name,
+        name: name,
         uri: result.assets[0].uri,
         type: result.assets[0].mimeType || 'application/octet-stream',
         fileType: 'document',
+        extn: '.' + name.split('.').pop(),
       });
     }
   };
