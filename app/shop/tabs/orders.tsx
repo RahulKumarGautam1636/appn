@@ -53,14 +53,14 @@ const Orders = () => {
       </View>
       <View className='bg-white'>
           <View className='flex-row justify-between border-y border-gray-200 border-solid p-4 bg-white gap-2'>
-              <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${tabActive === 'active' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setTabActive('active')}>
-                  <Text className={`font-PoppinsMedium ${tabActive === 'active' ? 'text-white' : ''}`}>Previous</Text>
+              <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${tabActive === 'active' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setTabActive('active')}>
+                  <Text className={`font-PoppinsMedium ${tabActive === 'active' ? 'text-white' : ''}`}>Active</Text>
               </TouchableOpacity>
-              <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${tabActive === 'completed' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setTabActive('completed')}>
-                  <Text className={`font-PoppinsMedium ${tabActive === 'completed' ? 'text-white' : ''}`}>Today</Text>                        
+              <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${tabActive === 'completed' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setTabActive('completed')}>
+                  <Text className={`font-PoppinsMedium ${tabActive === 'completed' ? 'text-white' : ''}`}>Completed</Text>                        
               </TouchableOpacity>
-              <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${tabActive === 'cancelled' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setTabActive('cancelled')}>
-                  <Text className={`font-PoppinsMedium ${tabActive === 'cancelled' ? 'text-white' : ''}`}>Upcoming</Text>
+              <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${tabActive === 'cancelled' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setTabActive('cancelled')}>
+                  <Text className={`font-PoppinsMedium ${tabActive === 'cancelled' ? 'text-white' : ''}`}>Cancelled</Text>
               </TouchableOpacity>
           </View>
       </View>

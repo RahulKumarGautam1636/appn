@@ -445,7 +445,7 @@ export const OrderItemCard = ({ data }: any) => {
         <View className="flex-row items-center justify-between">
           <Text className="text-lg font-semibold text-gray-700">₹ {num(data.Amount)}</Text>
           
-          <View className="flex-row items-center bg-gray-100 rounded-2xl">
+          <View className="flex-row items-center bg-gray-100 rounded-2xl py-2">
             {/* <TouchableOpacity className="w-9 h-9 items-center justify-center">
               <Ionicons name="remove" size={16} color="#666" />
             </TouchableOpacity> */}

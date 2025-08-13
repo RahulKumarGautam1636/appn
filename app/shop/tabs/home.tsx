@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions, Platform, FlatList } from 'react-native';
-import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { GridLoader, ProductCard } from '@/src/components/utils';
 import { Link } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
+import colors from 'tailwindcss/colors';
 
 const CatCard = ({ data }: any) => {
   return (
@@ -25,6 +26,7 @@ const ShoppingAppScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState('Pharmacy');
   const { products: productsData, categories: categoriesData } = useSelector((i: RootState) => i.siteData);
   const user = useSelector((i: RootState) => i.user);
+  const location = useSelector((i: RootState) => i.appData.location);
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
   const dispatch = useDispatch();
 
@@ -172,7 +174,7 @@ const ShoppingAppScreen = () => {
               </Link>
           </View>
         }
-        <View className="bg-white rounded-full px-4 py-[0.42rem] flex-row items-center mb-5">
+        <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center mb-2">
           <Feather name="search" size={20} color="#9CA3AF" />
           <TextInput 
             placeholder="Search..." 
@@ -180,6 +182,14 @@ const ShoppingAppScreen = () => {
             placeholderTextColor="#9CA3AF"
           />
           <Feather name="sliders" size={20} color="#9CA3AF" />
+        </View>
+        <View className='flex-row justify-between mb-3 items-center gap-12'>
+          <Text className='text-[12px] text-gray-700 font-medium'>Select area : </Text>
+          <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOCATIONS', state: true }))} className='flex-row justify-end gap-2 items-center flex-1'>
+            <FontAwesome6 name="location-pin" size={12} color={colors.purple[600]} />
+            <Text className="text-gray-700 text-[12px]" numberOfLines={1}>{location.LocationName}</Text>
+            <Ionicons name="caret-down" size={20} color={colors.orange[500]} />
+          </TouchableOpacity>
         </View>
         <View className="flex-row justify-around py-4 bg-white rounded-2xl">
           <TouchableOpacity className="items-center">

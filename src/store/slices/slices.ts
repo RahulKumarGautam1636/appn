@@ -261,6 +261,7 @@ const modalsSlice = createSlice({
     TEST_DETAIL: { state: false, data: '' },
     DEPTS: { state: false, data: '' },
     PRESC: { state: false, data: '' },
+    LOCATIONS: { state: false, data: '' },
   },
   reducers: {
     setModal: (state, action: any) => {
@@ -327,7 +328,7 @@ const appDataSlice = createSlice({
   },
   reducers: {
     setLocation: (state, action: any) => {
-      state.location = { ...state.location, ...action.payload};
+      state.location = action.payload;
       return state;
     },
     setPrescription: (state, action: any) => {

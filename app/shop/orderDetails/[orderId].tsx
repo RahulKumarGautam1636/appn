@@ -18,13 +18,13 @@ const OrderStatus = () => {
       completed: true,
     },
     {
-      title: 'In Progress',
+      title: 'Dispatched',
       date: '19 Dec 2023, 12:25 PM',
       icon: 'package',
       completed: true,
     },
     {
-      title: 'Shipped',
+      title: 'Out For Delivery',
       date: '19 Dec 2023, 01:05 PM',
       icon: 'truck',
       completed: true,
@@ -84,7 +84,7 @@ const OrderStatus = () => {
   const compCode = useSelector((i: RootState) => i.compCode);
   const user = useSelector((i: RootState) => i.user);
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
-  const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+  const locationId = useSelector((i: RootState) => i.appData.location.LocationId);  
   
   useEffect(() => {
     const getMyOrders = async (partyCode, id, locId) => {
@@ -100,6 +100,10 @@ const OrderStatus = () => {
   }, [compCode, isLoggedIn, user.PartyCode, locationId])
 
   const order = orders.data.OrderList[0] || {};
+
+  let orderS = order?.EnqFollowUpList?.map((i: any) => (
+    { title: i.Tag + ' ' + i.Remarks, date: new Date(i.NextAppDate).toDateString() + '    ' + i.NextAppTime, icon: getStatusIcon(i.Tag), completed: true }
+  ))
 
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
@@ -188,7 +192,7 @@ const OrderStatus = () => {
           <View className='flex-row gap-3 px-1 py-[0.9rem]'>
             <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order Status :</Text>
             {order.OrderStatus ? 
-              <Text className="text-[13px] text-green-600">{order.OrderStatus}</Text> :
+              <Text className="text-[13px] text-green-600 font-semibold">{order.OrderStatus}</Text> :
               <Text className={`text-[13px] font-semibold ${order.ApprovalStatus === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{order.ApprovalStatus === 'Y' ? 'Processed' : 'Order Placed'}</Text>
             }
           </View>
@@ -243,10 +247,11 @@ const OrderStatus = () => {
             <Feather name="chevron-right" size={23} color="white" />
           </TouchableOpacity>
         </View> */}
+        {order.EnqFollowUpList?.length ? <>
         <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Delivery Status</Text>
         <View className="bg-white shadow-sm border-b border-gray-200 rounded-3xl py-6 pl-5 pr-6">           
             <View className="relative gap-5">
-                {orderSteps.map((step, index) => (
+                {/* {orderSteps.map((step, index) => (
                     <View key={index} className="flex-row items-start">
                         {index < orderSteps.length - 1 && (<View className={`absolute left-4 top-8 w-0.5 h-12 ${step.completed ? 'bg-amber-600' : 'bg-gray-200'}`}/>)}
                         <View className={`w-8 h-8 rounded-full items-center justify-center z-10 ${step.completed ? 'bg-amber-600' : 'bg-gray-200'}`}>
@@ -264,9 +269,28 @@ const OrderStatus = () => {
                             <Feather name={getStatusIcon(step.title)} size={20} color={step.completed ? '#D97706' : '#9ca3af'} />
                         </View>
                     </View>
-                ))}
+                ))} */}
+                {orderS?.map((step, index) => (
+                  <View key={index} className="flex-row items-start">
+                      {index < orderS?.length - 1 && (<View className={`absolute left-4 top-8 w-0.5 h-12 ${step.completed ? 'bg-amber-600' : 'bg-gray-200'}`}/>)}
+                      <View className={`w-8 h-8 rounded-full items-center justify-center z-10 ${step.completed ? 'bg-amber-600' : 'bg-gray-200'}`}>
+                          <Feather name={step.icon} size={16} color={step.completed ? 'white' : '#9CA3AF'} />
+                      </View>
+                      <View className="flex-1 ml-4">
+                          <Text className={`font-semibold text-base mb-[0.4rem] ${step.completed ? 'text-gray-900' : 'text-gray-500'}`}>
+                              {step.title}
+                          </Text>
+                          <Text className={`text-sm ${step.completed ? 'text-gray-600' : 'text-gray-500'}`}>
+                              {step.date}
+                          </Text>
+                      </View>
+                      <View className="my-auto">
+                          <FontAwesome5 name="check" size={18} color={step.completed ? '#D97706' : '#9ca3af'} />
+                      </View>
+                  </View>
+              ))}
             </View>
-        </View>
+        </View></> : null}
         <View className="flex-row gap-4 mt-4">
             <ButtonPrimary title='NEED HELP' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-gray-700' />
             <ButtonPrimary title='CANCEL' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' />
@@ -279,9 +303,9 @@ const getStatusIcon = (title) => {
   switch (title) {
     case 'Order Placed':
       return 'file-text';
-    case 'In Progress':
+    case 'Dispatched':
       return 'box';
-    case 'Shipped':
+    case 'Out For Delivery':
       return 'truck';
     case 'Delivered':
       return 'package';
