@@ -166,7 +166,8 @@ const PrescriptionForm = () => {
     // }
 
     const verifiedMemberId = checkMember() ? patient.memberId : 0;
-    dispatch(setPrescription({ file: file, patient: { ...patient, memberId: verifiedMemberId }}));        
+    dispatch(setPrescription({ file: file, patient: { ...patient, memberId: verifiedMemberId }})); 
+    dispatch(setModal({name: 'PRESC', state: false}))       
     // setFile({});
     // setImgURL('');
   } 

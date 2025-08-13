@@ -5,10 +5,20 @@ import ButtonPrimary, { LinkBtn, MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { CartCard, createDate, num } from '@/src/components/utils';
-import { setModal } from '@/src/store/slices/slices';
+import { dumpCart, setModal, setPrescription } from '@/src/store/slices/slices';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import CheckDelivery from '../checkDelivery';
+import CheckDelivery from './checkDelivery';
+import { BASE_URL } from '@/constants';
+import axios from 'axios';
+
+
+const sliceBaseStr = (str: string) => {
+  let target = str.indexOf('base64,');
+  return str.slice(target + 7);
+}
+
+
 const Checkout = () => {
 
   const location = useSelector((i: RootState) => i.appData.location);
@@ -22,13 +32,14 @@ const Checkout = () => {
   const router = useRouter()     
 
   const cartItemsValueList = cartItems.map(item => item.count * item.SRate);                    
-  const cartSubtotal = cartItemsValueList.reduce((total, num) => total + num, 0).toFixed(2);           
+  const cartSubtotal = num(cartItemsValueList.reduce((total, num) => total + num, 0));           
 
   const cartItemsMRPList = cartItems.map(item => item.count * item.ItemMRP);                    
-  const grossTotal = cartItemsMRPList.reduce((total, num) => total + num, 0).toFixed(2);  
+  const grossTotal = num(cartItemsMRPList.reduce((total, num) => total + num, 0));  
   
   const cartItemsDiscountList = cartItems.map(item => ((item.ItemMRP * item.DiscountPer) / 100) * item.count);                  
-  const discountTotal = cartItemsDiscountList.reduce((total, num) => total + num, 0).toFixed(2); 
+  const discountTotal = num(cartItemsDiscountList.reduce((total, num) => total + num, 0)); 
+  const [loading, setLoading] = useState(false);
   
   // NEW WORK ===================================================================================================================================
 
@@ -49,6 +60,7 @@ const Checkout = () => {
     DeliveryParty: user.PartyCode,
     DeliveryState: user.State,
     DeliveryAddress : user.Address + ' ' + user.Address2 + ' ' + user.Pin,
+    LocationId: '',
   });
 
   const [isDeliverable, setDeliverable] = useState(false);
@@ -102,7 +114,7 @@ const Checkout = () => {
               cashPartyMobile = prescription.patient.phone || user.RegMob1;  
               partyCode = user.PartyCode;
               billingState = user.State;
-              deliveryState = prescription.patient.state.CodeId || user.State;
+              deliveryState = prescription.patient.state?.CodeId || user.State;
 
               setOrderData((preValues) => ({
                   ...preValues,
@@ -118,7 +130,6 @@ const Checkout = () => {
                   BillingAddress: user.Address + ' ' + user.Address2 + ' ' + user.Pin,
                   DeliveryAddress : user.Address + ' ' + user.Address2 + ' ' + user.Pin,
                   LocationId: locationId,
-                  filesToUpload: prescription,
 
                   PartyCode : partyCode,
                   DeliveryParty: selectedMember.PartyCode || user.PartyCode,
@@ -188,8 +199,8 @@ const Checkout = () => {
                         EnclosedDocList: '',
                         EnclosedDeleteDocList: '',
                         Remarks: prescription.file.name || '',           
-                        FileExtension: prescription.file.name,
-                        filesToUpload: ''
+                        FileExtension: prescription.file.extn,
+                        filesToUpload: sliceBaseStr(prescription.file.uri)
                       }
                     ]
                   }
@@ -205,10 +216,6 @@ const Checkout = () => {
                   DeliveryParty: '',
                   DeliveryState: '',
                   DeliveryAddress : '',
-                  filesToUpload: {},
-                  
-                  PartyCode : '',
-                  DeliveryParty: '',
                   ReferenceBy: '',
                   DoctorLocation: '',
               }))
@@ -217,8 +224,28 @@ const Checkout = () => {
       init();
   },[isLoggedIn, user, cartSubtotal, compCode, orderList, locationId, prescription.file.uri])
   
-  
+  const placeOrder = async () => {
+    if (!isLoggedIn) return alert('please login to place an order.');
+    if (!orderData.LocationId) return alert('Please select a Service Location before making an order.');
+    
+    let body = { ...orderData };
+    console.log(body);    
 
+    try {
+      setLoading(true);
+      const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
+      setLoading(false);
+      if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
+      dispatch(dumpCart());
+      dispatch(setPrescription({ patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } }))
+      alert('Order Booked Successfully.')
+      router.push('/shop/tabs/orders')
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+  
 
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
@@ -250,7 +277,7 @@ const Checkout = () => {
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Patient Details</Text>
       <View className='bg-white rounded-2xl p-5 shadow-md shadow-gray-400'>
           <View className='flex-row items-center'>
-              <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+              <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
               <View>
                   <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
                   <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder}</Text>
@@ -269,7 +296,7 @@ const Checkout = () => {
           <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
           <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
       </View>
-      <View className="bg-indigo-500 rounded-2xl p-5 mt-4 flex-row items-center justify-between">
+      {prescription.file.uri ? null :<TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-indigo-500 rounded-2xl p-5 mt-4 flex-row items-center justify-between">
         <View className="flex-row items-center flex-1">
           <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
             <Feather name="plus" size={28} color="#ffffff" />
@@ -282,7 +309,7 @@ const Checkout = () => {
         <TouchableOpacity>
           <Feather name="chevron-right" size={23} color="white" />
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>}
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Address Details</Text>
       <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
           <View className='justify-between flex-row px-1 py-[0.9rem] items-start gap-4'>
@@ -352,11 +379,16 @@ const Checkout = () => {
               <Text className="text-md text-gray-600 font-semibold">Grand Total</Text>
               <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
           </View>
-          <ButtonPrimary onClick={() => console.log(orderData)} title='PLACE ORDER' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
-          {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
 
+        {prescription.required ? <>
+          {!prescription.file.uri && <Text className='text-rose-500 text-sm mb-3' style={{fontFamily: 'Lato', fontWeight: 600}}>Please Attach your prescription to place an order.</Text>}
+        </> : ''}
+        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(isLoggedIn && isDeliverable && prescription.file.uri) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
+        {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
+
+        <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />
       </View>
-      <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />
+      
     </ScrollView>
   );
 };

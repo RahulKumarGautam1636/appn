@@ -119,15 +119,20 @@ const OrderStatus = () => {
 
         <View className='flex-row gap-3 p-4'>
           {/* <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} /> */}
-          <Text className="font-PoppinsSemibold text-slate-700 text-[14px] mr-auto">Billing Status</Text>
+          <Text className="font-PoppinsSemibold text-slate-700 text-[14px] mr-auto">Order Status</Text>
           {/* <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} /> */}
           {/* <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">
             {new Date(data.NextAppDate).toLocaleDateString('en-TT')}
             In Process{order.OrderStatus}
           </Text> */}
-          <View className={`px-3 py-[4px] rounded-xl shadow-sm ${order.ApprovalStatus === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
-              <Text className={`text-[13px] font-medium ${order.ApprovalStatus === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{order.ApprovalStatus === 'Y' ? 'Processed' : 'Order Placed'}</Text>
-          </View>
+          {order.OrderStatus ? 
+            <View className={`px-3 py-[4px] rounded-xl shadow-sm bg-sky-50`}>
+                <Text className={`text-[13px] font-medium text-sky-600`}>{order.OrderStatus}</Text>
+            </View> :
+            <View className={`px-3 py-[4px] rounded-xl shadow-sm ${order.ApprovalStatus === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
+                <Text className={`text-[13px] font-medium ${order.ApprovalStatus === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{order.ApprovalStatus === 'Y' ? 'Processed' : 'Order Placed'}</Text>
+            </View>
+          }
         </View>
       </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Deliver To</Text>
@@ -177,12 +182,15 @@ const OrderStatus = () => {
               <Text className="text-[13px] text-slate-700">{order.PartyAddress}</Text>
           </View>
           <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
-              <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order Status :</Text>
-              <Text className="text-[13px] text-slate-700">{order.OrderStatus}</Text>
+              <Text className="text-slate-600 font-bold text-[13px] mr-auto">Billing Status :</Text>
+              <Text className="text-[13px] text-orange-600 font-semibold">{order.ApprovalStatus === 'Y' ? 'PROCESSED' : 'ORDER PLACED'}</Text>
           </View>
           <View className='flex-row gap-3 px-1 py-[0.9rem]'>
-              <Text className="text-slate-600 font-bold text-[13px] mr-auto">Billing Status :</Text>
-              <Text className="text-[13px] text-slate-700">{order.ApprovalStatus === 'Y' ? 'PROCESSED' : 'ORDER PLACED'}</Text>
+            <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order Status :</Text>
+            {order.OrderStatus ? 
+              <Text className="text-[13px] text-green-600">{order.OrderStatus}</Text> :
+              <Text className={`text-[13px] font-semibold ${order.ApprovalStatus === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{order.ApprovalStatus === 'Y' ? 'Processed' : 'Order Placed'}</Text>
+            }
           </View>
       </View>
       {/* <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Service Location</Text>
@@ -221,7 +229,7 @@ const OrderStatus = () => {
                 <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ 643.76</Text>
             </View>
         </View>
-        <View className="bg-indigo-500 rounded-3xl p-5 flex-row items-center justify-between">
+        {/* <View className="bg-indigo-500 rounded-3xl p-5 flex-row items-center justify-between">
           <View className="flex-row items-center flex-1">
             <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
               <Feather name="upload" size={20} color="#ffffff" />
@@ -234,7 +242,7 @@ const OrderStatus = () => {
           <TouchableOpacity>
             <Feather name="chevron-right" size={23} color="white" />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Delivery Status</Text>
         <View className="bg-white shadow-sm border-b border-gray-200 rounded-3xl py-6 pl-5 pr-6">           
             <View className="relative gap-5">

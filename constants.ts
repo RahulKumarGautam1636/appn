@@ -6,6 +6,14 @@ export const rent = false;
 export const TAKEHOME_AGRO = '5KR8RKKh%2BtHG4iszAzAjJQ== ';
 export const TAKEHOME_GARMENTS = 't0ZL5KiikMgM1YeyB68a1w== ';
 export const TAKEHOME_ELECTRONICS = 'QqFodfpxRStiGjTKTYE/hA==';
+
+const REACT_APP_BASE_URL = 'https://myapps.gsterpsoft.com';
+const REACT_APP_TEST_BASE_URL = 'https://api.gsterpsoft.com';
+
+export const testMode = false;
+export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
+export const SRC_URL = 'https://erp.gsterpsoft.com';
+
 export const initReg = {  
   Name: '',        
   EncCompanyId: '',
@@ -97,10 +105,6 @@ export const initMember = {
   PartyId: '',
   LinkAutoId: 0,          // when doctor add member of other user.
 }
-
-export const BASE_URL = 'https://myapps.gsterpsoft.com'
-export const GSTERPSOFT_URL = 'https://apigst.gsterpsoft.com'  
-export const SRC_URL = 'https://erp.gsterpsoft.com';
 
 export const dummyUser = {
   "UserId": 14701,

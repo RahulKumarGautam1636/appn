@@ -93,7 +93,7 @@ const Cart = () => {
               <Text className="font-semibold text-md text-gray-600">Grand Total :</Text>
               <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
           </View>
-          <LinkBtn href={'/shop/tabs/checkout'} title='CHECKOUT' classes='flex-1 !rounded-2xl !bg-gray-700' />
+          <LinkBtn href={'/shop/checkout'} title='CHECKOUT' classes='flex-1 !rounded-2xl !bg-gray-700' />
         </View>
       </ScrollView>
   );

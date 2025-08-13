@@ -300,7 +300,7 @@ const getUserLocation = () => {
   if (LID) return { LocationId: LID };
   return { 
     required: true, 
-    LocationId: 1293, 
+    LocationId: 1293, // 1298, // 1293, 
     LocationName: 'Healthbuddy Kalyani Pharmacy', 
     Address: 'B-07/08(S), B-7, Ward No-10, Ground Floor Central Park, Kalyani-Nadia 741235', 
     StateDesc: 'West Bengal', 
@@ -315,7 +315,7 @@ const appDataSlice = createSlice({
   initialState: { 
     focusArea: '0',
     location: getUserLocation(),
-    prescription: { required: true, patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '' } },
+    prescription: { required: true, patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } },
     restaurant: { table: {  } },
     businessType: { Description: '', CodeValue: '', CodeId: '' },
     userRegType:
