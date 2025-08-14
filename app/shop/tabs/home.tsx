@@ -184,7 +184,7 @@ const ShoppingAppScreen = () => {
           <Feather name="sliders" size={20} color="#9CA3AF" />
         </View>
         <View className='flex-row justify-between mb-3 items-center gap-12'>
-          <Text className='text-[12px] text-gray-700 font-medium'>Select area : </Text>
+          <Text className='text-[12px] text-gray-600 font-medium'>Service provider : </Text>
           <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOCATIONS', state: true }))} className='flex-row justify-end gap-2 items-center flex-1'>
             <FontAwesome6 name="location-pin" size={12} color={colors.purple[600]} />
             <Text className="text-gray-700 text-[12px]" numberOfLines={1}>{location.LocationName}</Text>
@@ -193,10 +193,24 @@ const ShoppingAppScreen = () => {
         </View>
         <View className="flex-row justify-around py-4 bg-white rounded-2xl">
           <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="gift" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Garments</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity className="items-center">
+            <View className="w-12 h-12 bg-purple-600 rounded-2xl items-center justify-center mb-2">
+              <Feather name="percent" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Surgicals</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity className="items-center">
             <View className="w-12 h-12 bg-purple-500 rounded-2xl items-center justify-center mb-2">
               <Feather name="play" size={20} color="white" />
             </View>
-            <Text className="text-xs text-gray-600">Garments</Text>
+            <Text className="text-xs text-gray-600">Electronics</Text>
           </TouchableOpacity>
           
           <TouchableOpacity className="items-center">
@@ -206,19 +220,6 @@ const ShoppingAppScreen = () => {
             <Text className="text-xs text-gray-600">Grocery</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity className="items-center">
-            <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
-              <Feather name="gift" size={20} color="white" />
-            </View>
-            <Text className="text-xs text-gray-600">Medicines</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity className="items-center">
-            <View className="w-12 h-12 bg-purple-600 rounded-2xl items-center justify-center mb-2">
-              <Feather name="percent" size={20} color="white" />
-            </View>
-            <Text className="text-xs text-gray-600">Property</Text>
-          </TouchableOpacity>
         </View>
       </View>
       <View className='py-5'>

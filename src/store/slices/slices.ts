@@ -287,7 +287,7 @@ const cartSlice = createSlice({
       delete state[id]
     },
     dumpCart: (state, action: any) => {
-      state = {}
+      return {}
     }
   }
 });

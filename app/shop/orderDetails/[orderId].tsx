@@ -6,7 +6,7 @@ import ButtonPrimary from '@/src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL, myColors } from '@/constants';
-import { OrderItemCard, getFrom } from '@/src/components/utils';
+import { OrderItemCard, getFrom, num } from '@/src/components/utils';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 const OrderStatus = () => {
@@ -175,7 +175,7 @@ const OrderStatus = () => {
           </View>
           <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Order Value :</Text>
-              <Text className="text-[13px] text-slate-700">{parseFloat(order.Amount).toFixed(2)}</Text>
+              <Text className="text-[13px] text-slate-700">{num(order.Amount)}</Text>
           </View>
           <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
               <Text className="text-slate-600 font-bold text-[13px] mr-auto">Service Location :</Text>
@@ -222,15 +222,15 @@ const OrderStatus = () => {
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-500 text-[13px] items-center leading-5">Cart Subtotal</Text>
                 </View>
-                <Text className="font-PoppinsSemibold text-slate-700 text-[13px] ml-auto leading-5">702.64</Text>
+                <Text className="font-PoppinsSemibold text-slate-700 text-[13px] ml-auto leading-5">{num(order.Amount)}</Text>
             </View>
             <View className='flex-row gap-3 px-5 py-4 border-y border-gray-200'>
                 <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Service Charge</Text>
-                <Text className="font-PoppinsSemibold text-[13px] text-slate-700">+ 58.88</Text>
+                <Text className="font-PoppinsSemibold text-[13px] text-slate-700">+ 00.00</Text>
             </View>
             <View className='flex-row gap-3 px-5 py-4'>
                 <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Payable Amount</Text>
-                <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ 643.76</Text>
+                <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ {num(order.Amount)}</Text>
             </View>
         </View>
         {/* <View className="bg-indigo-500 rounded-3xl p-5 flex-row items-center justify-between">

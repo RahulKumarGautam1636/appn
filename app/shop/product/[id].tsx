@@ -12,10 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import colors from 'tailwindcss/colors';
 
 const ProductPage = () => {
-  const [quantity, setQuantity] = useState(1);
-  const incrementQuantity = () => setQuantity(prev => prev + 1);
-  const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
-
+  const [count, setCount] = useState(1);
   const [productData, setProductData] = useState({loading: false, data: {ImageMasterCollection: [], ItemMaster: {}, itemMasterCollection: []}, err: {status: false, msg: ''}});     
 	const [activePackSize, setPackSize] = useState('');
   const { location } = useSelector((state: RootState) => state.appData);
@@ -68,7 +65,7 @@ const ProductPage = () => {
 	}
 
   const handleAdd = () => {
-    add2Cart(isAdded, product, packSize, dispatch, quantity);
+    add2Cart(isAdded, product, packSize, dispatch, count);
   }
 
   const handleBuyNow = () => {
@@ -85,7 +82,7 @@ const ProductPage = () => {
     { uri: 'https://admin.takehome.live/Content/ImageMaster/860872_2.png' },
   ];
 
-  const images2 = productData.data.ImageMasterCollection.map((i: any) => ({uri: i.ImgURL}));
+  const images2 = productData.data.ImageMasterCollection.map((i: any) => ({uri: i.ImgURL}));  
 
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -180,11 +177,11 @@ const ProductPage = () => {
             </View>
           </View>
           <View className="flex-row items-center gap-6 justify-between mt-6 mb-1">
-            <TouchableOpacity onPress={decrementQuantity} className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center">
+            <TouchableOpacity onPress={() => setCount(pre => pre > 1 ? pre - 1 : 1)} className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center">
               <Feather name="minus" size={20} color="#6B7280" />
             </TouchableOpacity>
-            <Text className="text-xl font-semibold text-gray-900">{quantity}</Text>
-            <TouchableOpacity onPress={incrementQuantity} className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center">
+            <Text className="text-xl font-semibold text-gray-900">{count}</Text>
+            <TouchableOpacity onPress={() => setCount(pre => pre + 1)} className="w-12 h-12 rounded-full border border-gray-200 items-center justify-center">
               <Feather name="plus"  size={20} color="#6B7280" />
             </TouchableOpacity>
             <AddToCartBtn type='type_1' product={product} useAuth={true} qty={packSize().StockQty} addCart={handleAdd} buyNow={buyNow} />

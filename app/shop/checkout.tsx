@@ -4,7 +4,7 @@ import colors from 'tailwindcss/colors';
 import ButtonPrimary, { LinkBtn, MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { CartCard, createDate, num } from '@/src/components/utils';
+import { CartCard, createDate, num, wait } from '@/src/components/utils';
 import { dumpCart, setModal, setPrescription } from '@/src/store/slices/slices';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
@@ -233,9 +233,10 @@ const Checkout = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
+      await wait(3000);
+      // const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
       setLoading(false);
-      if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
+      // if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
       dispatch(dumpCart());
       dispatch(setPrescription({ patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } }))
       alert('Order Booked Successfully.')

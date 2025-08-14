@@ -200,7 +200,7 @@ export const getCategoryRequiredFieldsOnly = (list) => {
   }));
 }
 
-export const num = (n: any) => parseFloat(n.toFixed(2));
+export const num = (n: any) => n ? parseFloat(n.toFixed(2)) : 0;
 
 export const createDate = (days: any, months: any, years: any) => {
   var date = new Date(); 
@@ -268,12 +268,12 @@ export const GradientBG = ({ children, imgStyles={opacity: 0.8}, classes }: any)
   )
 }
 
-export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count=1) => {
+export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count) => {
   const state = store.getState();
   const locationId = state.appData.location.LocationId;
   if (!locationId) return alert('Please choose a Location.');
   if (isAdded) return dispatch(removeFromCart(data.LocationItemId));
-  dispatch(addToCart({...data, count: count, ...computeWithPackSize()})); 
+  dispatch(addToCart({...data, ...computeWithPackSize(), count: count})); 
   // let productToastData = { msg: 'Added to Cart', product: {name: data.Description, price: computeWithPackSize().SRate}, button: {text: 'Visit Cart', link: '/cartPage'} };
   // productToast(productToastData);
 }
@@ -283,7 +283,7 @@ export const buyNow = (dispatch, data, router, computeWithPackSize, ) => {
   const locationId = state.appData.location.LocationId;
   if (!locationId) return alert('Please choose a Location.');
   dispatch(dumpCart());
-  dispatch(addToCart({...data, count: 1, ...computeWithPackSize()})); 
+  dispatch(addToCart({...data, ...computeWithPackSize(), count: 1})); 
   router.push('/checkout');
 }
 
@@ -445,7 +445,7 @@ export const OrderItemCard = ({ data }: any) => {
         <View className="flex-row items-center justify-between">
           <Text className="text-lg font-semibold text-gray-700">₹ {num(data.Amount)}</Text>
           
-          <View className="flex-row items-center bg-gray-100 rounded-2xl py-2">
+          <View className="flex-row items-center bg-gray-100 rounded-2xl py-1">
             {/* <TouchableOpacity className="w-9 h-9 items-center justify-center">
               <Ionicons name="remove" size={16} color="#666" />
             </TouchableOpacity> */}
@@ -484,7 +484,7 @@ export const OrderCard = ({ data }: any) => {
             <Text className="text-gray-500 font-medium text-[0.95rem]">Order Value</Text>
             <Text className="text-[1.1rem] font-semibold text-sky-700 mt-4">₹ {parseFloat(data.Amount).toFixed(2)}</Text>
           </View>
-          <Text className="font-semibold text-pink-600 mb-auto my-auto">3 Items</Text>
+          {/* <Text className="font-semibold text-pink-600 mb-auto my-auto">{} Items</Text> */}
           <View className="items-center">
             <Text className="text-gray-500 font-medium text-[0.95rem]">Order Date</Text>
             <Text className="text-[1.05rem] font-semibold text-sky-700 mt-4">{data.VchDate.slice(0, 10).split('-').reverse().join('-')}</Text>
@@ -684,3 +684,5 @@ export const useFetch = (url: string, isValid: string) => {          // isValid 
 
   return [data, isLoading, error]
 }
+
+export const wait = async (time: number) => await new Promise((resolve) => setTimeout(resolve, time));

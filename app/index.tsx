@@ -34,7 +34,7 @@ export default function App() {
                   <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
               </View>
           </View>
-          <View className='flex-1 bg-white px-6 pt-8'>
+          <View className='flex-1 bg-white px-6 py-8'>
             <View className="flex-row justify-between items-center mb-6">
               <Text className="text-3xl font-bold text-gray-800">Our Services</Text>
             </View>
@@ -46,7 +46,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Book Medicine</Text>
-                    <Text className="text-gray-400 text-lg">45 mins</Text>
+                    <Text className="text-green-600 text-lg">Active</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
@@ -71,7 +71,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Surgicals</Text>
-                    <Text className="text-gray-400 text-lg">Coming soon..</Text>
+                    <Text className="text-rose-500 text-lg">Coming soon..</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
@@ -83,7 +83,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Agro & Groceries</Text>
-                    <Text className="text-gray-400 text-lg">Coming soon..</Text>
+                    <Text className="text-rose-500 text-lg">Coming soon..</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
@@ -95,7 +95,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Garments & Fashion</Text>
-                    <Text className="text-gray-400 text-lg">Coming soon..</Text>
+                    <Text className="text-rose-500 text-lg">Coming soon..</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />

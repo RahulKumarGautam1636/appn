@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import ButtonPrimary, { LinkBtn } from '@/src/components';
@@ -69,6 +69,9 @@ const Cart = () => {
           <Text className="text-lg font-semibold text-black">My Cart</Text>
         </TouchableOpacity>
       </View>
+      <Pressable onPress={() => dispatch(dumpCart())}>
+        <Text className="text-lg font-semibold text-black my-4">Clear All</Text>
+      </Pressable>
       <View className='gap-3'>
         {cartItems.map((data) => <CartCard data={data} key={data.LocationItemId} />)}
       </View>
