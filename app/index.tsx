@@ -25,14 +25,22 @@ export default function App() {
           <Init />
           
           <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
-          <View className="relative gap-4 flex-row items-center justify-center py-[6rem]">
+          {/* <View className="relative gap-4 flex-row items-center justify-center py-[6rem]">
               <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
               <Image className='' source={require('../assets/images/logo.png')} style={{ width: 75, height: 65 }} />
               <View>
-                  <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2 pt-3">TakeHome</Text>
-                  {/* <Text className="font-Poppins text-gray-600 text-[13px]">Healthcare at it's best.</Text> */}
+                  <Text className="font-Poppins text-gray-600 text-[13px]">Healthcare at it's best.</Text>
                   <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
               </View>
+          </View> */}
+
+          <View className="relative gap-4 flex-row items-center justify-center py-[5rem]">
+            <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
+            <Image className='mt-2' source={require('../assets/images/logo.png')} style={{ width: 75, height: 70 }} />
+            <View>
+                <Text className="font-PoppinsSemibold text-blue-800 text-[38px] mb-2 leading-[42px] pt-3">TakeHome</Text>
+                <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
+            </View>
           </View>
           <View className='flex-1 bg-white px-6 py-8'>
             <View className="flex-row justify-between items-center mb-6">

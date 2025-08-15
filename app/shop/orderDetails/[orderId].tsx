@@ -149,7 +149,7 @@ const OrderStatus = () => {
           <View className='justify-between flex-row mb-2'>
               <Text className="text-base font-medium text-black">{order.CashPartyName}</Text>
               <TouchableOpacity onPress={() => {}} className="">
-                <FontAwesome name="pencil" size={20} color={colors.blue[500]} />
+                <Feather name="arrow-right" size={20} color={colors.blue[500]} />
               </TouchableOpacity>
           </View>
           <View className="flex-row items-center gap-3  mb-1">
@@ -291,7 +291,7 @@ const OrderStatus = () => {
               ))}
             </View>
         </View></> : null}
-        <View className="flex-row gap-4 mt-4">
+        <View className="flex-row gap-4 mt-1">
             <ButtonPrimary title='NEED HELP' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-gray-700' />
             <ButtonPrimary title='CANCEL' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' />
         </View>

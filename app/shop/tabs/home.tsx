@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions,
 import { Feather, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { GridLoader, ProductCard } from '@/src/components/utils';
-import { Link } from 'expo-router';
+import { GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
+import { Link, router } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import colors from 'tailwindcss/colors';
+import { Pressable } from 'react-native-gesture-handler';
 
 const CatCard = ({ data }: any) => {
   return (
@@ -18,7 +19,6 @@ const CatCard = ({ data }: any) => {
 }
 
 const web = Platform.OS === 'web';
-const windowWidth = Dimensions.get('window').width;
 
 const ShoppingAppScreen = () => {
   
@@ -174,15 +174,18 @@ const ShoppingAppScreen = () => {
               </Link>
           </View>
         }
-        <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center mb-2">
-          <Feather name="search" size={20} color="#9CA3AF" />
-          <TextInput 
-            placeholder="Search..." 
-            className="flex-1 ml-3 text-gray-700"
-            placeholderTextColor="#9CA3AF"
-          />
-          <Feather name="sliders" size={20} color="#9CA3AF" />
-        </View>
+        <Pressable onPress={() => router.push('/shop/search')}>
+          <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center mb-2 pointer-events-none">
+            <Feather name="search" size={20} color="#9CA3AF" />
+            <TextInput 
+              placeholder="Search..." 
+              readOnly
+              className="flex-1 ml-3 text-gray-700"
+              placeholderTextColor="#9CA3AF"
+            />
+            <Feather name="sliders" size={20} color="#9CA3AF" />
+          </View>
+        </Pressable>
         <View className='flex-row justify-between mb-3 items-center gap-12'>
           <Text className='text-[12px] text-gray-600 font-medium'>Service provider : </Text>
           <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOCATIONS', state: true }))} className='flex-row justify-end gap-2 items-center flex-1'>
@@ -243,7 +246,7 @@ const ShoppingAppScreen = () => {
           }
         })()}
       </View>
-      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
+      {/* <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
         <View className="flex-row items-center flex-1">
           <View className="w-12 h-12 bg-purple-400 rounded-full items-center justify-center mr-4">
             <Feather name="upload" size={20} color="#ffffff" />
@@ -256,7 +259,7 @@ const ShoppingAppScreen = () => {
         <View>
           <Feather name="chevron-right" size={23} color="white" />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View className="flex-1 mb-4">
         <View className="flex-row justify-between items-center mb-4 px-5 ">
           <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
@@ -307,7 +310,7 @@ const ShoppingAppScreen = () => {
           
 
       </View>
-      <View className="flex-1 border-y border-gray-200">
+      {/* <View className="flex-1 border-y border-gray-200">
         {(() => {
           if (categoriesData.loading) {
               return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-5' />;
@@ -328,7 +331,7 @@ const ShoppingAppScreen = () => {
             )
           }
         })()}
-      </View>
+      </View> */}
       <FlatList
           data={categoriesData.LinkCategoryList}
           renderItem={({ item }) =>  (

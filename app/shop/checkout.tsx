@@ -265,9 +265,9 @@ const Checkout = () => {
         <View className="flex-1">
           <View className='justify-between flex-row mb-2'>
               <Text className="text-base font-medium text-black">{user.Name}</Text>
-              <TouchableOpacity onPress={() => {}} className="">
+              {/* <TouchableOpacity onPress={() => {}} className="">
                 <FontAwesome name="pencil" size={20} color={colors.blue[500]} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
           </View>
           <View className="flex-row items-center gap-3  mb-1">
             <FontAwesome6 name="phone-volume" size={12} color={colors.orange[500]} />
@@ -297,7 +297,21 @@ const Checkout = () => {
           <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
           <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
       </View>
-      {prescription.file.uri ? null :<TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-indigo-500 rounded-2xl p-5 mt-4 flex-row items-center justify-between">
+      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Prescription</Text>
+      {prescription.file.name ? 
+      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-white rounded-2xl border-b border-gray-200 p-5 flex-row items-center justify-between">
+        <View className="flex-row items-center flex-1 gap-4">
+          {prescription.file.fileType === 'image' ? <Image source={{ uri: prescription.file.uri }} className="w-14 h-14 rounded-xl border border-gray-100" resizeMode="cover" /> : null}
+          <View className="flex-1">
+            <Text className="font-semibold text-indigo-500 mb-2">{prescription.file.name}</Text>
+            <Text className="text-sm text-gray-500">{prescription.file.fileType}</Text>
+          </View>
+        </View>
+        <TouchableOpacity>
+          <Feather name="chevron-right" size={23} color="gray" />
+        </TouchableOpacity>
+      </TouchableOpacity> :
+      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-indigo-500 rounded-2xl p-5 flex-row items-center justify-between">
         <View className="flex-row items-center flex-1">
           <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
             <Feather name="plus" size={28} color="#ffffff" />
@@ -382,9 +396,9 @@ const Checkout = () => {
           </View>
 
         {prescription.required ? <>
-          {!prescription.file.uri && <Text className='text-rose-500 text-sm mb-3' style={{fontFamily: 'Lato', fontWeight: 600}}>Please Attach your prescription to place an order.</Text>}
+          {!prescription.file.name && <Text className='text-rose-500 text-sm mb-3' style={{fontFamily: 'Lato', fontWeight: 600}}>Please Attach your prescription to place an order.</Text>}
         </> : ''}
-        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(isLoggedIn && isDeliverable && prescription.file.uri) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
+        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(isLoggedIn && isDeliverable && prescription.file.name) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
         {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
 
         <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />

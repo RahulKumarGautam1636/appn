@@ -189,7 +189,7 @@ const ProductPage = () => {
         </View>
       </View>
       <View>
-        <View className='m-4 shadow-sm rounded-2xl overflow-hidden'>
+        {/* <View className='m-4 shadow-sm rounded-2xl overflow-hidden'>
           <Link href={'/appn/appnList'}>
               <View className='flex-row gap-4 w-full bg-white p-5 items-center'>
                   <FontAwesome name="shield" size={22} color={myColors.primary[500]} style={{width: 26}} />
@@ -211,7 +211,7 @@ const ProductPage = () => {
                   <Feather name="chevron-right" size={24} color='#6b7280' />
               </View>
           </Link>
-        </View>
+        </View> */}
         <View className="flex-row justify-between items-center pt-4 pb-3 px-5 bg-white">
           <Text className="text-lg font-bold text-gray-800">Similar Products</Text>
           <TouchableOpacity>

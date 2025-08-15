@@ -5,7 +5,7 @@ import colors from 'tailwindcss/colors';
 import ButtonPrimary, { LinkBtn } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { addToCart, removeFromCart } from '@/src/store/slices/slices';
+import { addToCart, dumpCart, removeFromCart } from '@/src/store/slices/slices';
 import { CartCard } from '@/src/components/utils';
 import { useRouter } from 'expo-router';
 
@@ -64,14 +64,14 @@ const Cart = () => {
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
       <View className="flex-row items-center justify-between pb-4 border-b border-gray-100">
-        <TouchableOpacity onPress={() => router.back()} className="flex-row items-center">
+        <TouchableOpacity onPress={() => router.push('/shop/tabs/home')} className="flex-row items-center">
           <Ionicons name="chevron-back" size={24} color="#000" className="mr-2" />
           <Text className="text-lg font-semibold text-black">My Cart</Text>
         </TouchableOpacity>
       </View>
-      <Pressable onPress={() => dispatch(dumpCart())}>
+      {/* <Pressable onPress={() => dispatch(dumpCart())}>
         <Text className="text-lg font-semibold text-black my-4">Clear All</Text>
-      </Pressable>
+      </Pressable> */}
       <View className='gap-3'>
         {cartItems.map((data) => <CartCard data={data} key={data.LocationItemId} />)}
       </View>

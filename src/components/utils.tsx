@@ -15,6 +15,7 @@ import { Button, Alert } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { FileText } from "lucide-react-native";
+import { Platform } from "react-native";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -268,7 +269,7 @@ export const GradientBG = ({ children, imgStyles={opacity: 0.8}, classes }: any)
   )
 }
 
-export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count) => {
+export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count=1) => {
   const state = store.getState();
   const locationId = state.appData.location.LocationId;
   if (!locationId) return alert('Please choose a Location.');
@@ -301,7 +302,7 @@ export const computeWithPackSize = (data, activePackSize, vType) => {
 } 
 
 
-export const ProductCard = ({ data, width }) => {
+export const ProductCard = ({ data, width='100%', type='grid' }) => {
 
   const compCode = useSelector((i: RootState) => i.compCode);
   // const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
@@ -347,30 +348,56 @@ export const ProductCard = ({ data, width }) => {
     buyNow(data, packSize, dispatch, router);
   }
 
-  // 
-  return (
-    <TouchableOpacity onPress={() => router.push(`/shop/product/${data.ItemId}`)} style={{width: width }}>
-      <View className={`items-start bg-white p-4 border border-gray-100 w-full`}>
-        <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
-          <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
-        </View>
-        <View className='flex-1 items-start mt-3'>
-          <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
-          <View className='flex-row gap-4'>
-            <Text className="text-[0.92rem] font-semibold text-green-700">₹ {packSize().SRate}</Text>
-            <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
+  if (type === 'grid') {
+    return (
+      <TouchableOpacity onPress={() => router.push(`/shop/product/${data.ItemId}`)} style={{width: width }}>
+        <View className={`items-start bg-white p-4 border border-gray-100 w-full`}>
+          <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
+            <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
           </View>
-          {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-          <View className='justify-between flex-row items-center w-full'>
-            {packSizeList}
-            <TouchableOpacity onPress={handleAdd}>
-              <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
-            </TouchableOpacity>
+          <View className='flex-1 items-start mt-3'>
+            <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
+            <View className='flex-row gap-4'>
+              <Text className="text-[0.92rem] font-semibold text-green-700">₹ {packSize().SRate}</Text>
+              <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
+            </View>
+            {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+            <View className='justify-between flex-row items-center w-full'>
+              {packSizeList}
+              <TouchableOpacity onPress={handleAdd}>
+                <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  )
+      </TouchableOpacity>
+    )
+  } else {
+    return (
+      <TouchableOpacity onPress={() => router.push(`/shop/product/${data.ItemId}`)} style={{width: width }}>
+        <View className={`flex-row items-start bg-white p-4 border border-gray-100 w-full gap-4`}>
+          <View className='items-center justify-center p-3 rounded-xl bg-gray-100 border border-gray-100'>
+            <Image className='shadow-sm' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: 90, height: 90 }} />
+          </View>
+          <View className='flex-1 items-start gap-[2px]'>
+            <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
+            <View className='flex-row gap-4'>
+              <Text className="text-[0.92rem] font-semibold text-gray-700">₹ {packSize().SRate}</Text>
+              <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
+            </View>
+            <Text className="text-[0.92rem] font-semibold text-green-700 mb-1">In Stock</Text>
+            {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+            <View className='justify-between flex-row items-center w-full'>
+              {packSizeList}
+              <TouchableOpacity onPress={handleAdd}>
+                <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 }
 
 export const CartCard = ({ data }: any) => {
@@ -686,3 +713,7 @@ export const useFetch = (url: string, isValid: string) => {          // isValid 
 }
 
 export const wait = async (time: number) => await new Promise((resolve) => setTimeout(resolve, time));
+
+
+export const web = Platform.OS === 'web';
+export const windowWidth = Dimensions.get('window').width;
