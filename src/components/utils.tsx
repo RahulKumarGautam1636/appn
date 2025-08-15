@@ -157,6 +157,7 @@ export const getRequiredFields = (list=[]) => {
     DepartmentId: i.DepartmentId,
     Discount: i.Discount,
     DiscountPer: i.DiscountPer,
+    EXPDate: i.EXPDate,
     ItemId: i.ItemId, 
     ItemMRP: i.ItemMRP, 
     PackSizeId: i.PackSizeId,
@@ -270,6 +271,7 @@ export const GradientBG = ({ children, imgStyles={opacity: 0.8}, classes }: any)
 }
 
 export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count=1) => {
+  if (data.Category === 24856) return alert('As Government Norms this Product is not to be sold Online - Contact with Service Provider for buying this product.');
   const state = store.getState();
   const locationId = state.appData.location.LocationId;
   if (!locationId) return alert('Please choose a Location.');
@@ -385,7 +387,10 @@ export const ProductCard = ({ data, width='100%', type='grid' }) => {
               <Text className="text-[0.92rem] font-semibold text-gray-700">₹ {packSize().SRate}</Text>
               <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
             </View>
+            {packSize().StockQty ? 
             <Text className="text-[0.92rem] font-semibold text-green-700 mb-1">In Stock</Text>
+            :
+            <Text className="text-[0.92rem] font-semibold text-orange-500 mb-1">Out of Stock</Text>}
             {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
             <View className='justify-between flex-row items-center w-full'>
               {packSizeList}
@@ -490,10 +495,10 @@ export const OrderItemCard = ({ data }: any) => {
   )
 }
 
-export const OrderCard = ({ data }: any) => {
+export const OrderCard = ({ data, tab }: any) => {
 
   return (
-    <Link href={`/shop/orderDetails/${data.BillId}?pane=${'active'}`} className="w-full">
+    <Link href={`/shop/orderDetails/${data.BillId}?pane=${tab}`} className="w-full">
       <View className="bg-white w-full rounded-2xl p-4 shadow-sm border-b border-gray-200">
         {/* Header with airline info and price */}
         <View className="flex-row justify-between items-center pb-4">

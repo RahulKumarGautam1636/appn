@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import ButtonPrimary from '@/src/components';
-import { getFrom, OrderCard } from '@/src/components/utils';
+import { getFrom, GridLoader, OrderCard } from '@/src/components/utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL } from '@/constants';
@@ -41,8 +41,6 @@ const Orders = () => {
       getMyOrders(user.PartyCode, locationId);
   }, [compCode, getMyOrders, isLoggedIn, user.PartyCode, locationId])
 
-  console.log(orders)
-
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full">
       <View className="flex-row items-center justify-between pb-3 border-b border-gray-100 p-4">
@@ -68,13 +66,13 @@ const Orders = () => {
         <View className='gap-3'>
           {(() => {
             if (orders.loading) {
-              return null;
+              return <GridLoader />;
             } else if (orders.err.status) {
               return null;
             } else if (!orders.data.OrderList.length) {
               return null;
             } else {
-              return orders.data.OrderList.map(order => <OrderCard data={order} key={order.BillId} />)
+              return orders.data.OrderList.map(order => <OrderCard data={order} tab={tabActive} key={order.BillId} />)
             }
           })()}
         </View>

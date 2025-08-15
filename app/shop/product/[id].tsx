@@ -1,7 +1,7 @@
 import { BASE_URL, myColors } from '@/constants';
 import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
-import { add2Cart, AddToCartBtn, buyNow, computeWithPackSize, getFrom, getRequiredFields, ProductCard } from '@/src/components/utils';
+import { add2Cart, AddToCartBtn, buyNow, computeWithPackSize, getFrom, getRequiredFields, GridLoader, ProductCard } from '@/src/components/utils';
 import { removeFromCart } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
@@ -86,9 +86,10 @@ const ProductPage = () => {
 
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
+      {productData.loading ? <GridLoader containerClass='m-4 gap-4' /> : <>
       <View className="">
         <View className="bg-white p-8 items-center relative">
-          <TouchableOpacity onPress={() => router.back()} className="p-2 bg-gray-100 rounded-full absolute top-[2rem] left-[2rem] z-20">
+          <TouchableOpacity onPress={() => router.back()} className="p-2 bg-gray-100 rounded-full absolute top-[1rem] left-[1rem] z-20">
               <Ionicons name="arrow-back-outline" size={24} color="black" />
           </TouchableOpacity>
           <View className="items-start flex-row mb-2">
@@ -250,7 +251,7 @@ const ProductPage = () => {
           })}
 
         </View>
-      </View>
+      </View></>}
     </ScrollView>
   );
 };
