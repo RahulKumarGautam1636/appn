@@ -33,8 +33,8 @@ export default function App() {
                   <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
               </View>
           </View> */}
-
-          <View className="relative gap-4 flex-row items-center justify-center py-[5rem]">
+    
+          <View className="relative gap-4 flex-row items-center justify-center py-[4.5rem]">
             <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
             <Image className='mt-2' source={require('../assets/images/logo.png')} style={{ width: 75, height: 70 }} />
             <View>
@@ -42,10 +42,10 @@ export default function App() {
                 <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
             </View>
           </View>
-          <View className='flex-1 bg-white px-6 py-8'>
-            <View className="flex-row justify-between items-center mb-6">
+          <View className='flex-1 bg-white px-4 py-5'>
+            {/* <View className="flex-row justify-between items-center mb-6">
               <Text className="text-3xl font-bold text-gray-800">Our Services</Text>
-            </View>
+            </View> */}
             <View className="space-y-4 gap-4">
               <TouchableOpacity onPress={() => router.push('./shop/tabs/home')} className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
                 <View className="flex-row items-center">
@@ -54,7 +54,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Book Medicine</Text>
-                    <Text className="text-green-600 text-lg">Active</Text>
+                    <Text className="text-green-600 text-lg font-semibold">Active</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
@@ -79,7 +79,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Surgicals</Text>
-                    <Text className="text-rose-500 text-lg">Coming soon..</Text>
+                    <Text className="text-rose-500 text-lg font-semibold">Coming soon..</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
@@ -91,7 +91,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Agro & Groceries</Text>
-                    <Text className="text-rose-500 text-lg">Coming soon..</Text>
+                    <Text className="text-rose-500 text-lg font-semibold">Coming soon..</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
@@ -103,7 +103,7 @@ export default function App() {
                   </View>
                   <View>
                     <Text className="text-gray-800 font-semibold text-xl mb-2">Garments & Fashion</Text>
-                    <Text className="text-rose-500 text-lg">Coming soon..</Text>
+                    <Text className="text-rose-500 text-lg font-semibold">Coming soon..</Text>
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />

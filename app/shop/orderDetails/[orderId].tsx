@@ -6,7 +6,7 @@ import ButtonPrimary, { MyModal } from '@/src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL, myColors } from '@/constants';
-import { GridLoader, OrderItemCard, getFrom, num, wait } from '@/src/components/utils';
+import { GridLoader, OrderItemCard, getFrom, getStatusIcon, num, wait } from '@/src/components/utils';
 import { useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 import axios from 'axios';
 import OrderReturn from '@/src/components/modals/orderReturn';
@@ -24,7 +24,7 @@ const OrderStatus = () => {
   const locationId = useSelector((i: RootState) => i.appData.location.LocationId);  
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(1);
-  const [returnOrder, setReturnOrder] = useState(false);
+  const [orderReturn, setOrderReturn] = useState({ active: false, type: '', orderData: {} });
   
   useEffect(() => {
     const getMyOrders = async (partyCode, id, locId) => {
@@ -68,13 +68,14 @@ const OrderStatus = () => {
   return (
     <>
       <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
+        
+        <View className="flex-row items-center justify-between pb-3 border-b border-gray-100">
+          <TouchableOpacity onPress={() => router.back()} className="flex-row items-center">
+            <Ionicons name="chevron-back" size={22} color="#000" className="mr-2" />
+            <Text className="text-lg font-semibold text-black">Order Details</Text>
+          </TouchableOpacity>
+        </View>
         {orders.loading ? <GridLoader /> : <>
-          <View className="flex-row items-center justify-between pb-3 border-b border-gray-100">
-            <TouchableOpacity onPress={() => router.back()} className="flex-row items-center">
-              <Ionicons name="chevron-back" size={22} color="#000" className="mr-2" />
-              <Text className="text-lg font-semibold text-black">Order Details</Text>
-            </TouchableOpacity>
-          </View>
           <View className='bg-white rounded-3xl shadow-sm border-b border-gray-200'>
             <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
                 <View className='flex-row items-center gap-3'>
@@ -255,29 +256,15 @@ const OrderStatus = () => {
           </View></> : null}
           <View className="flex-row gap-4 mt-1">
               <ButtonPrimary title='NEED HELP' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-gray-700' />
-              {pane === 'completed' ? <ButtonPrimary title='RETURN' onClick={() => setReturnOrder(true)} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' /> : null}
+              {pane === 'completed' ? <ButtonPrimary title='RETURN' onClick={() => setOrderReturn({active: true, type: 'order', orderData: order})} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' /> : null}
               {order.ApprovalStatus === 'Y' || order.OrderStatus === 'CANCELLED' ? null : <ButtonPrimary title='CANCEL' onClick={() => cancelOrder(order.BillId)} isLoading={loading} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' />}
           </View>
         </>}
       </ScrollView>
-      <MyModal modalActive={returnOrder} name='ORDER_RETURN' child={<OrderReturn order={order} handleShow={setReturnOrder} orderS={orderS} />} />
+      <MyModal modalActive={orderReturn.active} name='ORDER_RETURN' child={<OrderReturn order={orderReturn} setOrderReturn={setOrderReturn} orderS={orderS} />} />
     </>
   );
 };
 
-const getStatusIcon = (title) => {
-  switch (title) {
-    case 'Order Placed':
-      return 'file-text';
-    case 'Dispatched':
-      return 'box';
-    case 'Out For Delivery':
-      return 'truck';
-    case 'Delivered':
-      return 'package';
-    default:
-      return 'circle';
-  }
-};
 
 export default OrderStatus;

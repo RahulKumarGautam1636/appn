@@ -719,6 +719,26 @@ export const useFetch = (url: string, isValid: string) => {          // isValid 
 
 export const wait = async (time: number) => await new Promise((resolve) => setTimeout(resolve, time));
 
-
 export const web = Platform.OS === 'web';
 export const windowWidth = Dimensions.get('window').width;
+
+export const getStatusIcon = (title: string) => {
+  switch (title) {
+    case 'Order Placed':
+      return 'file-text';
+    case 'Dispatched':
+      return 'box';
+    case 'Out For Delivery':
+      return 'truck';
+    case 'Delivered':
+      return 'package';
+// -------------------------------- Return process.
+    case 'Refund Initiated':
+      return 'truck';
+    case 'Dispatched':
+      return 'Refund Completed';
+    case 'Out For Delivery':
+    default:
+      return 'circle';
+  }
+};
