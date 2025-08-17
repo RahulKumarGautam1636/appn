@@ -405,9 +405,23 @@ export const ProductCard = ({ data, width='100%', type='grid' }) => {
   }
 }
 
+export const escape = (str: string) => ({ swap: str.replace('&', '-'), unswap: str.replace('-', '&') });      // swap and unswap the & char with - to escape the url interference due to & character.
+
+export const CatCard = ({ data, classes, styles }: any) => {
+  return (
+    // <Link href={`/shop/filters/?brands=Abbott India Limited,Alcon Laboratories(India) Pvt. Ltd.&catVal=23485,23501&head=Pharmacy&hideOutStock=Y&page=1&query=tab&sortBy=NameASC&subCatVal=`}>
+    <Link href={`/shop/filters/?head=${escape(data.ParentDesc).swap}&catVal=${data.Parent}&page=1`} className={classes} style={styles}>
+      <View className={`items-center bg-white rounded-xl shadow-sm border-b border-gray-200 overflow-hidden w-full`}>
+        <Image className='' source={{uri: data.ImageURL}} style={{ width: 135, height: 100 }} />
+        <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 py-2">{data.ParentDesc}</Text>
+      </View>
+    </Link>
+  )
+}
+
 export const CartCard = ({ data }: any) => {
   const dispatch = useDispatch();
-  const activeItem = data.ItemPackSizeList.find(i => i.CodeId === data.PackSizeId);
+  const activeItem = data.ItemPackSizeList.find((i: any) => i.CodeId === data.PackSizeId);
   const activePackSize = activeItem ? activeItem.Description : 'N/A';
   return (
     <View key={data.LocationItemId} className="flex-row items-center bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200">

@@ -3,20 +3,11 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions,
 import { Feather, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
+import { CatCard, GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
 import { Link, router } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import colors from 'tailwindcss/colors';
 import { Pressable } from 'react-native-gesture-handler';
-
-const CatCard = ({ data }: any) => {
-  return (
-    <TouchableOpacity className="items-center bg-white rounded-xl shadow-lg overflow-hidden">
-      <Image className='' source={{uri: data.ImageURL}} style={{ width: 135, height: 100 }} />
-      <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 py-2">{data.ParentDesc}</Text>
-    </TouchableOpacity>
-  )
-}
 
 const web = Platform.OS === 'web';
 

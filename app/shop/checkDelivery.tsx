@@ -52,7 +52,7 @@ const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
             return <div className='text-center my-5'><h2 className="text-danger mark">An error occured, please try again later. Error code: <span className='text-dark'>{data.err.msg}</span></h2></div>;
         } else if (data.data === 0) {
             setDeliverable(false);
-            return <p className='text-danger mb-0 mt-2'>Now we have no service in this PIN - We will be available in your area very soon.</p>;
+            return <Text className='text-danger mb-0 mt-2'>Now we have no service in this PIN - We will be available in your area very soon.</Text>;
         } else {
             closeModal();
             setDeliverable(true);
