@@ -10,12 +10,11 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "tailwindcss/colors";
 import ButtonPrimary from ".";
-
-import { Button, Alert } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { FileText } from "lucide-react-native";
 import { Platform } from "react-native";
+import * as FileSystem from "expo-file-system";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
   
@@ -700,6 +699,27 @@ const styles2 = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 },
   fileInfo: { marginTop: 10, fontSize: 14 },
 });
+
+export const convertFileToBase64 = async (uri: string) => {
+  try {
+    const base64 = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    return base64;
+  } catch (error) {
+    console.error("Error converting file:", error);
+    return null;
+  }
+};
+
+export const  sliceBaseStr = async (str: string) => {
+  let target;
+  if (Platform.OS !== 'web') { 
+    target = await convertFileToBase64(str);
+  }  
+  target = target.indexOf('base64,');
+  return target.slice(target + 7);
+}
 
 
 export const useFetch = (url: string, isValid: string) => {          // isValid is taken to ensure correct params for API calls.

@@ -4,7 +4,7 @@ import colors from 'tailwindcss/colors';
 import ButtonPrimary, { LinkBtn, MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { CartCard, createDate, num, wait } from '@/src/components/utils';
+import { CartCard, createDate, num, sliceBaseStr, wait } from '@/src/components/utils';
 import { dumpCart, setModal, setPrescription } from '@/src/store/slices/slices';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
@@ -13,10 +13,10 @@ import { BASE_URL } from '@/constants';
 import axios from 'axios';
 
 
-const sliceBaseStr = (str: string) => {
-  let target = str.indexOf('base64,');
-  return str.slice(target + 7);
-}
+// const sliceBaseStr = (str: string) => {
+//   let target = str.indexOf('base64,');
+//   return str.slice(target + 7);
+// }
 
 
 const Checkout = () => {
@@ -115,6 +115,9 @@ const Checkout = () => {
               partyCode = user.PartyCode;
               billingState = user.State;
               deliveryState = prescription.patient.state?.CodeId || user.State;
+
+              // const fileUrl = await sliceBaseStr(prescription.file.uri)
+              // console.log((fileUrl));   
 
               setOrderData((preValues) => ({
                   ...preValues,
