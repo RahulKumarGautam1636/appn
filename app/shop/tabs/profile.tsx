@@ -55,7 +55,7 @@ const Profile = () => {
                             </View>
                         </View>
                     </View>
-                    <View className='flex-row justify-between border-y border-gray-300 border-solid'>
+                    {/* <View className='flex-row justify-between border-y border-gray-300 border-solid'>
                         <View className='items-center flex-1 border-r border-gray-300'>
                             <Link href={'/testList'}>
                                 <View className='items-center p-4'>
@@ -72,7 +72,7 @@ const Profile = () => {
                                 </View>
                             </Link>
                         </View>
-                    </View>
+                    </View> */}
                 </View>
                 <View className='m-4 gap-3'>
                     <Pressable onPress={() => setPersonalInfoActive(true)}>
@@ -89,13 +89,13 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
-                    <Link href={'#'}>
+                    {/* <Link href={'#'}>
                         <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                             <Ionicons name="flask" size={22} color={myColors.primary[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Patient History</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
-                    </Link>
+                    </Link> */}
                     <Link href={'/members'}>
                         <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                             <FontAwesome5 name="users" size={20} color={myColors.primary[500]} style={{width: 26}}/>
@@ -110,13 +110,13 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link> */}
-                    <Link href={'#'}>
+                    {/* <Link href={'#'}>
                         <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                             <FontAwesome5 name="headset" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Get Support</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
-                    </Link>
+                    </Link> */}
                     <Link href={'/shop/tabs/home'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
                         <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                             <Entypo name="log-out" size={20} color={myColors.primary[500]} style={{width: 26}}/>

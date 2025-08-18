@@ -27,6 +27,7 @@ const Checkout = ({ handleClose }: any) => {
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
     let cartTotal = itemsLength !== 0 ? itemsValue.reduce((total, item) => total+item).toFixed(2) : '00';
     let testDate = itemsLength ? labTests[0].testDate : '';
+    console.log(testDate);
 
     const handleBack = () => {
         if (handleClose) {
@@ -55,6 +56,7 @@ const Checkout = ({ handleClose }: any) => {
         if (!labTests.length) return alert('Your Cart is empty. Please add some Tests in your cart to proceed.')
         if (isLoggedIn) {
           let appDate = getDateDifference(testDate);
+          console.log(appDate);   
           if (!selectedMember.MemberId) {     
             // if (getConfirmation(`Book Lab Test for ${userInfo.Name} in ${userInfo.selectedCompany.COMPNAME}`) === false) return; 
             const newbookingData = { 
@@ -137,6 +139,7 @@ const Checkout = ({ handleClose }: any) => {
       }     
     
     const makeBookingRequest = async (params: any) => {
+        console.log(params);
         if (!params.UserId) return alert('Something went wrong, try again later. No user Id received: F');
         // loaderAction(true);
         const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, params);

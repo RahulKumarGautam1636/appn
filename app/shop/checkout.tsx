@@ -233,8 +233,10 @@ const Checkout = () => {
     try {
       setLoading(true);
       await wait(3000);
+      console.log(JSON.stringify(body));
       const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
       setLoading(false);
+      console.log(res);
       if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
       dispatch(dumpCart());
       dispatch(setPrescription({ patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } }))
