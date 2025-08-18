@@ -32,7 +32,6 @@ const ProductPage = () => {
       if (res) {
         const mainProduct = getRequiredFields([res.data.ItemMaster]);
         const relatedProducts = getRequiredFields(res.data.itemMasterCollection);
-        console.log(mainProduct, relatedProducts);
         setProductData({...res, data: {ImageMasterCollection: res.data.ImageMasterCollection, ItemMaster: mainProduct[0], itemMasterCollection: relatedProducts}}); 
       } else {
         console.log('No data received');

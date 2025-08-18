@@ -41,7 +41,6 @@ const Login = ({ modal }: any) => {
         setLoading(true)
         const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.phone}&UP=${params.password}&CID=${params.EncCompanyId}`);
         setLoading(false)
-        // console.log(res.data);
         // let appBusinessType = globalData.businessType.CodeValue;     
         // if (res.data.BusinessType !== appBusinessType) return alert('You are not Allowed to log in.');       // BLOCK LOGIN IF MISMATCH FOUND     which is the best place to make api call and update the redux store
     
@@ -310,7 +309,6 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
             setLoading(true);
             const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);
             setLoading(false);
-            console.log(res.data);
             if (res.data[1].length > 3) { 
                 return true;
             } else {
@@ -324,7 +322,6 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     } 
 
     const handleRegFormSubmit = async () => {
-        console.log(regData);        
         if (otp.verified) {
             if (regData.RegMob1.length < 10) return alert('phone number is invalid, please try again.');
             if (regData.UserPassword.length < 4) return alert('Minimum length for password is 4.');
@@ -365,14 +362,12 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
             if (regData.RegMob1.length < 10) return alert('please enter a valid phone number.');
             const userExist = await checkExistingUser();
             if (userExist) return;
-            console.log('sending OTP');
             const receivedOtp = await makeOtpRequest();
             setOTP({...otp, isOpen: true, sent: true, recievedValue: receivedOtp});
         } else if (otp.sent) {
             // if (compCode !== defaultId) {
                 if (otp.recievedValue !== otp.enteredValue) return alert('Wrong OTP.');
             // }
-            console.log('otp matched');
             setOTP({...otp, isOpen: false, verified: true, read_only: true});
             setPersonalFields(true);
         }
@@ -401,7 +396,6 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
         const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);
         setLoading(false);
         if (res.status === 200) {
-            console.log(res.data);
             return res.data;
         }
         alert('An Error Occured, Try again later.');

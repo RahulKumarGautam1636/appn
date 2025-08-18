@@ -155,7 +155,6 @@ const PrescriptionForm = () => {
   }
 
   function handleSubmit() {    
-    console.log(file);
     if (!file.uri) return alert('Please select a file.');
     // let sizeInKB = file.size / 1024;
     // if (sizeInKB > 5000) {

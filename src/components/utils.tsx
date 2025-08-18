@@ -346,9 +346,9 @@ export const ProductCard = ({ data, width='100%', type='grid' }) => {
     add2Cart(isAdded, data, packSize, dispatch);
   }
 
-  const handleBuyNow = () => {
-    buyNow(data, packSize, dispatch, router);
-  }
+  // const handleBuyNow = () => {
+  //   buyNow(data, packSize, dispatch, router);
+  // }
 
   if (type === 'grid') {
     return (
@@ -360,16 +360,21 @@ export const ProductCard = ({ data, width='100%', type='grid' }) => {
           <View className='flex-1 items-start mt-3'>
             <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
             <View className='flex-row gap-4'>
-              <Text className="text-[0.92rem] font-semibold text-green-700">₹ {packSize().SRate}</Text>
+              <Text className="text-[0.92rem] font-semibold text-sky-600">₹ {packSize().SRate}</Text>
               <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
             </View>
             {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
+            {packSize().StockQty ? 
+            <Text className="text-[0.85rem] font-semibold text-green-700 mb-1">In Stock</Text>
+            :
+            <Text className="text-[0.85rem] font-semibold text-orange-500 mb-1">Out of Stock</Text>}
             <View className='justify-between flex-row items-center w-full'>
               {packSizeList}
               <TouchableOpacity onPress={handleAdd}>
                 <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
               </TouchableOpacity>
             </View>
+            {data.Category === 24856 ? <Text className="text-[0.75rem] font-semibold text-rose-700 mt-2">FOR SALE OVER COUNTER ONLY</Text> : null}
           </View>
         </View>
       </TouchableOpacity>
@@ -384,7 +389,7 @@ export const ProductCard = ({ data, width='100%', type='grid' }) => {
           <View className='flex-1 items-start gap-[2px]'>
             <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
             <View className='flex-row gap-4'>
-              <Text className="text-[0.92rem] font-semibold text-gray-700">₹ {packSize().SRate}</Text>
+              <Text className="text-[0.92rem] font-semibold text-sky-600">₹ {packSize().SRate}</Text>
               <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
             </View>
             {packSize().StockQty ? 
@@ -398,6 +403,7 @@ export const ProductCard = ({ data, width='100%', type='grid' }) => {
                 <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
               </TouchableOpacity>
             </View>
+            {data.Category === 24856 ? <Text className="text-[0.75rem] font-semibold text-rose-700 mt-2">FOR SALE OVER COUNTER ONLY</Text> : null}
           </View>
         </View>
       </TouchableOpacity>
@@ -411,7 +417,7 @@ export const CatCard = ({ data, classes, styles }: any) => {
   return (
     // <Link href={`/shop/filters/?brands=Abbott India Limited,Alcon Laboratories(India) Pvt. Ltd.&catVal=23485,23501&head=Pharmacy&hideOutStock=Y&page=1&query=tab&sortBy=NameASC&subCatVal=`}>
     <Link href={`/shop/filters/?head=${escape(data.ParentDesc).swap}&catVal=${data.Parent}&page=1`} className={classes} style={styles}>
-      <View className={`items-center bg-white rounded-xl shadow-sm border-b border-gray-200 overflow-hidden w-full`}>
+      <View className={`items-center bg-white rounded-xl shadow-sm border-b border-gray-200 overflow-hidden w-full h-full`}>
         <Image className='' source={{uri: data.ImageURL}} style={{ width: 135, height: 100 }} />
         <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 py-2">{data.ParentDesc}</Text>
       </View>
@@ -606,7 +612,6 @@ export function FileUploader({ file, setFile, removeFile }: any) {
 
     if (!result.canceled) {
       const img = result.assets[0];
-      console.log(img);
       const name = img.fileName || 'image.jpg';
       setFile({
         name: name,

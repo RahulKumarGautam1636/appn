@@ -16,6 +16,7 @@ export default {
         PoppinsMedium: ["Poppins-Medium", "sans-serif"],
         PoppinsSemibold: ["Poppins-Semibold", "sans-serif"],
         PoppinsThin: ["Poppins-Thin", "sans-serif"],
+        GlittherSyavinafree: ["GlittherSyavinafree", "sans-serif"],
       },
       colors: myColors
     },

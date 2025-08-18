@@ -228,15 +228,14 @@ const Checkout = () => {
     if (!isLoggedIn) return alert('please login to place an order.');
     if (!orderData.LocationId) return alert('Please select a Service Location before making an order.');
     
-    let body = { ...orderData };
-    console.log(body);    
+    let body = { ...orderData };  
 
     try {
       setLoading(true);
       await wait(3000);
-      // const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
+      const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
       setLoading(false);
-      // if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
+      if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
       dispatch(dumpCart());
       dispatch(setPrescription({ patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } }))
       alert('Order Booked Successfully.')

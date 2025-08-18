@@ -22,8 +22,7 @@ function MainSearch() {
         const getSearchResult = async (companyCode: string, key: { filterBy: string, query: string}) => {                      
         if (!companyCode) return alert('no companyCode received');                  
         const res = await getFrom(`${BASE_URL}/api/search/Get?CID=${companyCode}&Type=${key.filterBy}&SearchString=${key.query}`, {}, setDoctors);
-        if (res) {
-            // console.log(res);            
+        if (res) {          
             setDoctors(res);
         } else {
             console.log('No data received');
@@ -31,7 +30,6 @@ function MainSearch() {
         }  
         const timer = setTimeout(() => {
         if (searchKey.query.length < 2) return;
-        console.log(compCode, defaultId);
         if (compCode === defaultId) {
             getSearchResult(zero, searchKey);                 // search every company if default company compCode.
         } else {

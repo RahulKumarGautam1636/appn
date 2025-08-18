@@ -25,6 +25,7 @@ export default function RootLayout() {
       'Poppins-Regular': require('./../assets/fonts/Poppins/Poppins-Regular.ttf'),
       'Poppins-Semibold': require('./../assets/fonts/Poppins/Poppins-SemiBold.ttf'),
       'Poppins-Thin': require('./../assets/fonts/Poppins/Poppins-Thin.ttf'),
+      'GlittherSyavinafree': require('./../assets/fonts/GlittherSyavinafree.otf'),
   });
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function RootLayout() {
                 <Stack.Screen name="shop/orderDetails/[orderId]" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="shop/search" options={{ headerShown: false, animation: 'slide_from_left' }} />
                 <Stack.Screen name="shop/filters" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="shop/brands" options={{ headerShown: false, animation: 'slide_from_left' }} />
               </Stack>
             </KeyboardAvoidingView>
           </SafeAreaView>

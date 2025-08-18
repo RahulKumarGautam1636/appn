@@ -15,7 +15,7 @@ const OrderStatus = () => {
 
   const router = useRouter();
 
-  const [orders, setOrders] = useState({ loading: false, data: { OrderList: [] }, err: { status: false, msg: '' } });
+  const [orders, setOrders] = useState({ loading: false, data: { OrderList: [], AlreadyReturnDetailsList: [] }, err: { status: false, msg: '' } });
   const { orderId, pane } = useGlobalSearchParams();
 
   const compCode = useSelector((i: RootState) => i.compCode);
@@ -39,7 +39,7 @@ const OrderStatus = () => {
     getMyOrders(user.PartyCode, orderId, locationId);
   }, [compCode, isLoggedIn, user.PartyCode, locationId, reload])
 
-  const order = orders.data.OrderList[0] || {};
+  const order = orders.data.OrderList[0] || {AlreadyReturnDetailsList: []};
 
   let orderS = order?.EnqFollowUpList?.map((i: any) => (
     { title: i.Tag + ' ' + i.Remarks, date: new Date(i.NextAppDate).toDateString() + '    ' + i.NextAppTime, icon: getStatusIcon(i.Tag), completed: true }
@@ -64,6 +64,28 @@ const OrderStatus = () => {
       setReload(reload + 1)                       // Reload / Recall getMyOrders to get cancelled update. Not using pane to avoid navigation history entry.
     }
   }
+
+  // RETURNS -------------------------------------------------------------------------
+  
+  let isAlreadySubmitted = order?.AlreadyReturnDetailsList?.length;
+  let pickupProgress = order?.AlreadyReturnDetailsList[0]?.EnqFollowUpList;
+  let isRequestApproved = pickupProgress?.length;
+
+  let productItems; 
+
+  if (isAlreadySubmitted) { 
+      productItems = order?.AlreadyReturnDetailsList || [];  
+  } else {
+      productItems = order?.SalesReturnDetailsList || [];  
+  }
+
+  let total = productItems.reduce((total, i) => total + (parseFloat(i.NetRateS * parseFloat(i.BillQty))), 0).toFixed(2);
+
+  let orderRturnStages = pickupProgress?.map((i: any) => (
+      { title: i.Tag + ' ' + i.Remarks, date: new Date(i.NextAppDate).toDateString() + '    ' + i.NextAppTime, icon: getStatusIcon(i.Tag), completed: true }
+  ))
+
+  // RETURNS -------------------------------------------------------------------------
 
   return (
     <>
@@ -254,9 +276,53 @@ const OrderStatus = () => {
                 ))}
               </View>
           </View></> : null}
+
+          {isAlreadySubmitted ? <>
+              <Text className='text-[1.05rem] mb-3 mt-1 font-PoppinsSemibold'>Return Status</Text>
+              <TouchableOpacity className={`${isRequestApproved ? 'bg-green-500' : 'bg-orange-500'} rounded-2xl p-5 flex-row items-center justify-between mb-4`}>
+                  <View className="flex-row items-center flex-1">
+                      <View className={`${isRequestApproved ? 'bg-green-400' : 'bg-orange-400'} w-12 h-12 rounded-full items-center justify-center mr-4`}> 
+                          <Feather name="check" size={24} color="#ffffff" />
+                      </View>
+                      <View className="flex-1">
+                      <Text className="font-semibold text-white leading-7">Your Return Request is {"\n"}{isRequestApproved ? 'APPROVED' : 'WAITING FOR APPROVAL'}</Text>
+                      {/* <Text className="text-sm text-gray-100">In order to place your order.</Text> */}
+                      </View>
+                  </View>
+              </TouchableOpacity>
+          </> : ''}
+          {orderRturnStages?.length ? <>
+              <View className="bg-white shadow-sm border-b border-gray-200 rounded-3xl py-6 pl-5 pr-6 mb-3">           
+                  <View className="relative gap-5">
+                      {orderRturnStages?.map((step, index) => (
+                      <View key={index} className="flex-row items-start">
+                          {index < orderRturnStages?.length - 1 && (<View className={`absolute left-4 top-8 w-0.5 h-12 ${step.completed ? 'bg-amber-600' : 'bg-gray-200'}`}/>)}
+                          <View className={`w-8 h-8 rounded-full items-center justify-center z-10 ${step.completed ? 'bg-amber-600' : 'bg-gray-200'}`}>
+                              <Feather name={step.icon} size={16} color={step.completed ? 'white' : '#9CA3AF'} />
+                          </View>
+                          <View className="flex-1 ml-4">
+                              <Text className={`font-semibold text-base mb-[0.4rem] ${step.completed ? 'text-gray-900' : 'text-gray-500'}`}>
+                                  {step.title}
+                              </Text>
+                              <Text className={`text-sm ${step.completed ? 'text-gray-600' : 'text-gray-500'}`}>
+                                  {step.date}
+                              </Text>
+                          </View>
+                          <View className="my-auto">
+                              <FontAwesome5 name="check" size={18} color={step.completed ? '#D97706' : '#9ca3af'} />
+                          </View>
+                      </View>
+                  ))}
+                  </View>
+              </View>
+          </> : null}
+
+
+
+
           <View className="flex-row gap-4 mt-1">
-              <ButtonPrimary title='NEED HELP' isLoading={false} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-gray-700' />
-              {pane === 'completed' ? <ButtonPrimary title='RETURN' onClick={() => setOrderReturn({active: true, type: 'order', orderData: order})} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' /> : null}
+              <ButtonPrimary title='CLOSE' isLoading={false} onClick={() => router.back()} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-gray-700' />
+              {(pane === 'completed' && !isAlreadySubmitted) ? <ButtonPrimary title='RETURN' onClick={() => setOrderReturn({active: true, type: 'order', orderData: order})} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' /> : null}
               {order.ApprovalStatus === 'Y' || order.OrderStatus === 'CANCELLED' ? null : <ButtonPrimary title='CANCEL' onClick={() => cancelOrder(order.BillId)} isLoading={loading} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-red-600' />}
           </View>
         </>}

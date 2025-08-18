@@ -24,8 +24,7 @@ const LabTests = ({}: any) => {
     useEffect(() => {
         const getLabData = async (company: any) => {                
             if (!company.EncCompanyId) return console.log('no companyCode received');                 
-            if (!company.LocationId) return console.log('no Loc Id received'); 
-            console.log(company.EncCompanyId);      
+            if (!company.LocationId) return console.log('no Loc Id received');     
             const res = await getFrom(`${BASE_URL}/api/Pharma/Get?CID=${company.EncCompanyId}&LOCID=${company.LocationId}&CatType=INVESTIGATION`, {}, setLabData);
             if (res) {              
                 const tests = getRequiredFields(res.data.itemMasterCollection, company.LocationId);

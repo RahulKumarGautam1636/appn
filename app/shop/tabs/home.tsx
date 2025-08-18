@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions,
 import { Feather, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { CatCard, GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
+import { CatCard, escape, GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
 import { Link, router } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import colors from 'tailwindcss/colors';
@@ -34,9 +34,9 @@ const ShoppingAppScreen = () => {
         <View>
           <View className="flex-row justify-between items-center pt-4 pb-3 px-5">
             <Text className="text-lg font-bold text-gray-800">{parentCategoryName}</Text>
-            <TouchableOpacity>
+            <Link href={`/shop/filters/?head=${escape(parentCategoryName).swap}&catVal=${parentId}`}>
               <Text className="text-purple-600 font-medium">See All</Text>
-            </TouchableOpacity>
+            </Link>
           </View> 
           <View>
             <FlatList
@@ -150,7 +150,7 @@ const ShoppingAppScreen = () => {
               </View>
           </View> :
           <View className="gap-3 flex-row items-center mb-5">
-              <Image className='rounded-full' source={require('../../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
+              <Image className='' source={require('../../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
               <View className='mr-auto'>
                   {/* <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
                   <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text> */}
@@ -177,7 +177,8 @@ const ShoppingAppScreen = () => {
             <Feather name="sliders" size={20} color="#9CA3AF" />
           </View>
         </Pressable>
-        <View className='flex-row justify-between mb-3 items-center gap-12'>
+        <View className='flex-row justify-between items-center gap-12'>  
+          {/*mb-3*/}
           <Text className='text-[12px] text-gray-600 font-medium'>Service provider : </Text>
           <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOCATIONS', state: true }))} className='flex-row justify-end gap-2 items-center flex-1'>
             <FontAwesome6 name="location-pin" size={12} color={colors.purple[600]} />
@@ -185,7 +186,7 @@ const ShoppingAppScreen = () => {
             <Ionicons name="caret-down" size={20} color={colors.orange[500]} />
           </TouchableOpacity>
         </View>
-        <View className="flex-row justify-around py-4 bg-white rounded-2xl">
+        {/* <View className="flex-row justify-around py-4 bg-white rounded-2xl">
           <TouchableOpacity className="items-center">
             <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
               <Feather name="gift" size={20} color="white" />
@@ -214,7 +215,7 @@ const ShoppingAppScreen = () => {
             <Text className="text-xs text-gray-600">Grocery</Text>
           </TouchableOpacity>
           
-        </View>
+        </View> */}
       </View>
       <View className='py-5'>
         <View className="flex-row justify-between items-center mb-4 px-5">
@@ -254,9 +255,9 @@ const ShoppingAppScreen = () => {
       <View className="flex-1 mb-4">
         <View className="flex-row justify-between items-center mb-4 px-5 ">
           <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
-          <TouchableOpacity>
+          <Link href={`/shop/brands`}>
             <Text className="text-purple-600 font-medium">See All</Text>
-          </TouchableOpacity>
+          </Link>
         </View>
         
         {/* <View className="flex-row flex-wrap justify-between">
@@ -282,7 +283,8 @@ const ShoppingAppScreen = () => {
             return (
               <ScrollView contentContainerClassName="flex-row gap-3 pb-3 px-5 " horizontal showsHorizontalScrollIndicator={false}>
                 {productsData.ItemBrandList.map((brand, index) => (
-                  <TouchableOpacity key={index} className="items-center justify-center">
+                  <Link href={`/shop/filters/?head=${escape(brand.Text).swap}&brands=${brand.Text}`} key={index} >
+                    <View className="items-center justify-center">
                     <View className="bg-white rounded-full items-center justify-center mb-3 border-b-2 border-gray-200 p-4">
                       <Image 
                         className='' 
@@ -292,7 +294,8 @@ const ShoppingAppScreen = () => {
                       />
                     </View>
                     <Text className="text-sm text-gray-600 text-center">{brand.Text.slice(0, 18)}</Text>
-                  </TouchableOpacity>
+                    </View>
+                  </Link>
                 ))}
               </ScrollView>
             )

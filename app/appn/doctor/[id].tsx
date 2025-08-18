@@ -122,8 +122,7 @@ const Booking = () => {
             return;
         }
         if (isLoggedIn) {
-            // let appDate = getDateDifference(bookingData.AppointDate);
-            // console.log(appDate);      
+            // let appDate = getDateDifference(bookingData.AppointDate);      
             if (!selectedMember.MemberId) {
             // let productToastData = { msg: 'Added to Cart', product: {name: 'Description', price: 1200}, button: {text: 'Visit Cart', link: '/cartPage'} };
             // productToast(productToastData);
@@ -200,7 +199,6 @@ const Booking = () => {
     }
 
     const makeBookingRequest = async (book: any) => {
-        console.log(book);
         if (!book.UserId) return alert('Something went wrong, try again later. No user Id received: F');
         setLoading(true);
         const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);

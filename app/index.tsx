@@ -33,21 +33,21 @@ export default function App() {
                   <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
               </View>
           </View> */}
-    
-          <View className="relative gap-4 flex-row items-center justify-center py-[4.5rem]">
-            <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
-            <Image className='mt-2' source={require('../assets/images/logo.png')} style={{ width: 75, height: 70 }} />
-            <View>
-                <Text className="font-PoppinsSemibold text-blue-800 text-[38px] mb-2 leading-[42px] pt-3">TakeHome</Text>
+          
+          <View className="relative gap-4 items-center justify-center py-[2rem] bg-white">
+            <Image className='' source={require('../assets/images/logo.png')} style={{ width: 200, height: 190 }} />
+            {/* <View className='items-center'>
+                <Text className="font-GlittherSyavinafree text-blue-800 text-[48px] mb-2 leading-[42px]">TakeHome</Text>
                 <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
-            </View>
+            </View> */}
           </View>
-          <View className='flex-1 bg-white px-4 py-5'>
+          <View className='flex-1 px-4 py-5 bg-slate-100'>
+            {/* <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="contain" /> */}
             {/* <View className="flex-row justify-between items-center mb-6">
               <Text className="text-3xl font-bold text-gray-800">Our Services</Text>
             </View> */}
             <View className="space-y-4 gap-4">
-              <TouchableOpacity onPress={() => router.push('./shop/tabs/home')} className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
+              <TouchableOpacity onPress={() => router.push('./shop/tabs/home')} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
                 <View className="flex-row items-center">
                   <View className="bg-red-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                     <FontAwesome6 name="capsules" size={33} color="white" />
@@ -72,7 +72,7 @@ export default function App() {
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
               </TouchableOpacity> */}
-              <TouchableOpacity className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
+              {/* <TouchableOpacity className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
                 <View className="flex-row items-center">
                   <View className="bg-blue-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                     <FontAwesome6 name="user-doctor" size={33} color="white" />
@@ -107,7 +107,7 @@ export default function App() {
                   </View>
                 </View>
                 <Feather name="chevron-right" size={30} color='gray' />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
           </ScrollView>
