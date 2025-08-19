@@ -233,7 +233,7 @@ export default Login;
 
 
 
-export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, modalMode={modalMode} }: any) => {
+export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, modalMode=false }: any) => {
 
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
