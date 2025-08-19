@@ -6,7 +6,7 @@ import ButtonPrimary, { MyModal } from '@/src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL, myColors } from '@/constants';
-import { GridLoader, OrderItemCard, getFrom, getStatusIcon, num, wait } from '@/src/components/utils';
+import { GridLoader, OrderItemCard, PreviewImage, getFrom, getStatusIcon, num, wait } from '@/src/components/utils';
 import { useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 import axios from 'axios';
 import OrderReturn from '@/src/components/modals/orderReturn';
@@ -15,7 +15,7 @@ const OrderStatus = () => {
 
   const router = useRouter();
 
-  const [orders, setOrders] = useState({ loading: false, data: { OrderList: [], AlreadyReturnDetailsList: [] }, err: { status: false, msg: '' } });
+  const [orders, setOrders] = useState({ loading: false, data: { OrderList: [{AlreadyReturnDetailsList: []}] }, err: { status: false, msg: '' } });
   const { orderId, pane } = useGlobalSearchParams();
 
   const compCode = useSelector((i: RootState) => i.compCode);
@@ -39,7 +39,7 @@ const OrderStatus = () => {
     getMyOrders(user.PartyCode, orderId, locationId);
   }, [compCode, isLoggedIn, user.PartyCode, locationId, reload])
 
-  const order = orders.data.OrderList[0] || {AlreadyReturnDetailsList: []};
+  const order = orders.data.OrderList[0];
 
   let orderS = order?.EnqFollowUpList?.map((i: any) => (
     { title: i.Tag + ' ' + i.Remarks, date: new Date(i.NextAppDate).toDateString() + '    ' + i.NextAppTime, icon: getStatusIcon(i.Tag), completed: true }
@@ -65,6 +65,12 @@ const OrderStatus = () => {
     }
   }
 
+  let firstPresc = order.EnclosedDocObj?.EnclosedDocList[0];
+  let filePath = firstPresc?.FilePath;
+  let fileName = firstPresc?.FileName;
+  let imgUrl = `${filePath}/${fileName}` || 'no_image_url'
+  const [preveiw, setPreview] = useState(false);
+
   // RETURNS -------------------------------------------------------------------------
   
   let isAlreadySubmitted = order?.AlreadyReturnDetailsList?.length;
@@ -79,7 +85,7 @@ const OrderStatus = () => {
       productItems = order?.SalesReturnDetailsList || [];  
   }
 
-  let total = productItems.reduce((total, i) => total + (parseFloat(i.NetRateS * parseFloat(i.BillQty))), 0).toFixed(2);
+  // let total = productItems.reduce((total, i) => total + (parseFloat(i.NetRateS * parseFloat(i.BillQty))), 0).toFixed(2);
 
   let orderRturnStages = pickupProgress?.map((i: any) => (
       { title: i.Tag + ' ' + i.Remarks, date: new Date(i.NextAppDate).toDateString() + '    ' + i.NextAppTime, icon: getStatusIcon(i.Tag), completed: true }
@@ -198,6 +204,22 @@ const OrderStatus = () => {
               </View>
             </View>
           </View> */}
+          
+          {fileName ? <>
+          <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Prescription</Text>
+          <MyModal modalActive={preveiw} onClose={() => setPreview(false)} name='PRESC_PREVIEW' child={<PreviewImage url={imgUrl} />} />
+          <TouchableOpacity onPress={() => setPreview(true)} className="bg-white rounded-2xl border-b border-gray-200 p-5 flex-row items-center justify-between">
+            <View className="flex-row items-center flex-1 gap-4">
+              <Image source={{ uri: imgUrl }} className="w-14 h-14 rounded-xl border border-gray-100" resizeMode="cover" />
+              <View className="flex-1">
+                <Text className="font-semibold text-indigo-500 mb-2">{order.VchNo}.png</Text>
+                <Text className="text-sm text-gray-500">Image</Text>
+              </View>
+            </View>
+            <TouchableOpacity>
+              <Feather name="chevron-right" size={23} color="gray" />
+            </TouchableOpacity>
+          </TouchableOpacity></> : null}
           <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Order List</Text>
           <View className='gap-3'>
             {order?.SalesDetailsList?.map((item, index) => <OrderItemCard data={item} key={index} />)}

@@ -220,7 +220,7 @@ const ShoppingAppScreen = () => {
       <View className='py-5'>
         <View className="flex-row justify-between items-center mb-4 px-5">
           <Text className="text-lg font-bold text-gray-800">Featured Categories</Text>
-          <Link href={'/'}>
+          <Link href={'/shop/tabs/categories'}>
             <Text className="text-purple-600 font-medium">See All</Text>
           </Link>
         </View>

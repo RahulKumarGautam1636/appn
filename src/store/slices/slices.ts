@@ -6,7 +6,7 @@ import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/componen
 
 const compCodeSlice = createSlice({
   name: 'compCode',
-  initialState: 'yFObpUjTIGhK9%2B4bFmadRg==', //'FFCeIi27FQMTNGpatwiktw==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==',
+  initialState: 'FFCeIi27FQMTNGpatwiktw==', //'FFCeIi27FQMTNGpatwiktw==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==',
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {
       state = action.payload;
@@ -19,7 +19,7 @@ const compCodeReducer = compCodeSlice.reducer;
 
 const loginSlice = createSlice({
   name: 'login',
-  initialState: true,
+  initialState: false,
   reducers: {
     setLogin: (state, action: PayloadAction<boolean>) => {
       return action.payload;
@@ -33,7 +33,7 @@ const loginReducer = loginSlice.reducer;
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: dummyUser,
+  initialState: {},
   reducers: {
     setUser: (state, action: PayloadAction<object>) => {
       return action.payload;

@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import ButtonPrimary from '@/src/components';
-import { getFrom, GridLoader, OrderCard } from '@/src/components/utils';
+import { getFrom, GridLoader, NoContent, OrderCard } from '@/src/components/utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL } from '@/constants';
@@ -70,7 +70,7 @@ const Orders = () => {
             } else if (orders.err.status) {
               return null;
             } else if (!orders.data.OrderList.length) {
-              return null;
+              return <NoContent label='No Orders Found' containerClass='pt-8' imgClass='h-[200px] mb-5'/>;
             } else {
               return orders.data.OrderList.map(order => <OrderCard data={order} tab={tabActive} key={order.BillId} />)
             }

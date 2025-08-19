@@ -8,7 +8,7 @@ import { getFrom, GridLoader } from "@/src/components/utils";
 import { BASE_URL, defaultId, zero } from "@/constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { setLocation, setModal } from "@/src/store/slices/slices";
+import { dumpCart, setLocation, setModal } from "@/src/store/slices/slices";
 import colors from "tailwindcss/colors";
 
 function Locations() {
@@ -30,6 +30,7 @@ function Locations() {
 
     const handleSelect = (i: any) => {
         let item = { Address: i.Address, StateDesc: i.StateDesc, StateCode: i.StateCode, PIN: i.PIN, Area: i.Area, LocationId: i.LocationId, LocationName: i.LocationName };
+        dispatch(dumpCart())
         dispatch(setLocation(item));
         dispatch(setModal({ name: 'LOCATIONS', state: false }));
     }

@@ -64,6 +64,7 @@ export const initReg = {
   TradeLicense: '',
 
   UserRegTypeId: '',
+  UserLevelSeq: ''
 }
 
 export const initMember = {

@@ -76,7 +76,7 @@ export default function TabsLayout() {
             {tabs.map((tab, index) => {
               const isFocused = state.routes[state.index]?.name === tab.key;
               const onPress = () => {
-                if (tab.key === 'profile') {
+                if (tab.key === 'profile' || tab.key === 'orders') {
                   if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
                 } 
                 router.push(`/shop/tabs/${tab.key}`);

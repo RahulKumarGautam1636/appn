@@ -6,7 +6,7 @@ import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { myColors } from '@/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLogin, setUser } from '@/src/store/slices/slices';
+import { dumpCart, setLogin, setUser } from '@/src/store/slices/slices';
 import { useState } from 'react';
 import { Registeration } from '../../login';
 import { MyModal } from '@/src/components';
@@ -20,6 +20,12 @@ const Profile = () => {
     const [personalInfoActive, setPersonalInfoActive] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch()
+
+    const handleLogout = () => {
+        dispatch(setLogin(false)); 
+        dispatch(setUser({}))
+        dispatch(dumpCart())
+    }
 
     return (
         <>
@@ -117,7 +123,7 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link> */}
-                    <Link href={'/shop/tabs/home'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
+                    <Link href={'/shop/tabs/home'} onPress={handleLogout}>
                         <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                             <Entypo name="log-out" size={20} color={myColors.primary[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Logout</Text>

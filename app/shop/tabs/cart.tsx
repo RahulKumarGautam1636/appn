@@ -6,7 +6,7 @@ import ButtonPrimary, { LinkBtn } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { addToCart, dumpCart, removeFromCart } from '@/src/store/slices/slices';
-import { CartCard } from '@/src/components/utils';
+import { CartCard, NoContent } from '@/src/components/utils';
 import { useRouter } from 'expo-router';
 
 const Cart = () => {
@@ -69,12 +69,10 @@ const Cart = () => {
           <Text className="text-lg font-semibold text-black">My Cart</Text>
         </TouchableOpacity>
       </View>
-      {/* <Pressable onPress={() => dispatch(dumpCart())}>
-        <Text className="text-lg font-semibold text-black my-4">Clear All</Text>
-      </Pressable> */}
-      <View className='gap-3'>
-        {cartItems.map((data) => <CartCard data={data} key={data.LocationItemId} />)}
-      </View>
+      {cartItems.length ? <>
+        <View className='gap-3'>
+          {cartItems.map((data) => <CartCard data={data} key={data.LocationItemId} />)}
+        </View>
         <View className='bg-white rounded-3xl shadow-sm my-4 border-b border-gray-200'>
             <View className='justify-between flex-row px-5 py-4 items-center'>
                 <View className='flex-row items-center gap-3'>
@@ -98,7 +96,8 @@ const Cart = () => {
           </View>
           <LinkBtn href={'/shop/checkout'} title='CHECKOUT' classes='flex-1 !rounded-2xl !bg-gray-700' />
         </View>
-      </ScrollView>
+      </> : <NoContent label='Your Cart is Empty' containerClass='flex-1' imgClass='h-[200px] mb-5'/>}
+    </ScrollView>
   );
 };
 

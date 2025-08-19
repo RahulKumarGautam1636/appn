@@ -60,7 +60,7 @@ export default function App() {
                 <Feather name="chevron-right" size={30} color='gray' />
               </TouchableOpacity>
               {/* onPress={() => router.push('./appn/tabs/opd')} */}
-              {/* <TouchableOpacity className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
+              {/* <TouchableOpacity onPress={() => router.push('./appn/tabs/opd')} className="flex-row items-center justify-between bg-slate-100 border border-gray-200 p-5 rounded-xl">
                 <View className="flex-row items-center">
                   <View className="bg-blue-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                     <FontAwesome6 name="user-doctor" size={33} color="white" />

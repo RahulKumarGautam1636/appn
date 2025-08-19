@@ -679,10 +679,10 @@ export function FileUploader({ file, setFile, removeFile }: any) {
             <FileText size={30} color="#F97316" />
             <Text className="text-orange-500 mt-3 text-base">Image</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={pickDocument} className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1">
+          {/* <TouchableOpacity onPress={pickDocument} className="border border-dashed border-orange-400 rounded-lg p-6 items-center flex-1">
             <FileText size={30} color="#F97316" />
             <Text className="text-orange-500 mt-3 text-base">PDF / DOC</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </>}
       </View>
 
@@ -713,12 +713,15 @@ export const convertFileToBase64 = async (uri: string) => {
 };
 
 export const  sliceBaseStr = async (str: string) => {
+  if (!str) return '';
   let target;
   if (Platform.OS !== 'web') { 
     target = await convertFileToBase64(str);
-  }  
-  target = target.indexOf('base64,');
-  return target.slice(target + 7);
+    return target;
+  } else {
+    target = str.indexOf('base64,');
+    return str.slice(target + 7);
+  }
 }
 
 
@@ -772,12 +775,23 @@ export const getStatusIcon = (title: string) => {
     case 'Delivered':
       return 'package';
 // -------------------------------- Return process.
+    case 'Return Started':
+      return 'corner-down-left';
+    case 'Item Returned':
+      return 'log-in';
     case 'Refund Initiated':
-      return 'truck';
-    case 'Dispatched':
-      return 'Refund Completed';
-    case 'Out For Delivery':
+      return 'file-text';
+    case 'Refund Completed':  
+      return 'check-square';
     default:
       return 'circle';
   }
 };
+
+export const PreviewImage = ({ url }: any) => {
+  return (
+    <View className="min-h-full w-full pointer-events-none p-6">
+      <Image source={{ uri: url }} className="h-full w-full rounded-xl" resizeMode="contain" />
+    </View>
+  )
+}

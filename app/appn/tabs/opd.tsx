@@ -18,6 +18,7 @@ const HomeScreen = () => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state: RootState) => state.isLoggedIn);
     const user = useSelector((state: any) => state.user);
+    const company = useSelector((state: RootState) => state.company.info);
     const { list, selected, status, error } = useSelector((state: RootState) => state.companies);
     const depts = useSelector((state: RootState) => state.depts);
     const [doctors, setDoctors] = useState({loading: true, data: {PartyMasterList: [], CompanyMasterList: []}, err: {status: false, msg: ''}})
@@ -135,8 +136,8 @@ const HomeScreen = () => {
                         <View className="gap-3 flex-row items-center">
                             <Image className='rounded-full' source={require('../../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
                             <View className='mr-auto'>
-                                <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
-                                <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text>
+                                <Text className="font-PoppinsSemibold text-gray-800 text-[16px]" numberOfLines={1}>{(company.COMPNAME)?.slice(0, 20)}..</Text>
+                                <Text className="font-Poppins text-gray-600 text-[11px]">Simplifying Your Searches</Text>
                             </View>
                             {/* <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOGIN', state: true }))}> */}
                             <Link href={'/login'}>

@@ -18,7 +18,7 @@ interface loginType {
     EncCompanyId: string
 }
 
-const Login = ({ modal }: any) => {
+const Login = ({ modalMode }: any) => {
 
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
@@ -26,7 +26,7 @@ const Login = ({ modal }: any) => {
     const user = useSelector((state: RootState) => state.user);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
-    const [loginData, setLoginData] = useState({ phone: '9330241456', password: '8583814626', EncCompanyId: compCode });        // 9330241456 // 8583814626
+    const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });        // 9330241456 // 8583814626
     
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
@@ -62,7 +62,7 @@ const Login = ({ modal }: any) => {
         //     AgeMonth: res.data.AgeMonth,
         //     AgeDay: res.data.AgeDay,
         //     UserPassword: res.data.UserPassword,               // force to re-enter.
-        //     // UserType: res.data.UserType,                       // set by modalMode
+        //     // UserType: res.data.UserType,                       // set by modal
         //     Qualification: res.data.Qualification,
         //     SpecialistId: res.data.SpecialistId,
         //     UserId: res.data.UserId,
@@ -159,7 +159,7 @@ const Login = ({ modal }: any) => {
             // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: res.data.UserPassword, compCode: params.companyCode }));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
-            if (modal) {
+            if (modalMode) {
                 dispatch(setModal({ name: 'LOGIN', state: false }))
             } else {
                 router.back();
@@ -182,17 +182,17 @@ const Login = ({ modal }: any) => {
     const comp = { name: 'TakeHome', tag: 'Simplifying Your Searches'}
     
     return (
-        <ScrollView contentContainerClassName='bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-[#6366f1] via-[#a5b4fc] to-[#e0e7ff] min-h-full' style={{minHeight: '100%'}}>
+        <ScrollView contentContainerClassName='min-h-full' style={{minHeight: '100%'}}>
             {/* <Image source={require('../assets/images/bg.jpg')} className="absolute w-full h-full z-0" resizeMode="cover" /> */}
             {/* <View className="w-full h-1/2 z-0 justify-center items-center relative">
             </View> */}
             <View className="relative gap-4 flex-row items-center justify-center mb-4 flex-1 pt-14 pb-12">
                 <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
-                <Image className='' source={require('../assets/images/logo.png')} style={{ width: 75, height: 65 }} />
-                <View>
+                <Image className='' source={require('../assets/images/logo.png')} style={{ width: 160, height: 150 }} />
+                {/* <View>
                     <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2 pt-3">{comp.name}</Text>
                     <Text className="font-Poppins text-gray-600 text-[13px]">{comp.tag}</Text>
-                </View>
+                </View> */}
             </View>
             {(() => {
                 if (tab === 'login') {
@@ -222,7 +222,7 @@ const Login = ({ modal }: any) => {
                         </View> 
                     )
                 } else if (tab === 'register') {
-                    return <Registeration setTab={setTab} setLoginData={setLoginData} setLoginError={setLoginError} />
+                    return <Registeration modalMode={modalMode} setTab={setTab} setLoginData={setLoginData} setLoginError={setLoginError} />
                 }
             })()}
         </ScrollView>
@@ -233,7 +233,7 @@ export default Login;
 
 
 
-export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false }: any) => {
+export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, modalMode={modalMode} }: any) => {
 
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
@@ -244,7 +244,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     const [otp, setOTP] = useState({isOpen: false, recievedValue: 'null', enteredValue: '', sent: false, verified: false, read_only: false});    
     const [personalFields, setPersonalFields] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [regData, setRegData] = useState({ ...initReg, DOB: '', DOBstr: '', UserType: 'PATIENT', BusinessType: 'B2C' });
+    const [regData, setRegData] = useState({ ...initReg, DOB: '', DOBstr: '', UserType: 'PATIENT', BusinessType: 'B2C', UserLevelSeq: 60 });
 
     useEffect(() => {
         if (!isLoggedIn) {                                                            
@@ -325,12 +325,19 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
         if (otp.verified) {
             if (regData.RegMob1.length < 10) return alert('phone number is invalid, please try again.');
             if (regData.UserPassword.length < 4) return alert('Minimum length for password is 4.');
+            if (regData.Pin.length < 4) return alert('Please enter a valid Pin Code.');
+            if (regData.DOBstr.length < 4) return alert('Please enter your Date of Birth.');
+            if (regData.Address.length < 4) return alert('Please enter your valid address.');
             let status = await makeRegisterationRequest({ ...regData });
             if (status) {
                 let loginStatus = await refreshUserInfo(regData);
                 if (loginStatus) {
                     dispatch(setLogin(true));
-                    router.push('/appn/home');
+                    if (modalMode) {
+                        dispatch(setModal({ name: 'LOGIN', state: false }))
+                    } else {
+                        router.back();
+                    }
                 }
             } 
         }

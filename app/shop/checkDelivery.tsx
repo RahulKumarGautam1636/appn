@@ -45,20 +45,31 @@ const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
         if (location.Pin !== user.Pin) setLocation({ Pin: user.Pin });
     }, [user.Pin])
 
-    const renderLocationList = (data: any) => {
-        if (data.loading) {
-            return <Text>Loading..</Text>;
-        } else if (data.err.status) {
-            return <View className='text-center my-5'><Text className="text-danger mark">An error occured, please try again later. Error code: {data.err.msg}</Text></View>;
-        } else if (data.data === 0) {
-            setDeliverable(false);
-            return <Text className='text-danger mb-0 mt-2'>Now we have no service in this PIN - We will be available in your area very soon.</Text>;
-        } else {
-            closeModal();
-            setDeliverable(true);
-            return;
+    useEffect(() => {
+        if (!locationList.loading && !locationList.err.status) {
+            if (locationList.data === 0) {
+                setDeliverable(false);
+            } else {
+                setDeliverable(true);
+                closeModal();
+            }
         }
-    } 
+    }, [locationList]);
+
+    // const renderLocationList = (data: any) => {
+    //     if (data.loading) {
+    //         return <Text>Loading..</Text>;
+    //     } else if (data.err.status) {
+    //         return <View className='text-center my-5'><Text className="text-danger mark">An error occured, please try again later. Error code: {data.err.msg}</Text></View>;
+    //     } else if (data.data === 0) {
+    //         setDeliverable(false);
+    //         return <Text className='text-danger mb-0 mt-2'>Now we have no service in this PIN - We will be available in your area very soon.</Text>;
+    //     } else {
+    //         closeModal();
+    //         setDeliverable(true);
+    //         return;
+    //     }
+    // } 
 
     const [personalInfoActive, setPersonalInfoActive] = useState(false);
     
@@ -136,7 +147,7 @@ const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
                         </View>
                     </View>
                 </View>
-                {renderLocationList(locationList)}
+                {/* {renderLocationList(locationList)} */}
             </View>
         </ScrollView>
         </>

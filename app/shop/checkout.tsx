@@ -12,13 +12,6 @@ import CheckDelivery from './checkDelivery';
 import { BASE_URL } from '@/constants';
 import axios from 'axios';
 
-
-// const sliceBaseStr = (str: string) => {
-//   let target = str.indexOf('base64,');
-//   return str.slice(target + 7);
-// }
-
-
 const Checkout = () => {
 
   const location = useSelector((i: RootState) => i.appData.location);
@@ -114,10 +107,7 @@ const Checkout = () => {
               cashPartyMobile = prescription.patient.phone || user.RegMob1;  
               partyCode = user.PartyCode;
               billingState = user.State;
-              deliveryState = prescription.patient.state?.CodeId || user.State;
-
-              // const fileUrl = await sliceBaseStr(prescription.file.uri)
-              // console.log((fileUrl));   
+              deliveryState = prescription.patient.state?.CodeId || user.State;  
 
               setOrderData((preValues) => ({
                   ...preValues,
@@ -203,7 +193,7 @@ const Checkout = () => {
                         EnclosedDeleteDocList: '',
                         Remarks: prescription.file.name || '',           
                         FileExtension: prescription.file.extn,
-                        filesToUpload: sliceBaseStr(prescription.file.uri)
+                        filesToUpload: ''          // avoid using large base64 url. will set in placeOrder.
                       }
                     ]
                   }
@@ -230,16 +220,19 @@ const Checkout = () => {
   const placeOrder = async () => {
     if (!isLoggedIn) return alert('please login to place an order.');
     if (!orderData.LocationId) return alert('Please select a Service Location before making an order.');
-    
-    let body = { ...orderData };  
 
-    try {
+    let body = { ...orderData };  
+    
+    if (prescription.file.extn) {
+      const fileString = await sliceBaseStr(prescription.file.uri);             
+      body.EnclosedDocObj.EnclosedDocList[0].filesToUpload = fileString;        
+    }
+
+    try {     
       setLoading(true);
-      await wait(3000);
-      console.log(JSON.stringify(body));
       const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
+      await wait(3000);
       setLoading(false);
-      console.log(res);
       if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
       dispatch(dumpCart());
       dispatch(setPrescription({ patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } }))
@@ -400,8 +393,9 @@ const Checkout = () => {
           </View>
 
         {prescription.required ? <>
-          {!prescription.file.name && <Text className='text-rose-500 text-sm mb-3' style={{fontFamily: 'Lato', fontWeight: 600}}>Please Attach your prescription to place an order.</Text>}
+          {!prescription.file.name && <Text className='text-rose-500 text-sm mb-3'>Please Attach your prescription to place an order.</Text>}
         </> : ''}
+        {isDeliverable ? null : <Pressable onPress={() => setLocationModalActive(true)}><Text className='text-blue-600 text-sm mb-3 font-medium'>Now we have no service at your PIN code. Click to know more.</Text></Pressable>}
         <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(isLoggedIn && isDeliverable && prescription.file.name) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
         {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
 
