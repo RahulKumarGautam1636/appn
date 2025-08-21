@@ -62,10 +62,11 @@ const Checkout = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      dispatch(setModal({name: 'LOGIN', state: true}))
+      // dispatch(setModal({name: 'LOGIN', state: true}))
+      router.push('/login');
       return;
     } else {
-      dispatch(setModal({name: 'LOGIN', state: false}))
+      // dispatch(setModal({name: 'LOGIN', state: false}))
       setLocationModalActive(true);
     }
   }, [user.Pin, isLoggedIn, locationId])

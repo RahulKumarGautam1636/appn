@@ -182,7 +182,7 @@ const Login = ({ modalMode }: any) => {
     const comp = { name: 'TakeHome', tag: 'Simplifying Your Searches'}
     
     return (
-        <ScrollView contentContainerClassName='min-h-full' style={{minHeight: '100%'}}>
+        <ScrollView contentContainerClassName='min-h-full bg-white' style={{minHeight: '100%'}}>
             {/* <Image source={require('../assets/images/bg.jpg')} className="absolute w-full h-full z-0" resizeMode="cover" /> */}
             {/* <View className="w-full h-1/2 z-0 justify-center items-center relative">
             </View> */}

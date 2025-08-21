@@ -22,7 +22,7 @@ export default function App() {
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <SafeAreaView className="flex-1">
-          <Init />
+          {/* <Init /> */}
           
           <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
           {/* <View className="relative gap-4 flex-row items-center justify-center py-[6rem]">

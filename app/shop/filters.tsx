@@ -17,6 +17,8 @@ const FilterPage = () => {
     setShowFilters(false);
   };
 
+  console.log('Filters Rerendered.')
+
   // const [productsList, setProductsList] = useState({loading: true, data: {itemMasterCollection: []}, err: {status: false, msg: ''}});
 
     const [searchText, setSearchText] = useState('');

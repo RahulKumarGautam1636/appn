@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions, Platform, FlatList } from 'react-native';
 import { Feather, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,122 +13,15 @@ const web = Platform.OS === 'web';
 
 const ShoppingAppScreen = () => {
   
-  const deviceWidth = web ? document.documentElement.clientWidth : windowWidth;
-  const [selectedCategory, setSelectedCategory] = useState('Pharmacy');
+
+  // const [selectedCategory, setSelectedCategory] = useState('Pharmacy');
   const { products: productsData, categories: categoriesData } = useSelector((i: RootState) => i.siteData);
   const user = useSelector((i: RootState) => i.user);
   const location = useSelector((i: RootState) => i.appData.location);
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
   const dispatch = useDispatch();
 
-  const renderProductSection = (data: any, parentId: number) => {
-    const productCategoryItems = data.itemMasterCollection.filter((i: any) => i.Category === parentId).slice(0, 8);   
-    const parentCategoryName = categoriesData.LinkCategoryList.filter((i: any) => i.Parent === parentId)[0]?.ParentDesc;
-    // const subLinks = categoriesData.LinkSubCategoryList.filter((i: any) => parentId === i.Parent);
-    if (data.loading) {
-      return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-5' />;
-    } else if (data.error) {
-      return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{data.error}</Text>;
-    } else {
-      return (
-        <View>
-          <View className="flex-row justify-between items-center pt-4 pb-3 px-5">
-            <Text className="text-lg font-bold text-gray-800">{parentCategoryName}</Text>
-            <Link href={`/shop/filters/?head=${escape(parentCategoryName).swap}&catVal=${parentId}`}>
-              <Text className="text-purple-600 font-medium">See All</Text>
-            </Link>
-          </View> 
-          <View>
-            <FlatList
-              data={productCategoryItems.slice(0.3)}
-              keyExtractor={(item) => item.LocationItemId.toString()}
-              className=""
-              contentContainerClassName="flex-row"
-              scrollEnabled={true}
-              horizontal
-              renderItem={({item}: any) => (<ProductCard data={item} width={deviceWidth / 2} />)}
-            />
-            <View className='flex-row justify-center gap-4 py-3 bg-white'>
-              <View className='h-2 w-2 bg-gray-500 rounded-full'></View>
-              <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
-              <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
-            </View>
-          </View>
-        </View>
-      
-      // <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName='flex-row'>
-      //   {productCategoryItems.slice(0, 5).map((product: any) => (
-      //     <View key={product.LocationItemId} className={`items-start bg-white p-4 border border-gray-100`} style={{width: deviceWidth / 2 }}>
-      //       <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
-      //         <Image className='shadow-sm' source={{uri: product.ItemImageURL}} style={{ width: 100, height: 140 }} />
-      //       </View>
-      //       <View className='flex-1 items-start mt-3'>
-      //         <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{product.Description.slice(0, 15)}</Text>
-      //         <View className='flex-row gap-4'>
-      //           <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
-      //           <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
-      //         </View>
-      //         {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-      //         <View className='justify-between flex-row items-center w-full'>
-      //           <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
-      //             <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
-      //           </View>
-      //           {/* <View className=''> */}
-      //             <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
-      //           {/* </View> */}
-      //         </View>
-      //       </View>
-      //     </View>
-      //   ))}
-      // </ScrollView>
-
-
-
-        // Version 2
-        // <View key={i}>
-        //   <View className="flex-row justify-between items-center pt-4 pb-3 px-5 bg-white border-t border-gray-100">
-        //     <Text className="text-lg font-bold text-gray-800">Pharmacy</Text>
-        //     <TouchableOpacity>
-        //       <Text className="text-purple-600 font-medium">See All</Text>
-        //     </TouchableOpacity>
-        //   </View> 
-        //   <View>
-        //     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName='flex-row'>
-        //       {[1, 2, 3, 4].map(i => (
-        //         <View key={i} className={`items-start bg-white p-4 border border-gray-100`} style={{width: cardWidth}}>
-        //           <View className='items-center justify-center w-full p-4 rounded-xl bg-slate-100'>
-        //             <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 100, height: 140 }} />
-        //           </View>
-        //           <View className='flex-1 items-start mt-3'>
-        //             <Text className="text-[1rem] font-semibold text-gray-900 mb-2">Fujifilm Camera</Text>
-        //             <View className='flex-row gap-4'>
-        //               <Text className="text-[0.92rem] font-semibold text-green-700">550.23</Text>
-        //               <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">250.60</Text>
-        //             </View>
-        //             {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-        //             <View className='justify-between flex-row items-center w-full'>
-        //               <View className='px-3 py-[0.4rem] bg-slate-100 shadow-sm rounded-xl mt-2' >
-        //                 <Text className='text-gray-700 text-[0.8rem]'>10 Tab</Text>
-        //               </View>
-        //               {/* <View className=''> */}
-        //                 <Ionicons name='cart-outline' className='mt-2' size={22} color='#0ea5e9' />
-        //               {/* </View> */}
-        //             </View>
-        //           </View>
-        //         </View>
-        //       ))}
-        //     </ScrollView>
-        //     <View className='flex-row justify-center gap-4 py-3 bg-white'>
-        //       <View className='h-2 w-2 bg-gray-500 rounded-full'></View>
-        //       <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
-        //       <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
-        //     </View>
-        //   </View>
-        // </View>
-      )
-      
-    }
-  }  
+  console.log('Home Screen rerendered.');
 
   return (
     <ScrollView className="flex-1 bg-purple-50">   
@@ -224,21 +117,9 @@ const ShoppingAppScreen = () => {
             <Text className="text-purple-600 font-medium">See All</Text>
           </Link>
         </View>
-        {(() => {
-          if (categoriesData.loading) {
-              return <GridLoader classes='h-[118px] w-[138px] rounded-xl' containerClass='flex-row gap-3 m-4' />;
-          } else if (categoriesData.error) {
-              return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{categoriesData.error}</Text>;
-          } else {
-            return (
-              <ScrollView contentContainerClassName="flex-row justify-between gap-3 px-5 py-1" horizontal showsHorizontalScrollIndicator={false}>
-                {categoriesData.LinkCategoryList.map((i, n) => (<CatCard data={i} key={n} />))}
-              </ScrollView>
-            )
-          }
-        })()}
+        <CategoriesSlider categoriesData={categoriesData} />
       </View>
-      {/* <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
+      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
         <View className="flex-row items-center flex-1">
           <View className="w-12 h-12 bg-purple-400 rounded-full items-center justify-center mr-4">
             <Feather name="upload" size={20} color="#ffffff" />
@@ -251,7 +132,7 @@ const ShoppingAppScreen = () => {
         <View>
           <Feather name="chevron-right" size={23} color="white" />
         </View>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
       <View className="flex-1 mb-4">
         <View className="flex-row justify-between items-center mb-4 px-5 ">
           <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
@@ -259,7 +140,6 @@ const ShoppingAppScreen = () => {
             <Text className="text-purple-600 font-medium">See All</Text>
           </Link>
         </View>
-        
         {/* <View className="flex-row flex-wrap justify-between">
           {brandLogos.map((brand, index) => (
             <TouchableOpacity key={index} className="items-center mb-4" style={{width: '18%'}}>
@@ -274,70 +154,9 @@ const ShoppingAppScreen = () => {
             </TouchableOpacity>
           ))}
         </View> */}
-        {(() => {
-          if (productsData.loading) {
-              return <GridLoader classes='h-[100px] w-[100px] !rounded-full' containerClass='flex-row gap-3 mx-5 mb-3' />;
-          } else if (productsData.error) {
-              return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{categoriesData.error}</Text>;
-          } else {
-            return (
-              <ScrollView contentContainerClassName="flex-row gap-3 pb-3 px-5 " horizontal showsHorizontalScrollIndicator={false}>
-                {productsData.ItemBrandList.map((brand, index) => (
-                  <Link href={`/shop/filters/?head=${escape(brand.Text).swap}&brands=${brand.Text}`} key={index} >
-                    <View className="items-center justify-center">
-                    <View className="bg-white rounded-full items-center justify-center mb-3 border-b-2 border-gray-200 p-4">
-                      <Image 
-                        className='' 
-                        resizeMode='contain' 
-                        source={{uri: `https://pharma.takehome.live/assets/img/ePharma/brands-logo/${brand.Text.trim()}.png`}} 
-                        style={{ width: 75, height: 75 }} 
-                      />
-                    </View>
-                    <Text className="text-sm text-gray-600 text-center">{brand.Text.slice(0, 18)}</Text>
-                    </View>
-                  </Link>
-                ))}
-              </ScrollView>
-            )
-          }
-        })()}     
-          
-
+        <BrandsSlider productsData={productsData} />    
       </View>
-      {/* <View className="flex-1 border-y border-gray-200">
-        {(() => {
-          if (categoriesData.loading) {
-              return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-5' />;
-          } else if (categoriesData.error) {
-              return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{categoriesData.error}</Text>;
-          } else {
-            return (
-              <ScrollView contentContainerClassName="flex-row p-5 items-center" horizontal showsHorizontalScrollIndicator={false}>
-                {categoriesData.LinkCategoryList.map((category) => (
-                    <CategoryButton
-                      key={category.Value}
-                      title={category.Text}
-                      isSelected={selectedCategory === category.Text}
-                      onPress={() => setSelectedCategory(category.Text)}
-                    />
-                ))}
-              </ScrollView>
-            )
-          }
-        })()}
-      </View> */}
-      <FlatList
-          data={categoriesData.LinkCategoryList}
-          renderItem={({ item }) =>  (
-            <View>
-              {renderProductSection(productsData, parseInt(item.Parent))}
-            </View>
-          )}
-          keyExtractor={(item) => item.Parent.toString()}
-          className=""
-          contentContainerClassName=""
-          scrollEnabled={false}
-      />
+      <ProductSection mainCategories={categoriesData.LinkCategoryList} productsData={productsData} />
     </ScrollView>
   );
 };
@@ -350,17 +169,102 @@ const CategoryButton = ({ title, isSelected, onPress }: any) => (
   </TouchableOpacity>
 );
 
-// const brandLogos = [
-//   { name: 'Nike', icon: 'checkroom' },
-//   { name: 'Macy\'s', icon: 'star', color: '#dc2626' },
-//   { name: 'Levi\'s', icon: 'straighten', color: '#dc2626' },
-//   { name: 'Adidas', icon: 'sports-soccer' },
-//   { name: 'Chanel', icon: 'diamond' },
-//   { name: 'Pepsi', icon: 'local-drink', color: '#2563eb' },
-//   { name: 'Starbucks', icon: 'local-cafe', color: '#059669' },
-//   { name: 'Puma', icon: 'pets' },
-//   { name: 'Ferrari', icon: 'directions-car', color: '#dc2626' },
-//   { name: 'Dell', icon: 'computer', color: '#2563eb' },
-// ];
+const CategoriesSlider = memo(({ categoriesData }: any) => {
+  if (categoriesData.loading) {
+    return <GridLoader classes='h-[118px] w-[138px] rounded-xl' containerClass='flex-row gap-3 m-4' />;
+  } else if (categoriesData.error) {
+    return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{categoriesData.error}</Text>;
+  } else {
+    return (
+      <ScrollView contentContainerClassName="flex-row justify-between gap-3 px-5 py-1" horizontal showsHorizontalScrollIndicator={false}>
+        {categoriesData.LinkCategoryList.map((i: any, n: number) => (<CatCard data={i} key={n} />))}
+      </ScrollView>
+    )
+  }
+})
 
+const BrandsSlider = memo(({ productsData }: any) => {
+  if (productsData.loading) {
+      return <GridLoader classes='h-[100px] w-[100px] !rounded-full' containerClass='flex-row gap-3 mx-5 mb-3' />;
+  } else if (productsData.error) {
+      return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{categoriesData.error}</Text>;
+  } else {
+    return (
+      <ScrollView contentContainerClassName="flex-row gap-3 pb-3 px-5 " horizontal showsHorizontalScrollIndicator={false}>
+        {productsData.ItemBrandList.map((brand, index) => (
+          <Link href={`/shop/filters/?head=${escape(brand.Text).swap}&brands=${brand.Text}`} key={index} >
+            <View className="items-center justify-center">
+            <View className="bg-white rounded-full items-center justify-center mb-3 border-b-2 border-gray-200 p-4">
+              <Image 
+                className='' 
+                resizeMode='contain' 
+                source={{uri: `https://pharma.takehome.live/assets/img/ePharma/brands-logo/${brand.Text.trim()}.png`}} 
+                style={{ width: 75, height: 75 }} 
+              />
+            </View>
+            <Text className="text-sm text-gray-600 text-center">{brand.Text.slice(0, 18)}</Text>
+            </View>
+          </Link>
+        ))}
+      </ScrollView>
+    )
+  }
+})
 
+const ProductSection = memo(({ mainCategories, productsData }: any) => {
+  const deviceWidth = web ? document.documentElement.clientWidth : windowWidth;
+  const renderProductSection = useCallback((data: any, parentId: number) => {
+    const productCategoryItems = data.itemMasterCollection.filter((i: any) => i.Category === parentId).slice(0, 8);   
+    const parentCategoryName = mainCategories.filter((i: any) => i.Parent === parentId)[0]?.ParentDesc;
+      console.log('Category section rerendered.');
+    // const subLinks = categoriesData.LinkSubCategoryList.filter((i: any) => parentId === i.Parent);
+    if (data.loading) {
+      return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-5' />;
+    } else if (data.error) {
+      return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{data.error}</Text>;
+    } else {
+      return (
+        <View>
+          <View className="flex-row justify-between items-center pt-4 pb-3 px-5">
+            <Text className="text-lg font-bold text-gray-800">{parentCategoryName}</Text>
+            <Link href={`/shop/filters/?head=${escape(parentCategoryName).swap}&catVal=${parentId}`}>
+              <Text className="text-purple-600 font-medium">See All</Text>
+            </Link>
+          </View> 
+          <View>
+            <FlatList
+              data={productCategoryItems.slice(0.3)}
+              keyExtractor={(item) => item.LocationItemId.toString()}
+              className=""
+              contentContainerClassName="flex-row"
+              scrollEnabled={true}
+              horizontal
+              renderItem={({item}: any) => (<ProductCard data={item} width={deviceWidth / 2} />)}
+            />
+            <View className='flex-row justify-center gap-4 py-3 bg-white'>
+              <View className='h-2 w-2 bg-gray-500 rounded-full'></View>
+              <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
+              <View className='h-2 w-2 bg-gray-300 rounded-full'></View>
+            </View>
+          </View>
+        </View>
+      )
+      
+    }
+  }, [mainCategories, productsData])
+
+  return (
+    <FlatList
+        data={mainCategories}
+        renderItem={({ item }) =>  (
+          <View>
+            {renderProductSection(productsData, parseInt(item.Parent))}
+          </View>
+        )}
+        keyExtractor={(item) => item.Parent.toString()}
+        className=""
+        contentContainerClassName=""
+        scrollEnabled={false}
+    />
+  )
+})

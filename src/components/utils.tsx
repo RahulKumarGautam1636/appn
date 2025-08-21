@@ -315,6 +315,8 @@ export const ProductCard = ({ data, width='100%', type='grid' }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  console.log('Product card rerendered.');
+
   useEffect(() => {
 		const packSizeList = data.ItemPackSizeList;
 		if (packSizeList && packSizeList?.length) {

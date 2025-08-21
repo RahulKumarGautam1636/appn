@@ -7,6 +7,7 @@ import store from "@/src/store/store";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { blur } from "@/constants";
+import Init from "@/src/components/init";
 
 export default function RootLayout() {
   const theme = useColorScheme();
@@ -70,6 +71,7 @@ export default function RootLayout() {
                 <Stack.Screen name="shop/filters" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="shop/brands" options={{ headerShown: false, animation: 'slide_from_left' }} />
               </Stack>
+              <Init />
             </KeyboardAvoidingView>
           </SafeAreaView>
         </SafeAreaProvider>
