@@ -303,19 +303,19 @@ export const computeWithPackSize = (data, activePackSize, vType) => {
 } 
 
 
-export const ProductCard = ({ data, width='100%', type='grid' }) => {
+export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
 
-  const compCode = useSelector((i: RootState) => i.compCode);
+  // const compCode = useSelector((i: RootState) => i.compCode);
   // const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
   const { vType } = useSelector((i: RootState) => i.company);
-  const cart = useSelector((i: RootState) => i.cart);
-  const isAdded = Object.values(cart).find((i: any) => i.LocationItemId === data.LocationItemId)
+  const isAdded = useSelector((i: RootState) => Object.values(i.cart).some((x : any) => x.LocationItemId === data.LocationItemId));
+  // const isAdded = Object.values(cart).find((i: any) => i.LocationItemId === data.LocationItemId)
 
   const [activePackSize, setPackSize] = useState('');
   const router = useRouter();
   const dispatch = useDispatch();
 
-  console.log('Product card rerendered.');
+  // console.log(`Product card --------------------------- ${parent}`);
 
   useEffect(() => {
 		const packSizeList = data.ItemPackSizeList;

@@ -47,7 +47,7 @@ function MainSearch() {
         return (
             <FlatList
                 data={data.data.itemMasterCollection.slice(0, 30)}
-                renderItem={({ item }) =>  <ProductCard type="list" data={item} key={item.LocationItemId} />}
+                renderItem={({ item }) =>  <ProductCard parent="Search" type="list" data={item} key={item.LocationItemId} />}
                 keyExtractor={(item) => item.LocationItemId.toString()}
                 className="overflow-visible"
                 contentContainerClassName="gap-3"

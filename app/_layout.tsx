@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import store from "@/src/store/store";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { blur } from "@/constants";
 import Init from "@/src/components/init";
@@ -37,6 +37,7 @@ export default function RootLayout() {
   }, [loaded, error]);
 
   return (
+    // <React.StrictMode>
     <Provider store={store}>
       <GestureHandlerRootView>
         <SafeAreaProvider>
@@ -47,29 +48,29 @@ export default function RootLayout() {
               <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/tabs" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="profile" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="appn/appnList" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="search" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="login" options={{ headerShown: false }} />
+                <Stack.Screen name="profile" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="appn/appnList" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="search" options={{ headerShown: false }} />
                 <Stack.Screen name="members" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/cart" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="testDetail" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="testDetail" options={{ headerShown: false }} />
                 <Stack.Screen name="testList" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/clinic/[compId]" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false }} />
 
 
                 {/* <Stack.Screen name="shop" options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
                 <Stack.Screen name="shop/tabs" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="shop/product/[id]" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="shop/cart" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="shop/checkout" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="shop/tabs/categories" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="shop/tabs/orders" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="shop/cart" options={{ headerShown: false }} />
+                <Stack.Screen name="shop/checkout" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="shop/tabs/categories" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="shop/tabs/orders" options={{ headerShown: false }} />
                 <Stack.Screen name="shop/orderDetails/[orderId]" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="shop/search" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="shop/filters" options={{ headerShown: false, animation: 'slide_from_right' }} />
-                <Stack.Screen name="shop/brands" options={{ headerShown: false, animation: 'slide_from_left' }} />
+                <Stack.Screen name="shop/filters" options={{ headerShown: false }} />
+                <Stack.Screen name="shop/brands" options={{ headerShown: false, animation: 'slide_from_right' }} />
               </Stack>
               <Init />
             </KeyboardAvoidingView>
@@ -77,5 +78,6 @@ export default function RootLayout() {
         </SafeAreaProvider>
       </GestureHandlerRootView>
     </Provider>
+    // </React.StrictMode>
   );
 }

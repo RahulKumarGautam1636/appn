@@ -3,7 +3,7 @@ import { RootState } from "@/src/store/store";
 import { Ionicons } from "@expo/vector-icons"
 import { Link } from "expo-router";
 import { useRouter } from "expo-router"
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { useSelector } from "react-redux";
 
 

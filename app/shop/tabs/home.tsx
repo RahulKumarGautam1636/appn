@@ -239,7 +239,7 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
               contentContainerClassName="flex-row"
               scrollEnabled={true}
               horizontal
-              renderItem={({item}: any) => (<ProductCard data={item} width={deviceWidth / 2} />)}
+              renderItem={({item}: any) => (<ProductCard parent='Home' data={item} width={deviceWidth / 2} />)}
             />
             <View className='flex-row justify-center gap-4 py-3 bg-white'>
               <View className='h-2 w-2 bg-gray-500 rounded-full'></View>

@@ -1,22 +1,15 @@
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import './globals.css';
 import Modals from '../src/components/modals';
-import Init from '@/src/components/init';
 import { TouchableOpacity } from 'react-native';
 import { Feather, FontAwesome6 } from '@expo/vector-icons';
-// import ButtonPrimary from './components';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { RootState } from './store/store';
 
 export default function App() {
 
-  // const dispatch = useDispatch();
-  // const count = useSelector((state: RootState) => state.counter.value);
-  // const [loading, setLoading] = useState(true);
   const router = useRouter();
   return (
     <GestureHandlerRootView>

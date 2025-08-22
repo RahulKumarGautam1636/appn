@@ -222,7 +222,7 @@ const ProductPage = () => {
 
           {productData.data.itemMasterCollection.map((data, index) => {
             return (
-              <ProductCard data={data} width={'50%'} key={data.LocationItemId} />
+              <ProductCard parent='Dedicated Page' data={data} width={'50%'} key={data.LocationItemId} />
               // <Link href={`/shop/product/${data.ItemId}`} className='w-1/2' key={data.LocationItemId}>
               //   <View className={`items-start bg-white p-4 border border-gray-100`}>
               //     <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>

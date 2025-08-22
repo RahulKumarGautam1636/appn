@@ -13,17 +13,15 @@ import colors from 'tailwindcss/colors';
 const FilterPage = () => {
   const [showFilters, setShowFilters] = useState(false);
 
-  const handleCloseFilters = () => {
-    setShowFilters(false);
-  };
-
-  console.log('Filters Rerendered.')
+  // const handleCloseFilters = () => {
+  //   setShowFilters(false);
+  // };
 
   // const [productsList, setProductsList] = useState({loading: true, data: {itemMasterCollection: []}, err: {status: false, msg: ''}});
 
-    const [searchText, setSearchText] = useState('');
     const [hideOutOfStock, setHideOutOfStock] = useState(false);
     const router = useRouter()
+    
   
     // ------------------------------------------------------------------------------------
     
@@ -44,8 +42,6 @@ const FilterPage = () => {
     const currPage = page || '1';
     const [productsList, setProductsList] = useState({loading: true, data: {itemMasterCollection: []}, err: {status: false, msg: ''}});
     const [hasMore, setHasMore] = useState(true);  
-  
-    console.log("catVal--", catVal, "subCatVal--", subCatVal, "brands--", brands, "sortBy--", sortBy, "query--", query, "hideOutOfStock--", hideOutOfStock, "filterCategoryName--", filterCategoryName, "filterSubCategoryName--", filterSubCategoryName, "page--", page);    
   
     const makeFilterRequest = async (reset: boolean, signal='') => {
       console.log('make filter request')
@@ -80,13 +76,13 @@ const FilterPage = () => {
       setProductsList({loading: true, data: {itemMasterCollection: []}, err: {status: false, msg: ''}})
       makeFilterRequest(true, controller.signal);
       return () => controller.abort();
-    }, [locationId, siteCategories.LinkCategoryList, siteCategories.LinkSubCategoryList, siteProducts.ItemBrandList, catVal, subCatVal, brands, sortBy, query, hideOutStock])
+    }, [locationId, siteCategories.LinkCategoryList, siteCategories.LinkSubCategoryList, siteProducts.ItemBrandList, currPage, catVal, subCatVal, brands, sortBy, query, hideOutStock])
   
   
-    useEffect(() => {  
-      if (currPage == '1') return;
-      makeFilterRequest(false);
-    }, [currPage])
+    // useEffect(() => {  
+    //   if (currPage == '1') return;
+    //   makeFilterRequest(false);
+    // }, [currPage])
   
     const [filters, setFilters] = useState({ categories: [], subCategories: [], brands: [], seartTerm: '', outOfStock: 'N' }); 
     const [sortBySelected, setSortBySelected] = useState({ name: 'Name (A - Z)', id: 2, value: 'NameASC'}); 
@@ -126,32 +122,30 @@ const FilterPage = () => {
       return itemsString;
     }
   
-    const handleFilters = (sortBy: string) => {
+    const handleFilters = (sortBy: string, viewPage) => {
       let selectedCategories = getSelectedItems('categories', 'Parent');
       let selectedSubCategories = getSelectedItems('subCategories', 'CategoryId');
       let selectedBrands = getSelectedItems('brands', 'Value');
-      // let newQueryString = { ...queryString, catVal: selectedCategories, subCatVal: selectedSubCategories, brands: selectedBrands, sortBy: sortBy, query: searchTerm, page: '1', hideOutStock: hideOutOfStockItems };
-      // let parsed = qs.stringify(newQueryString);
-      // history.push(`?${parsed}`);
-      console.log(`/shop/filters/?brands=${selectedBrands}&catVal=${selectedCategories}&head=Filtered Products&hideOutStock=${hideOutOfStock}&page=1&query=${query}&sortBy=${sortBy}&subCatVal=${selectedSubCategories}`);
-      router.push(`/shop/filters/?brands=${selectedBrands}&catVal=${selectedCategories}&head=Filtered Products&hideOutStock=${hideOutOfStock}&page=1&query=${query}&sortBy=${sortBy}&subCatVal=${selectedSubCategories}`)
+      router.replace({
+        pathname: '/shop/filters',
+        params: { brands: selectedBrands, catVal: selectedCategories, head: 'Filtered Products', ['hideOutStock']: hideOutOfStock === true ? 'Y' : 'N', query: filters.seartTerm, page: viewPage, sortBy: sortBy, subCatVal: selectedSubCategories }
+      })
     }
 
-    const handleNextPage = (sortBy: string) => {
-      let selectedCategories = getSelectedItems('categories', 'Parent');
-      let selectedSubCategories = getSelectedItems('subCategories', 'CategoryId');
-      let selectedBrands = getSelectedItems('brands', 'Value');
-      let newPage = parseInt(currPage) + 1;
-      // let newQueryString = { ...queryString, catVal: selectedCategories, subCatVal: selectedSubCategories, brands: selectedBrands, sortBy: sortBy, query: searchTerm, page: '1', hideOutStock: hideOutOfStockItems };
-      // let parsed = qs.stringify(newQueryString);
-      // history.push(`?${parsed}`);
-      console.log(`/shop/filters/?brands=${selectedBrands}&catVal=${selectedCategories}&head=Filtered Products&hideOutStock=${hideOutOfStock}&page=${newPage}&query=${query}&sortBy=${sortBy}&subCatVal=${selectedSubCategories}`);
-      router.push(`/shop/filters/?brands=${selectedBrands}&catVal=${selectedCategories}&head=Filtered Products&hideOutStock=${hideOutOfStock}&page=${newPage}&query=${query}&sortBy=${sortBy}&subCatVal=${selectedSubCategories}`)
-    }
+    // const handleNextPage = (sortBy: string) => {
+    //   let selectedCategories = getSelectedItems('categories', 'Parent');
+    //   let selectedSubCategories = getSelectedItems('subCategories', 'CategoryId');
+    //   let selectedBrands = getSelectedItems('brands', 'Value');
+    //   let newPage = parseInt(currPage) + 1;
+    //   router.replace({
+    //     pathname: '/shop/filters',
+    //     params: { brands: selectedBrands, catVal: selectedCategories, head: filterCategoryName, ['hideOutStock']: hideOutOfStock, page: newPage, query: query, sortBy: sortBy, subCatVal: selectedSubCategories }
+    //   })
+    // }
   
     const handleFilterForm = () => {
       // setHeading({ heading: 'Filtered Products', subHeading: '' });
-      handleFilters(sortBySelected.value);
+      handleFilters(sortBySelected.value, '1');
       setShowFilters(false);
     }
   
@@ -233,7 +227,7 @@ const FilterPage = () => {
   const handleSortBy = (item) => {
     setSortBySelected(item); 
     setSortByOpen(false);
-    handleFilters(item.value);
+    handleFilters(item.value, currPage);
   }
   
   const [view, setView] = useState('list');
@@ -249,9 +243,9 @@ const FilterPage = () => {
         </View>
         <View className="px-5 flex-1">
           <View className="mt-5">
-            <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center pointer-events-none">
+            <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center">
               <Feather name="search" size={20} color="#9CA3AF" />
-              <TextInput className="flex-1 ml-3 text-gray-700" placeholder="Search..." placeholderTextColor="#9CA3AF" value={searchText} onChangeText={setSearchText} />
+              <TextInput className="flex-1 ml-3 text-gray-700" placeholder="Search..." placeholderTextColor="#9CA3AF" value={filters.seartTerm} onChangeText={(text) => setFilters(pre => ({...pre, seartTerm: text}))} />
               <Feather name="sliders" size={20} color="#9CA3AF" />
             </View>
           </View>
@@ -294,7 +288,7 @@ const FilterPage = () => {
     )
   }
 
-  // const [loading, setLoading] = useState(false);
+  console.log(filters.seartTerm)
 
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full">
@@ -306,9 +300,9 @@ const FilterPage = () => {
       </View>
       <View className='flex-row justify-between px-5 pt-4 mb-3 border-t border-gray-200'>
         <Text className='text-[1.05rem] font-PoppinsSemibold'>{filterCategoryName}</Text>
-        {/* <TouchableOpacity onPress={() => setShowFilters(true)}>
+        <TouchableOpacity onPress={() => setShowFilters(true)}>
           <Feather name="filter" size={20} color={colors.slate[600]} />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
 
       <View className='flex-row gap-2 items-center justify-between p-5 bg-white border-y border-gray-200'>
@@ -320,10 +314,10 @@ const FilterPage = () => {
             <FontAwesome name="list-ul" size={20} color={view === 'list' ? colors.sky[600] : colors.slate[700]} />
           </TouchableOpacity>
         </View>
-        {/* <Pressable onPress={() => setSortByOpen(true)} className='flex-row gap-3 items-center'>
+        <Pressable onPress={() => setSortByOpen(true)} className='flex-row gap-3 items-center'>
           <Text className=''>Sort By : ({sortBySelected.name})</Text>
           <AntDesign name="caretdown" size={17} color={colors.orange[600]} />
-        </Pressable> */}
+        </Pressable>
         <MyModal modalActive={sortByOpen} onClose={() => setSortByOpen(false)} child={<SortByDropdown handler={(item: any) => handleSortBy(item)} />} />
       </View>
       {productsList.loading ? <GridLoader containerClass='m-4 gap-3' /> :
@@ -338,9 +332,13 @@ const FilterPage = () => {
           ListFooterComponent={loading ? <ListLoader /> : null}
         /> */}
         {productsList.data.itemMasterCollection.map((item, index) => <ProductCard data={item} type={view} width={view === 'grid' ? '50%' : '100%'} key={item.LocationItemId} />)}
-        {/* {hasMore ? <TouchableOpacity onPress={() => handleNextPage(sortBySelected.value)} className="flex-row flex-1 items-center m-4 justify-center bg-white rounded-lg py-3 shadow-sm border-b border-gray-200" >
+        {hasMore ? <TouchableOpacity onPress={() => handleFilters(sortBySelected.value, parseInt(currPage) + 1)} className="flex-row flex-1 items-center m-4 justify-center bg-white rounded-lg py-3 shadow-sm border-b border-gray-200" >
           <Text className="text-blue-500 font-medium">VIEW MORE</Text>
-        </TouchableOpacity> : null} */}
+        </TouchableOpacity> : 
+        <View className="flex-row flex-1 items-center m-4 justify-center bg-rose-50 rounded-lg py-3 shadow-sm border-b border-gray-200" >
+          <Text className="text-rose-500 font-medium">NO MORE PRODUCTS FOUND</Text>
+        </View>
+        }
       </View>
       }
       {/* {showFilters ? renderFilters() : null} */}
