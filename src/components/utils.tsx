@@ -589,7 +589,7 @@ export const AddToCartBtn = ({ type, product, useAuth, qty, addCart, buyNow, cla
       )
   } else if (type === 'type_1') {
     return (
-      <ButtonPrimary title={isAdded ? 'REMOVE FROM CART' : 'ADD TO CART'} onPress={addCart} isLoading={false} active={true} classes={`flex-1 !rounded-2xl ${isValid ? '' : 'opacity-50 pointer-events-none'}`} />
+      <ButtonPrimary title={isAdded ? 'REMOVE FROM CART' : 'ADD TO CART'} onPress={addCart} isLoading={false} active={true} classes={`flex-1 bg-purple-500 border-r border-gray-200 !rounded-none ${isValid ? '' : 'opacity-50 pointer-events-none'}`} />
     )
   }
 

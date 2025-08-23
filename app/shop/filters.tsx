@@ -61,8 +61,8 @@ const FilterPage = () => {
                   setProductsList(pre => ({...res, data: { itemMasterCollection: [...pre.data.itemMasterCollection, ...res.data.itemMasterCollection] }}))
               }
           } else {
-              setHasMore(false);            
-              alert('Something went wrong. Please try later.');
+              // setHasMore(false);            
+              // alert('Something went wrong. Please try later.');
           } 
       } catch (error) {
           setHasMore(false);            

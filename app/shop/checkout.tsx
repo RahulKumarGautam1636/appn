@@ -16,7 +16,7 @@ const Checkout = () => {
 
   const location = useSelector((i: RootState) => i.appData.location);
   const user = useSelector((i: RootState) => i.user);
-  const compInfo = useSelector((i: RootState) => i.company.info);
+  // const compInfo = useSelector((i: RootState) => i.company.info);
   const compCode = useSelector((i: RootState) => i.compCode);
   const selectedMember = useSelector((i: RootState) => i.members.selectedMember);
   const cart = useSelector((i: RootState) => i.cart);

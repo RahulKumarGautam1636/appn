@@ -5,52 +5,16 @@ import colors from 'tailwindcss/colors';
 import ButtonPrimary, { LinkBtn } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { addToCart, dumpCart, removeFromCart } from '@/src/store/slices/slices';
+import { addToCart, dumpCart, removeFromCart, setModal } from '@/src/store/slices/slices';
 import { CartCard, NoContent } from '@/src/components/utils';
 import { useRouter } from 'expo-router';
 
 const Cart = () => {
   const cart = useSelector((i: RootState) => i.cart);
+  const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
+  const dispatch = useDispatch();
   const cartItems = Object.values(cart);
-  const router = useRouter()
-  // const [cartItems, setCartItems] = useState([
-  //   {
-  //     id: 1,
-  //     name: 'Werolla Cardigans',
-  //     color: 'Gray',
-  //     size: 'M',
-  //     price: 385.00,
-  //     quantity: 1,
-  //     image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=200&h=200&fit=crop'
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Suga Leather Shoes',
-  //     color: 'Brown',
-  //     size: '40',
-  //     price: 375.00,
-  //     quantity: 1,
-  //     image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=200&fit=crop'
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Vinta Headphone',
-  //     color: 'Black',
-  //     size: '',
-  //     price: 360.00,
-  //     quantity: 1,
-  //     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop'
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'Zonia Super Watch',
-  //     color: 'Silver',
-  //     size: '',
-  //     price: 850.00,
-  //     quantity: 1,
-  //     image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop'
-  //   }
-  // ]);                 
+  const router = useRouter()              
 
   const cartItemsValueList = cartItems.map(item => item.count * item.SRate);                    
   const cartSubtotal = cartItemsValueList.reduce((total, num) => total + num, 0).toFixed(2);           
@@ -60,6 +24,14 @@ const Cart = () => {
   
   const cartItemsDiscountList = cartItems.map(item => ((item.ItemMRP * item.DiscountPer) / 100) * item.count);                  
   const discountTotal = cartItemsDiscountList.reduce((total, num) => total + num, 0).toFixed(2);  
+
+  const handleCheckout = () => {
+    if (!isLoggedIn) {
+      dispatch(setModal({name: 'LOGIN', state: true}))
+    } else {
+      router.push('/shop/checkout')
+    }
+  }
 
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
@@ -94,7 +66,7 @@ const Cart = () => {
               <Text className="font-semibold text-md text-gray-600">Grand Total :</Text>
               <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
           </View>
-          <LinkBtn href={'/shop/checkout'} title='CHECKOUT' classes='flex-1 !rounded-2xl !bg-gray-700' />
+          <ButtonPrimary onClick={handleCheckout} title='CHECKOUT' active={true} classes='flex-1 !rounded-2xl !bg-gray-700' />
         </View>
       </> : <NoContent label='Your Cart is Empty' containerClass='flex-1' imgClass='h-[200px] mb-5'/>}
     </ScrollView>

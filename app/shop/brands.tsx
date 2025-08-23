@@ -29,7 +29,7 @@ const Categories = () => {
                     return (
                         <View className="justify-between">
                             {products.ItemBrandList.map((i, n) => (
-                                <Link href={`/shop/filters/?head=${escape(i.Text).swap}&brands=${i.Text}`} className="w-full mb-3">
+                                <Link href={`/shop/filters/?head=${escape(i.Text).swap}&brands=${i.Text}`} className="w-full mb-3 shadow-sm">
                                     <View key={n} className="items-center justify-center p-4 bg-white w-full">
                                         {/* <View className="bg-white rounded-full items-center justify-center mb-3 border-b-2 border-gray-200 p-4">
                                             <Image

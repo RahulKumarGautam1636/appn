@@ -21,7 +21,7 @@ const ShoppingAppScreen = () => {
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
   const dispatch = useDispatch();
 
-  console.log('Home Screen rerendered.');
+  // console.log('Home Screen rerendered.');
 
   return (
     <ScrollView className="flex-1 bg-purple-50">   
@@ -34,12 +34,12 @@ const ShoppingAppScreen = () => {
                   <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
               </View>
               <View className="flex-row ml-auto">
-                <TouchableOpacity className="mr-4">
+                <Link href={'/shop/tabs/profile'} className="mr-4">
                   <Feather name="bell" size={24} color="#2563eb" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Feather name="settings" size={24} color="#2563eb" />
-                </TouchableOpacity>
+                </Link>
+                <Link href={'/shop/tabs/orders'}>
+                  <Feather name="gift" size={24} color="#2563eb" />
+                </Link>
               </View>
           </View> :
           <View className="gap-3 flex-row items-center mb-5">
@@ -119,7 +119,7 @@ const ShoppingAppScreen = () => {
         </View>
         <CategoriesSlider categoriesData={categoriesData} />
       </View>
-      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
+      {/* <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-purple-600 rounded-2xl mx-5 p-5 mb-5 flex-row items-center justify-between">
         <View className="flex-row items-center flex-1">
           <View className="w-12 h-12 bg-purple-400 rounded-full items-center justify-center mr-4">
             <Feather name="upload" size={20} color="#ffffff" />
@@ -132,8 +132,8 @@ const ShoppingAppScreen = () => {
         <View>
           <Feather name="chevron-right" size={23} color="white" />
         </View>
-      </TouchableOpacity>
-      <View className="flex-1 mb-4">
+      </TouchableOpacity> */}
+      <View className="flex-1 mb-2">
         <View className="flex-row justify-between items-center mb-4 px-5 ">
           <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
           <Link href={`/shop/brands`}>
@@ -216,7 +216,7 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
   const renderProductSection = useCallback((data: any, parentId: number) => {
     const productCategoryItems = data.itemMasterCollection.filter((i: any) => i.Category === parentId).slice(0, 8);   
     const parentCategoryName = mainCategories.filter((i: any) => i.Parent === parentId)[0]?.ParentDesc;
-      console.log('Category section rerendered.');
+      // console.log('Category section rerendered.');
     // const subLinks = categoriesData.LinkSubCategoryList.filter((i: any) => parentId === i.Parent);
     if (data.loading) {
       return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-5' />;
