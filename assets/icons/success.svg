@@ -1,0 +1,51 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light gray background -->
+  <rect width="400" height="300" fill="#f5f5f7"/>
+  
+  <!-- Confetti pieces scattered around -->
+  <!-- Yellow pieces -->
+  <rect x="120" y="60" width="14" height="6" fill="#ffd700" rx="2" transform="rotate(25 127 63)"/>
+  <rect x="280" y="80" width="12" height="5" fill="#ffd700" rx="2" transform="rotate(-15 286 82.5)"/>
+  <rect x="100" y="180" width="13" height="6" fill="#ffd700" rx="2" transform="rotate(45 106.5 183)"/>
+  <rect x="320" y="200" width="14" height="5" fill="#ffd700" rx="2" transform="rotate(-30 327 202.5)"/>
+  
+  <!-- Green pieces -->
+  <rect x="140" y="90" width="12" height="6" fill="#4ade80" rx="2" transform="rotate(-20 146 93)"/>
+  <rect x="260" y="110" width="13" height="5" fill="#4ade80" rx="2" transform="rotate(35 266.5 112.5)"/>
+  <rect x="80" y="220" width="12" height="6" fill="#4ade80" rx="2" transform="rotate(15 86 223)"/>
+  <rect x="300" y="180" width="14" height="6" fill="#4ade80" rx="2" transform="rotate(-45 307 183)"/>
+  
+  <!-- Blue pieces -->
+  <rect x="160" y="70" width="12" height="5" fill="#60a5fa" rx="2" transform="rotate(40 166 72.5)"/>
+  <rect x="240" y="90" width="13" height="6" fill="#60a5fa" rx="2" transform="rotate(-25 246.5 93)"/>
+  <rect x="90" y="200" width="12" height="5" fill="#60a5fa" rx="2" transform="rotate(20 96 202.5)"/>
+  <rect x="310" y="160" width="13" height="6" fill="#60a5fa" rx="2" transform="rotate(-40 316.5 163)"/>
+  
+  <!-- Purple pieces -->
+  <rect x="110" y="110" width="12" height="6" fill="#a78bfa" rx="2" transform="rotate(30 116 113)"/>
+  <rect x="290" y="130" width="14" height="5" fill="#a78bfa" rx="2" transform="rotate(-35 297 132.5)"/>
+  <rect x="70" y="160" width="12" height="6" fill="#a78bfa" rx="2" transform="rotate(50 76 163)"/>
+  <rect x="330" y="220" width="13" height="5" fill="#a78bfa" rx="2" transform="rotate(-20 336.5 222.5)"/>
+  
+  <!-- Pink star pieces -->
+  <polygon points="150,45 154,58 168,58 158,68 162,81 150,74 138,81 142,68 132,58 146,58" fill="#f472b6"/>
+  <polygon points="270,205 274,218 288,218 278,228 282,241 270,234 258,241 262,228 252,218 266,218" fill="#f472b6"/>
+  <polygon points="350,95 354,108 368,108 358,118 362,131 350,124 338,131 342,118 332,108 346,108" fill="#f472b6"/>
+  <polygon points="60,135 64,148 78,148 68,158 72,171 60,164 48,171 52,158 42,148 56,148" fill="#f472b6"/>
+  
+  <!-- Main green circle with gradient -->
+  <defs>
+    <radialGradient id="greenGradient" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#86efac"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </radialGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="rgba(34, 197, 94, 0.3)"/>
+    </filter>
+  </defs>
+  
+  <circle cx="200" cy="150" r="40" fill="url(#greenGradient)" filter="url(#shadow)"/>
+  
+  <!-- White checkmark -->
+  <path d="M 185 150 L 195 160 L 215 140" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
