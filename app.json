@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "TakeHome",
+    "name": "Gbooks",
     "slug": "myapp",
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
-    "scheme": "takehome",
+    "scheme": "gbooks",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.takehome.takehome"
+      "package": "com.gbooks.gbooks"
     },
     "web": {
       "bundler": "metro",
