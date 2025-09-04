@@ -1,4 +1,4 @@
-import { myColors } from "@/constants";
+import { hasAccess, myColors } from "@/constants";
 import { RootState } from "@/src/store/store";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter, useSegments } from "expo-router";
@@ -11,14 +11,15 @@ export default function TabsLayout() {
   const router = useRouter();
   const segments = useSegments();
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
+  const compCode = useSelector((i: RootState) => i.compCode)
   const dispatch = useDispatch();
 
   const tabs = [
     // { name: 'Home', icon: 'home', key: 'home' },
-    { name: 'Home', icon: 'home', key: 'opd' },
-    { name: 'Lab Test', icon: 'flask', key: 'lab' },
-    { name: 'Account', icon: 'person', key: 'profile' },
-    { name: 'Cart', icon: 'cart', key: 'cart' },
+    { name: 'Home', icon: 'home', key: 'opd', visible: true },
+    { name: 'Lab Test', icon: 'flask', key: 'lab', visible: hasAccess("labtest", compCode)},
+    { name: 'Account', icon: 'person', key: 'profile', visible: true },
+    { name: 'Cart', icon: 'cart', key: 'cart', visible: hasAccess("labtest", compCode)},
   ];
 
   const lab = useSelector((i: RootState) => i.cart);
@@ -71,6 +72,7 @@ export default function TabsLayout() {
               </Text>
           </TouchableOpacity>
           {tabs.map((tab, index) => {
+            if (!tab.visible) return;
             const isFocused = state.routes[state.index]?.name === tab.key;
             const onPress = () => {
               if (tab.key === 'profile') {

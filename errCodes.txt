@@ -1,1 +1,2 @@
 001 - The selected company Id and the current selected doctor's company id doesn't match. --/app/doctor/[id].tsx
+002 - No location id detected.

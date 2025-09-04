@@ -1,4 +1,4 @@
-import { Feather, FontAwesome, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { mmDDyyyyDate } from "../../src/components";
 import { setModal } from "@/src/store/slices/slices";
@@ -6,6 +6,9 @@ import { useDispatch } from "react-redux";
 import { myColors } from '@/constants';
 import { Link } from "expo-router";
 import { formatted, GradientBG } from "@/src/components/utils";
+import { TextInput } from "react-native-gesture-handler";
+import { useState } from "react";
+import colors from "tailwindcss/colors";
 
 const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={}, clinic={}, member={}, bookAppn }: any) => {
   
@@ -13,6 +16,8 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
   const [day, month, year] = bookingData.AppointDate.split('/').map(Number);
   let parsedActiveDate = new Date(year, month - 1, day);
   let formattedDate = new Date(parsedActiveDate).toDateString();
+
+  const [remarks, setRemarks] = useState('');
   
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -84,7 +89,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
               </View>
           </View>
           <View className='bg-white m-4 rounded-3xl shadow-md shadow-gray-400'>
-              <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
+              <View className='justify-between flex-row p-4 items-center'>
                   <View className='flex-row items-center gap-3'>
                       <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Time & Date</Text>
                   </View>
@@ -94,11 +99,18 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                   </View>
               </View>
 
-              <View className='flex-row gap-3 p-4'>
-                <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} />
+              <View className='flex-row gap-3 p-4 border-y border-gray-300'>
+                <FontAwesome5 name="clock" size={17} color={colors.fuchsia[500]} />
                 <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto tracking-wider">{bookingData.AppTime}</Text>
-                <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
+                <FontAwesome5 name="calendar-alt" size={17} color={colors.orange[500]} />
                 <Text className="font-PoppinsSemibold text-slate-500 text-[14px] tracking-wider">{formattedDate}</Text>
+              </View>
+              
+              <View className='flex-row gap-3 p-4'>
+                  <View className='w-full items-center flex-row rounded-2xl shadow-sm shadow-gray-500 bg-[#ebecef] pl-4'>
+                    <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={24} color={colors.blue[500]} className="pr-4" />
+                    <TextInput value={remarks} placeholderTextColor={colors.gray[400]} onChangeText={(text) => setRemarks(text)} placeholder='Appointment Remarks' multiline numberOfLines={4} textAlignVertical="top" className='text-gray-700 py-4 items-start px-5 flex-1 border-l border-gray-300 h-24' />
+                  </View>
               </View>
           </View>
           <View className='justify-between flex-row px-4 pt-1 items-center'>

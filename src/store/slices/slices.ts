@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestStatusHandlers } from './statusHandler';
 import axios from 'axios';
-import { BASE_URL, dummyUser, rent, TAKEHOME_AGRO } from '@/constants';
+import { BASE_URL, BC_ROY, defaultId, dummyUser, rent, TAKEHOME_AGRO } from '@/constants';
 import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/components/utils';
 
 const compCodeSlice = createSlice({
   name: 'compCode',
-  initialState: 'FFCeIi27FQMTNGpatwiktw==', // 'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
+  initialState: defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {
       state = action.payload;

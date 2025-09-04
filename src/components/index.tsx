@@ -142,7 +142,7 @@ export const CompCard = ({ data, active, details }: any) => {
         <TouchableOpacity className={`py-2 items-center rounded-xl flex-1 border ${active ? 'border-gray-400' : 'border-sky-500'}`} onPress={handleSelect}>
           <Text className={`font-Poppins leading-7 ${active ? 'text-stone-400' : 'text-sky-600'}`}>{active ? 'Selected' : 'Select Clinic'}</Text>
         </TouchableOpacity>
-        <View className="py-2 bg-primary-500 items-center rounded-xl flex-1">
+        <View className="py-2 bg-primary-500 items-center rounded-xl flex-1 pointer-events-none">
           <Link href={`/appn/clinic/${data.CompanyId}`} onPress={() => dispatch(setModal({name: 'COMPANIES', state: false }))}>
               <Text className="text-white font-Poppins leading-7">View Details</Text>
           </Link>

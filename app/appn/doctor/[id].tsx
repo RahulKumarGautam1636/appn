@@ -21,6 +21,7 @@ const Booking = () => {
 
     const { selectedAppnDate, doctor, docCompId } = useSelector((i: RootState) => i.appnData)
     const user = useSelector((i: RootState) => i.user)
+    const locationId = useSelector((i: RootState) => i.appData.location.LocationId)
     const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
     const { selectedMember } = useSelector((i: RootState) => i.members)
     const { list: companiesList, selected: selectedCompany} = useSelector((i: RootState) => i.companies)
@@ -80,17 +81,17 @@ const Booking = () => {
         } 
     } 
 
-    const [bookingData, setBookingData] = useState({ AppointDate: '', AppTime: '', TimeSlotId: null });
+    const [bookingData, setBookingData] = useState({ AppointDate: '', AppTime: '', TimeSlotId: null, companyId: '' });
 
-    const selectSlot = (AutoId, SDateStr, SInTimeStr) => {
-        setBookingData(pre => ({...pre, AppointDate: SDateStr, AppTime: SInTimeStr, TimeSlotId: AutoId }))
+    const selectSlot = (AutoId, SDateStr, SInTimeStr, EncCompanyId) => {
+        setBookingData(pre => ({...pre, AppointDate: SDateStr, AppTime: SInTimeStr, TimeSlotId: AutoId, companyId: EncCompanyId }))
         setSelectedSlot(AutoId);
     }
     
     const handleDateChange = (i: any) => {
         setSelectedDate(i.SDateStr);
         getDateSlotsList(doctor.PartyCode, i.SDateStr); 
-        selectSlot('', '', '');
+        selectSlot('', '', '', '');
     }
 
     useEffect(() => {
@@ -115,8 +116,8 @@ const Booking = () => {
     }, [companiesList.length, selectedCompany.EncCompanyId])
 
     const handleBookingFormSubmit = async (e: any) => {
-        // handleConfirmation();
         e.preventDefault();
+        if (!locationId) return alert('An Error Occured. Error code 002')
         if (!bookingData.TimeSlotId) {
             alert('Please select a time slot first.');
             return;
@@ -129,7 +130,6 @@ const Booking = () => {
             // if (getConfirmation(`Book Appointment for ${user.Name}`) === false) return; 
             const newbookingData = { 
                 ...bookingData,
-                UnderDoctId: doctor.PartyCode,
                 Salutation: user.Salutation,
                 Name: user.Name,
                 EncCompanyId: activeCompany.EncCompanyId,                   
@@ -153,7 +153,13 @@ const Booking = () => {
                 MemberId: user.MemberId,
                 Country: user.Country,
                 EnqType: 'OPD',
-                LocationId: 928, // globalData.location.LocationId
+                LocationId: locationId, 
+
+                UnderDoctId: doctor.PartyCode,  // sales
+                ReferrerId: user.ReferrerId,   // refBy
+                ProviderId: user.ProviderId,   // provider
+                MarketedId: user.MarketedId,   // marketing,
+                Remarks: 'remarks',
             }
             console.log('user booking');
             makeBookingRequest(newbookingData);
@@ -161,7 +167,6 @@ const Booking = () => {
                 // if (getConfirmation(`Book Appointment for ${selectedMember.MemberName}`) === false) return;
                 const newbookingData = { 
                     ...bookingData,
-                    UnderDoctId: doctor.PartyCode,
                     Salutation: selectedMember.Salutation,
                     Name: selectedMember.MemberName,
                     EncCompanyId: activeCompany.EncCompanyId,
@@ -185,7 +190,13 @@ const Booking = () => {
                     MemberId: selectedMember.MemberId,
                     Country: selectedMember.Country,
                     EnqType: 'OPD',
-                    LocationId: 928, // globalData.location.LocationId
+                    LocationId: locationId, 
+
+                    UnderDoctId: doctor.PartyCode,      
+                    ReferrerId: selectedMember.ReferrerId,      
+                    ProviderId: selectedMember.ProviderId,  
+                    MarketedId: selectedMember.MarketedId,      
+                    Remarks: 'remarks',
                 }
                 console.log('member booking');
                 makeBookingRequest(newbookingData);
@@ -199,6 +210,7 @@ const Booking = () => {
     }
 
     const makeBookingRequest = async (book: any) => {
+        console.log(book);        
         if (!book.UserId) return alert('Something went wrong, try again later. No user Id received: F');
         setLoading(true);
         const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);
@@ -383,7 +395,7 @@ const Booking = () => {
                             } else {
                                 return (
                                     <>
-                                        {dateSlotsList.data.map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr)}/>))}
+                                        {dateSlotsList.data.map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr, i.EncCompanyId)}/>))}
                                         {Array.from(Array(blankSlot).keys()).map(i => (<SlotBtn time={'00:00 PM - 00:00 PM'} blank={true} key={i} />))}
                                     </>
                                 )

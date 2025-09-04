@@ -137,7 +137,7 @@ const HomeScreen = () => {
                             <Image className='rounded-full' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} style={{ width: 40, height: 40 }} />
                             <View className='mr-auto'>
                                 <Text className="font-PoppinsSemibold text-gray-800 text-[16px]" numberOfLines={1}>{(company.COMPNAME)?.slice(0, 20)}..</Text>
-                                <Text className="font-Poppins text-gray-600 text-[11px]">Simplifying Your Searches</Text>
+                                <Text className="font-Poppins text-gray-600 text-[11px]" numberOfLines={1}>{(company.CATCHLINE)?.slice(0, 25)}..</Text>
                             </View>
                             {/* <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOGIN', state: true }))}> */}
                             <Link href={'/login'}>

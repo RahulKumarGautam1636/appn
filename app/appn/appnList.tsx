@@ -89,7 +89,7 @@ const AppnList = () => {
                     <View className='bg-primary-500 mb-4 rounded-2xl shadow-md shadow-gray-400'>
                         <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
                             <View className='flex-row items-center gap-3'>
-                                <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Lab Tests</Text>
+                                <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Appointments</Text>
                             </View>
                             <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">{appData.data.PartyFollowupList.length} Items</Text>
                         </View>

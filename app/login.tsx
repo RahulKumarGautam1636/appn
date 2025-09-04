@@ -27,7 +27,7 @@ const Login = ({ modalMode }: any) => {
     const company = useSelector((state: RootState) => state.company.info);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
-    const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });        // 9330241456 // 8583814626
+    const [loginData, setLoginData] = useState({ phone: '6000000101', password: '1234', EncCompanyId: compCode });        // 9330241456 // 8583814626
     
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
@@ -155,6 +155,9 @@ const Login = ({ modalMode }: any) => {
                 LicenceNo: res.data.LicenceNo ? res.data.LicenceNo : '',
                 ContactPerson: res.data.ContactPerson,
                 BusinessType: 'B2C',
+
+                UserLevelSeq: res.data.UserLevelSeq,
+                UserCompList: res.data.UserCompList[0],
             };
         
             // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: res.data.UserPassword, compCode: params.companyCode }));
