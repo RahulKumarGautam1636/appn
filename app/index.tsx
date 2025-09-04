@@ -9,6 +9,7 @@ import { TouchableOpacity } from 'react-native';
 import { Feather, FontAwesome6 } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
+import UpdateBanner from '@/src/components/update';
 
 export default function App() {
 
