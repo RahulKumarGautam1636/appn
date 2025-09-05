@@ -1,4 +1,4 @@
-import { BASE_URL, myColors } from '@/constants';
+import { BASE_URL, myColors } from '@/src/constants';
 import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
 import { add2Cart, AddToCartBtn, buyNow, computeWithPackSize, getFrom, getRequiredFields, GridLoader, NoContent, ProductCard } from '@/src/components/utils';

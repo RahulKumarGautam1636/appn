@@ -7,8 +7,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
-import { BASE_URL, myColors } from '@/constants';
-import { LabCartCard } from '@/src/components/cards';
+import { BASE_URL, myColors } from '@/src/constants';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -189,7 +188,7 @@ const Checkout = ({ handleClose }: any) => {
                     </View>
                     <View className='bg-white rounded-2xl p-5 my-4 shadow-md shadow-gray-400'>
                         <View className='flex-row items-center'>
-                            <Image className='shadow-lg rounded-full me-3' source={require('../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                            <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View>
                                 <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
                                 <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder}</Text>

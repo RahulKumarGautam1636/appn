@@ -1,4 +1,4 @@
-import { BASE_URL } from '@/constants';
+import { BASE_URL, hasAccess } from '@/src/constants';
 import { CompCard } from '@/src/components';
 import { BannerCarousel, getFrom, getRequiredFields, getRequiredFieldsOnly, GradientBG, GridLoader, ListLoader } from '@/src/components/utils';
 import { addToCart, setModal } from '@/src/store/slices/slices';
@@ -6,20 +6,28 @@ import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import axios from 'axios';
-import { Link } from 'expo-router';
+import { Link, useFocusEffect, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
-import { myColors } from '@/constants';
+import { myColors } from '@/src/constants';
 import LabCard from '@/src/components/cards';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const LabTests = ({}: any) => {
     const dispatch = useDispatch()
     const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
+    const compCode = useSelector((state: RootState) => state.compCode);
     const [labData, setLabData] = useState({loading: true, data: {ParentCategoryList: [], LinkSubCategoryList: [], itemMasterCollection: []}, err: {status: false, msg: ''}});
     const [investigationItem, setInvestigationItem] = useState({});
     const [date, setDate] = useState({ active: false, value: new Date()});
+    const router = useRouter()
+
+    useFocusEffect(() => {
+        if (!hasAccess("labtest", compCode)) {
+            router.push('/appn/tabs/opd');
+        }
+    })
 
     useEffect(() => {
         const getLabData = async (company: any) => {                

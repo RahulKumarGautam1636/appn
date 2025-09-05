@@ -3,7 +3,7 @@ import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "reac
 import ButtonPrimary, { mmDDyyyyDate } from "../../src/components";
 import { setModal } from "@/src/store/slices/slices";
 import { useDispatch } from "react-redux";
-import { myColors } from '@/constants';
+import { myColors } from '@/src/constants';
 import { Link } from "expo-router";
 import { formatted, GradientBG } from "@/src/components/utils";
 import { TextInput } from "react-native-gesture-handler";
@@ -42,8 +42,8 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
           </View> */}
           <View className='flex-row gap-4 px-4 pt-4 pb-5 mx-4 mb-4 rounded-3xl bg-white shadow-md shadow-gray-400'>
               <Image className='' source={require('./../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
-              <View>
-                  <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{doctor.Name}</Text>
+              <View className="flex-1">
+                  <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2" numberOfLines={1}>{doctor.Name}</Text>
                   <View className='flex-row gap-2'>
                       <FontAwesome name="graduation-cap" size={15} color="#075985" />
                       <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{doctor.SpecialistDesc}</Text>

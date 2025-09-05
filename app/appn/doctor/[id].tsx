@@ -7,7 +7,7 @@ import ButtonPrimary, { MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
-import { BASE_URL } from '@/constants';
+import { BASE_URL } from '@/src/constants';
 import { getFrom, GridLoader, withAutoUnmount } from '@/src/components/utils';
 import axios from 'axios';
 import { setAppnData, setCompanies, setModal } from '@/src/store/slices/slices';
@@ -278,7 +278,7 @@ const Booking = () => {
                     </Pressable>
                     <View className='flex-row gap-4 p-[13px]'>
                         <Image className='' source={require('./../../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
-                        <View>
+                        <View className='flex-1'>
                             <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{doctor.Name}</Text>
                             <View className='flex-row gap-2'>
                                 <FontAwesome name="graduation-cap" size={15} color="#075985" />
@@ -334,7 +334,7 @@ const Booking = () => {
 
                     <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
                         <View className='flex-1'>
-                            <Text className="font-PoppinsSemibold text-[15px] text-white">{selectedCompany.COMPNAME}</Text>
+                            <Text className="font-PoppinsSemibold text-[15px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
                             <View className='mt-2 '>
                                 <View className='flex gap-3 flex-row items-center'>
                                     <FontAwesome5 name="clock" size={14} color="#fff" />

@@ -9,7 +9,7 @@ import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
 import { getCompanies, getDepartments, getMembers, setModal } from '@/src/store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '@/src/components';
-import { BASE_URL } from '@/constants';
+import { BASE_URL } from '@/src/constants';
 import { formatted, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
 
 
@@ -92,8 +92,8 @@ const HomeScreen = () => {
                     <View className='bg-primary-500 rounded-3xl p-5 my-3'>
                         <View className='flex-row'>
                             <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
-                            <View>
-                                <Text className="font-PoppinsBold text-white text-[14px]">{firstAppn.AppointmentTo}</Text>
+                            <View className='flex-1'>
+                                <Text className="font-PoppinsBold text-white text-[14px]" numberOfLines={1}>{firstAppn.AppointmentTo}</Text>
                                 <Text className="font-Poppins text-gray-200 text-[11px]">{firstAppn.DocSpecialistDesc}</Text>
                             </View>
                             <View className="bg-primary-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
@@ -135,9 +135,9 @@ const HomeScreen = () => {
                         </View> :
                         <View className="gap-3 flex-row items-center">
                             <Image className='rounded-full' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} style={{ width: 40, height: 40 }} />
-                            <View className='mr-auto'>
-                                <Text className="font-PoppinsSemibold text-gray-800 text-[16px]" numberOfLines={1}>{(company.COMPNAME)?.slice(0, 20)}..</Text>
-                                <Text className="font-Poppins text-gray-600 text-[11px]" numberOfLines={1}>{(company.CATCHLINE)?.slice(0, 25)}..</Text>
+                            <View className='mr-auto flex-1'>
+                                <Text className="font-PoppinsSemibold text-gray-800 text-[16px]" numberOfLines={1}>{company.COMPNAME}</Text>
+                                <Text className="font-Poppins text-gray-600 text-[11px]" numberOfLines={1}>{company.CATCHLINE}</Text>
                             </View>
                             {/* <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOGIN', state: true }))}> */}
                             <Link href={'/login'}>

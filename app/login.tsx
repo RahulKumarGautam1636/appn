@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { mmDDyyyyDate, MyModal } from "../src/components";
-import { BASE_URL, defaultId, gender, initReg, myColors, salutations, states } from "@/constants";
+import { BASE_URL, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";

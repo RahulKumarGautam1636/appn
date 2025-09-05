@@ -1,13 +1,13 @@
 import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState } from "@/src/store/store";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { getFrom, GridLoader, NoContent } from "@/src/components/utils";
-import { BASE_URL } from "@/constants";
+import { BASE_URL } from "@/src/constants";
 import { Card_1, DayBtn, getDatesArray, MapComponent, MyModal } from "@/src/components";
-import Depts from "@/app/depts";
+import Depts from "@/app/appn/depts";
 
 
 const Clinic = () => {

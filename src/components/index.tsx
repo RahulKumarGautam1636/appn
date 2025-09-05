@@ -1,4 +1,4 @@
-import { blur, myColors, SRC_URL } from "@/constants"
+import { blur, myColors, SRC_URL } from "@/src/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
 import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler } from "react-native"
 import Heart from '../../assets/icons/departments/heart.svg';
@@ -28,7 +28,7 @@ import Animated, {
   interpolate,
   withDelay
 } from 'react-native-reanimated';
-import AppnDetail from "@/app/appnDetail";
+import AppnDetail from "@/app/appn/appnDetail";
 import { RootState } from "../store/store";
 
 
@@ -406,7 +406,7 @@ export const Card_4 = ({ data }: any) => {
 }
 
 
-export const MyModal = ({ modalActive, child, name, customClass, onClose, styles }: any) => {
+export const MyModal = ({ modalActive, child, name, customClass, onClose, styles, containerClass }: any) => {
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -449,7 +449,7 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose, styles
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />
     >
-      <KeyboardAvoidingView className="flex-1 justify-center" pointerEvents="box-none">
+      <KeyboardAvoidingView className={`flex-1 justify-center ${containerClass}`} pointerEvents="box-none">
         {React.cloneElement(child, { name: name, modalActive: modalActive })}
       </KeyboardAvoidingView>
     </ReactNativeModal>

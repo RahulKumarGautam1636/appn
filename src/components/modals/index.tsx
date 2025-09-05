@@ -6,9 +6,9 @@ import { CompCard, MyModal } from "../index";
 import { setModal } from "@/src/store/slices/slices";
 import Members from "@/app/members";
 import Login from "../../../app/login";
-import AppnDetail from "@/app/appnDetail";
-import { DeptsModal } from "@/app/depts";
-import TestDetail from "@/app/testDetail";
+import AppnDetail from "@/app/appn/appnDetail";
+import { DeptsModal } from "@/app/appn/depts";
+import TestDetail from "@/app/appn/testDetail";
 import PrescriptionForm from "@/app/shop/presc";
 import Locations from "@/app/shop/locations";
 

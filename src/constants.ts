@@ -1,4 +1,8 @@
+import Constants from "expo-constants";
 import colors from 'tailwindcss/colors.js';
+
+// export const { compId, baseUrl, srcUrl } = Constants.expoConfig.extra || {};
+
 export const zero = 'tSL0lTwETc1vrrU2ZIoFFA==';
 export const defaultId = 'FFCeIi27FQMTNGpatwiktw=='; 
 export const TAKEHOME_PHARMA = 'yFObpUjTIGhK9%2B4bFmadRg==';
@@ -6,7 +10,6 @@ export const TAKEHOME_AGRO = '5KR8RKKh%2BtHG4iszAzAjJQ==';
 export const TAKEHOME_GARMENTS = 't0ZL5KiikMgM1YeyB68a1w==';
 export const TAKEHOME_ELECTRONICS = 'QqFodfpxRStiGjTKTYE/hA==';
 export const BC_ROY = 'ji4C/%2BQbn%2BBofLeoFG9clw=='
-
 export const rent = false;
 export const blur = false;
 
@@ -15,11 +18,11 @@ const REACT_APP_TEST_BASE_URL = 'https://api.gsterpsoft.com';
 
 export const testMode = false;
 
-export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
-export const SRC_URL = 'https://erp.gsterpsoft.com';
+// export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
+// export const SRC_URL = 'https://erp.gsterpsoft.com';
 
-// export const BASE_URL = 'https://apigst.gsterpsoft.com';
-// export const SRC_URL = 'https://gsterpsoft.com';
+export const BASE_URL = 'https://apigst.gsterpsoft.com';
+export const SRC_URL = 'https://gsterpsoft.com';
 
 export const permissions = {
   appointments: [BC_ROY, defaultId],

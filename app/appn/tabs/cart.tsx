@@ -7,9 +7,9 @@ import Feather from '@expo/vector-icons/Feather';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
-import { myColors } from '@/constants';
+import { myColors } from '@/src/constants';
 import { LabCartCard } from '@/src/components/cards';
-import Checkout from '../../checkout';
+import Checkout from '@/app/appn/checkout';
 import { useState } from 'react';
 
 const Cart = ({}: any) => {

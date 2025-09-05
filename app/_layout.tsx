@@ -1,16 +1,18 @@
 import { SplashScreen, Stack } from "expo-router";
-import { KeyboardAvoidingView, StatusBar, useColorScheme } from "react-native";
+import { KeyboardAvoidingView, StatusBar } from "react-native";
 import { Provider } from 'react-redux';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import store from "@/src/store/store";
 import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
-import { blur } from "@/constants";
+import { blur } from "@/src/constants";
 import Init from "@/src/components/init";
+import UpdateBanner from "@/src/components/update";
+import Modals from "@/src/components/modals";
 
 export default function RootLayout() {
-  const theme = useColorScheme();
+  // const theme = useColorScheme();
   const isDark = false;
   const backgroundColor = isDark ? '#000000' : '#FFFFFF';
 
@@ -54,8 +56,8 @@ export default function RootLayout() {
                 <Stack.Screen name="search" options={{ headerShown: false }} />
                 <Stack.Screen name="members" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/cart" options={{ headerShown: false, animation: 'slide_from_left' }} />
-                <Stack.Screen name="testDetail" options={{ headerShown: false }} />
-                <Stack.Screen name="testList" options={{ headerShown: false, animation: 'slide_from_right' }} />
+                <Stack.Screen name="appn/testDetail" options={{ headerShown: false }} />
+                <Stack.Screen name="appn/testList" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/clinic/[compId]" options={{ headerShown: false, animation: 'slide_from_right' }} />
                 <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false }} />
 
@@ -73,6 +75,8 @@ export default function RootLayout() {
                 <Stack.Screen name="shop/brands" options={{ headerShown: false, animation: 'slide_from_right' }} />
               </Stack>
               <Init />
+              <Modals />
+              <UpdateBanner />
             </KeyboardAvoidingView>
           </SafeAreaView>
         </SafeAreaProvider>

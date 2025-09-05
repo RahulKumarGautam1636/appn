@@ -4,7 +4,7 @@ import { AntDesign, Feather, FontAwesome, FontAwesome6, Ionicons } from '@expo/v
 import { useGlobalSearchParams, useRouter } from 'expo-router';
 import ButtonPrimary, { MyModal } from '@/src/components';
 import { escape, getFrom, GridLoader, ListLoader, ProductCard } from '@/src/components/utils';
-import { BASE_URL, myColors } from '@/constants';
+import { BASE_URL, myColors } from '@/src/constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import colors from 'tailwindcss/colors';

@@ -5,7 +5,7 @@ import { Card_1 } from "@/src/components";
 import { RootState } from "@/src/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getFrom, GridLoader } from "@/src/components/utils";
-import { BASE_URL, defaultId, zero } from "@/constants";
+import { BASE_URL, defaultId, zero } from "@/src/constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { dumpCart, setLocation, setModal } from "@/src/store/slices/slices";

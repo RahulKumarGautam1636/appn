@@ -8,7 +8,7 @@ import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "reac
 import { Card_3 } from '../../src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { BASE_URL, myColors } from '@/constants';
+import { BASE_URL, myColors } from '@/src/constants';
 import { getFrom, ListLoader, NoContent } from '../../src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 

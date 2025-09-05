@@ -9,7 +9,7 @@ import { dumpCart, setModal, setPrescription } from '@/src/store/slices/slices';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import CheckDelivery from './checkDelivery';
-import { BASE_URL } from '@/constants';
+import { BASE_URL } from '@/src/constants';
 import axios from 'axios';
 
 const Checkout = () => {

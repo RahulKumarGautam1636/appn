@@ -5,7 +5,7 @@ import colors from 'tailwindcss/colors';
 import ButtonPrimary, { MyModal } from '@/src/components';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { BASE_URL, myColors } from '@/constants';
+import { BASE_URL, myColors } from '@/src/constants';
 import { GridLoader, OrderItemCard, PreviewImage, getFrom, getStatusIcon, num, wait } from '@/src/components/utils';
 import { useGlobalSearchParams, useLocalSearchParams, useRouter } from 'expo-router';
 import axios from 'axios';

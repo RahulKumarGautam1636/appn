@@ -4,7 +4,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { getFrom, getStatusIcon, GridLoader, num, OrderItemCard, wait } from "../utils";
 import ButtonPrimary from "..";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "@/constants";
+import { BASE_URL } from "@/src/constants";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import axios from "axios";

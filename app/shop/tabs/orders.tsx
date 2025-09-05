@@ -6,7 +6,7 @@ import ButtonPrimary from '@/src/components';
 import { getFrom, GridLoader, NoContent, OrderCard } from '@/src/components/utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { BASE_URL } from '@/constants';
+import { BASE_URL } from '@/src/constants';
 import { useRouter } from 'expo-router';
 
 const Orders = () => {
