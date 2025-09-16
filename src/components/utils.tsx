@@ -16,7 +16,7 @@ import { FileText } from "lucide-react-native";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 
-export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal: GenericAbortSignal) => {
+export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal?: GenericAbortSignal) => {
   
   setStateName((preValue: any) => {
     return {...preValue, loading: true};

@@ -22,6 +22,7 @@ const LabTests = ({}: any) => {
     const [investigationItem, setInvestigationItem] = useState({});
     const [date, setDate] = useState({ active: false, value: new Date()});
     const router = useRouter()
+    const [ searchItem, setSearchItem ] = useState({name: ''});
 
     useFocusEffect(() => {
         if (!hasAccess("labtest", compCode)) {
@@ -43,8 +44,6 @@ const LabTests = ({}: any) => {
         getLabData(selectedCompany);
         setSearchItem({name: ''});
     },[selectedCompany.EncCompanyId])
-
-    const [ searchItem, setSearchItem ] = useState({name: ''});
 
     const renderSlider = (data: any, parentId: any) => {    
         const productCategoryItems = data.data.itemMasterCollection.filter((i: any) => i.Category === parentId);   

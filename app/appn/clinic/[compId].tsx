@@ -80,11 +80,11 @@ const Clinic = () => {
         <>
             <ScrollView contentContainerClassName='bg-slate-200 min-h-full'>
                 {/* <Image source={require('../assets/images/bg.jpg')} className="absolute w-full h-full z-0" resizeMode="cover" /> */}
-                <View className="h-1/2 z-0 justify-center items-center max-h-[395px]">
-                    <Image source={require('../../../assets/images/clinic.jpeg')} className="w-full" resizeMode="contain" />  
+                <View className="h-1/2 z-0 justify-center items-center max-h-[230px]">
+                    <Image source={require('../../../assets/images/clinic.jpg')} className="w-full" resizeMode="contain" />  
                     {/* max-h-full for web */}
                 </View>
-                <View className='bg-slate-50 rounded-tl-[2.7rem] rounded-tr-[2.7rem] p-6 pt-7' style={{ marginTop: -45}}>
+                <View className='bg-slate-50 rounded-tl-[2.7rem] rounded-tr-[2.7rem] p-6 pt-7'>
                     <Text className="font-PoppinsSemibold text-sky-800 text-[22px]">{clinic.COMPNAME}</Text>
                     <View className="gap-[0.9rem] mt-3">
                         <View className='flex-row gap-3'>

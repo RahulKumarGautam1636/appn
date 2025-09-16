@@ -288,8 +288,6 @@ const FilterPage = () => {
     )
   }
 
-  console.log(filters.seartTerm)
-
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full">
       <View className="flex-row items-center justify-between p-4">

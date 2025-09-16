@@ -300,16 +300,16 @@ let LID = 0;
 const getUserLocation = () => {
   if (LID) return { LocationId: LID };
   return { 
-    LocationId: 0,
+    // LocationId: 0,
 
-    // required: true, 
-    // LocationId: 1293, // 1559, // 1298, // 1293, 
-    // LocationName: 'Healthbuddy Kalyani Pharmacy', 
-    // Address: 'B-07/08(S), B-7, Ward No-10, Ground Floor Central Park, Kalyani-Nadia 741235', 
-    // StateDesc: 'West Bengal', 
-    // StateCode: '19', 
-    // PIN: '741235', 
-    // Area: 'Kalyani' 
+    required: true, 
+    LocationId: 1293, // 1293, // 1559, // 1298, // 1293, 
+    LocationName: 'Healthbuddy Kalyani Pharmacy', 
+    Address: 'B-07/08(S), B-7, Ward No-10, Ground Floor Central Park, Kalyani-Nadia 741235', 
+    StateDesc: 'West Bengal', 
+    StateCode: '19', 
+    PIN: '741235', 
+    Area: 'Kalyani' 
   };
 }
 

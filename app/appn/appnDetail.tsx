@@ -12,6 +12,7 @@ import { GradientBG } from '@/src/components/utils';
 import { MyModal } from '@/src/components';
 import InvoicePreview from '@/app/appn/bill';
 import { useState } from 'react';
+import Prescription from './prescription';
 // import { Link } from 'expo-router';
 // import ButtonPrimary from '@/src/components';
 // import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -39,6 +40,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
     // }, [isFocused]);
 
     const [bill, setBill] = useState(false);
+    const [presc, setPresc] = useState(false);
 
     return (
         <>
@@ -241,19 +243,20 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                 <ButtonPrimary title='Cancel' active={true} onPress={() => {}} classes='flex-1 py-3' />
             </View> */}
             <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>
-                <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200' : 'bg-green-500'}`}>
+                <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
                 </TouchableOpacity>
-                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200' : 'bg-blue-500'}`}>
+                <TouchableOpacity onPress={() => setPresc(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200 pointer-events-none' : 'bg-blue-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Prescription</Text>
                 </TouchableOpacity>
-                {data.IsAppConfirmed !== 'Y' &&<TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
+                {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
                     <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
-                </TouchableOpacity>}
+                </TouchableOpacity> : null}
             </View>
             </GradientBG>
         </ScrollView>
         <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview />} />
+        <MyModal modalActive={presc} onClose={() => setPresc(false)}  name='BILL' child={<Prescription id={data.PrescriptionId} />} />
         </>
     )
 }

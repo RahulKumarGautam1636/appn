@@ -12,7 +12,9 @@ import { Link } from 'expo-router';
 
 const TestDetail = ({ data }: any) => {
 
-    const user = useSelector((i: RootState) => i.user);
+    const members = useSelector((i: RootState) => i.members.membersList);
+
+    const user = members.find(i => i.MemberName === data.PartyName);
 
     // const data = { IsAppConfirmed: 'Y', BillId: '46546', PrescriptionId:  '4547745', DeptName: '', TranNo: '', Status: '', NextAppTime: '09:30 AM', NextAppDate: '02/03/2025', CompanyName: 'XYZ Hospitality Solutions' }
 
@@ -35,11 +37,17 @@ const TestDetail = ({ data }: any) => {
                 <View className='flex-row gap-4 p-[13px] items-center mb-2 border-t border-gray-200'>
                     <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 80, height: 80 }} />
                     <View>
-                        <Text className="font-PoppinsSemibold text-slate-800 text-[15px] mb-2">{user.Name}</Text>
-                        <View className='flex-row gap-2'>
-                            <FontAwesome name="graduation-cap" size={15} color="#075985" />
-                            <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{user.Age} Year,   {user.GenderDesc}</Text>
-                        </View>
+                        <Text className="font-PoppinsSemibold text-slate-800 text-[15px] mb-2">{user ? user?.MemberName : data.PartyName}</Text>
+                        {user ? <>
+                            <View className='flex-row gap-3'>
+                                <FontAwesome name="clock-o" size={16} color="#075985" />
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{user?.Age} Year,   {user?.GenderDesc}</Text>
+                            </View>
+                            <View className='flex-row gap-3'>
+                                <Ionicons name="git-branch" size={16} color="#075985" />
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{user?.RelationShipWithHolder}</Text>
+                            </View>
+                        </> : null}
                         {/* <View className='flex-row gap-2'>
                             <FontAwesome5 name="stethoscope" size={15} color="#075985" />
                             <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{user.Qualification}</Text>
@@ -187,15 +195,18 @@ const TestDetail = ({ data }: any) => {
                 <ButtonPrimary title='Cancel' active={true} onPress={() => {}} classes='flex-1 py-3' />
             </View> */}
             <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>
-                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200' : 'bg-green-500'}`}>
+                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
                 </TouchableOpacity>
-                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200' : 'bg-blue-500'}`}>
-                    <Text className={`font-PoppinsMedium ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Details</Text>
+                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-blue-500`}>
+                    <Text className={`font-PoppinsMedium text-white`}>Details</Text>
                 </TouchableOpacity>
-                {data.IsAppConfirmed !== 'Y' &&<TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
+                {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
                     <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
-                </TouchableOpacity>}
+                </TouchableOpacity> : null}
+                {data.BillId ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-purple-500`}>
+                    <Text className={`font-PoppinsMedium text-white`}>Report</Text>
+                </TouchableOpacity> : null}
             </View>
         </ScrollView>
     )

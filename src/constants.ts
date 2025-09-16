@@ -1,4 +1,4 @@
-import Constants from "expo-constants";
+// import Constants from "expo-constants";
 import colors from 'tailwindcss/colors.js';
 
 // export const { compId, baseUrl, srcUrl } = Constants.expoConfig.extra || {};
@@ -27,7 +27,7 @@ export const SRC_URL = 'https://gsterpsoft.com';
 export const permissions = {
   appointments: [BC_ROY, defaultId],
   labtest: [defaultId],
-  pharmacy: [TAKEHOME_PHARMA, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS],
+  shop: [TAKEHOME_PHARMA, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS],
 };
 
 export const hasAccess = (module: string, role: string) => {
@@ -722,16 +722,16 @@ export const dummyUser = {
 
 export const myColors = {
   primary: {
-    50:  colors.pink[50],
-    100: colors.pink[100],
-    200: colors.pink[200],
-    300: colors.pink[300],
-    400: colors.pink[400],
-    500: colors.pink[500],
-    600: colors.pink[600],
-    700: colors.pink[700],
-    800: colors.pink[800],
-    900: colors.pink[900],
+    50:  colors.sky[50],
+    100: colors.sky[100],
+    200: colors.sky[200],
+    300: colors.sky[300],
+    400: colors.sky[400],
+    500: colors.sky[500],
+    600: colors.sky[600],
+    700: colors.sky[700],
+    800: colors.sky[800],
+    900: colors.sky[900],
   },
   bahia: {
     50: '#f9fbea',

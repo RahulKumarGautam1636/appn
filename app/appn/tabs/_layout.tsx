@@ -65,7 +65,7 @@ export default function TabsLayout() {
     <Tabs tabBar={({ state, descriptors, navigation }: any) => {
       return (
         <View style={styles.tabBar} className='border-y border-slate-200'>
-          {hasAccess("pharmacy", compCode) ? <TouchableOpacity onPress={() => router.push('/')} style={styles.tabItem} className={`flex-1 py-[10px]`} >
+          {hasAccess("shop", compCode) ? <TouchableOpacity onPress={() => router.push('/')} style={styles.tabItem} className={`flex-1 py-[10px]`} >
             <Ionicons name='arrow-back' size={20} color='#6e6e6e' />
               <Text style={[styles.tabText]}>
                 Back

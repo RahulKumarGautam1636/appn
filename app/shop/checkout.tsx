@@ -54,6 +54,16 @@ const Checkout = () => {
     DeliveryState: user.State,
     DeliveryAddress : user.Address + ' ' + user.Address2 + ' ' + user.Pin,
     LocationId: '',
+
+    UnderDoctId: 0,
+    ReferrerId: 0,
+    ReferrerId1: 0,
+    MarketedId: 0,
+    DeptId: 0,
+    BedCatId: 0,
+    CollectedById: 0,  
+    CashPartyMobile: '', 
+    VisitId: 0,
   });
 
   const [isDeliverable, setDeliverable] = useState(false);
@@ -135,11 +145,18 @@ const Checkout = () => {
 
                   // --------- NEW FIELDS FOR RESTAURANT STARTS ---------------------------------------
 
-                  BillId: '',
-                  BedId: '',
-                  CollectedById: '',
+                  BillId: 0,
+                  BedCatId: 0,
+                  BedId: 0,
+                  CollectedById: 0,
                   
                   // --------- NEW FIELDS FOR RESTAURANT ENDS ---------------------------------------
+
+                  UnderDoctId: user.UnderDoctId,
+                  ReferrerId: user.ReferrerId,
+                  ReferrerId1: user.ProviderId,
+                  MarketedId: user.MarketedId,
+                  DeptId: user?.UserCompList?.PahrmaDeptId,
 
                   AccPartyMemberMaster: {
                     Salutation: '',

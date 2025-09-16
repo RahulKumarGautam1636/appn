@@ -189,13 +189,11 @@ const ProductPage = () => {
             </View>
           </View>
 
-          <View className="bg-white border-y border-gray-200">
-            {/* Product Highlights Header */}
+          {/* <View className="bg-white border-y border-gray-200">
             <View className="flex-row items-center justify-between p-4 border-b border-gray-200">
               <Text className="text-lg font-semibold text-gray-900">Product Highlights</Text>
             </View>
       
-            {/* Product Highlights Content */}
             <View className="p-4 space-y-3">
               <View className="flex-row gap-4">
                 <DetailRow label="Blouse" value="Running Blouse" />
@@ -207,14 +205,10 @@ const ProductPage = () => {
                 <DetailRow label="Occasion" value="Party" />
               </View>
             </View>
-      
-            {/* Additional Details Header */}
+
             <View className="flex-row items-center justify-between p-4 border-y border-gray-200">
               <Text className="text-lg font-semibold text-gray-900">Additional Details</Text>
-              <TouchableOpacity 
-                onPress={() => setIsExpanded(!isExpanded)}
-                activeOpacity={0.7}
-              >
+              <TouchableOpacity  onPress={() => setIsExpanded(!isExpanded)} activeOpacity={0.7}>
                 <ChevronUp 
                   size={20} 
                   color="#6b7280"
@@ -224,8 +218,6 @@ const ProductPage = () => {
                 />
               </TouchableOpacity>
             </View>
-      
-            {/* Additional Details Content */}
             {isExpanded && (
               <View className="p-4 space-y-3">
                 <View className="flex-row gap-4">
@@ -264,7 +256,7 @@ const ProductPage = () => {
                 </View>
               </View>
             )}
-          </View>
+          </View> */}
         </View>
         <View>
           {/* <View className='m-4 shadow-sm rounded-2xl overflow-hidden'>

@@ -7,16 +7,18 @@ import { Link } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
-import { getCompanies, getDepartments, getMembers, setModal } from '@/src/store/slices/slices';
+import { setModal } from '@/src/store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '@/src/components';
-import { BASE_URL } from '@/src/constants';
+import { BASE_URL, defaultId } from '@/src/constants';
 import { formatted, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
+import colors from 'tailwindcss/colors';
 
 
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state: RootState) => state.isLoggedIn);
+    const compCode = useSelector((state: RootState) => state.compCode);
     const user = useSelector((state: any) => state.user);
     const company = useSelector((state: RootState) => state.company.info);
     const { list, selected, status, error } = useSelector((state: RootState) => state.companies);
@@ -117,7 +119,7 @@ const HomeScreen = () => {
     let formattedDate = formatted(parsedActiveDate);
 
     return (
-        <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100 relative'>
+        <ScrollView contentContainerClassName='min-h-full bg-slate-100 relative'>
             {/* <GradientBG> */}
                 <View className='p-4'>
                     {isLoggedIn ? 
@@ -128,9 +130,11 @@ const HomeScreen = () => {
                                 <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
                             </View>
                             <View className="gap-3 flex-row items-center ml-auto">
-                                <View className="bg-white p-3 rounded-full shadow-lg">
-                                    <FontAwesome name="bell" size={20} color='#3b82f6' className='text-blue-500'/>
-                                </View>
+                                <Link href={'/appn/tabs/profile'}>
+                                    <View className="bg-white p-3 rounded-full shadow-lg">
+                                        <FontAwesome name="bell" size={20} color='#3b82f6' className='text-blue-500'/>
+                                    </View>
+                                </Link>
                             </View>
                         </View> :
                         <View className="gap-3 flex-row items-center">
@@ -159,32 +163,33 @@ const HomeScreen = () => {
                         <Feather className='absolute z-50 top-[4px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                     </View>
                     {isLoggedIn && renderAppnData(appnData)}
-                    <View className='justify-between flex-row pt-1 items-center'>
-                        <View className='flex-row items-center gap-3'>
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                    {compCode === defaultId || list.length > 1 ? <View>
+                        <View className='justify-between flex-row pt-1 items-center'>
+                            <View className='flex-row items-center gap-3'>
+                                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                            </View>
+                            <View className="gap-3 flex-row items-center ml-auto">
+                                {/* <Feather name="chevron-left" size={24} color='#6b7280' />
+                                <Feather name="chevron-right" size={24} color='#6b7280' /> */}
+                                <Pressable onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))}>
+                                    <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
+                                </Pressable>
+                            </View>
                         </View>
-                        <View className="gap-3 flex-row items-center ml-auto">
-                            {/* <Feather name="chevron-left" size={24} color='#6b7280' />
-                            <Feather name="chevron-right" size={24} color='#6b7280' /> */}
-                            <Pressable onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))}>
-                                <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                    
-                    {(() => {
-                        if (status === 'loading') {
-                            return <GridLoader classes='h-[90px] w-[200px]' containerClass='flex-row gap-3 my-3' />
-                        } else if (error) {
-                            return;
-                        } else {
-                            return (
-                                <ScrollView horizontal={true} contentContainerClassName='py-3 px-[2] gap-4' showsHorizontalScrollIndicator={false}>
-                                    {list.map((i: any) => <CompCard data={i} key={i.EncCompanyId} active={selected?.EncCompanyId === i.EncCompanyId}/>)}
-                                </ScrollView>
-                            )
-                        }
-                    })()}
+                        {(() => {
+                            if (status === 'loading') {
+                                return <GridLoader classes='h-[90px] w-[200px]' containerClass='flex-row gap-3 my-3' />
+                            } else if (error) {
+                                return;
+                            } else {
+                                return (
+                                    <ScrollView horizontal={true} contentContainerClassName='py-3 px-[2] gap-4' showsHorizontalScrollIndicator={false}>
+                                        {list.map((i: any) => <CompCard data={i} key={i.EncCompanyId} active={selected?.EncCompanyId === i.EncCompanyId}/>)}
+                                    </ScrollView>
+                                )
+                            }
+                        })()}
+                    </View> : null}
                     <View className='justify-between flex-row pt-2 pb-1 items-center'>
                         <View className='flex-row items-center gap-3'>
                             <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Department</Text>
@@ -268,10 +273,21 @@ const HomeScreen = () => {
                             } else if (!doctors.data.PartyMasterList.length) {
                                 return <NoContent label='No Doctors Found' />;
                             } else {
-                                if (doctorTab === 'active_date') {
-                                    return doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />)
+                                if (doctorTab === 'all_date') {
+                                    return otherDayDoctors.data.PartyMasterList.length ? otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} />) : <NoContent label='No Doctors Found' imgClass='h-[170]'containerClass='mt-12'/>;
                                 } else {
-                                    return otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} />)
+                                    return (    
+                                        <>
+                                            {doctors.data.PartyMasterList.length ? doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />) : <Text className='p-4 bg-rose-200/50 text-red-500 leading-5 text-center mt-6 rounded-lg font-PoppinsSemibold'>No Doctors Found for Selected Date</Text>}
+                                            {otherDayDoctors.data.PartyMasterList.length ? <>
+                                                <View className='justify-between flex-row items-end p-4 bg-blue-200/50 mt-3 rounded-xl'>
+                                                    <Text className="font-PoppinsSemibold text-blue-600 text-[16px] leading-[23px]">All Available Doctors</Text>
+                                                    <FontAwesome name="arrow-down" size={20} color={colors.blue[600]} />
+                                                </View> 
+                                                {otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} />)}
+                                            </> : null}
+                                        </>
+                                    )
                                 }
                             }
                         })()}
@@ -283,9 +299,3 @@ const HomeScreen = () => {
 }
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-    screen: {
-        minHeight: "100%"
-    }
-});

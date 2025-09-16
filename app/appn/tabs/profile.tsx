@@ -21,7 +21,7 @@ const Profile = () => {
     const [personalInfoActive, setPersonalInfoActive] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch()
-
+    
     return (
         <>
         <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={

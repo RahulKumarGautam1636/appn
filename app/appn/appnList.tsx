@@ -1,14 +1,13 @@
-import { Entypo, FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Card_3 } from '../../src/components';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
-import { BASE_URL, myColors } from '@/src/constants';
+import { RootState } from '@/src/store/store';
+import { BASE_URL } from '@/src/constants';
 import { getFrom, ListLoader, NoContent } from '../../src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 
@@ -84,7 +83,7 @@ const AppnList = () => {
                 </View>
             </View>
 
-            <View className='px-4 pt-1'>
+            {companyList.length > 1 ? <><View className='px-4 pt-1'>
                 <View className=''>
                     <View className='bg-primary-500 mb-4 rounded-2xl shadow-md shadow-gray-400'>
                         <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
@@ -132,7 +131,7 @@ const AppnList = () => {
                         </Link>
                     </View>
                 </View>
-            </View>
+            </View></> : null}
             <View className='bg-white'>
                 <View className='flex-row justify-between border-y border-gray-200 border-solid p-4 bg-white gap-2'>
                     <TouchableOpacity className={`items-center flex-1 p-3 rounded-lg ${active === 'PENQ' ? 'bg-primary-500' : 'bg-slate-200'}`} onPress={() => setActive('PENQ')}>
