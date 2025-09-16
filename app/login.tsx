@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { mmDDyyyyDate, MyModal } from "../src/components";
-import { BASE_URL, defaultId, gender, initReg, myColors, salutations, states } from "@/constants";
+import { BASE_URL, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const Login = ({ modalMode }: any) => {
     const company = useSelector((state: RootState) => state.company.info);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
-    const [loginData, setLoginData] = useState({ phone: '6000000101', password: '1234', EncCompanyId: compCode });        // 9330241456 // 8583814626
+    const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });        // 9330241456 // 8583814626
     
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
@@ -40,63 +40,65 @@ const Login = ({ modalMode }: any) => {
     
     const makeLoginRequest = async (params: loginType) => {
         setLoading(true)
-        const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.phone}&UP=${params.password}&CID=${params.EncCompanyId}`);
+        // const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.phone}&UP=${params.password}&CID=${params.EncCompanyId}`);
+        const body = { UserName: params.phone, UserPassword: encodeURIComponent(params.password), EncCompanyId: params.EncCompanyId };
+        const res = await axios.post(`${BASE_URL}/api/UserAuth/CheckCompLogin`, body);
         setLoading(false)
         // let appBusinessType = globalData.businessType.CodeValue;     
         // if (res.data.BusinessType !== appBusinessType) return alert('You are not Allowed to log in.');       // BLOCK LOGIN IF MISMATCH FOUND     which is the best place to make api call and update the redux store
-    
-        if (res.data.Remarks === 'INVALID') {
+        const data = res.data[0];
+        if (data.Remarks === 'INVALID') {
             setLoginError({status: true, message: 'The username or password is incorrect.'});
-        } else if (res.data.Remarks === 'NOTINCOMPANY') {
+        } else if (data.Remarks === 'NOTINCOMPANY') {
             alert('Not In Company.')
         // setRegData((pre => ({             
         //     ...pre,
-        //     Salutation: res.data.Salutation,
-        //     Name: res.data.Name,
-        //     EncCompanyId: res.data.EncCompanyId,
+        //     Salutation: data.Salutation,
+        //     Name: data.Name,
+        //     EncCompanyId: data.EncCompanyId,
         //     PartyCode: '',
-        //     RegMob1: res.data.RegMob1,
-        //     Gender: res.data.Gender,
-        //     GenderDesc: res.data.GenderDesc,
-        //     Address: res.data.Address,
-        //     Age: res.data.Age,
-        //     AgeMonth: res.data.AgeMonth,
-        //     AgeDay: res.data.AgeDay,
-        //     UserPassword: res.data.UserPassword,               // force to re-enter.
-        //     // UserType: res.data.UserType,                       // set by modal
-        //     Qualification: res.data.Qualification,
-        //     SpecialistId: res.data.SpecialistId,
-        //     UserId: res.data.UserId,
-        //     PartyId: res.data.PartyId,
-        //     MemberId: res.data.MemberId,
+        //     RegMob1: data.RegMob1,
+        //     Gender: data.Gender,
+        //     GenderDesc: data.GenderDesc,
+        //     Address: data.Address,
+        //     Age: data.Age,
+        //     AgeMonth: data.AgeMonth,
+        //     AgeDay: data.AgeDay,
+        //     UserPassword: data.UserPassword,               // force to re-enter.
+        //     // UserType: data.UserType,                       // set by modal
+        //     Qualification: data.Qualification,
+        //     SpecialistId: data.SpecialistId,
+        //     UserId: data.UserId,
+        //     PartyId: data.PartyId,
+        //     MemberId: data.MemberId,
         
-        //     State: res.data.State,
-        //     StateName: res.data.StateName,
-        //     City: res.data.City,
-        //     Pin: res.data.Pin,
-        //     Address2: res.data.Address2,
+        //     State: data.State,
+        //     StateName: data.StateName,
+        //     City: data.City,
+        //     Pin: data.Pin,
+        //     Address2: data.Address2,
         
-        //     DOB: new Date(res.data.DOB).toLocaleDateString('en-TT'),
-        //     DOBstr: new Date(res.data.DOB).toLocaleDateString('en-TT'),
-        //     AnniversaryDate: new Date(res.data.AnniversaryDate).toLocaleDateString('en-TT'),
-        //     AnniversaryDatestr: new Date(res.data.AnniversaryDate).toLocaleDateString('en-TT'),
+        //     DOB: new Date(data.DOB).toLocaleDateString('en-TT'),
+        //     DOBstr: new Date(data.DOB).toLocaleDateString('en-TT'),
+        //     AnniversaryDate: new Date(data.AnniversaryDate).toLocaleDateString('en-TT'),
+        //     AnniversaryDatestr: new Date(data.AnniversaryDate).toLocaleDateString('en-TT'),
         //     Aadhaar: '',                                        // Not required.
         //     IsDOBCalculated: 'N',
 
-        //     UHID: res.data.UHID,
+        //     UHID: data.UHID,
         
-        //     compName: res.data.compName ? res.data.compName : '',
-        //     compAddress: res.data.compAddress ? res.data.compAddress : '',
-        //     compState: res.data.compState ? res.data.compState : '',
-        //     compPin: res.data.compPin ? res.data.compPin : '',
-        //     compPhone1: res.data.compPhone1 ? res.data.compPhone1 : '',
-        //     compPhone2: res.data.compPhone2 ? res.data.compPhone2 : '',
-        //     compMail: res.data.compMail ? res.data.compMail : '',
+        //     compName: data.compName ? data.compName : '',
+        //     compAddress: data.compAddress ? data.compAddress : '',
+        //     compState: data.compState ? data.compState : '',
+        //     compPin: data.compPin ? data.compPin : '',
+        //     compPhone1: data.compPhone1 ? data.compPhone1 : '',
+        //     compPhone2: data.compPhone2 ? data.compPhone2 : '',
+        //     compMail: data.compMail ? data.compMail : '',
 
-        //     RegMob2: res.data.RegMob2,            // for Business type.
-        //     GstIn: res.data.GstIn,
-        //     LicenceNo: res.data.LicenceNo ? res.data.LicenceNo : '',
-        //     ContactPerson: res.data.ContactPerson,
+        //     RegMob2: data.RegMob2,            // for Business type.
+        //     GstIn: data.GstIn,
+        //     LicenceNo: data.LicenceNo ? data.LicenceNo : '',
+        //     ContactPerson: data.ContactPerson,
         //     BusinessType: 'B2C',
         // })))
         // setShowPersonalFields(true);
@@ -105,62 +107,67 @@ const Login = ({ modalMode }: any) => {
         // setEnteredOTP('verified');                                                // pass OTP check at makeLoginReuest.
         // setTabActive('register');
         // setLoginError({status: false, message: ''});
-        } else if (!res.data.UserId || !res.data.UserType) {
+        } else if (!data.UserId || !data.UserType) {
             return alert("Something Went wrong, We can't log you in.");
         } else {
             let userLoginData = {
-                Name: res.data.UserFullName,
+                Name: data.UserFullName,
                 RegMob1: params.phone,
-                Email: res.data.Email,
-                UserId: res.data.UserId,
-                UserType: res.data.UserType,
-                PartyCode: res.data.PartyCode,
+                Email: data.Email,
+                UserId: data.UserId,
+                UserType: data.UserType,
+                PartyCode: data.PartyCode,
                 EncCompanyId: params.EncCompanyId,
-                Age: res.data.Age,
-                AgeDay: res.data.AgeDay,
-                AgeMonth: res.data.AgeMonth,
-                Gender: res.data.Gender,
-                GenderDesc: res.data.GenderDesc,
-                MPartyCode: res.data.MPartyCode,
-                Address: res.data.Address,
-                Qualification: res.data.Qualification,
-                SpecialistDesc: res.data.SpecialistDesc,
-                State: res.data.State, 
-                StateName: res.data.StateName,                         
-                City: res.data.City,
-                Pin: res.data.Pin,
-                Address2: res.data.Address2,
-                UHID: res.data.UHID,
-                MemberId: res.data.MemberId,
-                PartyId: res.data.PartyId,
-                Salutation: res.data.Salutation,
+                Age: data.Age,
+                AgeDay: data.AgeDay,
+                AgeMonth: data.AgeMonth,
+                Gender: data.Gender,
+                GenderDesc: data.GenderDesc,
+                MPartyCode: data.MPartyCode,
+                Address: data.Address,
+                Qualification: data.Qualification,
+                SpecialistDesc: data.SpecialistDesc,
+                State: data.State, 
+                StateName: data.StateName,                         
+                City: data.City,
+                Pin: data.Pin, // '741235'
+                Address2: data.Address2,
+                UHID: data.UHID,
+                MemberId: data.MemberId,
+                PartyId: data.PartyId,
+                Salutation: data.Salutation,
         
-                DOB: res.data.DOB,
-                DOBstr: res.data.DOB,
-                AnniversaryDate: res.data.AnniversaryDate,
-                AnniversaryDatestr: res.data.AnniversaryDate,
-                Aadhaar: res.data.Aadhaar,
-                IsDOBCalculated: res.data.IsDOBCalculated,
+                DOB: data.DOB,
+                DOBstr: data.DOB,
+                AnniversaryDate: data.AnniversaryDate,
+                AnniversaryDatestr: data.AnniversaryDate,
+                Aadhaar: data.Aadhaar,
+                IsDOBCalculated: data.IsDOBCalculated,
         
-                compName: res.data.compName ? res.data.compName: '',
-                compAddress: res.data.compAddress ? res.data.compAddress: '',
-                compState: res.data.compState ? res.data.compState: '',
-                compPin: res.data.compPin ? res.data.compPin: '',
-                compPhone1: res.data.compPhone1 ? res.data.compPhone1: '',
-                compPhone2: res.data.compPhone2 ? res.data.compPhone2: '',
-                compMail: res.data.compMail ? res.data.compMail: '',
+                compName: data.compName ? data.compName: '',
+                compAddress: data.compAddress ? data.compAddress: '',
+                compState: data.compState ? data.compState: '',
+                compPin: data.compPin ? data.compPin: '',
+                compPhone1: data.compPhone1 ? data.compPhone1: '',
+                compPhone2: data.compPhone2 ? data.compPhone2: '',
+                compMail: data.compMail ? data.compMail: '',
 
-                RegMob2: res.data.RegMob2,            // for Business type.
-                GstIn: res.data.GstIn,
-                LicenceNo: res.data.LicenceNo ? res.data.LicenceNo : '',
-                ContactPerson: res.data.ContactPerson,
+                RegMob2: data.RegMob2,            // for Business type.
+                GstIn: data.GstIn,
+                LicenceNo: data.LicenceNo ? data.LicenceNo : '',
+                ContactPerson: data.ContactPerson,
                 BusinessType: 'B2C',
 
-                UserLevelSeq: res.data.UserLevelSeq,
-                UserCompList: res.data.UserCompList[0],
+                UnderDoctId: data.UnderDoctId,
+                ReferrerId: data.ReferrerId,
+                ProviderId: data.ProviderId,
+                MarketedId: data.MarketedId,
+
+                UserLevelSeq: data.UserLevelSeq,
+                UserCompList: data.UserCompList[0],
             };
         
-            // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: res.data.UserPassword, compCode: params.companyCode }));
+            // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: data.UserPassword, compCode: params.companyCode }));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
             if (modalMode) {

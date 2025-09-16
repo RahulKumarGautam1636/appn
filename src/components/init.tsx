@@ -12,9 +12,9 @@ const Init = () => {
     const { location } = useSelector((state: RootState) => state.appData);
     const locationId = location.LocationId;
 
-    useEffect(() => {
-        dispatch(getCompanyDetails({ compCode: compCode, locationId: locationId }))
-    }, [compCode, locationId])
+    // useEffect(() => {
+    //     dispatch(getCompanyDetails({ compCode: compCode, locationId: locationId }))
+    // }, [compCode, locationId])
 
     useEffect(() => {
         dispatch(getCompanies({ companyCode: compCode, userId: user.UserId || 0 }));

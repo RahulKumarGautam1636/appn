@@ -2,8 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import { Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
-import { Card_2 } from '../src/components';
-import { useRouter } from 'expo-router';
 import { setDepts, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 

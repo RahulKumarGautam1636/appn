@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { myColors } from '@/constants';
+import { myColors } from '@/src/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { dumpCart, setLogin, setUser } from '@/src/store/slices/slices';
 import { useState } from 'react';

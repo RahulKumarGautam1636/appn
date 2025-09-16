@@ -1,4 +1,4 @@
-import { myColors } from "@/constants";
+import { myColors } from "@/src/constants";
 import { RootState } from "@/src/store/store";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter, useSegments } from "expo-router";

@@ -8,7 +8,7 @@ import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "reac
 import { Card_3, Card_4 } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { BASE_URL, myColors } from '@/constants';
+import { BASE_URL, defaultId, myColors } from '@/src/constants';
 import { getFrom, ListLoader, NoContent } from '@/src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 
@@ -17,6 +17,7 @@ const TestList = () => {
 
     const router = useRouter();
     const user = useSelector((i: RootState) => i.user);
+    const compCode = useSelector((i: RootState) => i.compCode);
     const [active, setActive] = useState('ENQ');
     const { selected } = useSelector((i: RootState) => i.companies);
     const [labData, setLabData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
@@ -98,6 +99,7 @@ const TestList = () => {
                         <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">26/06/2025</Text>
                     </View>
                 </View> 
+                {compCode === defaultId ? <>
                 <View className='justify-between flex-row items-center mb-3'>
                     <View className='flex-row items-center gap-3'>
                         <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
@@ -128,7 +130,7 @@ const TestList = () => {
                             </View>
                         </Link>
                     </View>
-                </View>
+                </View></> : null}
             </View>
             <View className='bg-white'>
                 <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>

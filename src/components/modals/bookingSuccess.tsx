@@ -3,7 +3,7 @@ import { Image, ScrollView, Text, View } from "react-native";
 import Heart from '../../../assets/icons/success.svg';
 import ButtonPrimary from "..";
 import { useRouter } from "expo-router";
-import { myColors } from "@/constants";
+import { myColors } from "@/src/constants";
 
 const BookingSuccess = ({ doctor, bookingData, clinic }: any) => {
   const router = useRouter()

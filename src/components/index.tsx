@@ -1,10 +1,9 @@
-import { blur, myColors, SRC_URL } from "@/constants"
+import { blur, hasAccess, myColors, SRC_URL } from "@/src/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
 import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler } from "react-native"
-import Heart from '../../assets/icons/departments/heart.svg';
-import Loader from '../../assets/images/loader.svg';
 import { Link, useRouter } from "expo-router";
 import { setAppnData, setCompanies, setDepts, setMembers, setModal } from "@/src/store/slices/slices";
+import { stripHtml } from "string-strip-html";
 
 import React, { useRef, useState } from 'react';
 import Modal, { ReactNativeModal } from 'react-native-modal';
@@ -28,7 +27,7 @@ import Animated, {
   interpolate,
   withDelay
 } from 'react-native-reanimated';
-import AppnDetail from "@/app/appnDetail";
+import AppnDetail from "@/app/appn/appnDetail";
 import { RootState } from "../store/store";
 
 
@@ -142,7 +141,7 @@ export const CompCard = ({ data, active, details }: any) => {
         <TouchableOpacity className={`py-2 items-center rounded-xl flex-1 border ${active ? 'border-gray-400' : 'border-sky-500'}`} onPress={handleSelect}>
           <Text className={`font-Poppins leading-7 ${active ? 'text-stone-400' : 'text-sky-600'}`}>{active ? 'Selected' : 'Select Clinic'}</Text>
         </TouchableOpacity>
-        <View className="py-2 bg-primary-500 items-center rounded-xl flex-1 pointer-events-none">
+        <View className="py-2 bg-primary-500 items-center rounded-xl flex-1">
           <Link href={`/appn/clinic/${data.CompanyId}`} onPress={() => dispatch(setModal({name: 'COMPANIES', state: false }))}>
               <Text className="text-white font-Poppins leading-7">View Details</Text>
           </Link>
@@ -183,21 +182,23 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
     }
     dispatch(setAppnData(doctorData))
   }
-
+  
   return (
     <Link href={`/appn/doctor/${data.PartyCode}`} onPress={handleBooking}>
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg border-b-2 border-gray-300 w-full'>
           <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
           <View className='flex-1'>
               <Text className="font-PoppinsSemibold text-sky-800 text-[14px]" numberOfLines={1}>{data.Name}</Text>
-              <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.SpecialistDesc}</Text>
-              <Text className="font-PoppinsMedium text-gray-800 text-[11px]">⭐ 4.9 
+              <Text className="font-PoppinsMedium text-gray-700 text-[12px] mb-[8px]" numberOfLines={1}>{data.SpecialistDesc}</Text>
+              {/* <Text className="font-PoppinsMedium text-gray-800 text-[11px]">⭐ 4.9 
                   &nbsp;<Text className='text-gray-500'>(2435 Reviews)</Text>
-              </Text>
+              </Text> */}
+              {data.Qualification ? <Text className="font-PoppinsMedium text-gray-500 text-[11px]">{data.Qualification}</Text> : null}
+              {stripHtml(data.PrescriptionFooter).result ? <Text className="font-PoppinsMedium text-gray-500 text-[13px] leading-6">{stripHtml(data.PrescriptionFooter).result}</Text> : null}
           </View>
           <View className='justify-between items-end'>
               <Ionicons name="arrow-forward-outline" size={20} color="#64748b" className='text-slate-500'/>
-              <Text className="font-PoppinsSemibold text-primary-600 text-[12px]">₹600/hr</Text>
+              <Text className="font-PoppinsSemibold text-primary-600 text-[12px]">Fee : ₹{data.Rate}</Text>
           </View>
       </View>
     </Link>
@@ -210,6 +211,8 @@ export const Card_2 = ({ data, index, active }: any) => {
   const router = useRouter();
   const [dropdown, setDropdown] = useState(false);
   const isModal = useSelector((i : RootState) => i.modals.MEMBERS.state);
+  const vType = useSelector((i : RootState) => i.company.vType);
+  const compCode = useSelector((i : RootState) => i.compCode);
   
   const handleTask = (path: string) => {
     dispatch(setMembers({ selectedMember: data }))
@@ -227,18 +230,35 @@ export const Card_2 = ({ data, index, active }: any) => {
   const Dropdown = () => {
     return (
       <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
-          <TouchableOpacity onPress={() => handleTask('')} className='flex-row gap-3 p-4 border-b border-gray-300' >
-            <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
-            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleTask('appn/tabs/home')} className='flex-row gap-3 p-4 border-b border-gray-300'>
-            <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
-            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleTask('appn/tabs/lab')} className='flex-row gap-3 p-4'>
-            <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
-            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
-          </TouchableOpacity>
+          {(() => {
+            if (vType === 'ErpHospital') {
+              return (
+                <>
+                  <TouchableOpacity onPress={() => handleTask('')} className='flex-row gap-3 p-4 border-b border-gray-300' >
+                    <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleTask('appn/tabs/opd')} className='flex-row gap-3 p-4 border-b border-gray-300'>
+                    <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
+                  </TouchableOpacity>
+                  {hasAccess("labtest", compCode) ? <TouchableOpacity onPress={() => handleTask('appn/tabs/lab')} className='flex-row gap-3 p-4'>
+                    <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
+                  </TouchableOpacity> : null}
+                </>
+              )
+            } else if (vType === 'ErpPharma') {
+              return (
+                <>
+                  <TouchableOpacity onPress={() => handleTask('shop/tabs/home')} className='flex-row gap-3 p-4'>
+                    <FontAwesome5 name="pills" size={17} color={myColors.primary[500]}/>
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[14px]">Book Medicines</Text>
+                  </TouchableOpacity>
+                </>
+              )
+            }
+          })()}
       </View>
     )
   }
@@ -246,7 +266,7 @@ export const Card_2 = ({ data, index, active }: any) => {
   return (
     <TouchableOpacity onPress={handleSelect}>
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
-        <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
+        <Image className='shadow-lg rounded-xl' source={require('../../assets/images/user.png')} style={{ width: 70, height: 70 }} />
         <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.MemberName}</Text>
             <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.RelationShipWithHolder}</Text>
@@ -406,7 +426,7 @@ export const Card_4 = ({ data }: any) => {
 }
 
 
-export const MyModal = ({ modalActive, child, name, customClass, onClose, styles }: any) => {
+export const MyModal = ({ modalActive, child, name, customClass, onClose, styles, containerClass }: any) => {
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -449,7 +469,7 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose, styles
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />
     >
-      <KeyboardAvoidingView className="flex-1 justify-center" pointerEvents="box-none">
+      <KeyboardAvoidingView className={`flex-1 justify-center ${containerClass}`} pointerEvents="box-none">
         {React.cloneElement(child, { name: name, modalActive: modalActive })}
       </KeyboardAvoidingView>
     </ReactNativeModal>

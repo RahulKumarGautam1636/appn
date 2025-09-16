@@ -2,21 +2,22 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-// import { Link } from 'expo-router';
+import { Link } from 'expo-router';
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
+import { setModal } from '@/src/store/slices/slices';
+import { myColors } from '@/src/constants';
+import { RootState } from '@/src/store/store';
+import { GradientBG } from '@/src/components/utils';
+import { MyModal } from '@/src/components';
+import InvoicePreview from '@/app/appn/bill';
+import { useState } from 'react';
+import Prescription from './prescription';
+// import { Link } from 'expo-router';
 // import ButtonPrimary from '@/src/components';
 // import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 // import { useEffect } from 'react';
 // import { useIsFocused } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { setModal } from '@/src/store/slices/slices';
-import { myColors } from '@/constants';
-import { Link } from 'expo-router';
-import { RootState } from '@/src/store/store';
-import { GradientBG } from '@/src/components/utils';
-import { MyModal } from '@/src/components';
-import InvoicePreview from './appn/bill';
-import { useState } from 'react';
 
 const { width } = Dimensions.get('window');
 
@@ -39,6 +40,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
     // }, [isFocused]);
 
     const [bill, setBill] = useState(false);
+    const [presc, setPresc] = useState(false);
 
     return (
         <>
@@ -58,7 +60,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     </View>
                 </View>
                 <View className='flex-row gap-4 p-[13px]'>
-                    <Image className='' source={require('../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
+                    <Image className='' source={require('../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{data.AppointmentTo}</Text>
                         <View className='flex-row gap-2'>
@@ -93,7 +95,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
             </View>
             <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
             <View className='flex-row items-center'>
-                <Image className='shadow-lg rounded-full me-3' source={require('../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                 <View>
                     <Text className="font-PoppinsBold text-[14px]">{data.PartyName}</Text>
                     <Text className="font-Poppins text-gray-500 text-[11px]">Myself</Text>
@@ -241,19 +243,20 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                 <ButtonPrimary title='Cancel' active={true} onPress={() => {}} classes='flex-1 py-3' />
             </View> */}
             <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>
-                <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200' : 'bg-green-500'}`}>
+                <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
                 </TouchableOpacity>
-                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200' : 'bg-blue-500'}`}>
+                <TouchableOpacity onPress={() => setPresc(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200 pointer-events-none' : 'bg-blue-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Prescription</Text>
                 </TouchableOpacity>
-                {data.IsAppConfirmed !== 'Y' &&<TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
+                {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
                     <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
-                </TouchableOpacity>}
+                </TouchableOpacity> : null}
             </View>
             </GradientBG>
         </ScrollView>
         <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview />} />
+        <MyModal modalActive={presc} onClose={() => setPresc(false)}  name='BILL' child={<Prescription id={data.PrescriptionId} />} />
         </>
     )
 }

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FileUploader, useFetch } from '@/src/components/utils';
 import colors from 'tailwindcss/colors';
 import { RootState } from '@/src/store/store';
-import { BASE_URL, gender, myColors, states } from '@/constants';
+import { BASE_URL, gender, myColors, states } from '@/src/constants';
 import { MyModal } from '@/src/components';
 
 

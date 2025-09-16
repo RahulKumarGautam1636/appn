@@ -13,15 +13,12 @@ const web = Platform.OS === 'web';
 
 const ShoppingAppScreen = () => {
   
-
-  // const [selectedCategory, setSelectedCategory] = useState('Pharmacy');
   const { products: productsData, categories: categoriesData } = useSelector((i: RootState) => i.siteData);
   const user = useSelector((i: RootState) => i.user);
   const location = useSelector((i: RootState) => i.appData.location);
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
   const dispatch = useDispatch();
-
-  // console.log('Home Screen rerendered.');
+  const company = useSelector((state: RootState) => state.company.info);
 
   return (
     <ScrollView className="flex-1 bg-purple-50">   
@@ -43,7 +40,7 @@ const ShoppingAppScreen = () => {
               </View>
           </View> :
           <View className="gap-3 flex-row items-center mb-5">
-              <Image className='' source={require('../../../assets/images/logo.png')} style={{ width: 40, height: 40 }} />
+              <Image className='' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} style={{ width: 40, height: 40 }} />
               <View className='mr-auto'>
                   {/* <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
                   <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text> */}

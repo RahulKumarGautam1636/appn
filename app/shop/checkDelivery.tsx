@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
 import { getFrom } from '@/src/components/utils';
-import { BASE_URL } from '@/constants';
+import { BASE_URL } from '@/src/constants';
 import { X } from 'lucide-react-native';
 import { MyModal } from '@/src/components';
 import { Registeration } from '../login';

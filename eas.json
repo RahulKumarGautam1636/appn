@@ -16,6 +16,27 @@
       },
       "channel": "preview"
     },
+    "bc-roy-test": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "bc-roy-test"
+    },
+    "bcroy": {
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "channel": "bcroy"
+    },
+    "takehome": {
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "channel": "takehome"
+    },
     "production": {
       "autoIncrement": true,
       "android": {

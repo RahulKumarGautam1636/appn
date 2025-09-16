@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { myColors } from '@/constants';
+import { hasAccess, myColors } from '@/src/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogin, setUser } from '@/src/store/slices/slices';
 import { useState } from 'react';
@@ -17,10 +17,11 @@ import { GradientBG } from '@/src/components/utils';
 const Profile = () => {
 
     const user = useSelector((state: RootState) => state.user);
+    const compCode = useSelector((state: RootState) => state.compCode);
     const [personalInfoActive, setPersonalInfoActive] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch()
-
+    
     return (
         <>
         <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={
@@ -55,9 +56,9 @@ const Profile = () => {
                             </View> */}
                         </View>
                     </View>
-                    <View className='flex-row justify-between border-y border-gray-300 border-solid'>
+                    {hasAccess("labtest", compCode) ? <View className='flex-row justify-between border-y border-gray-300 border-solid'>
                         <View className='items-center flex-1 border-r border-gray-300'>
-                            <Link href={'/testList'}>
+                            <Link href={'/appn/testList'}>
                                 <View className='items-center p-4'>
                                     <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">7</Text>
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
@@ -72,7 +73,7 @@ const Profile = () => {
                                 </View>
                             </Link>
                         </View>
-                    </View>
+                    </View> : null}
                 </View>
                 <View className='m-4 gap-3'>
                     <Pressable onPress={() => setPersonalInfoActive(true)}>
@@ -89,13 +90,13 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
-                    <Link href={'/testList'}>
+                    {hasAccess("labtest", compCode) ? <Link href={'/appn/testList'}>
                         <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                             <Ionicons name="flask" size={22} color={myColors.primary[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Lab Tests</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
-                    </Link>
+                    </Link> : null}
                     <Link href={'/members'}>
                         <View className='flex-row gap-4 w-full bg-white rounded-lg shadow-sm p-5'>
                             <FontAwesome5 name="users" size={20} color={myColors.primary[500]} style={{width: 26}}/>
