@@ -7,7 +7,7 @@ import { Pressable, ScrollView, Text, TouchableOpacity, View } from "react-nativ
 import { Card_3 } from '../../src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { BASE_URL } from '@/src/constants';
+import { BASE_URL, defaultId } from '@/src/constants';
 import { getFrom, ListLoader, NoContent } from '../../src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 
@@ -16,6 +16,7 @@ const AppnList = () => {
 
     const router = useRouter();
     const user = useSelector((i: RootState) => i.user);
+    const compCode = useSelector((i: RootState) => i.compCode);
     const [active, setActive] = useState('ENQ');
     const { selected } = useSelector((i: RootState) => i.companies);
     const [appData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
@@ -83,7 +84,7 @@ const AppnList = () => {
                 </View>
             </View>
 
-            {companyList.length > 1 ? <><View className='px-4 pt-1'>
+            {compCode === defaultId ? <><View className='px-4 pt-1'>
                 <View className=''>
                     <View className='bg-primary-500 mb-4 rounded-2xl shadow-md shadow-gray-400'>
                         <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>

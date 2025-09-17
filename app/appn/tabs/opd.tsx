@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -298,4 +299,185 @@ const HomeScreen = () => {
     )
 }
 
+<<<<<<< HEAD
 export default HomeScreen;
+=======
+export default HomeScreen;
+
+
+
+// import React, { useState } from 'react';
+// import { ArrowLeft, Camera, Calendar, Mail, ChevronDown } from 'lucide-react-native';
+// import { Button, Text, TextInput, View } from 'react-native';
+// import ButtonPrimary from '@/src/components';
+
+// const ProfileForm = () => {
+//   const [formData, setFormData] = useState({
+//     fullName: '',
+//     nickname: '',
+//     dateOfBirth: '',
+//     email: '',
+//     phoneNumber: '',
+//     gender: ''
+//   });
+
+//   const [showGenderDropdown, setShowGenderDropdown] = useState(false);
+
+//   const genderOptions = ['Male', 'Female', 'Other', 'Prefer not to say'];
+
+//   const handleInputChange = (field, value) => {
+//     setFormData(prev => ({
+//       ...prev,
+//       [field]: value
+//     }));
+//   };
+
+//   const handleGenderSelect = (gender) => {
+//     handleInputChange('gender', gender);
+//     setShowGenderDropdown(false);
+//   };
+
+//   const handleContinue = () => {
+//     console.log('Form Data:', formData);
+//     // Handle form submission here
+//   };
+
+//   return (
+//     <View className="flex flex-col h-screen bg-white">
+//       {/* Header */}
+//       <View className="flex items-center px-4 pt-12 pb-6">
+//         <ButtonPrimary className="mr-4">
+//           <ArrowLeft size={24} color="#000" />
+//         </ButtonPrimary>
+//         <Text className="text-xl font-semibold text-black">Fill Your Profile</Text>
+//       </View>
+
+//       {/* Scrollable Content */}
+//       <View className="flex-1 overflow-y-auto px-4">
+//         {/* Profile Picture Section */}
+//         <View className="flex items-center justify-center mb-8">
+//           <View className="relative">
+//             <View className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center">
+//               <View className="w-16 h-16 bg-gray-300 rounded-full" />
+//             </View>
+//             <ButtonPrimary className="absolute bottom-0 right-0 w-10 h-10 bg-black rounded-full flex items-center justify-center">
+//               <Camera size={20} color="#fff" />
+//             </ButtonPrimary>
+//           </View>
+//         </View>
+
+//         {/* Form Fields */}
+//         <View className="space-y-4">
+//           {/* Full Name */}
+//           <View>
+//             <TextInput
+//               className="w-full bg-gray-50 rounded-lg px-4 py-4 text-base text-black placeholder-gray-400 border-0 focus:ring-0 focus:outline-none"
+//               placeholder="Full Name"
+//               value={formData.fullName}
+//               onChange={(e) => handleInputChange('fullName', e.target.value)}
+//             />
+//           </View>
+
+//           {/* Nickname */}
+//           <View>
+//             <TextInput
+//               className="w-full bg-gray-50 rounded-lg px-4 py-4 text-base text-black placeholder-gray-400 border-0 focus:ring-0 focus:outline-none"
+//               placeholder="Nickname"
+//               value={formData.nickname}
+//               onChange={(e) => handleInputChange('nickname', e.target.value)}
+//             />
+//           </View>
+
+//           {/* Date of Birth */}
+//           <View className="relative">
+//             <TextInput
+//               className="w-full bg-gray-50 rounded-lg px-4 py-4 pr-12 text-base text-black placeholder-gray-400 border-0 focus:ring-0 focus:outline-none"
+//               placeholder="Date of Birth"
+//               value={formData.dateOfBirth}
+//               onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+//               type="date"
+//             />
+//             <View className="absolute right-4 top-1/2 transform -translate-y-1/2">
+//               <Calendar size={20} color="#9CA3AF" />
+//             </View>
+//           </View>
+
+//           {/* Email */}
+//           <View className="relative">
+//             <TextInput
+//               className="w-full bg-gray-50 rounded-lg px-4 py-4 pr-12 text-base text-black placeholder-gray-400 border-0 focus:ring-0 focus:outline-none"
+//               placeholder="Email"
+//               value={formData.email}
+//               onChange={(e) => handleInputChange('email', e.target.value)}
+//               type="email"
+//             />
+//             <View className="absolute right-4 top-1/2 transform -translate-y-1/2">
+//               <Mail size={20} color="#9CA3AF" />
+//             </View>
+//           </View>
+
+//           {/* Phone Number */}
+//           <View className="relative">
+//             <View className="flex bg-gray-50 rounded-lg">
+//               <View className="flex items-center px-4 py-4 border-r border-gray-200">
+//                 <View className="w-6 h-4 mr-2 rounded-sm overflow-hidden">
+//                   <View className="w-full h-1/3 bg-red-500" />
+//                   <View className="w-full h-1/3 bg-white" />
+//                   <View className="w-full h-1/3 bg-blue-500" />
+//                 </View>
+//                 <ChevronDown size={16} color="#9CA3AF" />
+//               </View>
+//               <TextInput
+//                 className="flex-1 px-4 py-4 text-base text-black placeholder-gray-400 bg-transparent border-0 focus:ring-0 focus:outline-none"
+//                 placeholder="Phone Number"
+//                 value={formData.phoneNumber}
+//                 onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+//                 type="tel"
+//               />
+//             </View>
+//           </View>
+
+//           {/* Gender Dropdown */}
+//           <View className="relative">
+//             <ButtonPrimary
+//               className="w-full bg-gray-50 rounded-lg px-4 py-4 flex items-center justify-between text-left"
+//               onClick={() => setShowGenderDropdown(!showGenderDropdown)}
+//             >
+//               <Text className={`text-base ${formData.gender ? 'text-black' : 'text-gray-400'}`}>
+//                 {formData.gender || 'Gender'}
+//               </Text>
+//               <ChevronDown size={20} color="#9CA3AF" />
+//             </ButtonPrimary>
+
+//             {showGenderDropdown && (
+//               <View className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-1 z-10 shadow-lg">
+//                 {genderOptions.map((option, index) => (
+//                   <ButtonPrimary
+//                     key={index}
+//                     className="w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 hover:bg-gray-50"
+//                     onClick={() => handleGenderSelect(option)}
+//                   >
+//                     <Text className="text-base text-black">{option}</Text>
+//                   </ButtonPrimary>
+//                 ))}
+//               </View>
+//             )}
+//           </View>
+//         </View>
+//       </View>
+
+//       {/* Continue Button */}
+//       <View className="px-4 pb-8 pt-4">
+//         <ButtonPrimary
+//           className="w-full bg-gray-800 rounded-full py-4 text-center hover:bg-gray-700 transition-colors"
+//           onClick={handleContinue}
+//         >
+//           <Text className="text-white text-lg font-semibold">Continue</Text>
+//         </ButtonPrimary>
+//       </View>
+//     </View>
+//   );
+// };
+
+// export default ProfileForm;
+>>>>>>> ec088461a890c7ce3a78859fec02681ab5faa94c

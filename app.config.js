@@ -2,7 +2,7 @@
 
 export default ({ config }) => {
   
-  const flavor = "bc_roy";       
+  const flavor = "xyz";       
 
   const flavorConfig = {
     xyz: {
