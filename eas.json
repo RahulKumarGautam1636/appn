@@ -23,6 +23,13 @@
       },
       "channel": "bc-roy-test"
     },
+    "xyz-hospital": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "xyz-hospital"
+    },
     "bcroy": {
       "autoIncrement": true,
       "android": {

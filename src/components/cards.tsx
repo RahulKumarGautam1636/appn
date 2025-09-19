@@ -10,9 +10,10 @@ import { mmDDyyyyDate } from ".";
 export default function LabCard({ data, testDate }: any) {
 
     const dispatch = useDispatch();
-    const lab = useSelector((i: RootState) => i.cart)
-    const labTests = Object.values(lab);
-    const isAdded = labTests.find((i: any) => i.LocationItemId === data.LocationItemId);
+    // const lab = useSelector((i: RootState) => i.cart)
+    // const labTests = Object.values(lab);
+    // const isAdded = labTests.find((i: any) => i.LocationItemId === data.LocationItemId);
+    const isAdded = useSelector((i: RootState) => Object.values(i.cart).some((x : any) => x.LocationItemId === data.LocationItemId));
     const handleAdd = () => {
         if (isAdded) {
             dispatch(removeFromCart(data.LocationItemId));
@@ -20,6 +21,8 @@ export default function LabCard({ data, testDate }: any) {
             dispatch(addToCart({...data, testDate: testDate}));
         }
     }
+
+    console.log('Lab Card Rerendered -------------------------');    
 
     return (
         <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg border-b-2 border-gray-300 p-4">

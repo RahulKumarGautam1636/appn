@@ -172,6 +172,7 @@ export const DeptCard = ({ data, active }: any) => {
 export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
 
   const dispatch = useDispatch();
+  // console.log(`Doctor card Rerendered--------------------------- ${parent}`);
 
   const handleBooking = () => {
     let doctorData = {
@@ -194,11 +195,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
                   &nbsp;<Text className='text-gray-500'>(2435 Reviews)</Text>
               </Text> */}
               {data.Qualification ? <Text className="font-PoppinsMedium text-gray-500 text-[11px]">{data.Qualification}</Text> : null}
-<<<<<<< HEAD
-              {data.PrescriptionFooter ? <Text className="font-PoppinsMedium text-gray-500 text-[13px] leading-6">{stripHtml(data.PrescriptionFooter).result}</Text> : null}
-=======
               {stripHtml(data.PrescriptionFooter).result ? <Text className="font-PoppinsMedium text-gray-500 text-[13px] leading-6">{stripHtml(data.PrescriptionFooter).result}</Text> : null}
->>>>>>> ec088461a890c7ce3a78859fec02681ab5faa94c
           </View>
           <View className='justify-between items-end'>
               <Ionicons name="arrow-forward-outline" size={20} color="#64748b" className='text-slate-500'/>

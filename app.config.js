@@ -2,12 +2,9 @@
 
 export default ({ config }) => {
   
-  const flavor = "xyz";       
-
   const flavorConfig = {
     xyz: {
       name: "Gbooks",
-      slug: "vit",
       package: "com.gbooks.gbooks",
       scheme: "gbooks",
       compId: "FFCeIi27FQMTNGpatwiktw==",
@@ -19,19 +16,17 @@ export default ({ config }) => {
     },
     bc_roy: {
       name: "B.C. ROY",
-      slug: "vit",
       package: "com.gbooks.bcroy",
       scheme: "bc_roy",
       compId: "ji4C/%2BQbn%2BBofLeoFG9clw==",
       icon: "./assets/images/bc_roy/logo.png",
       splash: "./assets/images/bc_roy/logo.png",
-      version: "1.0.0",
+      version: "1.0.1",
       baseUrl: "https://apigst.gsterpsoft.com",
       srcUrl: "https://gsterpsoft.com",
     },
     takehome: {
       name: "TakeHome",
-      slug: "vit",
       package: "com.takehome.takehome",
       scheme: "takehome",
       compId: "yFObpUjTIGhK9%2B4bFmadRg==",
@@ -43,7 +38,23 @@ export default ({ config }) => {
     },
   };
 
-  const selected = flavorConfig[flavor];
+  const accounts = {
+    rk: {
+      owner: "rkatexpo",
+      projectId: "8a4d3e0d-1e0d-4d25-8b68-8a46886eee2c",
+      updateUrl: "https://u.expo.dev/8a4d3e0d-1e0d-4d25-8b68-8a46886eee2c",
+      slug: "myapp"
+    },
+    vit: {
+      owner: "vit2025",
+      projectId: "49ccd396-a8dd-4738-ab6b-db8c2474135b",
+      updateUrl: "https://u.expo.dev/49ccd396-a8dd-4738-ab6b-db8c2474135b",
+      slug: "vit"
+    }
+  }
+
+  const flavor = flavorConfig["xyz"];
+  const account = accounts["rk"];
 
   return {
     ...config,
@@ -61,7 +72,7 @@ export default ({ config }) => {
       [
         "expo-splash-screen",
         {
-          image: selected.splash,
+          image: flavor.splash,
           imageWidth: 200,
           resizeMode: "contain",
           backgroundColor: "#ffffff",
@@ -72,34 +83,32 @@ export default ({ config }) => {
     extra: {
       router: {},
       eas: {
-        // projectId: "8a4d3e0d-1e0d-4d25-8b68-8a46886eee2c",
-        projectId: "49ccd396-a8dd-4738-ab6b-db8c2474135b",
+        projectId: account.projectId,
       },
-      compId: selected.compId,
-      baseUrl: selected.baseUrl,
-      srcUrl: selected.srcUrl,
+      compId: flavor.compId,
+      baseUrl: flavor.baseUrl,
+      srcUrl: flavor.srcUrl,
     },
-    owner: "vit2025",
+    owner: account.owner,
     updates: {
-      // url: "https://u.expo.dev/8a4d3e0d-1e0d-4d25-8b68-8a46886eee2c",
-      url: "https://u.expo.dev/49ccd396-a8dd-4738-ab6b-db8c2474135b",
-      // checkAutomatically: "NEVER",
-      // fallbackToCacheTimeout: 0
+      url: account.updateUrl,
+      checkAutomatically: "NEVER",
+      fallbackToCacheTimeout: 0
     },
     runtimeVersion: { policy: "appVersion" },
 
-    name: selected.name,           
-    slug: selected.slug,
-    icon: selected.icon,
-    scheme: selected.scheme,
-    version: selected.version,
+    name: flavor.name,           
+    slug: account.slug,
+    icon: flavor.icon,
+    scheme: flavor.scheme,
+    version: flavor.version,
     android: {
       adaptiveIcon: {
-        foregroundImage: selected.icon,
+        foregroundImage: flavor.icon,
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
-      package: selected.package,
+      package: flavor.package,
     },
   }
 };

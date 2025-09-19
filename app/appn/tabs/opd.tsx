@@ -7,7 +7,7 @@ import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpa
 import { Link } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { setModal } from '@/src/store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '@/src/components';
 import { BASE_URL, defaultId } from '@/src/constants';
@@ -29,6 +29,7 @@ const HomeScreen = () => {
     const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 30), activeDate: new Date().toLocaleDateString('en-TT')})
     const [appnData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
     const [doctorTab, setDoctorTab] = useState('active_date')
+    
 
     useEffect(() => {
         let controller = new AbortController();
@@ -265,44 +266,48 @@ const HomeScreen = () => {
                             {/* <Text className="font-PoppinsMedium text-white text-[15px] leading-[23px]">All</Text> */}
                         </View>
                     </View> 
-                    <View className='mt-2 gap-4'>
-                        {(() => {
-                            if (doctors.loading) {
-                                return <GridLoader />
-                            } else if (doctors.err.status) {
-                                return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{doctors.err.msg}</Text>
-                            } else if (!doctors.data.PartyMasterList.length) {
-                                return <NoContent label='No Doctors Found' />;
-                            } else {
-                                if (doctorTab === 'all_date') {
-                                    return otherDayDoctors.data.PartyMasterList.length ? otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} />) : <NoContent label='No Doctors Found' imgClass='h-[170]'containerClass='mt-12'/>;
-                                } else {
-                                    return (    
-                                        <>
-                                            {doctors.data.PartyMasterList.length ? doctors.data.PartyMasterList.map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} selectedDate={filterdates.activeDate} />) : <Text className='p-4 bg-rose-200/50 text-red-500 leading-5 text-center mt-6 rounded-lg font-PoppinsSemibold'>No Doctors Found for Selected Date</Text>}
-                                            {otherDayDoctors.data.PartyMasterList.length ? <>
-                                                <View className='justify-between flex-row items-end p-4 bg-blue-200/50 mt-3 rounded-xl'>
-                                                    <Text className="font-PoppinsSemibold text-blue-600 text-[16px] leading-[23px]">All Available Doctors</Text>
-                                                    <FontAwesome name="arrow-down" size={20} color={colors.blue[600]} />
-                                                </View> 
-                                                {otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor: any) => <Card_1 data={doctor} key={doctor.PartyCode} />)}
-                                            </> : null}
-                                        </>
-                                    )
-                                }
-                            }
-                        })()}
-                    </View>
+                    <RenderDoctors doctors={doctors} otherDayDoctors={otherDayDoctors} filterdates={filterdates} doctorTab={doctorTab} />
                 </View>
             {/* </GradientBG> */}
         </ScrollView>
     )
 }
 
-<<<<<<< HEAD
 export default HomeScreen;
-=======
-export default HomeScreen;
+
+const RenderDoctors = memo(({ doctors, otherDayDoctors, filterdates, doctorTab }: any) => {
+
+    return (
+        <View className='mt-2 gap-4'>
+            {(() => {
+                if (doctors.loading) {
+                    return <GridLoader />
+                } else if (doctors.err.status) {
+                    return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{doctors.err.msg}</Text>
+                } else if (!doctors.data.PartyMasterList.length) {
+                    return <NoContent label='No Doctors Found' />;
+                } else {
+                    if (doctorTab === 'all_date') {
+                        return otherDayDoctors.data.PartyMasterList.length ? otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor, index) => <Card_1 data={doctor} key={index} />) : <NoContent label='No Doctors Found' imgClass='h-[170]'containerClass='mt-12'/>;
+                    } else {
+                        return (    
+                            <>
+                                {doctors.data.PartyMasterList.length ? doctors.data.PartyMasterList.map((doctor, index) => <Card_1 data={doctor} key={index} selectedDate={filterdates.activeDate} />) : <Text className='p-4 bg-rose-200/50 text-red-500 leading-5 text-center mt-6 rounded-lg font-PoppinsSemibold'>No Doctors Found for Selected Date</Text>}
+                                {otherDayDoctors.data.PartyMasterList.length ? <>
+                                    <View className='justify-between flex-row items-end p-4 bg-blue-200/50 mt-3 rounded-xl'>
+                                        <Text className="font-PoppinsSemibold text-blue-600 text-[16px] leading-[23px]">All Available Doctors</Text>
+                                        <FontAwesome name="arrow-down" size={20} color={colors.blue[600]} />
+                                    </View> 
+                                    {otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor, index) => <Card_1 data={doctor} key={index} />)}
+                                </> : null}
+                            </>
+                        )
+                    }
+                }
+            })()}
+        </View>
+    )
+})
 
 
 
@@ -480,4 +485,3 @@ export default HomeScreen;
 // };
 
 // export default ProfileForm;
->>>>>>> ec088461a890c7ce3a78859fec02681ab5faa94c

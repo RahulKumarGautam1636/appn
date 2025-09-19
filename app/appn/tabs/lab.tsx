@@ -7,7 +7,7 @@ import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-
 import Feather from '@expo/vector-icons/Feather';
 import axios from 'axios';
 import { Link, useFocusEffect, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { myColors } from '@/src/constants';
@@ -44,36 +44,6 @@ const LabTests = ({}: any) => {
         getLabData(selectedCompany);
         setSearchItem({name: ''});
     },[selectedCompany.EncCompanyId])
-
-    const renderSlider = (data: any, parentId: any) => {    
-        const productCategoryItems = data.data.itemMasterCollection.filter((i: any) => i.Category === parentId);   
-        const parentCategoryName = data.data.ParentCategoryList.filter((i: any) => i.Value === parentId.toString())[0]?.Text;
-        if (data.loading) {
-          return <GridLoader />;
-        } else if (data.err.status) {
-          return;
-        } else if (productCategoryItems.length === 0) {
-          return;
-        } else {
-            return (
-                <View className='gap-4'>
-                    {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(date.value).toLocaleDateString('en-TT')} />)}
-                </View>
-            ) 
-        }
-    }
-    
-
-    const renderContent = (data: any) => {
-        if (data.loading) {
-            return <GridLoader />;
-        } else if (data.data.ParentCategoryList.length === 0) {
-            return <View className='text-center my-5 w-100'><Text className="text-info mark">No Products found !</Text></View>;
-        } else {
-            return data.data.ParentCategoryList.map((i: any) => (<View key={i.Value}>{renderSlider(labData, parseInt(i.Value))}</View>))
-        }
-    }
-
     
     useEffect(() => {
         const getSearchItems = async (company: any, query: string) => {
@@ -192,7 +162,7 @@ const LabTests = ({}: any) => {
                             <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
                         </View>
                     </View>
-                    {renderContent(labData)}
+                    <RenderLabTest labData={labData} dateValue={date.value} />
                 </View>
             </View>
             </GradientBG>
@@ -202,3 +172,33 @@ const LabTests = ({}: any) => {
 
 
 export default LabTests;
+
+
+const RenderLabTest = memo(({ labData, dateValue }: any) => {
+
+    const renderSlider = (data: any, parentId: any) => {    
+        const productCategoryItems = data.data.itemMasterCollection.filter((i: any) => i.Category === parentId);   
+        const parentCategoryName = data.data.ParentCategoryList.filter((i: any) => i.Value === parentId.toString())[0]?.Text;
+        if (data.loading) {
+          return <GridLoader />;
+        } else if (data.err.status) {
+          return;
+        } else if (productCategoryItems.length === 0) {
+          return;
+        } else {
+            return (
+                <View className='gap-4'>
+                    {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(dateValue).toLocaleDateString('en-TT')} />)}
+                </View>
+            ) 
+        }
+    }
+
+    if (labData.loading) {
+        return <GridLoader />;
+    } else if (labData.data.ParentCategoryList.length === 0) {
+        return <View className='text-center my-5 w-100'><Text className="text-info mark">No Products found !</Text></View>;
+    } else {
+        return labData.data.ParentCategoryList.map((i: any) => (<View key={i.Value}>{renderSlider(labData, parseInt(i.Value))}</View>))
+    }
+})

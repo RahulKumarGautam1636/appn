@@ -90,7 +90,7 @@ export default function RootLayout() {
           <LayoutContent />
           <Init />
           <Modals />
-          {/* <UpdateBanner /> */}
+          <UpdateBanner />
         </SafeAreaProvider>
       </GestureHandlerRootView>
     </Provider>
