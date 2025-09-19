@@ -6,48 +6,86 @@ import ButtonPrimary from ".";
 import colors from "tailwindcss/colors";
 import Constants from "expo-constants";
 
+import * as Application from "expo-application";
+import { Linking } from "react-native";
+import axios from "axios";
+
 export default function UpdateBanner() {
-  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [updateAvailable, setUpdateAvailable] = useState(true);
 
   const FORCE_UPDATE_TEST = false;
 
-  useEffect(() => {
-    const checkForUpdates = async () => {
-      console.log("👉 Inside checkForUpdates");
+  // useEffect(() => {
+  //   const checkForUpdates = async () => {
 
-      try {
-        if (FORCE_UPDATE_TEST) {
-          console.log("⚡ Simulating update available (local test)");
-          setUpdateAvailable(true);
-          return;
-        }
+  //     try {
+  //       if (FORCE_UPDATE_TEST) {
+  //         setUpdateAvailable(true);
+  //         return;
+  //       }
 
-        console.log("🔍 Checking for new update from server...");
-        const update = await Updates.checkForUpdateAsync();
+  //       const update = await Updates.checkForUpdateAsync();
 
-        if (update.isAvailable) {
-          console.log("✅ Real update available. Fetching...");
-          await Updates.fetchUpdateAsync();
-          setUpdateAvailable(true);
-        } else {
-          console.log("ℹ️ No update available.");
-        }
-      } catch (e) {
-        console.error("❌ Error checking for updates:", e);
-      }
-    };
+  //       if (update.isAvailable) {
+  //         await Updates.fetchUpdateAsync();
+  //         setUpdateAvailable(true);
+  //       } else {
+  //         console.log("ℹ️ No update available.");
+  //       }
+  //     } catch (e) {
+  //       console.error("❌ Error checking for updates:", e);
+  //     }
+  //   };
 
-    console.log("Before environment check.");
-    console.log("__DEV__ :", __DEV__);
-    console.log("Constants.executionEnvironment :", Constants.executionEnvironment);
+  //   if (!FORCE_UPDATE_TEST && (__DEV__ || Constants.executionEnvironment === "storeClient")) {
+  //     console.log("🚫 Running in Expo Go - skipping update check");
+  //     return;
+  //   }
 
-    if (!FORCE_UPDATE_TEST && (__DEV__ || Constants.executionEnvironment === "storeClient")) {
-      console.log("🚫 Running in Expo Go - skipping update check");
-      return;
+  //   checkForUpdates();
+  // }, []);
+
+  function compareVersions(v1, v2) {
+    const v1Parts = v1.split(".").map(Number);
+    const v2Parts = v2.split(".").map(Number);
+  
+    for (let i = 0; i < Math.max(v1Parts.length, v2Parts.length); i++) {
+      const a = v1Parts[i] || 0;
+      const b = v2Parts[i] || 0;
+      if (a > b) return 1;
+      if (a < b) return -1;
     }
-
-    checkForUpdates();
-  }, []);
+    return 0;
+  }
+  
+  async function checkForStoreUpdate() {
+    try {
+      alert('Checking for Updates.')
+      const res = await axios.get("https://myapps.gsterpsoft.com/api/Location/Get?CID=yFObpUjTIGhK9%2B4bFmadRg==&Area=Kalyani&SearchStr=");
+      
+      // const { latestVersion, minVersion, playStoreUrl } = res.data[0];
+      
+      const currentVersion = Application.nativeApplicationVersion;
+      console.log(
+        currentVersion, 
+        // latestVersion, minVersion, playStoreUrl
+      );
+  
+      // if (compareVersions(currentVersion, minVersion) < 0) {
+      //   Linking.openURL(playStoreUrl);
+      //   return { type: "force" };
+      // }
+  
+      // if (compareVersions(currentVersion, latestVersion) < 0) {
+      //   return { type: "optional", url: playStoreUrl };
+      // }
+  
+      return { type: "none" }; // up to date
+    } catch (e) {
+      console.log("Error checking version:", e);
+      return { type: "error" };
+    }
+  }
 
   if (!updateAvailable) return null;
 
@@ -67,8 +105,9 @@ export default function UpdateBanner() {
           title="RESTART"
           active={true}
           onPress={() => {
-            console.log("♻️ Restarting app...");
-            Updates.reloadAsync();
+            // console.log("♻️ Restarting app...");
+            // Updates.reloadAsync();
+            checkForStoreUpdate()
           }}
           classes="w-full bg-slate-600 !h-[50px]"
         />
