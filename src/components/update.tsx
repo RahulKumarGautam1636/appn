@@ -61,13 +61,13 @@ export default function UpdateBanner() {
   async function checkForStoreUpdate() {
     try {
       alert('Checking for Updates.')
-      const res = await axios.get("https://myapps.gsterpsoft.com/api/Location/Get?CID=yFObpUjTIGhK9%2B4bFmadRg==&Area=Kalyani&SearchStr=");
+      // const res = await axios.get("https://myapps.gsterpsoft.com/api/Location/Get?CID=yFObpUjTIGhK9%2B4bFmadRg==&Area=Kalyani&SearchStr=");
       
       // const { latestVersion, minVersion, playStoreUrl } = res.data[0];
       
-      const currentVersion = Application.nativeApplicationVersion;
+      // const currentVersion = Application.nativeApplicationVersion;
       console.log(
-        currentVersion, 
+        Constants.expoConfig?.version
         // latestVersion, minVersion, playStoreUrl
       );
   
@@ -104,9 +104,9 @@ export default function UpdateBanner() {
         <ButtonPrimary
           title="RESTART"
           active={true}
-          onPress={() => {
+          onPress={async () => {
             // console.log("♻️ Restarting app...");
-            // Updates.reloadAsync();
+            // await Updates.reloadAsync();
             checkForStoreUpdate()
           }}
           classes="w-full bg-slate-600 !h-[50px]"
