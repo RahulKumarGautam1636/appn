@@ -61,12 +61,13 @@ export default function UpdateBanner() {
   async function checkForStoreUpdate() {
     try {
       alert('Checking for Updates.')
-      // const res = await axios.get("https://myapps.gsterpsoft.com/api/Location/Get?CID=yFObpUjTIGhK9%2B4bFmadRg==&Area=Kalyani&SearchStr=");
+      const res = await axios.get("http://10.0.2.2:3000/versions/com.gbooks.bcroy");
       
       // const { latestVersion, minVersion, playStoreUrl } = res.data[0];
       
       // const currentVersion = Application.nativeApplicationVersion;
       console.log(
+        res.data,
         Constants.expoConfig?.version
         // latestVersion, minVersion, playStoreUrl
       );
@@ -107,7 +108,7 @@ export default function UpdateBanner() {
           onPress={async () => {
             // console.log("♻️ Restarting app...");
             // await Updates.reloadAsync();
-            checkForStoreUpdate()
+            await checkForStoreUpdate()
           }}
           classes="w-full bg-slate-600 !h-[50px]"
         />
@@ -115,3 +116,26 @@ export default function UpdateBanner() {
     </View>
   );
 }
+
+
+
+// {
+//   "versions": {
+//     "com.gbooks.bcroy": {
+//       "AppWebName": "com.gbooks.bcroy",
+//       "Major": 1,
+//       "Minor": 0,
+//       "Patch": 0,
+//       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.gbooks.bcroy"
+//     },
+//     "com.gbooks.gbooks": {
+//       "AppWebName": "com.gbooks.gbooks",
+//       "Major": 1,
+//       "Minor": 0,
+//       "Patch": 0,
+//       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.gbooks.gbooks"
+//     }
+//   }
+// }
+
+// npx json-server --host 0.0.0.0 --port 3000 db.json
