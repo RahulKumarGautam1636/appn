@@ -53,7 +53,7 @@ export default ({ config }) => {
     }
   }
 
-  const flavor = flavorConfig["xyz"];
+  const flavor = flavorConfig["takehome"];
   const account = accounts["rk"];
 
   return {

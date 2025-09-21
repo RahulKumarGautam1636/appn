@@ -7,8 +7,8 @@ import colors from "tailwindcss/colors";
 import Constants from "expo-constants";
 
 import * as Application from "expo-application";
-import { Linking } from "react-native";
 import axios from "axios";
+import { Linking } from "react-native";
 
 export default function UpdateBanner() {
   const [updateAvailable, setUpdateAvailable] = useState(true);
@@ -45,50 +45,45 @@ export default function UpdateBanner() {
   //   checkForUpdates();
   // }, []);
 
-  function compareVersions(v1, v2) {
-    const v1Parts = v1.split(".").map(Number);
-    const v2Parts = v2.split(".").map(Number);
-  
-    for (let i = 0; i < Math.max(v1Parts.length, v2Parts.length); i++) {
-      const a = v1Parts[i] || 0;
-      const b = v2Parts[i] || 0;
-      if (a > b) return 1;
-      if (a < b) return -1;
+  // Example function
+  async function openPlayStore(url: string) {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        alert("Error Unable to open Play Store link");
+      }
+    } catch (err) {
+      console.error("Failed to open Play Store:", err);
     }
-    return 0;
   }
   
+  const [update, setUpdate] = useState({active: false, type: '', url: ''})
+
   async function checkForStoreUpdate() {
     try {
-      alert('Checking for Updates.')
-      const res = await axios.get("http://10.0.2.2:3000/versions/com.gbooks.bcroy");
-      
-      // const { latestVersion, minVersion, playStoreUrl } = res.data[0];
-      
-      // const currentVersion = Application.nativeApplicationVersion;
-      console.log(
-        res.data,
-        Constants.expoConfig?.version
-        // latestVersion, minVersion, playStoreUrl
-      );
-  
-      // if (compareVersions(currentVersion, minVersion) < 0) {
-      //   Linking.openURL(playStoreUrl);
-      //   return { type: "force" };
-      // }
-  
-      // if (compareVersions(currentVersion, latestVersion) < 0) {
-      //   return { type: "optional", url: playStoreUrl };
-      // }
-  
-      return { type: "none" }; // up to date
+      // const res = await axios.get("http://10.0.2.2:3000/versions/com.gbooks.bcroy");         // Emulator
+      // const res = await axios.get("http://192.168.43.208:3000/versions/bcroy");      // Ipconfig 2
+      const pakage = Constants.expoConfig?.android?.package;
+      const [ major, minor, patch ] = Constants.expoConfig?.version?.split(".").map(Number);
+      const res = await axios.get(`https://myapps.gsterpsoft.com/api/AppVersion/GetLatestVersion?Type=app&AppWebName=${pakage}`);    
+      const { Major, Minor, Patch, AppWebName } = res.data.VersionObj;
+      const playStoreUrl = `https://play.google.com/store/apps/details?id=${AppWebName}`;
+      console.log(Major, Minor, Patch, playStoreUrl, major, minor, patch);
+      if (Minor > minor) {
+        setUpdate({ active: true, type: 'force', url: playStoreUrl })
+      } 
     } catch (e) {
-      console.log("Error checking version:", e);
-      return { type: "error" };
+      console.log("Error checking version:", e); 
     }
   }
 
-  if (!updateAvailable) return null;
+  useEffect(() => {
+    checkForStoreUpdate();
+  }, [])
+
+  if (!update.active) return null;
 
   return (
     <View className="absolute justify-center items-center inset-0 z-50 bg-gray-800/50">
@@ -96,46 +91,41 @@ export default function UpdateBanner() {
         <View className="p-12 bg-fuchsia-100 rounded-full flex justify-center items-center">
           <Entypo name="download" size={60} color={colors.fuchsia[500]} />
         </View>
-        <Text className="font-PoppinsSemibold text-gray-800 text-center text-lg mt-7 mb-3">
-          We Received an Update.
+        <Text className="font-PoppinsSemibold text-gray-800 text-center text-lg mt-7 mb-3">We Received an Update.</Text>
+        <Text className="font-PoppinsMedium text-gray-600 text-base mb-7 text-center">
+          {update.type === 'force' ? 'Please Update the App on Play Store.' : 'Please Restart the App'}
         </Text>
-        <Text className="font-PoppinsMedium text-gray-600 text-base mb-7">
-          Please Restart the App.
-        </Text>
-        <ButtonPrimary
-          title="RESTART"
-          active={true}
-          onPress={async () => {
-            // console.log("♻️ Restarting app...");
-            // await Updates.reloadAsync();
-            await checkForStoreUpdate()
-          }}
-          classes="w-full bg-slate-600 !h-[50px]"
-        />
+        {update.type === 'force' ? 
+          <ButtonPrimary title="UPDATE" active={true} onPress={async () => openPlayStore(update.url)} classes="w-full bg-slate-600 !h-[50px]" />
+          :
+          <ButtonPrimary title="RESTART" active={true} onPress={async () => {await Updates.reloadAsync()}} classes="w-full bg-slate-600 !h-[50px]" />
+        }
       </View>
     </View>
   );
 }
 
 
+// npx json-server --host 0.0.0.0 --port 3000 db.json
+
+
+
 
 // {
-//   "versions": {
-//     "com.gbooks.bcroy": {
+//   "versions": [
+//     {
+//       "id": "bcroy",
 //       "AppWebName": "com.gbooks.bcroy",
 //       "Major": 1,
-//       "Minor": 0,
-//       "Patch": 0,
-//       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.gbooks.bcroy"
+//       "Minor": 1,
+//       "Patch": 0
 //     },
-//     "com.gbooks.gbooks": {
+//     {
+//       "id": "gbooks",
 //       "AppWebName": "com.gbooks.gbooks",
 //       "Major": 1,
 //       "Minor": 0,
-//       "Patch": 0,
-//       "playStoreUrl": "https://play.google.com/store/apps/details?id=com.gbooks.gbooks"
+//       "Patch": 0
 //     }
-//   }
+//   ]
 // }
-
-// npx json-server --host 0.0.0.0 --port 3000 db.json
