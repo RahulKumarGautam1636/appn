@@ -5,83 +5,70 @@ import { Entypo } from "@expo/vector-icons";
 import ButtonPrimary from ".";
 import colors from "tailwindcss/colors";
 import Constants from "expo-constants";
-
-import * as Application from "expo-application";
 import axios from "axios";
 import { Linking } from "react-native";
 
-export default function UpdateBanner() {
-  const [updateAvailable, setUpdateAvailable] = useState(true);
-
-  const FORCE_UPDATE_TEST = false;
-
-  // useEffect(() => {
-  //   const checkForUpdates = async () => {
-
-  //     try {
-  //       if (FORCE_UPDATE_TEST) {
-  //         setUpdateAvailable(true);
-  //         return;
-  //       }
-
-  //       const update = await Updates.checkForUpdateAsync();
-
-  //       if (update.isAvailable) {
-  //         await Updates.fetchUpdateAsync();
-  //         setUpdateAvailable(true);
-  //       } else {
-  //         console.log("ℹ️ No update available.");
-  //       }
-  //     } catch (e) {
-  //       console.error("❌ Error checking for updates:", e);
-  //     }
-  //   };
-
-  //   if (!FORCE_UPDATE_TEST && (__DEV__ || Constants.executionEnvironment === "storeClient")) {
-  //     console.log("🚫 Running in Expo Go - skipping update check");
-  //     return;
-  //   }
-
-  //   checkForUpdates();
-  // }, []);
-
-  // Example function
-  async function openPlayStore(url: string) {
-    try {
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        alert("Error Unable to open Play Store link");
-      }
-    } catch (err) {
-      console.error("Failed to open Play Store:", err);
+const openPlayStore = async (url: string) => {
+  try {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      alert("Error Unable to open Play Store link");
     }
+  } catch (err) {
+    console.error("Failed to open Play Store:", err);
   }
-  
+}
+
+export default function UpdateBanner() {
+   
   const [update, setUpdate] = useState({active: false, type: '', url: ''})
 
-  async function checkForStoreUpdate() {
-    try {
-      // const res = await axios.get("http://10.0.2.2:3000/versions/com.gbooks.bcroy");         // Emulator
-      // const res = await axios.get("http://192.168.43.208:3000/versions/bcroy");      // Ipconfig 2
-      const pakage = Constants.expoConfig?.android?.package;
-      const [ major, minor, patch ] = Constants.expoConfig?.version?.split(".").map(Number);
-      const res = await axios.get(`https://myapps.gsterpsoft.com/api/AppVersion/GetLatestVersion?Type=app&AppWebName=${pakage}`);    
-      const { Major, Minor, Patch, AppWebName } = res.data.VersionObj;
-      const playStoreUrl = `https://play.google.com/store/apps/details?id=${AppWebName}`;
-      console.log(Major, Minor, Patch, playStoreUrl, major, minor, patch);
-      if (Minor > minor) {
-        setUpdate({ active: true, type: 'force', url: playStoreUrl })
-      } 
-    } catch (e) {
-      console.log("Error checking version:", e); 
-    }
-  }
-
   useEffect(() => {
-    checkForStoreUpdate();
-  }, [])
+
+    async function checkForStoreUpdate() {
+      try {
+        const pakage = Constants.expoConfig?.android?.package;
+        const [ major, minor, patch ] = Constants.expoConfig?.version?.split(".").map(Number);
+        const res = await axios.get(`https://myapps.gsterpsoft.com/api/AppVersion/GetLatestVersion?Type=app&AppWebName=${pakage}`);   
+        // const res = await axios.get(`http://10.0.2.2:3000/versions/${pakage?.split('.')[2]}`);                     // Emulator      
+        // const res = await axios.get(`http://http://192.168.0.127:3000/versions/${pakage}`);      // Ipconfig 2
+        const { Major, Minor, Patch, AppWebName } = res.data.VersionObj
+        const playStoreUrl = `https://play.google.com/store/apps/details?id=${AppWebName}`;
+        console.log(Major, Minor, Patch, playStoreUrl, major, minor, patch);
+        if (Minor > minor) {
+          setUpdate({ active: true, type: 'force', url: playStoreUrl })
+        } 
+        // else if (Patch > patch) {
+        //   setUpdate({ active: true, type: 'optional', url: playStoreUrl })
+        // }
+      } catch (e) {
+        console.log("Error checking version:", e); 
+      }
+    }
+
+    const checkForUpdates = async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          setUpdate({ active: true, type: 'optional', url: '' })
+        } else {
+          console.log("ℹ️ No update available.");
+          checkForStoreUpdate();
+        }
+      } catch (e) {
+        console.error("❌ Error checking for updates:", e);
+      }
+    };
+
+    if (__DEV__ || Constants.executionEnvironment === "storeClient") {
+      console.log("🚫 Running in Expo Go - skipping update check");
+      return;
+    }
+    checkForUpdates();
+  }, []);
 
   if (!update.active) return null;
 
@@ -108,24 +95,3 @@ export default function UpdateBanner() {
 
 // npx json-server --host 0.0.0.0 --port 3000 db.json
 
-
-
-
-// {
-//   "versions": [
-//     {
-//       "id": "bcroy",
-//       "AppWebName": "com.gbooks.bcroy",
-//       "Major": 1,
-//       "Minor": 1,
-//       "Patch": 0
-//     },
-//     {
-//       "id": "gbooks",
-//       "AppWebName": "com.gbooks.gbooks",
-//       "Major": 1,
-//       "Minor": 0,
-//       "Patch": 0
-//     }
-//   ]
-// }

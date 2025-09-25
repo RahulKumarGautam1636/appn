@@ -10,7 +10,7 @@ import { setLogin, setUser, getCompanies, setModal } from "../src/store/slices/s
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { createDate, getDuration } from "@/src/components/utils";
+import { createDate, getDuration, minDate, useRegType } from "@/src/components/utils";
 
 interface loginType {
     phone: string,
@@ -163,10 +163,11 @@ const Login = ({ modalMode }: any) => {
                 ProviderId: data.ProviderId,
                 MarketedId: data.MarketedId,
 
+                UserRegTypeId: data.UserRegTypeId,
                 UserLevelSeq: data.UserLevelSeq,
                 UserCompList: data.UserCompList[0],
             };
-        
+            console.log(userLoginData);
             // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: data.UserPassword, compCode: params.companyCode }));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
@@ -199,7 +200,7 @@ const Login = ({ modalMode }: any) => {
             </View> */}
             <View className="relative gap-4 flex-row items-center justify-center mb-4 flex-1 pt-14 pb-12">
                 <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
-                <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} style={{ width: 160, height: 150 }} />
+                <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} resizeMode="contain" style={{ width: 160, height: 150 }} />
                 {/* <Image className='' source={require('../assets/images/logo.png')} style={{ width: 160, height: 150 }} /> */}
                 {/* <View>
                     <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2 pt-3">{comp.name}</Text>
@@ -245,28 +246,40 @@ export default Login;
 
 
 
-export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, modalMode=false }: any) => {
+export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, closeEdit, modalMode=false }: any) => {
 
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
     const isLoggedIn = useSelector((state: RootState) => state.isLoggedIn);
     const user = useSelector((state: RootState) => state.user);
+    const vType = useSelector((state: RootState) => state.company.vType);
     const router = useRouter();
     const [dobDate, setDobDate] = useState(false);
     const [otp, setOTP] = useState({isOpen: false, recievedValue: 'null', enteredValue: '', sent: false, verified: false, read_only: false});    
     const [personalFields, setPersonalFields] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [regData, setRegData] = useState({ ...initReg, DOB: '', DOBstr: '', UserType: 'PATIENT', BusinessType: 'B2C', UserLevelSeq: 60 });
+    const [regData, setRegData] = useState({ ...initReg, DOB: '', DOBstr: '', BusinessType: 'B2C' });
+    const isOPD = vType === 'ErpHospital';
+    const regType = useSelector((state: RootState) => state.modals.LOGIN.data?.mode) || {};
+    const userRegTypeId = useSelector((state: RootState) => state.appData.userRegType.CodeId);
+    
+    const regTypes = { 60: 'Customer', 57: 'SP', 58: 'AP', REFERRER: 'MP', 55: 'MarketBy' }; 
+    useRegType(regTypes[regType?.level]);  
 
     useEffect(() => {
         if (!isLoggedIn) {                                                            
-            setRegData(pre => ({...pre, EncCompanyId: compCode, UserRegTypeId: 43198 }));          
+            setRegData(pre => ({...pre, 
+                EncCompanyId: compCode, 
+                UserRegTypeId: isOPD ? userRegTypeId : 43198, 
+                UserLevelSeq: isOPD ? regType?.level : 60,
+                UserType: isOPD ? regType?.title : 'CUSTOMER', 
+            }));          
         } else {
             setRegData((pre => ({             
                 ...pre,
                 Name: user.Name,
                 RegMob1: user.RegMob1,
-                UserId: 0,
+                UserId: user.UserId,
                 UserType: user.UserType,
                 PartyCode: user.PartyCode,
                 EncCompanyId: user.EncCompanyId,
@@ -291,7 +304,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
         
                 DOB: new Date(user.DOB).toLocaleDateString('en-TT'),
                 DOBstr: new Date(user.DOB).toLocaleDateString('en-TT'),
-                AnniversaryDate: new Date(user.AnniversaryDate).toLocaleDateString('en-TT'),
+                AnniversaryDate: new Date(user.AnniversaryDate).toLocaleDateString('en-TT'),        
                 AnniversaryDatestr: new Date(user.AnniversaryDate).toLocaleDateString('en-TT'),
                 Aadhaar: user.Aadhaar,
                 IsDOBCalculated: user.IsDOBCalculated,
@@ -309,7 +322,8 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                 LicenceNo: user.LicenceNo,
                 ContactPerson: user.ContactPerson,
                 BusinessType: user.BusinessType,
-                UserRegTypeId: 43198
+                UserRegTypeId: user.UserRegTypeId,
+                UserLevelSeq: user.UserLevelSeq
             })))
             setOTP({isOpen: false, recievedValue: 'null', enteredValue: '', sent: false, verified: true, read_only: false})
             setPersonalFields(true);
@@ -317,6 +331,8 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     }, [isLoggedIn, user]);
 
     const makeRegisterationRequest = async (params: any) => {
+        console.log(params);
+        
         try {
             setLoading(true);
             const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);
@@ -340,6 +356,10 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
             if (regData.Pin.length < 4) return alert('Please enter a valid Pin Code.');
             if (regData.DOBstr.length < 4) return alert('Please enter your Date of Birth.');
             if (regData.Address.length < 4) return alert('Please enter your valid address.');
+            if (regData.UserRegTypeId.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 003');
+            if (regData.UserRegTypeId.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 003');
+            if (!regData.UserLevelSeq) return alert('Error Occured. Please restart the app and try again. Err - 004');
+            if (regData.UserType.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 005');
             let status = await makeRegisterationRequest({ ...regData });
             if (status) {
                 let loginStatus = await refreshUserInfo(regData);
@@ -347,6 +367,8 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                     dispatch(setLogin(true));
                     if (modalMode) {
                         dispatch(setModal({ name: 'LOGIN', state: false }))
+                    } else if (isModal) {
+                        closeEdit()
                     } else {
                         router.back();
                     }
@@ -358,13 +380,16 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     const refreshUserInfo = async (params: any) => {
         try {
             setLoading(true);
-            const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.RegMob1}&UP=${encodeURIComponent(params.UserPassword)}&CID=${compCode}`);
-            setLoading(false);
-            if (res.data.Remarks === 'INACTIVE') {
+            const body = { UserName: params.RegMob1, UserPassword: params.UserPassword, EncCompanyId: compCode };
+            const res = await axios.post(`${BASE_URL}/api/UserAuth/CheckCompLogin`, body);
+            setLoading(false)
+            const data = res.data[0];
+            
+            if (data.Remarks === 'INACTIVE') {
                 alert('THIS USER ID IS INACTIVE')
                 return false;
-            } else if (res.data.UserId) {
-                dispatch(setUser(res.data));
+            } else if (data.UserId) {
+                dispatch(setUser(data));
                 // localStorage.setItem("userLoginData", encrypt({ phone: params.RegMob1, password: params.UserPassword, compCode: compCode }));
                 return true;
             } else {

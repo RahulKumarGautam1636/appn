@@ -53,6 +53,7 @@ export default ({ config }) => {
     }
   }
 
+  const testBuild = false;
   const flavor = flavorConfig["takehome"];
   const account = accounts["rk"];
 
@@ -108,7 +109,7 @@ export default ({ config }) => {
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
-      package: flavor.package,
+      package: testBuild ? 'com.testBuild.' + flavor.package.split('.')[2] : flavor.package,
     },
   }
 };

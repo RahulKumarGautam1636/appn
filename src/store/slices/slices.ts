@@ -2,7 +2,7 @@ import Constants from "expo-constants";
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestStatusHandlers } from './statusHandler';
 import axios from 'axios';
-import { BASE_URL, BC_ROY, defaultId, dummyUser, rent, TAKEHOME_AGRO } from '@/src/constants';
+import { BASE_URL, BC_ROY, defaultId, dummyUser, initLocation, rent, TAKEHOME_AGRO } from '@/src/constants';
 import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/components/utils';
 export const { compId, baseUrl, srcUrl } = Constants.expoConfig.extra || {};
 
@@ -12,7 +12,9 @@ const compCodeSlice = createSlice({
   initialState: compId ? compId : defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {
-      state = action.payload;
+      console.log(action.payload);
+      
+      return action.payload;
     },
   },
 });
@@ -286,7 +288,7 @@ const cartSlice = createSlice({
       const id = action.payload;
       delete state[id]
     },
-    dumpCart: (state, action: any) => {
+    dumpCart: (action: any) => {
       return {}
     }
   }
@@ -300,16 +302,16 @@ let LID = 0;
 const getUserLocation = () => {
   if (LID) return { LocationId: LID };
   return { 
-    // LocationId: 0,
+    ...initLocation
 
-    required: true, 
-    LocationId: 1293, // 1293, // 1559, // 1298, // 1293, 
-    LocationName: 'Healthbuddy Kalyani Pharmacy', 
-    Address: 'B-07/08(S), B-7, Ward No-10, Ground Floor Central Park, Kalyani-Nadia 741235', 
-    StateDesc: 'West Bengal', 
-    StateCode: '19', 
-    PIN: '741235', 
-    Area: 'Kalyani' 
+    // required: true, 
+    // LocationId: 1293, // 1293, // 1559, // 1298, // 1293, 
+    // LocationName: 'Healthbuddy Kalyani Pharmacy', 
+    // Address: 'B-07/08(S), B-7, Ward No-10, Ground Floor Central Park, Kalyani-Nadia 741235', 
+    // StateDesc: 'West Bengal', 
+    // StateCode: '19', 
+    // PIN: '741235', 
+    // Area: 'Kalyani' 
   };
 }
 
@@ -346,7 +348,7 @@ const appDataSlice = createSlice({
       return state;
     },
     setUserRegType: (state, action: any) => {
-      state.userRegType = { ...state.userRegType, ...action.payload };
+      state.userRegType = action.payload;
       return state;
     },    
   }

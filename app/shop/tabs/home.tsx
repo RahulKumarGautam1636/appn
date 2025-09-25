@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions, Platform, FlatList } from 'react-native';
 import { Feather, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import { Link, router } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import colors from 'tailwindcss/colors';
 import { Pressable } from 'react-native-gesture-handler';
+import { TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
 
 const web = Platform.OS === 'web';
 
@@ -19,6 +20,11 @@ const ShoppingAppScreen = () => {
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
   const dispatch = useDispatch();
   const company = useSelector((state: RootState) => state.company.info);
+
+  useEffect(() => {
+    if (location.LocationId) return;
+    dispatch(setModal({ name: 'LOCATIONS', state: true }))
+  }, [location.LocationId])
 
   return (
     <ScrollView className="flex-1 bg-purple-50">   
@@ -40,7 +46,7 @@ const ShoppingAppScreen = () => {
               </View>
           </View> :
           <View className="gap-3 flex-row items-center mb-5">
-              <Image className='' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} style={{ width: 40, height: 40 }} />
+              <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} resizeMode='contain' style={{ width: 40, height: 40 }} />
               <View className='mr-auto'>
                   {/* <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
                   <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text> */}
@@ -58,21 +64,16 @@ const ShoppingAppScreen = () => {
         <Pressable onPress={() => router.push('/shop/search')}>
           <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center mb-2 pointer-events-none">
             <Feather name="search" size={20} color="#9CA3AF" />
-            <TextInput 
-              placeholder="Search..." 
-              readOnly
-              className="flex-1 ml-3 text-gray-700"
-              placeholderTextColor="#9CA3AF"
-            />
+            <TextInput placeholder="Search..." readOnly className="flex-1 ml-3 text-gray-700" placeholderTextColor="#9CA3AF" />
             <Feather name="sliders" size={20} color="#9CA3AF" />
           </View>
         </Pressable>
         <View className='flex-row justify-between items-center gap-12'>  
           {/*mb-3*/}
-          <Text className='text-[12px] text-gray-600 font-medium'>Service provider : </Text>
+          <Text className='text-[12px] text-gray-600 font-medium mr-3'>Service provider : </Text>
           <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOCATIONS', state: true }))} className='flex-row justify-end gap-2 items-center flex-1'>
             <FontAwesome6 name="location-pin" size={12} color={colors.purple[600]} />
-            <Text className="text-gray-700 text-[12px]" numberOfLines={1}>{location.LocationName}</Text>
+            <Text className="text-gray-700 text-[12px]" numberOfLines={1}>{location.LocationId ? location.LocationName : 'Please select a service provider.'}</Text>
             <Ionicons name="caret-down" size={20} color={colors.orange[500]} />
           </TouchableOpacity>
         </View>
@@ -160,11 +161,11 @@ const ShoppingAppScreen = () => {
 
 export default ShoppingAppScreen;
 
-const CategoryButton = ({ title, isSelected, onPress }: any) => (
-  <TouchableOpacity onPress={onPress} className={`px-4 py-[0.7rem] rounded-2xl border transition-colors ${ isSelected ? 'bg-blue-500 border-blue-600 ' : 'bg-white border-gray-200' }`}>
-    <Text className={`text-[0.95rem] font-medium ${isSelected ? 'text-white' : 'text-gray-700'}`}>{title}</Text>
-  </TouchableOpacity>
-);
+// const CategoryButton = ({ title, isSelected, onPress }: any) => (
+//   <TouchableOpacity onPress={onPress} className={`px-4 py-[0.7rem] rounded-2xl border transition-colors ${ isSelected ? 'bg-blue-500 border-blue-600 ' : 'bg-white border-gray-200' }`}>
+//     <Text className={`text-[0.95rem] font-medium ${isSelected ? 'text-white' : 'text-gray-700'}`}>{title}</Text>
+//   </TouchableOpacity>
+// );
 
 const CategoriesSlider = memo(({ categoriesData }: any) => {
   if (categoriesData.loading) {
@@ -180,7 +181,14 @@ const CategoriesSlider = memo(({ categoriesData }: any) => {
   }
 })
 
+const urlSource = {
+  [TAKEHOME_PHARMA]: 'pharma',
+  [TAKEHOME_AGRO]: 'agro',
+  [TAKEHOME_SURGICAL]: 'snj'
+}
+
 const BrandsSlider = memo(({ productsData }: any) => {
+  const compCode = useSelector((i: RootState) => i.compCode);
   if (productsData.loading) {
       return <GridLoader classes='h-[100px] w-[100px] !rounded-full' containerClass='flex-row gap-3 mx-5 mb-3' />;
   } else if (productsData.error) {
@@ -188,7 +196,7 @@ const BrandsSlider = memo(({ productsData }: any) => {
   } else {
     return (
       <ScrollView contentContainerClassName="flex-row gap-3 px-5 " horizontal showsHorizontalScrollIndicator={false}>
-        {productsData.ItemBrandList.map((brand, index) => (
+        {productsData.ItemBrandList?.slice(0, 50).map((brand, index) => (
           // <CategoryButton key={index} title={brand.Text} isSelected={false} onPress={() => {}}/>
           <Link href={`/shop/filters/?head=${escape(brand.Text).swap}&brands=${brand.Text}`} key={index} >
             <View className="items-center justify-center">
@@ -196,7 +204,7 @@ const BrandsSlider = memo(({ productsData }: any) => {
               <Image 
                 className='' 
                 resizeMode='contain' 
-                source={{uri: `https://pharma.takehome.live/assets/img/ePharma/brands-logo/${brand.Text.trim()}.png`}} 
+                source={{uri: `https://${urlSource[compCode]}.takehome.live/assets/img/ePharma/brands-logo/${brand.Text.trim()}.png`}} 
                 style={{ width: 75, height: 75 }} 
               />
             </View>
