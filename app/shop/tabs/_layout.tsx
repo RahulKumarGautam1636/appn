@@ -69,9 +69,7 @@ export default function TabsLayout() {
           <View style={styles.tabBar} className='border-y border-slate-200'>
             <TouchableOpacity onPress={() => router.push('/')} style={styles.tabItem} className={`flex-1 py-[10px]`} >
               <Ionicons name='arrow-back' size={20} color='#6e6e6e' />
-                <Text style={[styles.tabText]}>
-                  Back
-                </Text>
+                <Text style={[styles.tabText]}>Back</Text>
             </TouchableOpacity>
             {tabs.map((tab, index) => {
               const isFocused = state.routes[state.index]?.name === tab.key;

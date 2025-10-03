@@ -9,6 +9,7 @@ export const TAKEHOME_PHARMA = 'yFObpUjTIGhK9%2B4bFmadRg==';
 export const TAKEHOME_AGRO = '5KR8RKKh%2BtHG4iszAzAjJQ==';
 export const TAKEHOME_GARMENTS = 't0ZL5KiikMgM1YeyB68a1w==';
 export const TAKEHOME_ELECTRONICS = 'QqFodfpxRStiGjTKTYE/hA==';
+export const TAKEHOME_SURGICAL = 'aS8HN5gcPcKUC8hc/JCvBA==';
 export const BC_ROY = 'ji4C/%2BQbn%2BBofLeoFG9clw=='
 export const rent = false;
 export const blur = false;
@@ -33,6 +34,17 @@ export const permissions = {
 export const hasAccess = (module: string, role: string) => {
   return permissions[module]?.includes(role);
 };
+
+export const initLocation = {
+  required: true, 
+  LocationId: 0,
+  LocationName: '', 
+  Address: '', 
+  StateDesc: '', 
+  StateCode: 0, 
+  PIN: '', 
+  Area: ''
+}
 
 export const initReg = {  
   Name: '',        

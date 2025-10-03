@@ -170,11 +170,11 @@ const OrderStatus = () => {
               </View>
               <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
                   <Text className="text-slate-600 font-bold text-[13px] mr-auto">Service Location :</Text>
-                  <Text className="text-[13px] text-slate-700">{order.LocationName}</Text>
+                  <Text className="text-[13px] text-slate-700 flex-1 text-right">{order.LocationName}</Text>
               </View>
               <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
                   <Text className="text-slate-600 font-bold text-[13px] mr-auto">Delivery Address :</Text>
-                  <Text className="text-[13px] text-slate-700">{order.PartyAddress}</Text>
+                  <Text className="text-[13px] text-slate-700 flex-1 text-right">{order.PartyAddress}</Text>
               </View>
               <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
                   <Text className="text-slate-600 font-bold text-[13px] mr-auto">Billing Status :</Text>

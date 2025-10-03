@@ -37,7 +37,7 @@ const Orders = () => {
   }, [tabActive])                                                               // Adding tabActive as dependency will call getMyOrders whenever tabActive is changed with current tab name.
 
   useEffect(() => {
-      if (!isLoggedIn) return router.push('/');
+      if (!isLoggedIn) return;
       getMyOrders(user.PartyCode, locationId);
   }, [compCode, getMyOrders, isLoggedIn, user.PartyCode, locationId])
 

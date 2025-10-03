@@ -1,9 +1,9 @@
 import axios, { GenericAbortSignal } from "axios";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Animated, StyleSheet, TouchableWithoutFeedback, Dimensions, Image, Text, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
-import { addToCart, dumpCart, removeFromCart, setPrescription } from "../store/slices/slices";
+import { addToCart, dumpCart, removeFromCart, setModal, setUserRegType } from "../store/slices/slices";
 import store, { RootState } from "../store/store";
 import { Link, useRouter } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -15,6 +15,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { FileText } from "lucide-react-native";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
+import { BASE_URL, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from "../constants";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal?: GenericAbortSignal) => {
   
@@ -71,6 +72,42 @@ export const GridLoader = ({ classes='h-[120px] flex-1', count=6, containerClass
       ])
     ).start();
   }, []);
+
+  if (Platform.OS === 'web') {
+    return (
+      <div className={`flex justify-between overflow-hidden ${containerClass}`}>
+        <style>{`
+          .skeleton-box {
+            display: inline-block;
+            /* height: 1em; */
+            position: relative;
+            overflow: hidden;
+            background-color: #cbd5e1;
+          }
+
+          .skeleton-box::after {
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              transform: translateX(-100%);
+              background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0));
+              -webkit-animation: shimmer 3s infinite;
+              animation: shimmer 3s infinite;
+              content: "";
+          }
+
+          @keyframes shimmer {
+            100% {
+              transform: translateX(100%);
+            }
+          }
+        `}</style>
+        {Array.from(Array(count).keys()).map(i => (<div className={`${classes} skeleton-box`} key={i}></div>))}
+      </div>
+    )
+  }
 
   return (
     <View className={`flex justify-between overflow-hidden ${containerClass}`}>
@@ -336,13 +373,13 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
     return computeWithPackSize(data, activePackSize, vType);
   }
 
-  const packSizeList = data.ItemPackSizeList?.map(i => (
-    <TouchableOpacity onPress={() => handlePackSize(i)} key={i.CodeId} className={`px-3 py-[0.4rem] shadow-sm rounded-xl mt-2 ${i.CodeId === packSize().PackSizeId ? 'bg-blue-50' : 'bg-slate-100'}`} >
+  const packSizeList = data.ItemPackSizeList?.map((i: any) => (
+    <TouchableOpacity onPress={() => handlePackSize(i)} key={i.CodeId} className={`px-3 py-[0.4rem] shadow-sm rounded-xl mt-1 mr-1 ${i.CodeId === packSize().PackSizeId ? 'bg-blue-50' : 'bg-slate-100'}`} >
       <Text className={`text-[0.8rem] ${i.CodeId === packSize().PackSizeId ? 'text-blue-600' : 'text-gray-700'}`}>{i.Description}</Text>
     </TouchableOpacity>
   ));
 
-  const handleAdd = (e) => {
+  const handleAdd = (e: any) => {
     e.stopPropagation();
     add2Cart(isAdded, data, packSize, dispatch);
   }
@@ -355,26 +392,29 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
     return (
       <TouchableOpacity onPress={() => router.push(`/shop/product/${data.ItemId}`)} style={{width: width }}>
         <View className={`items-start bg-white p-4 border border-gray-100 w-full`}>
-          <View className='items-center justify-center w-full p-4 rounded-xl bg-gray-100 border border-gray-100'>
+          <View className='items-center justify-center w-full p-2 rounded-xl border border-gray-100'>
             <Image className='' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
           </View>
-          <View className='flex-1 items-start mt-3'>
+          <View className='flex-1 items-start mt-3 w-full'>
             <Text className="text-[1rem] font-semibold text-gray-900 mb-2">{data.Description.slice(0, 20)}</Text>
             <View className='flex-row gap-4'>
               <Text className="text-[0.92rem] font-semibold text-sky-600">₹ {packSize().SRate}</Text>
               <Text className="text-[0.75rem] mt-[2px] font-medium text-rose-500 mb-2 line-through">₹ {packSize().ItemMRP}</Text>
             </View>
             {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-            {packSize().StockQty ? 
-            <Text className="text-[0.85rem] font-semibold text-green-700 mb-1">In Stock</Text>
-            :
-            <Text className="text-[0.85rem] font-semibold text-orange-500 mb-1">Out of Stock</Text>}
-            <View className='justify-between flex-row items-center w-full'>
-              {packSizeList}
-              <TouchableOpacity onPress={handleAdd}>
-                <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
+
+            <View className="flex-row w-full">
+              <View className="flex-1">
+                {packSize().StockQty ? <Text className="text-[0.85rem] font-semibold text-green-700 mb-1">In Stock</Text> : <Text className="text-[0.85rem] font-semibold text-orange-500 mb-1">Out of Stock</Text>}
+                <View className='flex-row items-center flex-wrap mt-1'>
+                  {packSizeList}
+                </View>
+              </View>
+              <TouchableOpacity onPress={handleAdd} className='mt-auto ml-auto'>
+                <Ionicons name={`cart${isAdded ? '' : '-outline'}`} size={22} color='#0ea5e9' />
               </TouchableOpacity>
             </View>
+
             {data.Category === 24856 ? <Text className="text-[0.75rem] font-semibold text-rose-700 mt-2">FOR SALE OVER COUNTER ONLY</Text> : null}
           </View>
         </View>
@@ -419,8 +459,8 @@ export const CatCard = ({ data, classes, styles }: any) => {
     // <Link href={`/shop/filters/?brands=Abbott India Limited,Alcon Laboratories(India) Pvt. Ltd.&catVal=23485,23501&head=Pharmacy&hideOutStock=Y&page=1&query=tab&sortBy=NameASC&subCatVal=`}>
     <Link href={`/shop/filters/?head=${escape(data.ParentDesc).swap}&catVal=${data.Parent}&page=1`} className={classes} style={styles}>
       <View className={`items-center bg-white rounded-xl shadow-sm border-b border-gray-200 overflow-hidden w-full h-full`}>
-        <Image className='' source={{uri: data.ImageURL}} style={{ width: 135, height: 100 }} />
-        <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 py-2">{data.ParentDesc}</Text>
+        <Image className='' source={{uri: data.ImageURL}} style={{ width: 135, height: 100 }} resizeMode="contain" />
+        <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 p-2">{data.ParentDesc}</Text>
       </View>
     </Link>
   )
@@ -589,7 +629,7 @@ export const AddToCartBtn = ({ type, product, useAuth, qty, addCart, buyNow, cla
       )
   } else if (type === 'type_1') {
     return (
-      <ButtonPrimary title={isAdded ? 'REMOVE FROM CART' : 'ADD TO CART'} onPress={addCart} isLoading={false} active={true} classes={`flex-1 bg-purple-500 border-r border-gray-200 !rounded-none ${isValid ? '' : 'opacity-50 pointer-events-none'}`} />
+      <ButtonPrimary title={isAdded ? 'REMOVE' : 'ADD TO CART'} onPress={addCart} isLoading={false} active={true} classes={`flex-1 bg-purple-500 border-r border-gray-200 !rounded-none ${isValid ? '' : 'opacity-50 pointer-events-none'}`} />
     )
   }
 
@@ -796,4 +836,54 @@ export const PreviewImage = ({ url }: any) => {
       <Image source={{ uri: url }} className="h-full w-full rounded-xl" resizeMode="contain" />
     </View>
   )
+}
+
+export const userLevel = { MARKETBY: 55, SALESPOINT: 56, DOCTOR: 57, PROVIDER: 58, PATIENT: 60, CUSTOMER: 60 }; 
+export const uType = { 
+  MARKETBY: { title: 'MARKETBY', level: 55}, 
+  SALESPOINT: { title: 'SALESPOINT', level: 56},
+  DOCTOR: { title: 'DOCTOR', level: 57}, 
+  PROVIDER: { title: 'PROVIDER', level: 58}, 
+  COLLECTOR: { title: 'COLLECTOR', level: 59},
+  POLYCLINIC: { title: 'POLYCLINIC', level: 465464}, 
+  
+  PATIENT: { title: 'PATIENT', level: 60}, 
+  RETAILER: { title: 'RETAILER', level: 60},
+  CUSTOMER: { title: 'CUSTOMER', level: 60},
+};
+
+
+export const useRegType = (type: string) => {
+  let { info: compInfo, vType } = store.getState().company;
+  if (vType !== 'ErpHospital') return;
+  const regTypes = useFetch(`${BASE_URL}/api/Values/GetMstAllMaster?CID=${compInfo.CompanyId}&type=RegistrationType&P1=0`, compInfo.CompanyId)[0];
+  useEffect(() => {
+    if (!regTypes.length) return;
+    let regType = regTypes.find(i => i.CodeValue === type);
+    if (!regType) {
+      alert('Something went wrong. Please try later. Invalid RegType.');
+      // store.dispatch(modalAction('LOGIN_MODAL', false, {mode: uType.PATIENT}));
+      store.dispatch(setModal({name: 'LOGIN', state: false}));
+      return;
+    }
+    // store.dispatch(globalDataAction({ userRegType: { CodeId: regType.CodeId, Description: regType.Description, CodeValue: regType.CodeValue }}));
+    store.dispatch(setUserRegType({ CodeId: regType.CodeId, Description: regType.Description, CodeValue: regType.CodeValue }));
+  },[regTypes, type])
+  return null;
+}
+
+export const minDate = "0001-01-01T00:00:00";
+
+export const getFallbackImg = () => {
+  const compCode = store.getState().compCode;
+  const companies = {
+    [TAKEHOME_PHARMA]: 'https://pharma.takehome.live/assets/img/fallback/takeHome-no-image.png',
+    [TAKEHOME_ELECTRONICS]: 'https://pharma.takehome.live/assets/img/fallback/takeHome-no-image.png',
+    [TAKEHOME_AGRO]: 'https://pharma.takehome.live/assets/img/fallback/takeHome-no-image.png',
+    [TAKEHOME_SURGICAL]: 'https://pharma.takehome.live/assets/img/fallback/takeHome-no-image.png',
+    [TAKEHOME_GARMENTS]: 'https://pharma.takehome.live/assets/img/fallback/takeHome-no-image.png',
+    ['KHLqDFK8CUUxe1p1EotU3g==']: 'https://demo.gbooksindia.in/assets/img/fallback/no-image.png'
+  }
+
+  return companies[compCode];
 }

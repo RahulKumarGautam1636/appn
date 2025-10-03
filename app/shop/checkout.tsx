@@ -290,56 +290,58 @@ const Checkout = () => {
           </View>
         </View>
       </View>
-      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Patient Details</Text>
-      <View className='bg-white rounded-2xl p-5 shadow-md shadow-gray-400'>
-          <View className='flex-row items-center'>
-              <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
-              <View>
-                  <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
-                  <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder}</Text>
-              </View>
-              <Pressable onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} className="ms-auto">
-                  <FontAwesome name="pencil" size={24} color="#2563eb"/>
-              </Pressable>
-          </View>
-          <View className='py-3 px-4 bg-gray-100 mt-4 rounded-xl flex gap-3 flex-row'>
-              <MaterialIcons name="av-timer" size={17} color="#000" />
-              <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{selectedMember.Age} Years</Text>
-              <Ionicons name="male-female" size={17} color="#000" />
-              <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{selectedMember.GenderDesc}</Text>
-          </View>
-          <Text className="text-sm py-3 text-gray-500">
-          <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
-          <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
-      </View>
-      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Prescription</Text>
-      {prescription.file.name ? 
-      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-white rounded-2xl border-b border-gray-200 p-5 flex-row items-center justify-between">
-        <View className="flex-row items-center flex-1 gap-4">
-          {prescription.file.fileType === 'image' ? <Image source={{ uri: prescription.file.uri }} className="w-14 h-14 rounded-xl border border-gray-100" resizeMode="cover" /> : null}
-          <View className="flex-1">
-            <Text className="font-semibold text-indigo-500 mb-2">{prescription.file.name}</Text>
-            <Text className="text-sm text-gray-500">{prescription.file.fileType}</Text>
-          </View>
+      {prescription.required ? <>
+        <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Patient Details</Text>
+        <View className='bg-white rounded-2xl p-5 shadow-md shadow-gray-400'>
+            <View className='flex-row items-center'>
+                <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                <View>
+                    <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
+                    <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder}</Text>
+                </View>
+                <Pressable onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} className="ms-auto">
+                    <FontAwesome name="pencil" size={24} color="#2563eb"/>
+                </Pressable>
+            </View>
+            <View className='py-3 px-4 bg-gray-100 mt-4 rounded-xl flex gap-3 flex-row'>
+                <MaterialIcons name="av-timer" size={17} color="#000" />
+                <Text className="font-Poppins text-gray-500 text-[13px] me-auto leading-5">{selectedMember.Age} Years</Text>
+                <Ionicons name="male-female" size={17} color="#000" />
+                <Text className="font-Poppins text-gray-500 text-[13px] leading-5">{selectedMember.GenderDesc}</Text>
+            </View>
+            <Text className="text-sm py-3 text-gray-500">
+            <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
+            <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
         </View>
-        <TouchableOpacity>
-          <Feather name="chevron-right" size={23} color="gray" />
-        </TouchableOpacity>
-      </TouchableOpacity> :
-      <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-indigo-500 rounded-2xl p-5 flex-row items-center justify-between">
-        <View className="flex-row items-center flex-1">
-          <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
-            <Feather name="plus" size={28} color="#ffffff" />
+        <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Prescription</Text>
+        {prescription.file.name ? 
+        <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-white rounded-2xl border-b border-gray-200 p-5 flex-row items-center justify-between">
+          <View className="flex-row items-center flex-1 gap-4">
+            {prescription.file.fileType === 'image' ? <Image source={{ uri: prescription.file.uri }} className="w-14 h-14 rounded-xl border border-gray-100" resizeMode="cover" /> : null}
+            <View className="flex-1">
+              <Text className="font-semibold text-indigo-500 mb-2">{prescription.file.name}</Text>
+              <Text className="text-sm text-gray-500">{prescription.file.fileType}</Text>
+            </View>
           </View>
-          <View className="flex-1">
-            <Text className="font-semibold text-white mb-2">Please Attach your prescription.</Text>
-            <Text className="text-sm text-gray-100">In order to place your order.</Text>
+          <TouchableOpacity>
+            <Feather name="chevron-right" size={23} color="gray" />
+          </TouchableOpacity>
+        </TouchableOpacity> :
+        <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-indigo-500 rounded-2xl p-5 flex-row items-center justify-between">
+          <View className="flex-row items-center flex-1">
+            <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
+              <Feather name="plus" size={28} color="#ffffff" />
+            </View>
+            <View className="flex-1">
+              <Text className="font-semibold text-white mb-2">Please Attach your prescription.</Text>
+              <Text className="text-sm text-gray-100">In order to place your order.</Text>
+            </View>
           </View>
-        </View>
-        <TouchableOpacity>
-          <Feather name="chevron-right" size={23} color="white" />
-        </TouchableOpacity>
-      </TouchableOpacity>}
+          <TouchableOpacity>
+            <Feather name="chevron-right" size={23} color="white" />
+          </TouchableOpacity>
+        </TouchableOpacity>}
+      </> : null}
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Address Details</Text>
       <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
           <View className='justify-between flex-row px-1 py-[0.9rem] items-start gap-4'>
@@ -414,7 +416,7 @@ const Checkout = () => {
           {!prescription.file.name && <Text className='text-rose-500 text-sm mb-3'>Please Attach your prescription to place an order.</Text>}
         </> : ''}
         {isDeliverable ? null : <Pressable onPress={() => setLocationModalActive(true)}><Text className='text-blue-600 text-sm mb-3 font-medium'>Now we have no service at your PIN code. Click to know more.</Text></Pressable>}
-        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(isLoggedIn && isDeliverable && prescription.file.name) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
+        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${((isLoggedIn && isDeliverable && prescription.file.name) || !prescription.required) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
         {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
 
         <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />

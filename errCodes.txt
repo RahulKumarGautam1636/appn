@@ -1,2 +1,6 @@
 001 - The selected company Id and the current selected doctor's company id doesn't match. --/app/doctor/[id].tsx
 002 - No location id detected.
+003 - No UserRegTypeId recieved.
+004 - No UserLevelSeq recieved.
+005 - No UserType recieved.
+006 - Invalid user PartyCode. Can not get your last Order.

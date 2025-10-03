@@ -77,7 +77,7 @@ const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
         <>
             <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={
                 <ScrollView>
-                    <Registeration isModal={true} />
+                    <Registeration isModal={true} closeEdit={() => {}}/>
                 </ScrollView>
             } />
              <ScrollView contentContainerClassName='bg-white min-h-full p-4'>
@@ -108,12 +108,7 @@ const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
                         <Text className="text-gray-700 mb-2">
                         Pincode / Zip <Text className="text-red-500">*</Text>
                         </Text>
-                        <TextInput
-                        className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 bg-white"
-                        placeholder="Enter pincode"
-                        value="741235"
-                        keyboardType="numeric"
-                        />
+                        <TextInput className="border border-gray-300 rounded-lg px-4 py-3 text-gray-900 bg-white" placeholder="Enter pincode" value={user.Pin} keyboardType="numeric" />
                     </View>
 
                     <View className="mb-6">

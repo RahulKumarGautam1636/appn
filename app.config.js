@@ -32,7 +32,7 @@ export default ({ config }) => {
       compId: "yFObpUjTIGhK9%2B4bFmadRg==",
       icon: "./assets/images/takehome/splash_n_appIcon.png",
       splash: "./assets/images/takehome/logo.png",
-      version: "1.0.2",
+      version: "1.0.4",
       baseUrl: "https://myapps.gsterpsoft.com",
       srcUrl: "https://erp.gsterpsoft.com",
     },
@@ -53,8 +53,9 @@ export default ({ config }) => {
     }
   }
 
+  const testBuild = false;
   const flavor = flavorConfig["takehome"];
-  const account = accounts["rk"];
+  const account = accounts["vit"];
 
   return {
     ...config,
@@ -108,7 +109,7 @@ export default ({ config }) => {
         backgroundColor: "#ffffff",
       },
       edgeToEdgeEnabled: true,
-      package: flavor.package,
+      package: testBuild ? 'com.testBuild.' + flavor.package.split('.')[2] : flavor.package,
     },
   }
 };

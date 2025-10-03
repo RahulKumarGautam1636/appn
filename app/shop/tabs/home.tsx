@@ -1,13 +1,14 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions, Platform, FlatList } from 'react-native';
-import { Feather, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { CatCard, escape, GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
+import { CatCard, escape, getFallbackImg, getFrom, GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
 import { Link, router } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import colors from 'tailwindcss/colors';
 import { Pressable } from 'react-native-gesture-handler';
+import { BASE_URL, TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
 
 const web = Platform.OS === 'web';
 
@@ -19,6 +20,15 @@ const ShoppingAppScreen = () => {
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
   const dispatch = useDispatch();
   const company = useSelector((state: RootState) => state.company.info);
+
+  useEffect(() => {
+    if (location.LocationId) return;
+    setTimeout(() => {
+      dispatch(setModal({ name: 'LOCATIONS', state: true }))
+    }, 1000);
+  }, [location.LocationId])
+
+  const [showLastOrder, setShowLastOrder] = useState(true);
 
   return (
     <ScrollView className="flex-1 bg-purple-50">   
@@ -40,7 +50,7 @@ const ShoppingAppScreen = () => {
               </View>
           </View> :
           <View className="gap-3 flex-row items-center mb-5">
-              <Image className='' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} style={{ width: 40, height: 40 }} />
+              <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} resizeMode='contain' style={{ width: 40, height: 40 }} />
               <View className='mr-auto'>
                   {/* <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
                   <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text> */}
@@ -58,21 +68,16 @@ const ShoppingAppScreen = () => {
         <Pressable onPress={() => router.push('/shop/search')}>
           <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center mb-2 pointer-events-none">
             <Feather name="search" size={20} color="#9CA3AF" />
-            <TextInput 
-              placeholder="Search..." 
-              readOnly
-              className="flex-1 ml-3 text-gray-700"
-              placeholderTextColor="#9CA3AF"
-            />
+            <TextInput placeholder="Search..." readOnly className="flex-1 ml-3 text-gray-700" placeholderTextColor="#9CA3AF" />
             <Feather name="sliders" size={20} color="#9CA3AF" />
           </View>
         </Pressable>
         <View className='flex-row justify-between items-center gap-12'>  
           {/*mb-3*/}
-          <Text className='text-[12px] text-gray-600 font-medium'>Service provider : </Text>
+          <Text className='text-[12px] text-gray-600 font-medium mr-3'>Service provider : </Text>
           <TouchableOpacity onPress={() => dispatch(setModal({ name: 'LOCATIONS', state: true }))} className='flex-row justify-end gap-2 items-center flex-1'>
             <FontAwesome6 name="location-pin" size={12} color={colors.purple[600]} />
-            <Text className="text-gray-700 text-[12px]" numberOfLines={1}>{location.LocationName}</Text>
+            <Text className="text-gray-700 text-[12px]" numberOfLines={1}>{location.LocationId ? location.LocationName : 'Please select a service provider.'}</Text>
             <Ionicons name="caret-down" size={20} color={colors.orange[500]} />
           </TouchableOpacity>
         </View>
@@ -107,7 +112,10 @@ const ShoppingAppScreen = () => {
           
         </View> */}
       </View>
-      <View className='py-5'>
+      {isLoggedIn && showLastOrder ? <View className='px-5 mt-3 mb-[-0.5rem]'>
+        <LastOrder locationId={location.LocationId} handleShow={setShowLastOrder} isLoggedIn={isLoggedIn} userPartyCode={user.PartyCode} />
+      </View> : null}
+      <View className='pt-5 pb-5'>
         <View className="flex-row justify-between items-center mb-4 px-5">
           <Text className="text-lg font-bold text-gray-800">Featured Categories</Text>
           <Link href={'/shop/tabs/categories'}>
@@ -160,11 +168,11 @@ const ShoppingAppScreen = () => {
 
 export default ShoppingAppScreen;
 
-const CategoryButton = ({ title, isSelected, onPress }: any) => (
-  <TouchableOpacity onPress={onPress} className={`px-4 py-[0.7rem] rounded-2xl border transition-colors ${ isSelected ? 'bg-blue-500 border-blue-600 ' : 'bg-white border-gray-200' }`}>
-    <Text className={`text-[0.95rem] font-medium ${isSelected ? 'text-white' : 'text-gray-700'}`}>{title}</Text>
-  </TouchableOpacity>
-);
+// const CategoryButton = ({ title, isSelected, onPress }: any) => (
+//   <TouchableOpacity onPress={onPress} className={`px-4 py-[0.7rem] rounded-2xl border transition-colors ${ isSelected ? 'bg-blue-500 border-blue-600 ' : 'bg-white border-gray-200' }`}>
+//     <Text className={`text-[0.95rem] font-medium ${isSelected ? 'text-white' : 'text-gray-700'}`}>{title}</Text>
+//   </TouchableOpacity>
+// );
 
 const CategoriesSlider = memo(({ categoriesData }: any) => {
   if (categoriesData.loading) {
@@ -180,25 +188,28 @@ const CategoriesSlider = memo(({ categoriesData }: any) => {
   }
 })
 
+const urlSource = {
+  [TAKEHOME_PHARMA]: 'pharma',
+  [TAKEHOME_AGRO]: 'agro',
+  [TAKEHOME_SURGICAL]: 'snj'
+}
+
 const BrandsSlider = memo(({ productsData }: any) => {
+  const compCode = useSelector((i: RootState) => i.compCode);
   if (productsData.loading) {
       return <GridLoader classes='h-[100px] w-[100px] !rounded-full' containerClass='flex-row gap-3 mx-5 mb-3' />;
   } else if (productsData.error) {
-      return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{categoriesData.error}</Text>;
+      return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{productsData.error}</Text>;
   } else {
     return (
       <ScrollView contentContainerClassName="flex-row gap-3 px-5 " horizontal showsHorizontalScrollIndicator={false}>
-        {productsData.ItemBrandList.map((brand, index) => (
+        {productsData.ItemBrandList?.slice(0, 50).map((brand, index) => (
           // <CategoryButton key={index} title={brand.Text} isSelected={false} onPress={() => {}}/>
           <Link href={`/shop/filters/?head=${escape(brand.Text).swap}&brands=${brand.Text}`} key={index} >
             <View className="items-center justify-center">
             <View className="bg-white rounded-full items-center justify-center mb-3 border-b-2 border-gray-200 p-4">
-              <Image 
-                className='' 
-                resizeMode='contain' 
-                source={{uri: `https://pharma.takehome.live/assets/img/ePharma/brands-logo/${brand.Text.trim()}.png`}} 
-                style={{ width: 75, height: 75 }} 
-              />
+              <MyImage srcLink={`https://${urlSource[compCode]}.takehome.live/assets/img/ePharma/brands-logo/${brand.Text.trim()}.png`} resizeMode='contain' style={{ width: 75, height: 75 }} />
+              {/* <Image className='' resizeMode='contain' source={{uri: `https://${urlSource[compCode]}.takehome.live/assets/img/ePharma/brands-logo/${brand.Text.trim()}.png`}} style={{ width: 75, height: 75 }} /> */}
             </View>
             <Text className="text-sm text-gray-600 text-center">{brand.Text.slice(0, 18)}</Text>
             </View>
@@ -208,6 +219,13 @@ const BrandsSlider = memo(({ productsData }: any) => {
     )
   }
 })
+
+const MyImage = (props: any) => {
+  const [error, setError] = useState(false);
+  return (
+    <Image { ...props } onError={() => setError(true)} source={error ? {uri: getFallbackImg()} : {uri: props?.srcLink}} />
+  )
+}
 
 const ProductSection = memo(({ mainCategories, productsData }: any) => {
   const deviceWidth = web ? document.documentElement.clientWidth : windowWidth;
@@ -219,7 +237,9 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
     if (data.loading) {
       return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-5' />;
     } else if (data.error) {
-      return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{data.error}</Text>;
+      return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold">{data.error}</Text>;
+    } else if (!productCategoryItems.length) {
+      return;
     } else {
       return (
         <View>
@@ -265,4 +285,73 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
         scrollEnabled={false}
     />
   )
+})
+
+
+
+const LastOrder = memo(({ locationId, userPartyCode, isLoggedIn, handleShow }: any) => {
+  
+    const [myOrderData, setMyOrderData] = useState({ loading: false, data: { OrderList: [] }, err: { status: false, msg: '' } });
+    const compCode = useSelector((i: RootState) => i.compCode);  
+  
+    const getMyOrders = useCallback(async (partyCode: string, locationId: string) => {
+        if (!partyCode) return alert('An Error Occured. Error Code 006');
+        const res = await getFrom(`${BASE_URL}/api/Pharma/GetOrderList?CID=${compCode}&PID=${partyCode}&Type=${'active'}&LOCID=${locationId}`, {}, setMyOrderData);
+        if (res) {
+            setMyOrderData(res);
+        } else {
+            console.log('No data received');
+        }
+    }, [])                                                           
+  
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        getMyOrders(userPartyCode, locationId);
+    }, [compCode, getMyOrders, isLoggedIn, userPartyCode, locationId])
+  
+    const renderTabs = (data: any) => {
+        if (data.loading) {
+            return null; 
+        } else if (data.err.status) {
+            return null; 
+        } else if (data.data.OrderList.length === 0) {
+            return null;
+        } else {
+            return data.data.OrderList.slice(0,1).map(order => {
+                return (
+                  <TouchableOpacity onPress={() => router.push(`/shop/orderDetails/${order.BillId}?pane=${'active'}`)} className='w-full'>
+                    <View className='flex justify-between items-center flex-row'>
+                      <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-2">Your Last Order</Text>
+                      <Pressable onPress={() => handleShow(false)}>
+                        <Text className="text-purple-600 font-medium">Close</Text>
+                      </Pressable>
+                    </View>
+                    <View className='bg-blue-500 rounded-3xl p-5 my-3'>
+                      <View className='flex-row'>
+                        <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                        <View className='flex-1'>
+                            <Text className="font-PoppinsBold text-white text-[14px]" numberOfLines={1}>{order.CashPartyName}</Text>
+                            <Text className="font-Poppins text-gray-200 text-[11px] items-center"><FontAwesome6 name="phone-volume" size={12} color="white" />  {order.CashPartyMobile}</Text>
+                        </View>
+                        <View className="bg-blue-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
+                            <FontAwesome name="arrow-right" size={20} color='#fff' />
+                        </View>
+                      </View>
+                      <View className='p-4 bg-blue-400 mt-4 rounded-2xl flex gap-3 flex-row'>
+                        <FontAwesome5 name="rupee-sign" size={15} color="#fff" />
+                        <Text className="font-Poppins text-gray-100 text-[13px] leading-5 me-auto">{parseFloat(order.Amount).toFixed(2)}</Text>
+                        <FontAwesome5 name="calendar-alt" size={15} color="#fff" />
+                        <Text className="font-Poppins text-gray-100 text-[13px] leading-5">{new Date(order.VchDate).toLocaleDateString('en-TT')}</Text>
+                      </View>
+                      <View className='flex-row gap-2 mt-3'>
+                        <Text className="font-semibold text-gray-200 text-[11px] whitespace-nowrap">Address : </Text>
+                        <Text className="font-Poppins text-gray-200 text-[11px] flex-wrap flex-1">{order.PartyAddress}</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                )
+            })
+        }
+    }
+    return renderTabs(myOrderData);
 })

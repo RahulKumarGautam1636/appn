@@ -36,6 +36,13 @@
         "buildType": "app-bundle"
       },
       "channel": "bcroy"
+    },    
+    "takehome-test": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "takehome-test"
     },
     "takehome": {
       "autoIncrement": true,

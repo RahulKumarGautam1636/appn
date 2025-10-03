@@ -95,7 +95,7 @@ const FilterPage = () => {
       // if (siteData.isLoading) return;
       let categories = insertStatus(siteCategories.LinkCategoryList, 'Parent', catVal);
       let subCategories = insertStatus([...new Map(siteCategories.LinkSubCategoryList.map(item => [item['CategoryId'], item])).values()], 'CategoryId', subCatVal);
-      let brandsList = insertStatus(siteProducts.ItemBrandList, 'Value', brands);
+      let brandsList = insertStatus(siteProducts.ItemBrandList, 'Text', brands);
       const selectedSortBy = sortByOptions.find(i => i.value === sortBy);
       setSortBySelected(selectedSortBy);
       setFilters({ categories: categories, subCategories: subCategories, brands: brandsList, seartTerm: query, outOfStock: hideOutStock });
@@ -125,7 +125,7 @@ const FilterPage = () => {
     const handleFilters = (sortBy: string, viewPage) => {
       let selectedCategories = getSelectedItems('categories', 'Parent');
       let selectedSubCategories = getSelectedItems('subCategories', 'CategoryId');
-      let selectedBrands = getSelectedItems('brands', 'Value');
+      let selectedBrands = getSelectedItems('brands', 'Text');
       router.replace({
         pathname: '/shop/filters',
         params: { brands: selectedBrands, catVal: selectedCategories, head: 'Filtered Products', ['hideOutStock']: hideOutOfStock === true ? 'Y' : 'N', query: filters.seartTerm, page: viewPage, sortBy: sortBy, subCatVal: selectedSubCategories }
@@ -254,7 +254,7 @@ const FilterPage = () => {
             <View className="flex-row flex-wrap gap-2 mb-4">
               {renderSelectedItemButtons('categories', 'Parent', 'ParentDesc')}
               {renderSelectedItemButtons('subCategories', 'CategoryId', 'CategoryDesc')}
-              {renderSelectedItemButtons('brands', 'Value', 'Text')} 
+              {renderSelectedItemButtons('brands', 'Text', 'Text')} 
             </View>
             {/* {selectedCategories.length > 0 && ( */}
               <TouchableOpacity onPress={() => clearAll()} className="self-start">
@@ -279,7 +279,7 @@ const FilterPage = () => {
           </View>
           {renderCategory('categories', 'Parent', 'ParentDesc', 'CATEGORIES')}
           {renderCategory('subCategories', 'CategoryId', 'CategoryDesc', 'SUB CATEGORIES')}
-          {renderCategory('brands', 'Value', 'Text', 'BRANDS')}
+          {renderCategory('brands', 'Text', 'Text', 'BRANDS')}
         </View>
         <View className="p-5 mt-4 border-t border-gray-200">
           <ButtonPrimary title={'Apply Filters'} onClick={handleFilterForm} active={true} classes='flex-1 !rounded-2xl !h-[50px] !bg-gray-700' />

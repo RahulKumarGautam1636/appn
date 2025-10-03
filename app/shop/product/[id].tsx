@@ -21,7 +21,8 @@ const ProductPage = () => {
   const { id } = useLocalSearchParams();
   const compCode = useSelector((state: RootState) => state.compCode);
   const cart = useSelector((i: RootState) => i.cart);
-  const { vType } = useSelector((i: RootState) => i.company);
+  const vType = useSelector((i: RootState) => i.company.vType);
+  const isMedicine = vType === 'ErpPharma';
   const dispatch = useDispatch();
   const product = productData.data.ItemMaster;
   const router = useRouter()
@@ -134,30 +135,33 @@ const ProductPage = () => {
               {/* <Text className="text-[1rem] font-semibold text-green-600 ml-auto">{locationId && !packSize().StockQty ? '' : 'In Stock'}</Text> */}
             </View>
             <View className="flex-row gap-5 items-center border-y border-gray-200 py-5 mb-5">
-              <Text className="text-lg font-semibold text-gray-900 mb-3">Pack Size :</Text>
-              <View className="flex-row gap-5">
-                {product?.ItemPackSizeList?.map((pack) => (
-                  <TouchableOpacity key={pack.CodeId} onPress={() => handlePackSize(pack)} className={`rounded-2xl flex-row items-center justify-center px-4 py-3 ${ pack.CodeId === packSize().PackSizeId ? 'border border-purple-300 bg-purple-50' : 'bg-gray-50 border border-gray-200' }`}>
-                    <View className="">
-                      <Text className='text-[0.9rem] mb-1 font-semibold'>{pack.Description}</Text>
-                      <View className='flex-row gap-2 items-end'>
-                        <Text className='text-[0.9rem]'>₹ {pack.SRate ? pack.SRate : product?.SRate}</Text>
-                        {/* <Text className='line-through text-rose-500 text-sm'>240</Text> */}
+              {isMedicine ? <>
+                <Text className="text-lg font-semibold text-gray-900 mb-3">Pack Size :</Text>
+                <View className="flex-row gap-5 mr-auto">
+                  {product?.ItemPackSizeList?.map((pack) => (
+                    <TouchableOpacity key={pack.CodeId} onPress={() => handlePackSize(pack)} className={`rounded-2xl flex-row items-center justify-center px-4 py-3 ${ pack.CodeId === packSize().PackSizeId ? 'border border-purple-300 bg-purple-50' : 'bg-gray-50 border border-gray-200' }`}>
+                      <View className="">
+                        <Text className='text-[0.9rem] mb-1 font-semibold'>{pack.Description}</Text>
+                        <View className='flex-row gap-2 items-end'>
+                          <Text className='text-[0.9rem]'>₹ {pack.SRate ? pack.SRate : product?.SRate}</Text>
+                          {/* <Text className='line-through text-rose-500 text-sm'>240</Text> */}
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </> : null}
               {locationId && !packSize().StockQty ?
-                <View className='flex-row ml-auto items-center gap-[0.4rem]'>
+                <View className='flex-row items-center gap-[0.4rem]'>
                   <FontAwesome name="close" size={18}  color={colors.rose[600]} />
                   <Text className="text-[1rem] font-semibold text-rose-600 ml-auto">Out of Stock</Text> 
                 </View> :
-                <View className='items-center flex-row gap-[0.4rem] ml-auto'>
+                <View className='items-center flex-row gap-[0.4rem]'>
                   <FontAwesome name="check" size={18}  color={colors.green[600]} />
                   <Text className="text-[1rem] font-semibold text-green-600">In Stock</Text>
                 </View>
               }
+
             </View>
             <View className={`mb-6 ${product?.Technicalname?.length > 30 ? 'gap-2' : 'flex-row items-center gap-4'}`}>
               <Text className="text-lg font-semibold text-gray-900">Description</Text>
@@ -298,7 +302,7 @@ const ProductPage = () => {
           </View>
         </View></>}
       </ScrollView>
-      <View className="flex-row items-center gap-6 justify-between bg-white py-4 px-6 border-y border-gray-100">
+      <View className="flex-row items-center gap-4 justify-between bg-white py-4 px-6 border-y border-gray-100">
         <TouchableOpacity onPress={() => setCount(pre => pre > 1 ? pre - 1 : 1)} className="w-12 h-12 rounded-full bg-gray-100 border border-gray-200 items-center justify-center">
           <Feather name="minus" size={20} color="#6B7280" />
         </TouchableOpacity>

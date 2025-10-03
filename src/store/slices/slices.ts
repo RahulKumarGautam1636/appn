@@ -2,7 +2,7 @@ import Constants from "expo-constants";
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestStatusHandlers } from './statusHandler';
 import axios from 'axios';
-import { BASE_URL, BC_ROY, defaultId, dummyUser, rent, TAKEHOME_AGRO } from '@/src/constants';
+import { BASE_URL, BC_ROY, defaultId, dummyUser, initLocation, rent, TAKEHOME_AGRO, TAKEHOME_PHARMA } from '@/src/constants';
 import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/components/utils';
 export const { compId, baseUrl, srcUrl } = Constants.expoConfig.extra || {};
 
@@ -12,7 +12,9 @@ const compCodeSlice = createSlice({
   initialState: compId ? compId : defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {
-      state = action.payload;
+      console.log(action.payload);
+      
+      return action.payload;
     },
   },
 });
@@ -112,6 +114,8 @@ export const getCompanyDetails = createAsyncThunk(
           } else {  
             vertical = res.data.VerticleType      
           }
+
+          if (res.data.EncCompanyId === TAKEHOME_PHARMA || res.data.EncCompanyId === 'KHLqDFK8CUUxe1p1EotU3g==') dispatch(setPrescription({ required: true }));
           return { info: res.data, vType: vertical };
         } 
         vertical = res.data.VerticleType          
@@ -286,7 +290,7 @@ const cartSlice = createSlice({
       const id = action.payload;
       delete state[id]
     },
-    dumpCart: (state, action: any) => {
+    dumpCart: (action: any) => {
       return {}
     }
   }
@@ -300,16 +304,16 @@ let LID = 0;
 const getUserLocation = () => {
   if (LID) return { LocationId: LID };
   return { 
-    // LocationId: 0,
+    ...initLocation
 
-    required: true, 
-    LocationId: 1293, // 1293, // 1559, // 1298, // 1293, 
-    LocationName: 'Healthbuddy Kalyani Pharmacy', 
-    Address: 'B-07/08(S), B-7, Ward No-10, Ground Floor Central Park, Kalyani-Nadia 741235', 
-    StateDesc: 'West Bengal', 
-    StateCode: '19', 
-    PIN: '741235', 
-    Area: 'Kalyani' 
+    // required: true, 
+    // LocationId: 1293, // 1293, // 1559, // 1298, // 1293, 
+    // LocationName: 'Healthbuddy Kalyani Pharmacy', 
+    // Address: 'B-07/08(S), B-7, Ward No-10, Ground Floor Central Park, Kalyani-Nadia 741235', 
+    // StateDesc: 'West Bengal', 
+    // StateCode: '19', 
+    // PIN: '741235', 
+    // Area: 'Kalyani' 
   };
 }
 
@@ -318,7 +322,7 @@ const appDataSlice = createSlice({
   initialState: { 
     focusArea: '0',
     location: getUserLocation(),
-    prescription: { required: true, patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } },
+    prescription: { required: false, patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } },
     restaurant: { table: {  } },
     businessType: { Description: '', CodeValue: '', CodeId: '' },
     userRegType:
@@ -346,7 +350,7 @@ const appDataSlice = createSlice({
       return state;
     },
     setUserRegType: (state, action: any) => {
-      state.userRegType = { ...state.userRegType, ...action.payload };
+      state.userRegType = action.payload;
       return state;
     },    
   }
@@ -355,43 +359,54 @@ const appDataSlice = createSlice({
 export const { setLocation, setPrescription, setRestaurant, setBusinessType, setUserRegType } = appDataSlice.actions;
 const appDataReducer = appDataSlice.reducer;
 
+let categoriesController: AbortController | null = null;
+
 export const getCategories = createAsyncThunk(
   'auth/getCategories',
-  async (params: any, { dispatch, rejectWithValue, getState }) => {
-    try {              
+  async (params: any, { rejectWithValue }) => {
+    try {     
       const getCategories = async () => {         
-        const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatSubCat?CID=${params.compCode}&LOCID=${params.locationId}`);
+        if (categoriesController) categoriesController.abort();       
+        categoriesController = new AbortController();         
+        const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatSubCat?CID=${params.compCode}&LOCID=${params.locationId}`, { signal: categoriesController.signal });
         if (res.status === 200) {
           const categories = getCategoryRequiredFieldsOnly(res.data.LinkCategoryList);
           return { loading: false, LinkCategoryList: categories, LinkSubCategoryList: res.data.LinkSubCategoryList }
         }
+        return rejectWithValue('Unexpected response');
       }
       const categories = await getCategories();
       return categories
     } catch (err: any) {
+      if (axios.isCancel(err)) return rejectWithValue('Request cancelled');
+      if (err.name === 'CanceledError') return rejectWithValue('Request cancelled');
       return rejectWithValue(err.message || 'Something went wrong');
     }
   }
 );
 
+let productsController: AbortController | null = null;
+
 export const getProducts = createAsyncThunk(
   'auth/getProducts',
-  async (params: any, { dispatch, rejectWithValue, getState }) => {
-    try {              
-      const getProducts = async () => {         
-        const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatItemsWithBrand?CID=${params.compCode}&LOCID=${params.locationId}`);
-        if (res.status === 200) {
-          const products = getRequiredFields(res.data.itemMasterCollection);
-          return { loading: false, itemMasterCollection: products, ItemBrandList: res.data.ItemBrandList }
-        }
+  async (params: any, { rejectWithValue }) => {
+    try {
+      if (productsController) productsController.abort();       // cancel previous request if still running
+      productsController = new AbortController();
+      const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatItemsWithBrand?CID=${params.compCode}&LOCID=${params.locationId}`, { signal: productsController.signal });
+      if (res.status === 200) {
+        const products = getRequiredFields(res.data.itemMasterCollection);
+        return { loading: false, itemMasterCollection: products, ItemBrandList: res.data.ItemBrandList }
       }
-      const products = await getProducts();
-      return products
+      return rejectWithValue('Unexpected response');
     } catch (err: any) {
+      if (axios.isCancel(err)) return rejectWithValue('Request cancelled');
+      if (err.name === 'CanceledError') return rejectWithValue('Request cancelled');
       return rejectWithValue(err.message || 'Something went wrong');
     }
   }
 );
+
 
 const siteDataSlice = createSlice({
   name: 'siteData',
@@ -406,6 +421,12 @@ const siteDataSlice = createSlice({
     setSiteProducts: (state, action: any) => {
       state = Object.assign(state, action.payload);
     },
+    resetSiteProducts: () => {
+      return { 
+        categories: {loading: true, error: '', LinkCategoryList: [], LinkSubCategoryList: []},
+        products: {loading: true, error: '', itemMasterCollection: [], ItemBrandList: []}
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -421,6 +442,7 @@ const siteDataSlice = createSlice({
         };
       })
       .addCase(getCategories.rejected, (state, action) => {
+        if (action.payload === 'Request cancelled') return;
         state.categories.loading = false;
         state.categories.error = action.payload || action.error.message;
       });
@@ -438,13 +460,14 @@ const siteDataSlice = createSlice({
         };
       })
       .addCase(getProducts.rejected, (state, action) => {
+        if (action.payload === 'Request cancelled') return;
         state.products.loading = false;
         state.products.error = action.payload || action.error.message;
       });
   },
 });
 
-export const { setSiteProducts } = siteDataSlice.actions;
+export const { setSiteProducts, resetSiteProducts } = siteDataSlice.actions;
 const siteDataReducer = siteDataSlice.reducer;
 
 
