@@ -63,6 +63,7 @@ const HomeScreen = () => {
 
     useEffect(() => {
         const getAppnData = async (query: string, userId: string, companyId: string) => {
+            if (!companyId) return;
             if (user.UserId > 1) {
               const res = await getFrom(`${BASE_URL}/api/Appointment/Get?id=${userId}&CID=${companyId}&Type=${query}&CatType=OPD&MemberId=${'0'}`, {}, setAppnData);
               if (res) {
@@ -94,7 +95,7 @@ const HomeScreen = () => {
                 <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: firstAppn}))}>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-2">Upcoming Schedule</Text>
                     <View className='bg-primary-500 rounded-3xl p-5 my-3'>
-                        <View className='flex-row'>
+                        <View className='flex-row items-start'>
                             <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View className='flex-1'>
                                 <Text className="font-PoppinsBold text-white text-[14px]" numberOfLines={1}>{firstAppn.AppointmentTo}</Text>

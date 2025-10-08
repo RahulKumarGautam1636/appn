@@ -255,7 +255,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
             </View>
             </GradientBG>
         </ScrollView>
-        <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview />} />
+        <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview id={data.BillId} type={'OPD'} />} />
         <MyModal modalActive={presc} onClose={() => setPresc(false)}  name='BILL' child={<Prescription id={data.PrescriptionId} />} />
         </>
     )

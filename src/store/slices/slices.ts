@@ -24,7 +24,7 @@ const compCodeReducer = compCodeSlice.reducer;
 
 const loginSlice = createSlice({
   name: 'login',
-  initialState: false,
+  initialState: true,
   reducers: {
     setLogin: (state, action: PayloadAction<boolean>) => {
       return action.payload;
@@ -38,7 +38,7 @@ const loginReducer = loginSlice.reducer;
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: {},
+  initialState: dummyUser,
   reducers: {
     setUser: (state, action: PayloadAction<object>) => {
       return action.payload;
@@ -260,6 +260,7 @@ const modalsSlice = createSlice({
     APPN_SUCCESS: { state: false, data: "" },
     COMPANIES: { state: false, data: '' },
     MEMBERS: { state: false, data: '' },
+    ADD_MEMBER: { state: false, data: '' },
     LOGIN: { state: false, data: '' },
     APPN_DETAIL: { state: false, data: '' },
     TEST_DETAIL: { state: false, data: '' },

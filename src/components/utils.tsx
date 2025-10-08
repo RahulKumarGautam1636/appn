@@ -1,6 +1,6 @@
 import axios, { GenericAbortSignal } from "axios";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity, Pressable } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
 import { addToCart, dumpCart, removeFromCart, setModal, setUserRegType } from "../store/slices/slices";
@@ -886,4 +886,50 @@ export const getFallbackImg = () => {
   }
 
   return companies[compCode];
+}
+
+
+export default function MyDropdown({ offsetY=0, offsetX=0, maxHeight=200, isOpen, setOpen, anchorRef, children, dropdownPosition, dropdownClassName='', stickTo='bottom', overlay=false }: any) {
+
+  const [position, setPosition] = useState({ top: 0, left: 0, width: 0, height: 0 });
+
+  const calculatePosition = () => {
+    anchorRef?.current?.measure((fx, fy, width, height, px, py) => {
+      setPosition({
+        top: py, 
+        left: px,
+        width: width,
+        height: height
+      });
+    });
+  };
+ 
+  React.useEffect(() => {                   // Recalculate position when dropdown opens
+    if (isOpen) calculatePosition();
+  }, [isOpen]);
+
+  const handleClose = () => {                  // Close dropdown when tapping outside (optional)
+    setTimeout(() => setOpen(false), 200);
+  };
+
+  let childPosition = stickTo === 'top' ? {top: position.top - maxHeight + offsetY} : {top: (position.top + position.height + offsetY)};
+  
+  dropdownPosition = { 
+    ...childPosition,
+    left: (position.left + offsetX), 
+    width: position.width, 
+    maxHeight: maxHeight, 
+    ...dropdownPosition 
+  }
+
+  return (
+    <>
+      <Pressable className={`absolute inset-0 z-[99990] ${overlay ? 'bg-gray-700/25' : ''}`} onPress={() => handleClose()}></Pressable>
+        {isOpen && (
+          <View className={`absolute bg-white rounded-2xl shadow-md border border-stone-200 z-[99999] ${dropdownClassName}`} style={dropdownPosition} >
+            {children({ closeDropdown: handleClose })}
+          </View>
+        )}
+    </>
+  );
 }

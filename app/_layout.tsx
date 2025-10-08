@@ -60,6 +60,7 @@ function LayoutContent() {
             <Stack.Screen name="appn/appnList" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="search" />
             <Stack.Screen name="members" options={{animation: 'slide_from_right'}} />
+            <Stack.Screen name="appn/addMember" options={{animation: 'slide_from_right'}} />
             <Stack.Screen name="appn/cart" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="appn/testDetail" />
             <Stack.Screen name="appn/testList" options={{animation: 'slide_from_right'}} />

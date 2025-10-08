@@ -11,6 +11,7 @@ import { DeptsModal } from "@/app/appn/depts";
 import TestDetail from "@/app/appn/testDetail";
 import PrescriptionForm from "@/app/shop/presc";
 import Locations from "@/app/shop/locations";
+import AddMember from "@/app/appn/addMember";
 
 
 const Modals = () => {
@@ -26,6 +27,7 @@ const Modals = () => {
             <MyModal modalActive={modals.DEPTS.state} name='DEPTS' child={<DeptsModal />} />
             <MyModal modalActive={modals.PRESC.state} name='PRESC' child={<PrescriptionForm />} />
             <MyModal modalActive={modals.LOCATIONS.state} name='LOCATIONS' child={<Locations />} />
+            <MyModal modalActive={modals.ADD_MEMBER.state} name='LOCATIONS' child={<AddMember isModal={true} />} />
         </>
     )
 }

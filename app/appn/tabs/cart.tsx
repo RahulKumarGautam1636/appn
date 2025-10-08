@@ -1,6 +1,6 @@
 import ButtonPrimary, { MyModal } from '@/src/components';
 import { BannerCarousel, NoContent, num } from '@/src/components/utils';
-import { addToCart, removeFromCart, setModal } from '@/src/store/slices/slices';
+import { addToCart, dumpCart, removeFromCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
@@ -10,7 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { myColors } from '@/src/constants';
 import { LabCartCard } from '@/src/components/cards';
 import Checkout from '@/app/appn/checkout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Heart from '../../../assets/icons/success.svg';
+import colors from 'tailwindcss/colors';
 
 const Cart = ({}: any) => {
     const lab = useSelector((i: RootState) => i.cart)
@@ -28,6 +30,13 @@ const Cart = ({}: any) => {
         if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
         if (!itemsLength) return alert('Please add some items to your cart before making order.')
         setCheckout(true)
+    }
+
+    const [success, setSuccess] = useState(false);
+    const viewOrders = () => {
+        setSuccess(false);
+        setCheckout(false);
+        router.push('/appn/testList');
     }
     
     return (
@@ -95,10 +104,80 @@ const Cart = ({}: any) => {
                     <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} onPress={handleCheckout} classes='m-4' />
                 </View>
             </ScrollView>
-            <MyModal modalActive={checkout} name='CHECKOUT' onClose={() => setCheckout(false)} child={<Checkout handleClose={setCheckout} />} />
+            <MyModal modalActive={checkout} name='CHECKOUT' onClose={() => setCheckout(false)} child={<Checkout handleClose={setCheckout} setSuccess={setSuccess} />} />
+            <MyModal modalActive={success} name='SUCCESS' onClose={() => setSuccess(false)} child={<BookingSuccess handleClose={viewOrders} />} />
         </>
     )
 }
 
-
 export default Cart;
+
+const BookingSuccess = ({ handleClose }: any) => {
+  const selectedMember = useSelector((i: RootState) => i.members.selectedMember)
+  const clinic = useSelector((i: RootState) => i.companies.selected)
+  const lab = useSelector((i: RootState) => i.cart)
+  const labTests = Object.values(lab);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(labTests);    
+    return () => dispatch(dumpCart());
+  }, [])
+  return (
+    <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
+      <View className=''>
+        {/* <View className='justify-between flex-row p-4 items-center'>
+            <View className='flex-row items-center gap-3'>
+              <Ionicons name="arrow-back-outline" size={24} color="black" />
+              <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Review & Pay</Text>
+            </View>
+            <View className="gap-3 flex-row items-center ml-auto">
+                <Feather name="heart" size={20} color='black' />
+                <Feather name="share-2" size={20} color='black' />
+            </View>
+        </View> */}
+        <View className="px-4 mb-1 items-center">
+          <Heart height={250} />
+          <Text className="font-PoppinsSemibold text-gray-800 text-[18px] text-center">Thanks, Your Booking has Confirmed.</Text>
+          <Text className="font-Poppins text-gray-600 text-[13px] text-center mt-2">Please check your Email for details.</Text>
+        </View>
+        <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
+          <View className='flex-row items-center'>
+              <Image className='shadow-md rounded-lg me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+              <View>
+                  <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
+                  <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder || 'Patient'},  {selectedMember.Age} years,  {selectedMember.GenderDesc}</Text>
+              </View>
+              <FontAwesome name="check" size={20} color='#16a34a' className="ms-auto" />
+          </View>
+          <View className="p-4 bg-gray-100 my-6 rounded-xl gap-6">
+
+            {labTests.map((i: any) => (
+                // <View key={i.LocationItemId} className='flex-row gap-2 w-full px-5 py-4 border-b border-gray-200 items-center'>
+                //     <Text className="font-PoppinsMedium text-gray-500 text-[13px] mr-auto leading-6 flex-1 pr-4">{i.Description}  X  {i.count}</Text>
+                //     <FontAwesome name="rupee" size={13} color="#2563eb" />
+                //     <Text className="font-PoppinsMedium text-slate-700 text-[13px] leading-5">{num(i.SRate * i.count)}</Text>
+                // </View>
+
+                <View key={i.LocationItemId} className='flex gap-3 flex-row'>
+                    <Ionicons name={'flask'} size={17} color={colors.orange[500]} />
+                    <Text className="font-Poppins text-gray-700 text-[13px] me-auto leading-5 flex-1" numberOfLines={1}>{i.Description}</Text>
+                    <Text className="font-Poppins text-gray-700 text-[13px] leading-5">{i.testDate}</Text>
+                </View>
+            ))}
+
+            
+          </View>
+          <View className='flex-row items-center mb-4 gap-4'>
+            <FontAwesome5 name="hospital" size={35} color={myColors.primary[500]} />
+            <View className="flex-1">
+                <Text className="font-PoppinsSemibold text-[14px]">{clinic.COMPNAME}</Text>
+                <Text className="font-Poppins text-gray-500 text-[11px]" numberOfLines={1}>{clinic.ADDRESS}</Text>
+            </View>
+          </View>
+          <ButtonPrimary title='View Appointments' onPress={handleClose} classes='!h-[46px] bg-white border border-gray-400 mt-2' textClasses='text-[14px]' />
+        </View>
+      </View>
+    </ScrollView>
+  )
+}

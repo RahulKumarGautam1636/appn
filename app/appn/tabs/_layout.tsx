@@ -16,7 +16,7 @@ export default function TabsLayout() {
 
   const tabs = [
     // { name: 'Home', icon: 'home', key: 'home' },
-    { name: 'Home', icon: 'home', key: 'opd', visible: true },
+    { name: 'OPD', icon: 'calendar', key: 'opd', visible: true },
     { name: 'Lab Test', icon: 'flask', key: 'lab', visible: hasAccess("labtest", compCode)},
     { name: 'Account', icon: 'person', key: 'profile', visible: true },
     { name: 'Cart', icon: 'cart', key: 'cart', visible: hasAccess("labtest", compCode)},

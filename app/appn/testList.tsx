@@ -79,23 +79,23 @@ const TestList = () => {
                     <Ionicons name="arrow-back-outline" size={24} color="black" />
                     <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Appointments</Text>
                 </Pressable>
-                <View className="gap-3 flex-row items-center ml-auto">
+                {/* <View className="gap-3 flex-row items-center ml-auto">
                     <Feather name="heart" size={20} color='black' />
                     <Feather name="share-2" size={20} color='black' />
-                </View>
+                </View> */}
             </View>
             <View className='px-4 pt-1'>
                 <View className='bg-white mb-4 rounded-2xl shadow-md shadow-gray-400'>
                     <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
                         <View className='flex-row items-center gap-3'>
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Total Tests</Text>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Total</Text>
                         </View>
-                        <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">{labData.data.PartyFollowupList.length} Items</Text>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">{labData.data.PartyFollowupList.length} Appointments</Text>
                     </View>
 
                     <View className='flex-row gap-3 p-4'>
-                        <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Booking Date</Text>
                         <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
+                        <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Next Appointment</Text>
                         <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">26/06/2025</Text>
                     </View>
                 </View> 

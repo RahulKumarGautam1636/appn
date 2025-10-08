@@ -45,15 +45,15 @@ const Profile = () => {
                     <View className='flex-row gap-4 p-[13px] items-center mb-2'>
                         <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('./../../../assets/images/user.png')} style={{ width: 80, height: 80 }} />
                         <View>
-                            <Text className="font-PoppinsSemibold text-slate-800 text-[15px] mb-2">{user.Name}</Text>
-                            <View className='flex-row gap-2'>
-                                <FontAwesome name="graduation-cap" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{user.Age} Year,   {user.GenderDesc}</Text>
+                            <Text className="font-PoppinsSemibold text-[#075985] text-[15px] mb-2">{user.Name}</Text>
+                            <View className='flex-row gap-2 mb-[6px]'>
+                                <FontAwesome5 name="clock" size={15} color="#075985" />
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{user.Age} Year,   {user.GenderDesc}</Text>
                             </View>
-                            {/* <View className='flex-row gap-2'>
-                                <FontAwesome5 name="stethoscope" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{user.Qualification}</Text>
-                            </View> */}
+                            <View className='flex-row gap-2'>
+                                <FontAwesome5 name="shield-alt" size={15} color="#075985" />
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{user.UserType}</Text>
+                            </View>
                         </View>
                     </View>
                     {hasAccess("labtest", compCode) ? <View className='flex-row justify-between border-y border-gray-300 border-solid'>

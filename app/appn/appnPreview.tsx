@@ -2,22 +2,22 @@ import { Feather, FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons, M
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { mmDDyyyyDate } from "../../src/components";
 import { setModal } from "@/src/store/slices/slices";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { myColors } from '@/src/constants';
 import { Link } from "expo-router";
 import { formatted, GradientBG } from "@/src/components/utils";
 import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
 import colors from "tailwindcss/colors";
+import { RootState } from "@/src/store/store";
 
-const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={}, clinic={}, member={}, bookAppn }: any) => {
+const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={}, clinic={}, member={}, remarks, setRemarks, loading }: any) => {
   
   const dispatch = useDispatch();
   const [day, month, year] = bookingData.AppointDate.split('/').map(Number);
   let parsedActiveDate = new Date(year, month - 1, day);
   let formattedDate = new Date(parsedActiveDate).toDateString();
-
-  const [remarks, setRemarks] = useState('');
+  const prescription = useSelector((i: RootState) => i.appData.prescription);
   
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -81,8 +81,31 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
               <Text className="text-primary-500 font-Poppins leading-6">Address : </Text>
               {member.Address}
             </Text>
-            <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
+            <View className="gap-4 flex-row mt-1">
+              {prescription.file.name ? null : <ButtonPrimary title='Add Prescription' onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} classes='!h-[43px] bg-orange-50 border-dashed border border-orange-300 flex-1' textClasses='text-sm' />}
+              <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-300 flex-1' textClasses='text-sm' />
+            </View>
           </View>
+          {prescription.file.name ? 
+          <View className="mx-4 mb-4 mt-1">
+            <View className='justify-between flex-row items-center mb-4'>
+                <View className='flex-row items-center gap-3'>
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Prescription</Text>
+                </View>
+            </View>
+            <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-white rounded-2xl border-b border-gray-200 p-5 flex-row items-center justify-between">
+              <View className="flex-row items-center flex-1 gap-4">
+                {prescription.file.fileType === 'image' ? <Image source={{ uri: prescription.file.uri }} className="w-14 h-14 rounded-xl border border-gray-100" resizeMode="cover" /> : null}
+                <View className="flex-1">
+                  <Text className="font-semibold text-indigo-500 mb-2">{prescription.file.name}</Text>
+                  <Text className="text-sm text-gray-500">{prescription.file.fileType}</Text>
+                </View>
+              </View>
+              <TouchableOpacity>
+                <Feather name="chevron-right" size={23} color="gray" />
+              </TouchableOpacity>
+            </TouchableOpacity>
+          </View> : null}
           <View className='justify-between flex-row px-4 pt-1 items-center'>
               <View className='flex-row items-center gap-3'>
                   <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment</Text>
@@ -186,7 +209,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                 <Text className="font-PoppinsSemibold text-gray-700 text-[14px] leading-5">₹ 210</Text>
             </View>
           </View>
-          <ButtonPrimary title='Confirm Booking' active={true} onPress={handleConfirmation} classes='mx-4 mb-4' />
+          <ButtonPrimary title='Confirm Booking' isLoading={loading} active={true} onPress={handleConfirmation} classes='mx-4 mb-4' />
         </View>
       </GradientBG>
     </ScrollView>

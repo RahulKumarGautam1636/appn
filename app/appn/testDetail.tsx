@@ -3,11 +3,15 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { myColors } from '@/src/constants';
+import { BASE_URL, myColors } from '@/src/constants';
 import { setModal } from '@/src/store/slices/slices';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { Link } from 'expo-router';
+import { getFrom, GridLoader, NoContent, num } from '@/src/components/utils';
+import ButtonPrimary, { MyModal } from '@/src/components';
+import { useEffect, useState } from 'react';
+import colors from 'tailwindcss/colors';
 
 
 const TestDetail = ({ data }: any) => {
@@ -20,8 +24,9 @@ const TestDetail = ({ data }: any) => {
 
     const dispatch = useDispatch();
     const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
-
+    const [showDetails, setShowDetails] = useState(false);
     return (
+        <>
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
             <View className='bg-white'>
                 <View className='justify-between flex-row p-4 items-center'>
@@ -198,7 +203,7 @@ const TestDetail = ({ data }: any) => {
                 <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
                 </TouchableOpacity>
-                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-blue-500`}>
+                <TouchableOpacity onPress={() => setShowDetails(true)} className={`items-center flex-1 py-3 rounded-lg bg-blue-500`}>
                     <Text className={`font-PoppinsMedium text-white`}>Details</Text>
                 </TouchableOpacity>
                 {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
@@ -209,7 +214,102 @@ const TestDetail = ({ data }: any) => {
                 </TouchableOpacity> : null}
             </View>
         </ScrollView>
+        <MyModal modalActive={showDetails} name='TEST_DETAILS' onClose={() => setShowDetails(false)} child={<TestItemDetails RefId={data.RefId} handleClose={setShowDetails} />} />
+        </>
     )
 }
 
 export default TestDetail;
+
+
+const TestItemDetails = ({ handleClose, RefId }: any) => {
+
+    const data = [
+        { Description: 'Included Tests One', Amount: 4545, BillQty: 3 },
+        { Description: 'Included Tests One', Amount: 2343, BillQty: 3 },
+        { Description: 'Included Tests One', Amount: 5454, BillQty: 3 },
+        { Description: 'Included Tests One', Amount: 2553, BillQty: 3 }
+    ]
+
+    const compCode = useSelector((i: RootState) => i.compCode);
+    const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+    const [tests, setTests] = useState({loading: true, data: {enqObj: []}, err: {status: false, msg: ''}});
+  
+    const getLabData = async (query: any, companyId: any, locId: any) => {
+        const res = await getFrom(`${BASE_URL}/api/Appointment/Get?EnqId=${query}&CID=${companyId}&LOCID=${locId}`, {}, setTests);
+        if (res) {
+            setTimeout(() => {
+              setTests(res);            
+            }, 400)
+        }
+    }
+
+    useEffect(() => {
+      getLabData(RefId, compCode, locationId);
+    },[RefId, compCode, locationId])
+
+    return (
+        <ScrollView contentContainerClassName='bg-slate-100 min-h-full p-4'>
+            <View className='justify-between flex-row pt-4 pb-6 items-center'>
+                <Pressable onPress={() => handleClose(false)} className='flex-row items-center gap-3'>
+                    <Ionicons name="arrow-back-outline" size={24} color="black" />
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Included Tests</Text>
+                </Pressable>
+            </View>
+            {(() => {
+                if (tests.loading) {
+                    return <GridLoader />
+                } else if (!tests.data.enqObj?.EnquiryDetailsList?.length) {
+                    return <NoContent imgClass='h-[200] mt-[8rem]' label='No Tests Found.' />
+                } else {
+                    return (
+                        <View className='gap-4 mb-4'>
+                            {tests.data.enqObj?.EnquiryDetailsList?.map((i: any, n: number) => <OrderItemCard key={n} data={i} />)}
+                        </View>
+                    )
+                }
+            })()}
+            <View className="flex-row mt-auto">
+                <ButtonPrimary title='CLOSE' onClick={() => handleClose(false)} active={true} classes='flex-1 !rounded-3xl !h-[50px] !bg-gray-700' />
+            </View>
+        </ScrollView>
+    )
+}
+
+
+export const OrderItemCard = ({ data }: any) => {
+  return (
+    <View key={data.LocationItemId} className="flex-row items-center bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200">
+      <View className="flex-1">
+          <View className='justify-between flex-row mb-3'>
+              <Text className="text-lg font-medium text-sky-600 flex-1">{data.ItemDesc}</Text>
+              <TouchableOpacity className="">
+                  <Ionicons name="trash-outline" size={20} color={colors.rose[500]} />
+              </TouchableOpacity>
+          </View>
+        
+        <View className="flex-row items-center mb-3">
+          {/* <ColorIndicator color={data.color} /> */}
+          <Text className="text-base text-gray-600 mr-3">Qty : {data.BillQty}</Text>
+          {/* {data.size && (
+            <> */}
+              <View className="w-1 h-1 bg-gray-400 rounded-full mr-3" />
+              <Text className="text-base text-gray-600">Date : {new Date(data.TranDate).toLocaleDateString('en-TT')}</Text>
+            {/* </>
+          )} */}
+        </View>
+        
+        <View className="flex-row items-center justify-between">
+            <Text className="text-lg font-semibold text-gray-600">₹ {(data.BillQty * data.Rate).toFixed(2)}</Text>
+            
+            <View className='flex-row items-center'>
+                <Text className="mx-2 text-base text-black">Status :</Text>
+                <View className={`flex-row items-center bg-gray-100 rounded-2xl py-1 px-2 ${data.Status === 'Y' ? 'bg-green-600' : 'bg-sky-500'}`}>
+                    <Text className={`mx-2 text-base font-medium text-white`}>{ data.Status === 'Y' ? 'Done' : 'Pending' }</Text>
+                </View>
+            </View>
+        </View>
+      </View>
+    </View>
+  )
+}

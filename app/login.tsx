@@ -27,7 +27,7 @@ const Login = ({ modalMode }: any) => {
     const company = useSelector((state: RootState) => state.company.info);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
-    const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });        // 9330241456 // 8583814626
+    const [loginData, setLoginData] = useState({ phone: '6000000076', password: '1234', EncCompanyId: compCode });        // 9330241456 // 8583814626
     
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
@@ -136,6 +136,7 @@ const Login = ({ modalMode }: any) => {
                 MemberId: data.MemberId,
                 PartyId: data.PartyId,
                 Salutation: data.Salutation,
+                UserFullName: data.UserFullName,
         
                 DOB: data.DOB,
                 DOBstr: data.DOB,

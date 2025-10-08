@@ -2,7 +2,7 @@ import { blur, hasAccess, myColors, SRC_URL } from "@/src/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
 import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler } from "react-native"
 import { Link, useRouter } from "expo-router";
-import { setAppnData, setCompanies, setDepts, setMembers, setModal } from "@/src/store/slices/slices";
+import { setAppnData, setCompanies, setDepts, setMembers, setModal, setPrescription } from "@/src/store/slices/slices";
 import { stripHtml } from "string-strip-html";
 
 import React, { useRef, useState } from 'react';
@@ -29,6 +29,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import AppnDetail from "@/app/appn/appnDetail";
 import { RootState } from "../store/store";
+import { uType } from "./utils";
+import colors from "tailwindcss/colors";
 
 
 export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
@@ -206,7 +208,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
   )
 }
 
-export const Card_2 = ({ data, index, active }: any) => {
+export const Card_2 = ({ data, active }: any) => {
 
   const dispatch = useDispatch()
   const router = useRouter();
@@ -214,6 +216,7 @@ export const Card_2 = ({ data, index, active }: any) => {
   const isModal = useSelector((i : RootState) => i.modals.MEMBERS.state);
   const vType = useSelector((i : RootState) => i.company.vType);
   const compCode = useSelector((i : RootState) => i.compCode);
+  const userLevel = useSelector((i : RootState) => i.user.UserLevelSeq);
   
   const handleTask = (path: string) => {
     dispatch(setMembers({ selectedMember: data }))
@@ -226,25 +229,26 @@ export const Card_2 = ({ data, index, active }: any) => {
     if (!isModal) return setDropdown(true);
     dispatch(setMembers({ selectedMember: data }))
     dispatch(setModal({ name: 'MEMBERS', state: false }))
+    dispatch(setPrescription({ patient: { docName: '', docAddress: '' }, file: { name: '', uri: '', type: '', fileType: '', extn: '' } }));
   }
 
   const Dropdown = () => {
     return (
-      <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+      <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400 py-2'>
           {(() => {
             if (vType === 'ErpHospital') {
               return (
                 <>
-                  <TouchableOpacity onPress={() => handleTask('')} className='flex-row gap-3 p-4 border-b border-gray-300' >
-                    <FontAwesome5 name="flask" size={17} color={myColors.primary[500]} />
+                  <TouchableOpacity onPress={() => handleTask('')} className='flex-row gap-4 py-4 pl-6 border-b border-gray-300' >
+                    <FontAwesome5 name="flask" size={17} color={colors.rose[500]} />
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleTask('appn/tabs/opd')} className='flex-row gap-3 p-4 border-b border-gray-300'>
-                    <FontAwesome6 name="calendar-alt" size={17} color={myColors.primary[500]} />
+                  <TouchableOpacity onPress={() => handleTask('appn/tabs/opd')} className='flex-row gap-4 py-4 pl-6 border-b border-gray-300'>
+                    <FontAwesome6 name="calendar-alt" size={17} color={colors.rose[500]} />
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Appointment</Text>
                   </TouchableOpacity>
-                  {hasAccess("labtest", compCode) ? <TouchableOpacity onPress={() => handleTask('appn/tabs/lab')} className='flex-row gap-3 p-4'>
-                    <Ionicons name="flask" size={17} color={myColors.primary[500]}/>
+                  {hasAccess("labtest", compCode) ? <TouchableOpacity onPress={() => handleTask('appn/tabs/lab')} className='flex-row gap-4 py-4 pl-6'>
+                    <Ionicons name="flask" size={17} color={colors.rose[500]}/>
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Book Lab Tests</Text>
                   </TouchableOpacity> : null}
                 </>
@@ -252,14 +256,18 @@ export const Card_2 = ({ data, index, active }: any) => {
             } else if (vType === 'ErpPharma') {
               return (
                 <>
-                  <TouchableOpacity onPress={() => handleTask('shop/tabs/home')} className='flex-row gap-3 p-4'>
-                    <FontAwesome5 name="pills" size={17} color={myColors.primary[500]}/>
+                  <TouchableOpacity onPress={() => handleTask('shop/tabs/home')} className='flex-row gap-4 py-4 pl-6'>
+                    <FontAwesome5 name="pills" size={17} color={colors.rose[500]}/>
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px]">Book Medicines</Text>
                   </TouchableOpacity>
                 </>
               )
             }
           })()}
+          <TouchableOpacity onPress={() => {dispatch(setModal({ name: 'ADD_MEMBER', state: true, data: {editId: data.MemberId}})); setDropdown(false)}} className='flex-row gap-4 py-4 pl-6 border-t border-gray-300' >
+            <FontAwesome5 name="pencil-alt" size={17} color={colors.rose[500]} />
+            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>Edit Member</Text>
+          </TouchableOpacity>
       </View>
     )
   }
@@ -270,7 +278,7 @@ export const Card_2 = ({ data, index, active }: any) => {
         <Image className='shadow-lg rounded-xl' source={require('../../assets/images/user.png')} style={{ width: 70, height: 70 }} />
         <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.MemberName}</Text>
-            <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{data.RelationShipWithHolder}</Text>
+            <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{userLevel === uType.MARKETBY.level ? 'PATIENT' : data.RelationShipWithHolder}</Text>
             <Text className="font-PoppinsMedium text-gray-800 text-[11px]">
                 &nbsp;<Text className='text-gray-500'>{data.Age} Years,   {data.GenderDesc}</Text>
             </Text>

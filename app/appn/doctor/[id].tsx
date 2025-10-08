@@ -34,6 +34,7 @@ const Booking = () => {
     const router = useRouter();
     const [activeCompany, setActiveCompany] = useState({});
     const [loading, setLoading] = useState(false);
+    const [remarks, setRemarks] = useState('');
 
     useEffect(() => {
         setSelectedDate(selectedAppnDate);
@@ -160,7 +161,7 @@ const Booking = () => {
                 ReferrerId: user.ReferrerId,   // refBy
                 ProviderId: user.ProviderId,   // provider
                 MarketedId: user.MarketedId,   // marketing,
-                Remarks: 'remarks',
+                Remarks: remarks,
             }
             console.log('user booking');
             makeBookingRequest(newbookingData);
@@ -197,7 +198,7 @@ const Booking = () => {
                     ReferrerId: selectedMember.ReferrerId,      
                     ProviderId: selectedMember.ProviderId,  
                     MarketedId: selectedMember.MarketedId,      
-                    Remarks: 'remarks',
+                    Remarks: remarks,
                 }
                 console.log('member booking');
                 makeBookingRequest(newbookingData);
@@ -210,10 +211,11 @@ const Booking = () => {
         }
     }
 
-    const makeBookingRequest = async (book: any) => {     
+    const makeBookingRequest = async (book: any) => { 
+        // console.log(book);
         if (!book.UserId) return alert('Something went wrong, try again later. No user Id received: F');
         setLoading(true);
-        const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);
+        const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);    // { status: 200 }
         setLoading(false);
         if (res.status === 200) {
             // try {const status = axios.post(`${process.env.REACT_APP_BASE_URL_}`, params)} catch (error) {}
@@ -395,7 +397,7 @@ const Booking = () => {
                         })()}
                     </View>
                 </View>
-                {compCode === BC_ROY ? null : <ButtonPrimary title='Book Appointment' isLoading={loading} active={true} onPress={handleBooking} classes={`m-4 ${compCode === BC_ROY ? 'pointer-events-none' : ''}`} />}
+                {compCode === BC_ROY ? null : <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-4 ${compCode === BC_ROY ? 'pointer-events-none' : ''}`} />}
             </ScrollView>
             <ReactNativeModal
                 isVisible={confirmation}
@@ -409,7 +411,7 @@ const Booking = () => {
                 style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
             >   
                 {/* <MyModal modalActive={confirmation} name='LOGIN' child={<AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />} /> */}
-                <AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />
+                <AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} remarks={remarks} setRemarks={setRemarks} loading={loading} />
             </ReactNativeModal>
 
             <ReactNativeModal

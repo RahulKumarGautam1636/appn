@@ -100,11 +100,6 @@ const PrescriptionForm = () => {
   }, [prescription.file.uri])
 
   useEffect(() => {
-    if (!prescription.required && !prescription.file.uri) return;
-    else setFile(prescription.file)
-  }, [prescription.file.uri])
-
-  useEffect(() => {
     if (prescription.patient.name) {
         setPatient(pre => ({ 
             ...pre,
@@ -175,10 +170,6 @@ const PrescriptionForm = () => {
 
   const handleClearAll = () => {
     setPatient(initMember)
-  };
-
-  const handleSelectAnotherPatient = () => {
-    Alert.alert('Select Patient', 'Patient selection functionality');
   };
 
   const removeFile = () => {
@@ -303,7 +294,7 @@ const PrescriptionForm = () => {
 
           <View className="flex-row justify-between mt-6 mb-2">
             <Button title="Clear All" color={colors.rose[500]} onPress={handleClearAll} />
-            <Button color={colors.slate[700]} title="Select Another Patient" onPress={handleSelectAnotherPatient} />
+            <Button color={colors.slate[700]} title="Select Another Patient" onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} />
           </View>
         </View>
 

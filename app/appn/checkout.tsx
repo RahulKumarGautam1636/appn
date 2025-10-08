@@ -1,8 +1,8 @@
 import ButtonPrimary, { getDateDifference } from '@/src/components';
-import { BannerCarousel, num } from '@/src/components/utils';
+import { BannerCarousel, num, wait } from '@/src/components/utils';
 import { addToCart, dumpCart, removeFromCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
-import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -10,8 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL, myColors } from '@/src/constants';
 import { useState } from 'react';
 import axios from 'axios';
+import colors from 'tailwindcss/colors';
 
-const Checkout = ({ handleClose }: any) => {
+const Checkout = ({ handleClose, setSuccess }: any) => {
     const { selected: selectedCompany } = useSelector((state: RootState) => state.companies);
     const { selectedMember } = useSelector((i: RootState) => i.members)
     const router = useRouter()
@@ -21,6 +22,8 @@ const Checkout = ({ handleClose }: any) => {
     const [bookingData, setBookingData] = useState({ AppointDate: '', AppTime: '', TimeSlotId: null }); 
     const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
     const user = useSelector((i: RootState) => i.user);
+    const [remarks, setRemarks] = useState('');
+    const [loading, setLoading] = useState(false)
                                                             
     const itemsLength = labTests.length;
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
@@ -86,7 +89,13 @@ const Checkout = ({ handleClose }: any) => {
               EnquiryDetailsList: orderList,
               EnqDate: testDate,
               EnqDateStr: testDate,
-              Doctor: {}                                
+              Doctor: {},
+              
+              UnderDoctId: user.UnderDoctId,  // sales
+              ReferrerId: user.ReferrerId,   // refBy
+              ProviderId: user.ProviderId,   // provider
+              MarketedId: user.MarketedId,   // marketing,
+              Remarks: remarks,
             }
             console.log('user labtest booking');
             makeBookingRequest(newbookingData);
@@ -122,7 +131,13 @@ const Checkout = ({ handleClose }: any) => {
               EnquiryDetailsList: orderList,
               EnqDate: testDate,
               EnqDateStr: testDate,
-              Doctor: {}                                
+              Doctor: {},
+              
+              UnderDoctId: selectedMember.UnderDoctId,                // sales
+              ReferrerId: selectedMember.ReferrerId,   // refBy
+              ProviderId: selectedMember.ProviderId,   // provider
+              MarketedId: selectedMember.MarketedId,   // marketing,
+              Remarks: remarks,
             }
             console.log('member labtest booking');
             makeBookingRequest(newbookingData);
@@ -133,23 +148,30 @@ const Checkout = ({ handleClose }: any) => {
         //   modalAction('LOGIN_MODAL', true, {mode: 'PATIENT'});
             router.push('/login');
         }
-      }     
+    }     
     
     const makeBookingRequest = async (params: any) => {
+        // return console.log(params);      
         if (!params.UserId) return alert('Something went wrong, try again later. No user Id received: F');
-        // loaderAction(true);
-        const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, params);
-        // loaderAction(false);
-        if (res.status === 200) {
-            // bookingToast(res.data, { position: "top-center", autoClose: 4000, closeButton: false, className: 'booking-reference-toast' });
-            // modalAction('LABTEST_BOOK_MODAL', false);          
-            dispatch(dumpCart());
-            handleBack();
-            router.push('/testList')
-        } else {
+        try {
+            setLoading(true);
+            await wait(2000);
+            const res = { status: 200 }//await axios.post(`${BASE_URL}/api/Appointment/Post`, params);   // 
+            setLoading(false);
+            if (res.status === 200) {       
+                // dispatch(dumpCart());
+                handleBack();
+                setSuccess(true);
+            } else {
+                alert('Something went wrong, try again later.');
+            }
+        } catch (error) {
+            setLoading(false);
             alert('Something went wrong, try again later.');
+            console.log(error);            
         }
-    }  
+       
+    } 
 
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -191,7 +213,7 @@ const Checkout = ({ handleClose }: any) => {
                             <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View>
                                 <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
-                                <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder}</Text>
+                                <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder || 'PATIENT'}</Text>
                             </View>
                             <Pressable onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} className="ms-auto">
                                 <FontAwesome name="refresh" size={24} color="#2563eb"/>
@@ -206,6 +228,23 @@ const Checkout = ({ handleClose }: any) => {
                         <Text className="text-sm py-3 text-gray-500">
                         <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
                         <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
+                    </View>
+                    <View className='bg-white rounded-3xl shadow-md shadow-gray-400 mb-4'>
+                        <View className='justify-between flex-row pt-4 px-4 items-center'>
+                            <View className='flex-row items-center gap-3'>
+                                <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Appointment Remarks</Text>
+                            </View>
+                            <View className="gap-3 flex-row items-center ml-auto">
+                                {/* <Feather name="chevron-down" size={24} color='#6b7280' /> */}
+                                <FontAwesome name="pencil" size={18} color="#6b7280" />
+                            </View>
+                        </View>                        
+                        <View className='flex-row gap-3 p-4'>
+                            <View className='w-full items-center flex-row rounded-2xl shadow-sm shadow-gray-500 bg-[#ebecef] pl-4'>
+                                <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={24} color={colors.blue[500]} className="pr-4" />
+                                <TextInput value={remarks} placeholderTextColor={colors.gray[400]} onChangeText={(text) => setRemarks(text)} placeholder='Remarks' multiline numberOfLines={4} textAlignVertical="top" className='text-gray-700 py-4 items-start px-5 flex-1 border-l border-gray-300 h-24' />
+                            </View>
+                        </View>
                     </View>
                     <View className='justify-between flex-row pt-1 items-center'>
                         <View className='flex-row items-center gap-3'>
@@ -248,7 +287,7 @@ const Checkout = ({ handleClose }: any) => {
                         <Text className="font-PoppinsSemibold text-slate-800 text-[14px] leading-5">{cartTotal}</Text>
                     </View>
                 </View>
-                <ButtonPrimary title='Confirm Booking' isLoading={false} active={true} onPress={handleBookingFormSubmit} classes='m-4' />
+                <ButtonPrimary title='Confirm Booking' isLoading={loading} active={true} onPress={handleBookingFormSubmit} classes='m-4' />
             </View>
         </ScrollView>
     )
@@ -256,3 +295,4 @@ const Checkout = ({ handleClose }: any) => {
 
 
 export default Checkout;
+
