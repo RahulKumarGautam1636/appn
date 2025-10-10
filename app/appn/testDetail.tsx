@@ -8,15 +8,18 @@ import { setModal } from '@/src/store/slices/slices';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { Link } from 'expo-router';
-import { getFrom, GridLoader, NoContent, num } from '@/src/components/utils';
+import { getFrom, GridLoader, NoContent, num, uType } from '@/src/components/utils';
 import ButtonPrimary, { MyModal } from '@/src/components';
 import { useEffect, useState } from 'react';
 import colors from 'tailwindcss/colors';
+import InvoicePreview from './bill';
+import LabReport from '@/src/sreens/labReport';
 
 
 const TestDetail = ({ data }: any) => {
 
     const members = useSelector((i: RootState) => i.members.membersList);
+    const userLevel = useSelector((i : RootState) => i.user.UserLevelSeq);
 
     const user = members.find(i => i.MemberName === data.PartyName);
 
@@ -25,6 +28,9 @@ const TestDetail = ({ data }: any) => {
     const dispatch = useDispatch();
     const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
     const [showDetails, setShowDetails] = useState(false);
+    const [bill, setBill] = useState(false);
+    const [report, setReport] = useState(false)
+
     return (
         <>
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -49,8 +55,8 @@ const TestDetail = ({ data }: any) => {
                                 <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{user?.Age} Year,   {user?.GenderDesc}</Text>
                             </View>
                             <View className='flex-row gap-3'>
-                                <Ionicons name="git-branch" size={16} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{user?.RelationShipWithHolder}</Text>
+                                <Ionicons name="medical" size={16} color="#075985" />
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{userLevel === uType.MARKETBY.level ? 'PATIENT' : user?.RelationShipWithHolder}</Text>
                             </View>
                         </> : null}
                         {/* <View className='flex-row gap-2'>
@@ -200,7 +206,7 @@ const TestDetail = ({ data }: any) => {
                 <ButtonPrimary title='Cancel' active={true} onPress={() => {}} classes='flex-1 py-3' />
             </View> */}
             <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>
-                <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
+                <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setShowDetails(true)} className={`items-center flex-1 py-3 rounded-lg bg-blue-500`}>
@@ -209,12 +215,14 @@ const TestDetail = ({ data }: any) => {
                 {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
                     <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
                 </TouchableOpacity> : null}
-                {data.BillId ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-purple-500`}>
+                {data.BillId ? <TouchableOpacity onPress={() => setReport(true)} className={`items-center flex-1 py-3 rounded-lg bg-purple-500`}>
                     <Text className={`font-PoppinsMedium text-white`}>Report</Text>
                 </TouchableOpacity> : null}
             </View>
         </ScrollView>
         <MyModal modalActive={showDetails} name='TEST_DETAILS' onClose={() => setShowDetails(false)} child={<TestItemDetails RefId={data.RefId} handleClose={setShowDetails} />} />
+        <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview id={data.BillId} type={'INVESTIGATION'} />} />
+        <MyModal modalActive={report} onClose={() => setReport(false)}  name='REPORT' child={<LabReport id={data.BillId} type={'INVESTIGATION'} />} />
         </>
     )
 }

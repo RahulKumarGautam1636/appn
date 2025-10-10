@@ -11,6 +11,7 @@ export const TAKEHOME_GARMENTS = 't0ZL5KiikMgM1YeyB68a1w==';
 export const TAKEHOME_ELECTRONICS = 'QqFodfpxRStiGjTKTYE/hA==';
 export const TAKEHOME_SURGICAL = 'aS8HN5gcPcKUC8hc/JCvBA==';
 export const BC_ROY = 'ji4C/%2BQbn%2BBofLeoFG9clw=='
+export const HEXAGON_ID = 'CHEZmvXXLYNYZOKVN9fr5A==';
 export const rent = false;
 export const blur = false;
 

@@ -17,7 +17,7 @@ export default ({ config }) => {
     bc_roy: {
       name: "B.C. ROY",
       package: "com.gbooks.bcroy",
-      scheme: "bc_roy",
+      scheme: "bcroy",
       compId: "ji4C/%2BQbn%2BBofLeoFG9clw==",
       icon: "./assets/images/bc_roy/logo.png",
       splash: "./assets/images/bc_roy/logo.png",
@@ -104,6 +104,7 @@ export default ({ config }) => {
     scheme: flavor.scheme,
     version: flavor.version,
     android: {
+      softwareKeyboardLayoutMode: "pan",
       adaptiveIcon: {
         foregroundImage: flavor.icon,
         backgroundColor: "#ffffff",

@@ -20,9 +20,7 @@ export default function LabCard({ data, testDate }: any) {
         } else {
             dispatch(addToCart({...data, testDate: testDate}));
         }
-    }
-
-    console.log('Lab Card Rerendered -------------------------');    
+    }   
 
     return (
         <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg border-b-2 border-gray-300 p-4">

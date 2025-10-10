@@ -29,7 +29,6 @@ const HomeScreen = () => {
     const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 30), activeDate: new Date().toLocaleDateString('en-TT')})
     const [appnData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
     const [doctorTab, setDoctorTab] = useState('active_date')
-    
 
     useEffect(() => {
         let controller = new AbortController();
@@ -99,7 +98,7 @@ const HomeScreen = () => {
                             <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View className='flex-1'>
                                 <Text className="font-PoppinsBold text-white text-[14px]" numberOfLines={1}>{firstAppn.AppointmentTo}</Text>
-                                <Text className="font-Poppins text-gray-200 text-[11px]">{firstAppn.DocSpecialistDesc}</Text>
+                                <Text className="font-Poppins text-gray-200 text-[11px]" numberOfLines={1}>{firstAppn.DocSpecialistDesc}</Text>
                             </View>
                             <View className="bg-primary-400 py-[11px] px-[13px] rounded-full shadow-lg ms-auto">
                                 <FontAwesome name="arrow-right" size={20} color='#fff' />

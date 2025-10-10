@@ -77,7 +77,7 @@ const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
         <>
             <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={
                 <ScrollView>
-                    <Registeration isModal={true} closeEdit={() => {}}/>
+                    <Registeration isModal={true} closeEdit={() => setPersonalInfoActive(false)}/>
                 </ScrollView>
             } />
              <ScrollView contentContainerClassName='bg-white min-h-full p-4'>

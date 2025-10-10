@@ -24,7 +24,7 @@ const compCodeReducer = compCodeSlice.reducer;
 
 const loginSlice = createSlice({
   name: 'login',
-  initialState: true,
+  initialState: false,
   reducers: {
     setLogin: (state, action: PayloadAction<boolean>) => {
       return action.payload;
@@ -38,7 +38,7 @@ const loginReducer = loginSlice.reducer;
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: dummyUser,
+  initialState: {},
   reducers: {
     setUser: (state, action: PayloadAction<object>) => {
       return action.payload;

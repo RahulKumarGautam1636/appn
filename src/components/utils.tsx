@@ -332,7 +332,7 @@ export const computeWithPackSize = (data, activePackSize, vType) => {
       return data;     // { ItemMRP: data.ItemMRP, SRate: data.SRate, StockQty: data.StockQty, DiscountPer: data.DiscountPer, PackSizeId: data.PackSizeId };
   } else {
     if (activePackSize.MRP) {
-      return { ItemMRP: activePackSize.MRP, SRate: activePackSize.SRate, StockQty: activePackSize.StockQty, DiscountPer: activePackSize.MRPDisPer, PackSizeId: activePackSize.CodeId, PTR: activePackSize.PTR };  
+      return { ...data, ItemMRP: activePackSize.MRP, SRate: activePackSize.SRate, StockQty: activePackSize.StockQty, DiscountPer: activePackSize.MRPDisPer, PackSizeId: activePackSize.CodeId, PTR: activePackSize.PTR };  
     } else {
       return data;     // { ItemMRP: data.ItemMRP, SRate: data.SRate, StockQty: data.StockQty, DiscountPer: data.DiscountPer, PackSizeId: data.PackSizeId };
     }
@@ -352,7 +352,7 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // console.log(`Product card --------------------------- ${parent}`);
+  console.log(`Product card --------------------------- ${parent}`);
 
   useEffect(() => {
 		const packSizeList = data.ItemPackSizeList;
@@ -855,18 +855,17 @@ export const uType = {
 
 export const useRegType = (type: string) => {
   let { info: compInfo, vType } = store.getState().company;
-  if (vType !== 'ErpHospital') return;
+  let isLoggedIn = store.getState().isLoggedIn;
   const regTypes = useFetch(`${BASE_URL}/api/Values/GetMstAllMaster?CID=${compInfo.CompanyId}&type=RegistrationType&P1=0`, compInfo.CompanyId)[0];
   useEffect(() => {
+    if (isLoggedIn || vType !== 'ErpHospital') return;
     if (!regTypes.length) return;
     let regType = regTypes.find(i => i.CodeValue === type);
     if (!regType) {
       alert('Something went wrong. Please try later. Invalid RegType.');
-      // store.dispatch(modalAction('LOGIN_MODAL', false, {mode: uType.PATIENT}));
-      store.dispatch(setModal({name: 'LOGIN', state: false}));
+      store.dispatch(setModal({name: 'LOGIN', state: false}));              // store.dispatch(modalAction('LOGIN_MODAL', false, {mode: uType.PATIENT}));
       return;
     }
-    // store.dispatch(globalDataAction({ userRegType: { CodeId: regType.CodeId, Description: regType.Description, CodeValue: regType.CodeValue }}));
     store.dispatch(setUserRegType({ CodeId: regType.CodeId, Description: regType.Description, CodeValue: regType.CodeValue }));
   },[regTypes, type])
   return null;
@@ -932,4 +931,11 @@ export default function MyDropdown({ offsetY=0, offsetX=0, maxHeight=200, isOpen
         )}
     </>
   );
+}
+
+
+export const invalidDate = '0001-01-01T00:00:00'
+
+export const isEmpty = (obj: any) => {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
 }

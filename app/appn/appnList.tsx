@@ -97,7 +97,7 @@ const AppnList = () => {
                         <View className='flex-row gap-3 p-4'>
                             <Text className="font-PoppinsSemibold text-white text-[14px] mr-auto">Next Appointment</Text>
                             <FontAwesome5 name="calendar-alt" size={17} color={`#fff`} />
-                            <Text className="font-PoppinsSemibold text-white text-[14px]">26/06/2025</Text>
+                            <Text className="font-PoppinsSemibold text-white text-[14px]">Not Found</Text>
                         </View>
                     </View> 
                 </View>

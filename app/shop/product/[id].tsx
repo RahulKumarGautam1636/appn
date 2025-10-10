@@ -1,7 +1,7 @@
 import { BASE_URL, myColors } from '@/src/constants';
 import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
-import { add2Cart, AddToCartBtn, buyNow, computeWithPackSize, getFrom, getRequiredFields, GridLoader, NoContent, ProductCard } from '@/src/components/utils';
+import { add2Cart, AddToCartBtn, buyNow, computeWithPackSize, getFrom, getRequiredFields, GridLoader, isEmpty, NoContent, ProductCard } from '@/src/components/utils';
 import { removeFromCart } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { Feather, FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import colors from 'tailwindcss/colors';
-import { ChevronUp, Copy } from 'lucide-react-native';
+import { ChevronRighChevronRight, t, ChevronUp, Copy, Smile, ChevronRight } from 'lucide-react-native';
 
 const ProductPage = () => {
   const [count, setCount] = useState(1);
@@ -76,13 +76,6 @@ const ProductPage = () => {
   const input = product?.EXPDate || '';
   const [day, month, year] = input.split("/");
   const date = new Date(`${year}-${month}-${day}`).toDateString().split(' ').slice(1, 4).join(' ');
-
-  const images = [
-    { uri: 'https://admin.takehome.live/Content/ImageMaster/856441_2.jpg' },
-    { uri: 'https://admin.takehome.live/Content/ImageMaster/250506161756_1.png' },
-    { uri: 'https://admin.takehome.live/Content/ImageMaster/860872_2.png' },
-  ];
-
   const images2 = productData.data.ImageMasterCollection.map((i: any) => ({uri: i.ImgURL})); 
   
   
@@ -94,10 +87,61 @@ const ProductPage = () => {
     </View>
   );
 
+
+  // LOW PRICED ITEM -----------------------------------------------------------------------------------------------------------------------
+
+    let relatedProducts = [];
+  
+    if (isEmpty(productData.data.ItemMaster)) {
+      relatedProducts = productData.data.itemMasterCollection;
+    } else {
+      relatedProducts = [productData.data.ItemMaster, ...productData.data.itemMasterCollection]
+    }
+  
+    const relatedProductPacksizes = relatedProducts.map(item => {
+      if (item.ItemPackSizeList && item.ItemPackSizeList.length) {
+        const prices = computeWithPackSize(item, item.ItemPackSizeList[0], vType);
+        return prices;
+      }
+    })
+
+    const placeZeroValuedAtLast = () => {
+      const sortedBySRateAsc = relatedProductPacksizes.sort((a, b) => a.SRate - b.SRate);
+      const findZeroPriced = sortedBySRateAsc.filter(i => i.SRate === 0);
+      const findPriced = sortedBySRateAsc.filter(i => i.SRate !== 0);
+      return [...findPriced, ...findZeroPriced]
+    }
+
+    const similarProduct = vType === 'ErpPharma' ? placeZeroValuedAtLast()[0] || {} : {};
+    console.log(similarProduct);    
+    const showSimilar = !isEmpty(similarProduct) && productData.data.ItemMaster.LocationItemId !== similarProduct.LocationItemId;
+
+  // -----------------------------------------------------------------------------------------------------------------------
+
   return (
     <>
       <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
         {productData.loading ? <GridLoader containerClass='m-4 gap-4' /> : <>
+        {showSimilar ? <View className="bg-gray-50 p-4 shadow-sm border border-gray-100">
+          <View className="flex-row justify-between items-start">
+            <Link href={`/shop/product/${similarProduct.ItemId}`} className="w-full">
+              <View className="flex-1">
+                <Text className="text-orange-700 text-sm mb-3 font-medium">Similar product at lower price.</Text>
+                <View className="flex-row items-center gap-4 w-full">
+                  <Image className="w-12 h-12 bg-gray-100" source={{ uri: similarProduct.ItemImageURL }} resizeMode="cover" />                  
+                  <View className="flex-1 mr-auto">
+                    <Text className="text-sky-800 font-medium text-lg" numberOfLines={1}>{similarProduct.Description}</Text>
+                    <View className="flex-row items-center mt-1">
+                      <Text className="text-gray-700 text-sm">₹ {similarProduct.SRate}   |   {similarProduct.DiscountPer}% off   |   {similarProduct.StockQty || similarProduct.ItemPackSizeList[0]?.StockQty ? 'In Stock' : 'Out of Stock'}</Text>
+                    </View>
+                  </View>
+                  <Text className="text-blue-600 font-semibold text-base"><ChevronRight /></Text>
+                </View>
+              </View>
+            </Link>
+          </View>
+        </View> : null}
+
         <View className="">
           <View className="bg-white p-8 items-center relative">
             <TouchableOpacity onPress={() => router.back()} className="p-2 bg-gray-100 rounded-full absolute top-[1rem] left-[1rem] z-20">

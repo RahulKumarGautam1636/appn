@@ -26,7 +26,7 @@ const Profile = () => {
         <>
         <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={
             <ScrollView>
-                <Registeration isModal={true} />
+                <Registeration isModal={true} closeEdit={() => setPersonalInfoActive(false)} />
             </ScrollView>
         } />
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>

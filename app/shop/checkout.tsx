@@ -33,6 +33,7 @@ const Checkout = () => {
   const cartItemsDiscountList = cartItems.map(item => ((item.ItemMRP * item.DiscountPer) / 100) * item.count);                  
   const discountTotal = num(cartItemsDiscountList.reduce((total, num) => total + num, 0)); 
   const [loading, setLoading] = useState(false);
+  const [onlyOTC, setOnlyOTC] = useState(false);
   
   // NEW WORK ===================================================================================================================================
 
@@ -72,16 +73,17 @@ const Checkout = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      // dispatch(setModal({name: 'LOGIN', state: true}))
       router.push('/login');
       return;
     } else {
-      // dispatch(setModal({name: 'LOGIN', state: false}))
       setLocationModalActive(true);
     }
   }, [user.Pin, isLoggedIn, locationId])
 
-
+  useEffect(() => {
+    const noOTCitem = cartItems.find((i: any) => i.Category !== 23485);
+    if (!noOTCitem) setOnlyOTC(true);
+  }, [cartItems])
 
   let orderList = useMemo(() => {
       let items = cartItems.map(i => ({             
@@ -236,7 +238,8 @@ const Checkout = () => {
   },[isLoggedIn, user, cartSubtotal, compCode, orderList, locationId, prescription.file.uri])
   
   const placeOrder = async () => {
-    if (!isLoggedIn) return alert('please login to place an order.');
+    if (!cartItems.length) return alert('Please add some products to place an order.');
+    if (!isLoggedIn) return alert('Please login to place an order.');
     if (!orderData.LocationId) return alert('Please select a Service Location before making an order.');
 
     let body = { ...orderData };  
@@ -248,7 +251,7 @@ const Checkout = () => {
 
     try {     
       setLoading(true);
-      const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);
+      const res = await axios.post(`${BASE_URL}/api/Pharma/Post`, body);    // { data : 'Y', status: 200 }
       await wait(3000);
       setLoading(false);
       if (res.data === 'N' || res.status !== 200) {return alert('Failed to Place Order.');};
@@ -313,34 +316,36 @@ const Checkout = () => {
             <Text className="text-primary-500 font-Poppins">Address : </Text>{selectedMember.Address}</Text>
             <ButtonPrimary title='Change Patient' onPress={() => dispatch(setModal({ name: 'MEMBERS', state: true }))} classes='!h-[43px] bg-sky-50 border-dashed border border-blue-500 mt-1' textClasses='text-sm' />
         </View>
-        <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Prescription</Text>
-        {prescription.file.name ? 
-        <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-white rounded-2xl border-b border-gray-200 p-5 flex-row items-center justify-between">
-          <View className="flex-row items-center flex-1 gap-4">
-            {prescription.file.fileType === 'image' ? <Image source={{ uri: prescription.file.uri }} className="w-14 h-14 rounded-xl border border-gray-100" resizeMode="cover" /> : null}
-            <View className="flex-1">
-              <Text className="font-semibold text-indigo-500 mb-2">{prescription.file.name}</Text>
-              <Text className="text-sm text-gray-500">{prescription.file.fileType}</Text>
+        {onlyOTC ? null : <>
+          <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Prescription</Text>
+          {prescription.file.name ? 
+          <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-white rounded-2xl border-b border-gray-200 p-5 flex-row items-center justify-between">
+            <View className="flex-row items-center flex-1 gap-4">
+              {prescription.file.fileType === 'image' ? <Image source={{ uri: prescription.file.uri }} className="w-14 h-14 rounded-xl border border-gray-100" resizeMode="cover" /> : null}
+              <View className="flex-1">
+                <Text className="font-semibold text-indigo-500 mb-2">{prescription.file.name}</Text>
+                <Text className="text-sm text-gray-500">{prescription.file.fileType}</Text>
+              </View>
             </View>
-          </View>
-          <TouchableOpacity>
-            <Feather name="chevron-right" size={23} color="gray" />
-          </TouchableOpacity>
-        </TouchableOpacity> :
-        <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-indigo-500 rounded-2xl p-5 flex-row items-center justify-between">
-          <View className="flex-row items-center flex-1">
-            <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
-              <Feather name="plus" size={28} color="#ffffff" />
+            <TouchableOpacity>
+              <Feather name="chevron-right" size={23} color="gray" />
+            </TouchableOpacity>
+          </TouchableOpacity> :
+          <TouchableOpacity onPress={() => dispatch(setModal({name: 'PRESC', state: true}))} className="bg-indigo-500 rounded-2xl p-5 flex-row items-center justify-between">
+            <View className="flex-row items-center flex-1">
+              <View className="w-12 h-12 bg-indigo-400 rounded-full items-center justify-center mr-4"> 
+                <Feather name="plus" size={28} color="#ffffff" />
+              </View>
+              <View className="flex-1">
+                <Text className="font-semibold text-white mb-2">Please Attach your prescription.</Text>
+                <Text className="text-sm text-gray-100">In order to place your order.</Text>
+              </View>
             </View>
-            <View className="flex-1">
-              <Text className="font-semibold text-white mb-2">Please Attach your prescription.</Text>
-              <Text className="text-sm text-gray-100">In order to place your order.</Text>
-            </View>
-          </View>
-          <TouchableOpacity>
-            <Feather name="chevron-right" size={23} color="white" />
-          </TouchableOpacity>
-        </TouchableOpacity>}
+            <TouchableOpacity>
+              <Feather name="chevron-right" size={23} color="white" />
+            </TouchableOpacity>
+          </TouchableOpacity>}
+        </>}
       </> : null}
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Address Details</Text>
       <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
@@ -412,11 +417,11 @@ const Checkout = () => {
               <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
           </View>
 
-        {prescription.required ? <>
+        {(!onlyOTC && prescription.required) ? <>
           {!prescription.file.name && <Text className='text-rose-500 text-sm mb-3'>Please Attach your prescription to place an order.</Text>}
         </> : ''}
         {isDeliverable ? null : <Pressable onPress={() => setLocationModalActive(true)}><Text className='text-blue-600 text-sm mb-3 font-medium'>Now we have no service at your PIN code. Click to know more.</Text></Pressable>}
-        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${((isLoggedIn && isDeliverable && prescription.file.name) || !prescription.required) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
+        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(onlyOTC || (isLoggedIn && isDeliverable && prescription.file.name) || !prescription.required) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
         {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
 
         <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />

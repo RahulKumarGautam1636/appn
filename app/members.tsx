@@ -6,6 +6,7 @@ import { Card_2 } from '../src/components';
 import { useRouter } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 const Members = ({ modalActive }: any) => {
     const { membersList, selectedMember } = useSelector((state: RootState) => state.members);
@@ -33,7 +34,11 @@ const Members = ({ modalActive }: any) => {
                     </TouchableOpacity>
                 </View>
                 <View className='mt-2 gap-4 realtive'>
-                    {membersList.map((member: any, index: number) => <Card_2 active={member.MemberId === selectedMember.MemberId} data={member} index={index} key={index} selectedDate={'01/05/2025'} />)}
+                    {membersList.map((member: any, index: number) => (
+                        <Animated.View entering={FadeInDown.delay(index * 200).springify()}>
+                            <Card_2 active={member.MemberId === selectedMember.MemberId} data={member} index={index} key={index} selectedDate={'01/05/2025'} />
+                        </Animated.View>
+                    ))}
                 </View>
             </View>
         </ScrollView>

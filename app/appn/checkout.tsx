@@ -156,7 +156,7 @@ const Checkout = ({ handleClose, setSuccess }: any) => {
         try {
             setLoading(true);
             await wait(2000);
-            const res = { status: 200 }//await axios.post(`${BASE_URL}/api/Appointment/Post`, params);   // 
+            const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, params);   // { status: 200 }
             setLoading(false);
             if (res.status === 200) {       
                 // dispatch(dumpCart());
@@ -199,7 +199,7 @@ const Checkout = ({ handleClose, setSuccess }: any) => {
                         <View className='flex-row gap-3 p-4'>
                             <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Booking Date</Text>
                             <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
-                            <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">26/06/2025</Text>
+                            <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">{new Date().toLocaleDateString('en-TT')}</Text>
                         </View>
                     </View> 
                     

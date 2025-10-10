@@ -11,6 +11,7 @@ import { setLogin, setUser, getCompanies, setModal } from "../src/store/slices/s
 import { FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { createDate, getDuration, minDate, useRegType } from "@/src/components/utils";
+import colors from "tailwindcss/colors";
 
 interface loginType {
     phone: string,
@@ -27,7 +28,7 @@ const Login = ({ modalMode }: any) => {
     const company = useSelector((state: RootState) => state.company.info);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
-    const [loginData, setLoginData] = useState({ phone: '6000000076', password: '1234', EncCompanyId: compCode });        // 9330241456 // 8583814626
+    const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });        // 9330241456 // 8583814626
     
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
@@ -192,7 +193,11 @@ const Login = ({ modalMode }: any) => {
         }
     }, [isLoggedIn, user]);
 
-    const comp = { name: 'TakeHome', tag: 'Simplifying Your Searches'}
+
+    const backToLogin = () => {
+        setTab('login');
+        setLoginError({status: false, message: ''});
+    }
     
     return (
         <ScrollView contentContainerClassName='min-h-full bg-white' style={{minHeight: '100%'}}>
@@ -225,7 +230,9 @@ const Login = ({ modalMode }: any) => {
                                 {loginError.status ?
                                     <Text className="text-blue-500 text-[13px] font-PoppinsSemibold mr-auto">{loginError.message}</Text>
                                 : null}
-                                <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
+                                <Pressable onPress={() => setTab('forgotPassword')}>
+                                    <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
+                                </Pressable>
                                 <ButtonPrimary onClick={handleLoginFormSubmit} isLoading={loading} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                                 <Pressable onPress={() => setTab('register')}>
                                     <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account  ? 
@@ -237,6 +244,8 @@ const Login = ({ modalMode }: any) => {
                     )
                 } else if (tab === 'register') {
                     return <Registeration modalMode={modalMode} setTab={setTab} setLoginData={setLoginData} setLoginError={setLoginError} />
+                } else if (tab === 'forgotPassword') {
+                    return <ForgotPassword backToLogin ={backToLogin} />
                 }
             })()}
         </ScrollView>
@@ -245,7 +254,12 @@ const Login = ({ modalMode }: any) => {
 
 export default Login;
 
-
+const allRegTypes = [
+    {title: 'PATIENT', level: 60},
+    {title: 'DOCTOR', level: 57},
+    {title: 'PROVIDER', level: 58},
+    {title: 'MARKETBY', level: 55, description: 'Marketing Executive'}
+];
 
 export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, closeEdit, modalMode=false }: any) => {
 
@@ -261,11 +275,17 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     const [loading, setLoading] = useState(false);
     const [regData, setRegData] = useState({ ...initReg, DOB: '', DOBstr: '', BusinessType: 'B2C' });
     const isOPD = vType === 'ErpHospital';
-    const regType = useSelector((state: RootState) => state.modals.LOGIN.data?.mode) || {};
+    // const regType = useSelector((state: RootState) => state.modals.LOGIN.data?.mode) || {};
     const userRegTypeId = useSelector((state: RootState) => state.appData.userRegType.CodeId);
-    
+    const [regTypeDropdown, setRegTypeDropdown] = useState(false);
+    const [regType, setRegType] = useState({title: 'PATIENT', level: 60});    
     const regTypes = { 60: 'Customer', 57: 'SP', 58: 'AP', REFERRER: 'MP', 55: 'MarketBy' }; 
-    useRegType(regTypes[regType?.level]);  
+    useRegType(regTypes[regType?.level]); 
+
+    useEffect(() => {
+        if (isLoggedIn) return;
+        setRegTypeDropdown(true);
+    }, [])  
 
     useEffect(() => {
         if (!isLoggedIn) {                                                            
@@ -329,16 +349,16 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
             setOTP({isOpen: false, recievedValue: 'null', enteredValue: '', sent: false, verified: true, read_only: false})
             setPersonalFields(true);
         }
-    }, [isLoggedIn, user]);
+    }, [isLoggedIn, user, userRegTypeId]);
 
     const makeRegisterationRequest = async (params: any) => {
         console.log(params);
         
         try {
             setLoading(true);
-            const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);
+            const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);     //  { data: ['Y', 456446]}
             setLoading(false);
-            if (res.data[1].length > 3) { 
+            if (String(res.data[1]).length > 3) { 
                 return true;
             } else {
                 alert('Something Went wrong, Please try again later.');
@@ -390,7 +410,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                 alert('THIS USER ID IS INACTIVE')
                 return false;
             } else if (data.UserId) {
-                dispatch(setUser(data));
+                dispatch(setUser({ ...data, UserCompList: data.UserCompList[0] }));
                 // localStorage.setItem("userLoginData", encrypt({ phone: params.RegMob1, password: params.UserPassword, compCode: compCode }));
                 return true;
             } else {
@@ -410,9 +430,9 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
             const receivedOtp = await makeOtpRequest();
             setOTP({...otp, isOpen: true, sent: true, recievedValue: receivedOtp});
         } else if (otp.sent) {
-            // if (compCode !== defaultId) {
+            if (compCode !== defaultId) {
                 if (otp.recievedValue !== otp.enteredValue) return alert('Wrong OTP.');
-            // }
+            }
             setOTP({...otp, isOpen: false, verified: true, read_only: true});
             setPersonalFields(true);
         }
@@ -526,102 +546,182 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
         )
     }
 
+    const RegTypesDropdown = () => {
+        return (
+            <ScrollView className="">
+                <View className='bg-white m-4 rounded-3xl shadow-md shadow-gray-400'>
+                    {allRegTypes.map((i: any, n: number) => (
+                        <TouchableOpacity key={i.level} className={`flex-row gap-3 p-4 ${n === (allRegTypes.length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {setRegType(i); setRegTypeDropdown(false)}}>
+                            <FontAwesome6 name="circle-right" size={20} color={colors.fuchsia[500]} />
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] mr-auto" numberOfLines={1}>{i.Description || i.title}</Text>
+                            {i.level === regType.level ? 
+                                <>
+                                    <FontAwesome6 name="check" size={20} color={myColors.primary[500]} />
+                                    <Text className="font-PoppinsSemibold text-primary-500 text-[14px]" numberOfLines={1}>Selected</Text>
+                                </>
+                            : null}
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            </ScrollView>
+        )
+    }
+
     const [day, month, year] = regData.DOB.split('/').map(Number);
     let parsedDOB = new Date(year, month - 1, day);
 
     return (
-        <View className={`bg-white shadow-lg px-4 pt-6 pb-6 w-full ${isModal ? 'h-full' : 'mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem]'}`}> 
-            <Text className={`font-PoppinsSemibold text-gray-800 text-[24px] text-center ${isModal ? 'py-3' : 'py-4'}`}>{isModal ? 'Personal Details' : 'Please Register'}</Text>
-            <View className="gap-6 mt-4 min-h-[60%]">
-                <View className='z-10'>
-                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
-                    <TextInput placeholder='Phone Number' maxLength={10} value={regData.RegMob1} onChangeText={(text) => setRegData(pre => ({...pre, RegMob1: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
-                </View>
-                {otp.isOpen ? <View className='z-10'>
-                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Enter OTP</Text>
-                    <TextInput placeholder='Enter your OTP..' value={otp.enteredValue} onChangeText={(text) => setOTP(pre => ({...pre, enteredValue: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
-                </View> : null}
-                {!personalFields ? <>
-                    <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto mb-10">We'll send you an OTP !</Text>
-                    <ButtonPrimary onClick={handleNext} isLoading={loading} title='SUBMIT' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
-                </> : null}
-                {personalFields ? <>
-                    <View className="gap-6">
-                        <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Personal Information</Text>
-                        <View className="flex-row gap-3">
-                            <Pressable className='z-10 flex-1' onPress={() => setSalutationDropdown(true)}>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Salutation</Text>
-                                <TextInput placeholder='-Select-' readOnly value={regData.Salutation} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                                <MyModal modalActive={salutationDropdown} onClose={() => setSalutationDropdown(false)} child={<SalutationDropdown />} />
-                            </Pressable>
-                            <View className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Name</Text>
-                                <TextInput placeholder='Name' value={regData.Name} onChangeText={(text) => setRegData(pre => ({...pre, Name: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                        </View>
-                        <View className="flex-row gap-3">
-                            <Pressable onPress={() => setGenderDropdown(true)} className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Gender</Text>
-                                <TextInput readOnly placeholder='Gender' value={regData.GenderDesc} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                                <MyModal modalActive={genderDropdown} onClose={() => setGenderDropdown(false)} child={<GenderDropdown />} />
-                            </Pressable>
-                            <Pressable className='z-10 flex-1' onPress={() => setDobDate(true)}>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">DOB</Text>
-                                <TextInput placeholder='DD/MM/YYYY' readOnly value={regData.DOB} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                                {dobDate ? <DateTimePicker value={parsedDOB} mode="date" display="default" onChange={(e: any, d: any) => {calculateDuration(new Date(d).toLocaleDateString('en-TT')); setDobDate(false)}} /> : null}
-                            </Pressable>
-                        </View>
-                        <View className="flex-row gap-3">
-                            <View className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Years</Text>
-                                <TextInput placeholder='00' maxLength={2} value={String(regData.Age)} onChangeText={(text) => handleNumberInputsWithDate({name: 'Age', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                            <View className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Months</Text>
-                                <TextInput placeholder='00' value={String(regData.AgeMonth)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeMonth', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                            <View className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Days</Text>
-                                <TextInput placeholder='00' value={String(regData.AgeDay)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeDay', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                        </View>
-                        <View className="flex-row">
-                            <View className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Address</Text>
-                                <TextInput placeholder='Address' value={regData.Address} onChangeText={(text) => setRegData(pre => ({...pre, Address: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                        </View>
-                        <View className="flex-row gap-3">
-                            <View className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">City</Text>
-                                <TextInput placeholder='City' value={regData.City} onChangeText={(text) => setRegData(pre => ({...pre, City: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                            <Pressable className='z-10 flex-1' onPress={() => setStateDropdown(true)}>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">State</Text>
-                                <TextInput placeholder='State' readOnly value={regData.StateName} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                                <MyModal modalActive={stateDropdown} onClose={() => setStateDropdown(false)} child={<StateDropdown />} />
-                            </Pressable>
-                        </View>
-                        <View className="flex-row gap-3">
-                            <View className='z-10 flex-1'> 
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Pin Code</Text>
-                                <TextInput placeholder='Pin Code' maxLength={6} value={regData.Pin} onChangeText={(text) => setRegData(pre => ({...pre, Pin: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                            <View className='z-10 flex-1'>
-                                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
-                                <TextInput placeholder='Password' maxLength={10} value={regData.UserPassword} onChangeText={(text) => setRegData(pre => ({...pre, UserPassword: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
-                            </View>
-                        </View>
+        <>
+            <View className={`bg-white shadow-lg px-4 pt-6 pb-6 w-full ${isModal ? 'h-full' : 'mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem]'}`}> 
+                <Text className={`font-PoppinsSemibold text-gray-800 text-[24px] text-center ${isModal ? 'py-3' : 'py-4'}`}>{isModal ? 'Personal Details' : 'Please Register'}</Text>
+                <View className="gap-6 mt-4 min-h-[60%]">
+                    <View className='z-10'>
+                        <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
+                        <TextInput placeholder='Phone Number' maxLength={10} value={regData.RegMob1} onChangeText={(text) => setRegData(pre => ({...pre, RegMob1: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                     </View>
-                    <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Please use a strong password</Text>
-                    <ButtonPrimary onClick={handleRegFormSubmit} isLoading={loading} title={isModal ? 'UPDATE DETAILS' : 'REGISTER'} active={true} classes='rounded-2xl' textClasses='tracking-widest' />
-                </> : null}
-                {isModal ? null: <Pressable onPress={() => setTab('login')} className="mt-4">
-                    <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Already have Account  ? 
-                        <Text className="text-primary-500">  Please Login</Text>
-                    </Text>
-                </Pressable>}
+                    {otp.isOpen ? <View className='z-10'>
+                        <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Enter OTP</Text>
+                        <TextInput placeholder='Enter your OTP..' value={otp.enteredValue} onChangeText={(text) => setOTP(pre => ({...pre, enteredValue: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                    </View> : null}
+                    {!personalFields ? <>
+                        <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto mb-10">We'll send you an OTP !</Text>
+                        <ButtonPrimary onClick={handleNext} isLoading={loading} title='SUBMIT' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
+                    </> : null}
+                    {personalFields ? <>
+                        <View className="gap-6">
+                            <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Personal Information</Text>
+                            <View className="flex-row gap-3">
+                                <Pressable className='z-10 flex-1' onPress={() => setSalutationDropdown(true)}>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Salutation</Text>
+                                    <TextInput placeholder='-Select-' readOnly value={regData.Salutation} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <MyModal modalActive={salutationDropdown} onClose={() => setSalutationDropdown(false)} child={<SalutationDropdown />} />
+                                </Pressable>
+                                <View className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Name</Text>
+                                    <TextInput placeholder='Name' value={regData.Name} onChangeText={(text) => setRegData(pre => ({...pre, Name: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                            </View>
+                            <View className="flex-row gap-3">
+                                <Pressable onPress={() => setGenderDropdown(true)} className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Gender</Text>
+                                    <TextInput readOnly placeholder='Gender' value={regData.GenderDesc} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <MyModal modalActive={genderDropdown} onClose={() => setGenderDropdown(false)} child={<GenderDropdown />} />
+                                </Pressable>
+                                <Pressable className='z-10 flex-1' onPress={() => setDobDate(true)}>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">DOB</Text>
+                                    <TextInput placeholder='DD/MM/YYYY' readOnly value={regData.DOB} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    {dobDate ? <DateTimePicker value={parsedDOB} mode="date" display="default" onChange={(e: any, d: any) => {calculateDuration(new Date(d).toLocaleDateString('en-TT')); setDobDate(false)}} /> : null}
+                                </Pressable>
+                            </View>
+                            <View className="flex-row gap-3">
+                                <View className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Years</Text>
+                                    <TextInput placeholder='00' maxLength={2} value={String(regData.Age)} onChangeText={(text) => handleNumberInputsWithDate({name: 'Age', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                                <View className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Months</Text>
+                                    <TextInput placeholder='00' value={String(regData.AgeMonth)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeMonth', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                                <View className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Days</Text>
+                                    <TextInput placeholder='00' value={String(regData.AgeDay)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeDay', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                            </View>
+                            <View className="flex-row">
+                                <View className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Address</Text>
+                                    <TextInput placeholder='Address' value={regData.Address} onChangeText={(text) => setRegData(pre => ({...pre, Address: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                            </View>
+                            <View className="flex-row gap-3">
+                                <View className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">City</Text>
+                                    <TextInput placeholder='City' value={regData.City} onChangeText={(text) => setRegData(pre => ({...pre, City: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                                <Pressable className='z-10 flex-1' onPress={() => setStateDropdown(true)}>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">State</Text>
+                                    <TextInput placeholder='State' readOnly value={regData.StateName} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <MyModal modalActive={stateDropdown} onClose={() => setStateDropdown(false)} child={<StateDropdown />} />
+                                </Pressable>
+                            </View>
+                            <View className="flex-row gap-3">
+                                <View className='z-10 flex-1'> 
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Pin Code</Text>
+                                    <TextInput placeholder='Pin Code' maxLength={6} value={regData.Pin} onChangeText={(text) => setRegData(pre => ({...pre, Pin: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                                <View className='z-10 flex-1'>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
+                                    <TextInput placeholder='Password' maxLength={10} value={regData.UserPassword} onChangeText={(text) => setRegData(pre => ({...pre, UserPassword: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                </View>
+                            </View>
+                        </View>
+                        <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Please use a strong password</Text>
+                        <ButtonPrimary onClick={handleRegFormSubmit} isLoading={loading} title={isModal ? 'UPDATE DETAILS' : 'REGISTER'} active={true} classes='rounded-2xl' textClasses='tracking-widest' />
+                    </> : null}
+                    {isModal ? null: <Pressable onPress={() => setTab('login')} className="mt-4">
+                        <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Already have Account  ? 
+                            <Text className="text-primary-500">  Please Login</Text>
+                        </Text>
+                    </Pressable>}
+                </View>
             </View>
-        </View>
+            <MyModal modalActive={regTypeDropdown} onClose={() => setRegTypeDropdown(false)} child={<RegTypesDropdown />} />
+        </>
     )
+}
+
+
+const ForgotPassword = ({ backToLogin }: any) => {
+
+  const [forgotPassword, setForgotPassword] = useState({recoveryNumber: '', msg: "You'll Recieve a Message."});
+  const [isPasswordSent, setPasswordSent] = useState(false);
+  const compCode = useSelector((i: RootState) => i.compCode);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    sendPassword();
+  }
+
+  const goToLogin = () => {
+    backToLogin();
+    setForgotPassword({recoveryNumber: '', msg: ''});
+    // setPasswordSent(false);
+  }
+
+  const sendPassword = async () => {
+    if (forgotPassword.recoveryNumber.length < 9) return alert('Please enter a valid number.')
+    setLoading(true)
+    const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?id=0&UN=${forgotPassword.recoveryNumber}&CID=${compCode}&Type=FP`, {});
+    setLoading(false)
+    if (res.data === 'Y') {
+      setForgotPassword(pre => ({...pre, recoveryNumber: '', msg: 'Your Password has been sent to your registered mobile number. please check !'}))
+    //   setPasswordSent(true);
+    } else {
+      setForgotPassword(pre => ({...pre, recoveryNumber: '', msg: 'This number is not Registered.'}))
+    }
+  }
+
+  return (
+    <View className='bg-white shadow-lg mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem] px-4 pt-6 pb-28 w-full'>
+        <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center pt-4 pb-8">Forgot Password ?</Text>
+        <View className="p-4 gap-8 min-h-[55%]">
+            <View className='z-10'>
+                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
+                <TextInput placeholder='Phone Number' maxLength={10} value={forgotPassword.recoveryNumber} onChangeText={(text) => setForgotPassword(pre => ({...pre, recoveryNumber: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+            </View>
+            
+            <Text className="text-orange-500 text-[13px] font-PoppinsSemibold mr-auto">{forgotPassword.msg}</Text>
+            <Pressable onPress={goToLogin}>
+                <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Go Back To Login.</Text>
+            </Pressable>
+            <ButtonPrimary onClick={handleSubmit} isLoading={loading} title='SUBMIT' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
+            <Pressable onPress={goToLogin}>
+                <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Already have an Account ? 
+                    <Text className="text-primary-500">  Back To Login</Text>
+                </Text>
+            </Pressable>
+        </View>
+    </View> 
+  )
 }

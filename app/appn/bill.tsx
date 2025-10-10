@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { WebView } from "react-native-webview";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import ButtonPrimary from "@/src/components";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { getFrom, GridLoader } from "@/src/components/utils";
+import { getFrom, GridLoader, NoContent } from "@/src/components/utils";
 import { BASE_URL, SRC_URL } from "@/src/constants";
 
 export default function InvoicePreview({ id, type }: any) {
@@ -36,9 +36,9 @@ export default function InvoicePreview({ id, type }: any) {
         if (data.loading) {
             return <GridLoader />
         } else if (data.err.status) {
-            return <h2 className="text-danger mark">An error occured, please try again later. Error code: <span className="text-dark d-inline">{data.err.msg}</span></h2>;
+            return <Text className="text-red-600">An error occured, please try again later. Error code: <Text className="text-gray-700">{data.err.msg}</Text></Text>;
         } else if (!data.data.SalesObj) {
-            return <h2 className="text-danger py-2">No Data Received !</h2>;
+            return <NoContent label="No Data found." />;
         } else {
             const page = prescriptionPage(data.data.SalesObj);
             return (

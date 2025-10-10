@@ -15,6 +15,7 @@ import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import AppnPreview from '../appnPreview';
 import BookingSuccess from '../../../src/components/modals/bookingSuccess';
 import ReactNativeModal from 'react-native-modal';
+import { stripHtml } from 'string-strip-html';
 
 
 const Booking = () => {
@@ -282,14 +283,23 @@ const Booking = () => {
                         <Image className='' source={require('./../../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
                         <View className='flex-1'>
                             <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{doctor.Name}</Text>
-                            <View className='flex-row gap-2'>
+                            {doctor.Qualification ? <View className='flex-row gap-2'>
                                 <FontAwesome name="graduation-cap" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{doctor.SpecialistDesc}</Text>
-                            </View>
-                            <View className='flex-row gap-2'>
+                                <Text className="font-PoppinsMedium text-gray-800 text-[12px] mb-[6px]">{doctor.Qualification}</Text>
+                            </View> : null}
+                            {doctor.SpecialistDesc ? <View className='flex-row gap-2'>
                                 <FontAwesome5 name="stethoscope" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{doctor.Qualification}</Text>
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{doctor.SpecialistDesc}</Text>
+                            </View> : null}
+
+                            {stripHtml(doctor.PrescriptionFooter).result ? 
+
+                            <View className='flex-row gap-2 mt-1'>
+                                <Text className="font-PoppinsMedium text-gray-700 text-[13px] leading-6">{stripHtml(doctor.PrescriptionFooter).result}</Text>
                             </View>
+                            // <Text className="font-PoppinsMedium text-gray-500 text-[13px] leading-6"></Text>
+                            
+                            : null}
                         </View>
                     </View>
                     {compCode === BC_ROY ? null : <View className='flex-row justify-between p-4 border-y border-gray-300 border-solid'>
@@ -444,6 +454,8 @@ const styles = StyleSheet.create({
 });
 
 const SlotBtn = ({ time, active, handleSelect, blank }: any) => {
+    console.log(time);
+    
     // return (        
     //     <TouchableOpacity onPress={handleSelect} className={`${blank ? 'opacity-60' : ''} justify-center border-2 rounded-lg px-3 py-1 mb-3 ${active ? 'bg-primary-50 border-primary-400' : 'bg-gray-50 border-gray-300'}`} style={{
     //         width: '17.1%'     // 6 items
@@ -465,8 +477,8 @@ const SlotBtn = ({ time, active, handleSelect, blank }: any) => {
             </View>
             <Text className={`${blank ? 'opacity-0' : ''} font-Poppins text-[11px] leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>-</Text>
             <View>
-                <Text className={`${blank ? 'opacity-0' : ''} font-Poppins text-[11px] tracking-wider leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[0]}</Text>
-                <Text className={`${blank ? 'opacity-0' : ''} font-Poppins text-[11px] tracking-wider leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[1]}</Text>
+                <Text className={`${blank ? 'opacity-0' : ''} font-Poppins text-[11px] tracking-wider leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[3]}</Text>
+                <Text className={`${blank ? 'opacity-0' : ''} font-Poppins text-[11px] tracking-wider leading-5 text-center ${active ? 'text-primary-500' : 'text-gray-500'}`}>{time.split(' ')[4]}</Text>
             </View>
         </TouchableOpacity>
     )

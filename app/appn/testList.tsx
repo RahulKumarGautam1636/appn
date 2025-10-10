@@ -94,9 +94,9 @@ const TestList = () => {
                     </View>
 
                     <View className='flex-row gap-3 p-4'>
-                        <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
                         <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Next Appointment</Text>
-                        <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">26/06/2025</Text>
+                        <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
+                        <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">Not Found</Text>
                     </View>
                 </View> 
                 {compCode === defaultId ? <>

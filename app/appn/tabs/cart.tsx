@@ -66,7 +66,7 @@ const Cart = ({}: any) => {
                             <View className='flex-row gap-3 p-4'>
                                 <Text className="font-PoppinsSemibold text-white text-[14px] mr-auto">Booking Date</Text>
                                 <FontAwesome5 name="calendar-alt" size={17} color={`#fff`} />
-                                <Text className="font-PoppinsSemibold text-white text-[14px]">26/06/2025</Text>
+                                <Text className="font-PoppinsSemibold text-white text-[14px]">{new Date().toLocaleDateString('en-TT')}</Text>
                             </View>
                         </View> 
                         <View className='justify-between flex-row pt-1 items-center'>
