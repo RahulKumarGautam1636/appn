@@ -6,6 +6,7 @@ import { RootState } from "../store/store";
 import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { mmDDyyyyDate } from ".";
+import colors from "tailwindcss/colors";
 
 export default function LabCard({ data, testDate }: any) {
 
@@ -23,21 +24,21 @@ export default function LabCard({ data, testDate }: any) {
     }   
 
     return (
-        <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg border-b-2 border-gray-300 p-4">
-            <View className="mt-1 uppercase h-[45px] w-[45px] items-center justify-center rounded-xl bg-primary-500">
-                <Ionicons name={'flask'} size={21} color={'#fff'} />
+        <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg border-b-2 border-gray-300 p-3">
+            <View className="mt-1 uppercase h-[40px] w-[40px] items-center justify-center rounded-xl bg-fuchsia-600">
+                <Ionicons name={'flask'} size={19} color={'#fff'} />
             </View>
             <View className='mr-auto flex-1'>
-                <Text className="font-PoppinsSemibold text-sky-800 leading-7">{data.Description}</Text>
-                <Text className="text-gray-500 mt-[6px] text-sm font-PoppinsMedium">{data.CategoryName}</Text>
-                <View className='flex-row gap-4 items-end mt-[8px]'>
-                    <Text className="mt-2 text-[13px] text-blue-600 font-PoppinsSemibold leading-5"><FontAwesome name="rupee" size={13} color="#2563eb" /> {data.SRate}</Text>
-                    <Text className="text-red-700 opacity-65 mt-2 text-sm font-PoppinsMedium leading-5 line-through"><FontAwesome name="rupee" size={13} color="#b91c1c" /> {data.ItemMRP}</Text>
+                <Text className="font-PoppinsSemibold text-sky-800 leading-6 text-[12px]">{data.Description}</Text>
+                <Text className="text-gray-500 mt-[4px] text-[11px] font-PoppinsMedium">{data.CategoryName}</Text>
+                <View className='flex-row gap-3 items-end mt-[5px]'>
+                    <Text className="mt-1.5 text-[12px] text-blue-600 font-PoppinsSemibold leading-4"><FontAwesome name="rupee" size={12} color="#2563eb" /> {data.SRate}</Text>
+                    <Text className="text-red-700 opacity-65 mt-1.5 text-[12px] font-PoppinsMedium leading-4 line-through"><FontAwesome name="rupee" size={12} color="#b91c1c" /> {data.ItemMRP}</Text>
                 </View>
             </View>
             {isAdded ?
-            <Ionicons name="cart" className='p-[10px] bg-sky-100 rounded-full my-auto' size={21} color="#3b82f6" /> :
-            <Ionicons name="cart-outline" className='p-[10px] bg-sky-50 rounded-full my-auto' size={21} color="#3b82f6" />}
+            <Ionicons name="cart" className='p-[9px] bg-sky-100 rounded-full my-auto' size={19} color={colors.sky[500]} /> :
+            <Ionicons name="cart-outline" className='p-[9px] bg-sky-50 rounded-full my-auto' size={19} color={colors.sky[500]} />}
             
         </TouchableOpacity>
     )

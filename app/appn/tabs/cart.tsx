@@ -58,20 +58,20 @@ const Cart = ({}: any) => {
                         <View className='bg-primary-500 mb-4 rounded-2xl shadow-md shadow-gray-400'>
                             <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
                                 <View className='flex-row items-center gap-3'>
-                                    <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">Lab Tests</Text>
+                                    <Text className="font-PoppinsSemibold text-white text-[13px] items-center leading-5">Lab Tests</Text>
                                 </View>
-                                <Text className="font-PoppinsSemibold text-white text-[14px] items-center leading-5">{itemsLength} Items</Text>
+                                <Text className="font-PoppinsSemibold text-white text-[13px] items-center leading-5">{itemsLength} Items</Text>
                             </View>
 
                             <View className='flex-row gap-3 p-4'>
-                                <Text className="font-PoppinsSemibold text-white text-[14px] mr-auto">Booking Date</Text>
+                                <Text className="font-PoppinsSemibold text-white text-[13px] mr-auto">Booking Date</Text>
                                 <FontAwesome5 name="calendar-alt" size={17} color={`#fff`} />
-                                <Text className="font-PoppinsSemibold text-white text-[14px]">{new Date().toLocaleDateString('en-TT')}</Text>
+                                <Text className="font-PoppinsSemibold text-white text-[13px]">{new Date().toLocaleDateString('en-TT')}</Text>
                             </View>
                         </View> 
                         <View className='justify-between flex-row pt-1 items-center'>
                             <View className='flex-row items-center gap-3'>
-                                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Cart Contents</Text>
+                                <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Cart Contents</Text>
                             </View>
                         </View>
                         {labTests.length ? <View className='gap-4 realtive mt-4'>
@@ -86,7 +86,7 @@ const Cart = ({}: any) => {
                             </View>
                         </View>
                     </View>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] mx-4 mt-1 mb-3">Cart Summary</Text>
+                    <Text className="font-PoppinsSemibold text-gray-800 text-[14px] mx-4 mt-1 mb-3">Cart Summary</Text>
                     <View className='bg-white shadow-sm shadow-gray-400'>
                         {labTests.map((i: any) => (
                             <View key={i.LocationItemId} className='flex-row gap-2 w-full px-5 py-4 border-b border-gray-200 items-center'>

@@ -1,11 +1,11 @@
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import './globals.css';
 import { TouchableOpacity } from 'react-native';
-import { Feather, FontAwesome6 } from '@expo/vector-icons';
+import { Feather, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
@@ -57,7 +57,7 @@ export default function App() {
             <SafeAreaView className="flex-1">
               {/* <Init /> */}
               
-              <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
+              <ScrollView contentContainerClassName='bg-slate-100 min-h-full relative'>
               {/* <View className="relative gap-4 flex-row items-center justify-center py-[6rem]">
                   <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
                   <Image className='' source={require('../assets/images/logo.png')} style={{ width: 75, height: 65 }} />
@@ -66,7 +66,12 @@ export default function App() {
                       <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
                   </View>
               </View> */}
-              
+              <Link href={'/login'} className='absolute top-3 right-3 z-40'>
+                  <View className="gap-2 flex-row items-center bg-white p-2 rounded-full shadow-sm">
+                      <Ionicons name="enter" size={25} color='#3b82f6' className='text-blue-500' />
+                      <Text className='font-PoppinsMedium leading-5 text-slate-700'>Login </Text>
+                  </View>
+              </Link>
               <View className="relative gap-4 items-center justify-center py-[2rem] bg-white">
                 <Image className='' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/752.jpeg` }} style={{ width: 200, height: 190 }} />    
                 {/* <Image className='' source={require('../assets/images/logo.png')} style={{ width: 200, height: 190 }} />    TAKEHOME */}

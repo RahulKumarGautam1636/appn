@@ -69,7 +69,7 @@ const LabTests = ({}: any) => {
             <GradientBG>
             <View className=''>
                 <BannerCarousel />
-                <View className='p-4'>
+                <View className='p-3'>
 
                     {/* <View className='justify-between flex-row items-center'>
                         <View className='flex-row items-center gap-3'>
@@ -102,64 +102,64 @@ const LabTests = ({}: any) => {
                         </View> 
                     </TouchableOpacity> */}
 
-                    <View className='justify-between flex-row items-center mb-3'>
-                        <View className='flex-row items-center gap-3'>
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                    <View className='justify-between flex-row items-center mb-2'>
+                        <View className='flex-row items-center gap-2'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">Select Clinic</Text>
                         </View>
                         <Pressable onPress={() => dispatch(setModal({ name: 'COMPANIES', state: true }))} className="gap-2 flex-row items-center ml-auto">
-                            <Text className="font-PoppinsMedium text-sky-700 text-[13px] leading-4">{companyList.length} more clinics</Text>
-                            <Feather name="chevron-down" size={24} color='#0369a1' />
+                            <Text className="font-PoppinsMedium text-sky-700 text-[12px] leading-4">{companyList.length} more clinics</Text>
+                            <Feather name="chevron-down" size={22} color='#0369a1' />
                         </Pressable>
                     </View>
 
-                    <View className='bg-primary-500 mb-[1.15rem] rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
-                        <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
+                    <View className='bg-primary-500 mb-[0.9rem] rounded-2xl shadow-md shadow-primary-700 overflow-hidden'>
+                        <View className='flex-row items-center gap-3 pl-4 pr-3 pb-4 pt-3 bg-primary-500 '>
                             <View className='flex-1'>
-                                <Text className="font-PoppinsSemibold text-[15px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
-                                <View className='mt-[10px]'>
-                                    <View className='flex gap-3 flex-row items-center'>
-                                        <FontAwesome5 name="clock" size={14} color="#fff" />
-                                        <Text className="font-PoppinsMedium text-gray-100 text-[11px] leading-5">08:30 AM - 12:00 PM</Text>
+                                <Text className="font-PoppinsSemibold text-[13px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
+                                <View className='mt-[8px]'>
+                                    <View className='flex gap-2 flex-row items-center'>
+                                        <FontAwesome5 name="clock" size={12} color="#fff" />
+                                        <Text className="font-PoppinsMedium text-gray-100 text-[10px] leading-4">08:30 AM - 12:00 PM</Text>
                                     </View>
-                                    <View className='flex gap-3 flex-row items-center mt-2'>
-                                        <FontAwesome5 name="map-marker-alt" size={14} color="#fff" />
-                                        <Text className="font-Poppins text-gray-100 text-[11px] leading-5" numberOfLines={1}>{selectedCompany.ADDRESS}</Text>
+                                    <View className='flex gap-2 flex-row items-center mt-1.5'>
+                                        <FontAwesome5 name="map-marker-alt" size={12} color="#fff" />
+                                        <Text className="font-Poppins text-gray-100 text-[10px] leading-4" numberOfLines={1}>{selectedCompany.ADDRESS}</Text>
                                     </View>
                                 </View>
                             </View>
                             <Link href={`/appn/clinic/${selectedCompany.CompanyId}`}>
                                 <View>
-                                    <Feather name="chevron-right" size={24} color="#fff" className='px-[9px] py-[9px] bg-primary-400 rounded-full'  />
+                                    <Feather name="chevron-right" size={22} color="#fff" className='px-[8px] py-[8px] bg-primary-400 rounded-full'  />
                                 </View>
                             </Link>
                         </View>
                     </View>
                     
-                    <View className='bg-white mb-4 rounded-2xl shadow-lg border-b-2 border-gray-300'>
-                        <View className='flex-row w-full px-5 py-[16px] border-b border-gray-200 items-center'>
-                            <FontAwesome5 name="calendar-alt" size={21} color={myColors.primary[500]} />
-                            <Text className="font-PoppinsMedium text-slate-500 text-[14px] leading-6 ml-4 mr-auto">Select Date:</Text>
+                    <View className='bg-white mb-3 rounded-2xl shadow-lg border-b-2 border-gray-300'>
+                        <View className='flex-row w-full px-4 py-[13px] border-b border-gray-200 items-center'>
+                            <FontAwesome5 name="calendar-alt" size={19} color={myColors.primary[500]} />
+                            <Text className="font-PoppinsMedium text-slate-500 text-[13px] leading-5 ml-3 mr-auto">Select Date:</Text>
                             <Pressable onPress={() => setDate(pre => ({...pre, active: true}))}>
-                                <Text className="font-PoppinsMedium text-sky-700 text-[14px] leading-6 mr-2">{new Date(date.value).toLocaleDateString('en-TT')}</Text>
+                                <Text className="font-PoppinsMedium text-sky-700 text-[13px] leading-5 mr-2">{new Date(date.value).toLocaleDateString('en-TT')}</Text>
                             </Pressable>
                             {date.active ? <DateTimePicker value={date.value} mode="date" display="default" onChange={(e, d) => setDate({active: false, value: d})} /> : null}
-                            <Feather name="chevron-down" size={22} color='gray' />
+                            <Feather name="chevron-down" size={20} color='gray' />
                         </View>               
-                        <View className='flex-row gap-4 w-full p-4 items-center'>
-                            <View className='w-full items-center flex-row rounded-2xl shadow-sm shadow-gray-500 bg-[#ebecef] pr-4'>
-                                <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' placeholderTextColor="#9CA3AF" className='text-gray-700 py-4 items-start px-5 flex-1' />
-                                <Feather className='' name="search" size={24} color={myColors.primary[500]} />
+                        <View className='flex-row gap-3 w-full p-3 items-center'>
+                            <View className='w-full items-center flex-row rounded-2xl shadow-sm shadow-gray-500 bg-[#ebecef] pr-3'>
+                                <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' placeholderTextColor="#9CA3AF" className='text-gray-700 text-[13px] py-3 items-start px-4 flex-1' />
+                                <Feather className='' name="search" size={22} color={myColors.primary[500]} />
                             </View>
                         </View>
                     </View>
                     <View className='justify-between flex-row pt-1 pb-4 items-center'>
-                        <View className='flex-row items-center gap-3'>
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Popular Tests</Text>
+                        <View className='flex-row items-center gap-2'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-4">Popular Tests</Text>
                         </View>
-                        <View className="gap-3 flex-row items-center ml-auto">
+                        <View className="gap-2 flex-row items-center ml-auto">
                             {/* <Feather name="chevron-left" size={24} color='#6b7280' />
                             <Feather name="chevron-right" size={24} color='#6b7280' /> */}
-                            <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
+                            <Text className="font-PoppinsMedium text-primary-600 text-[14px] leading-[20px]">View All</Text>
                         </View>
                     </View>
                     <RenderLabTest labData={labData} dateValue={date.value} />
@@ -187,7 +187,7 @@ const RenderLabTest = memo(({ labData, dateValue }: any) => {
           return;
         } else {
             return (
-                <View className='gap-4'>
+                <View className='gap-3'>
                     {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(dateValue).toLocaleDateString('en-TT')} />)}
                 </View>
             ) 

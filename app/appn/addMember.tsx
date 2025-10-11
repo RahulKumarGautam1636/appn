@@ -520,12 +520,12 @@ const AddMember = ({ isModal }: any) => {
                     <View className="gap-6 mt-4 min-h-[60%]">
                     <View className="flex-row gap-3">
                         <View className='z-10 flex-1'>
-                            <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
-                            <TextInput placeholder='Phone Number' maxLength={10} value={memberData.RegMob1} readOnly className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                            <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Phone Number</Text>
+                            <TextInput placeholder='Phone Number' maxLength={10} value={memberData.RegMob1} readOnly className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                         </View>
                         <View className='z-10 flex-1'>
-                            <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Member Phone Number</Text>
-                            <TextInput placeholder='Member Phone Number' maxLength={10} value={memberData.Mobile} onChangeText={(text) => setMemberData(pre => ({...pre, Mobile: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                            <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Member Phone Number</Text>
+                            <TextInput placeholder='Member Phone Number' maxLength={10} value={memberData.Mobile} onChangeText={(text) => setMemberData(pre => ({...pre, Mobile: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                         </View>
                     </View>
                         {/* {!personalFields ? <>
@@ -537,69 +537,69 @@ const AddMember = ({ isModal }: any) => {
                             <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Personal Information</Text>
                             <View className="flex-row gap-3">
                                 <Pressable className='z-10 flex-1' onPress={() => setSalutationDropdown(true)}>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Salutation</Text>
-                                    <TextInput placeholder='-Select-' readOnly value={memberData.Salutation} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Salutation</Text>
+                                    <TextInput placeholder='-Select-' readOnly value={memberData.Salutation} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                     <MyModal modalActive={salutationDropdown} onClose={() => setSalutationDropdown(false)} child={<SalutationDropdown handleSelect={(salutationValue: any) => setMemberData(pre => ({...pre, Salutation: salutationValue}))} />} />
                                 </Pressable>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Member Name</Text>
-                                    <TextInput placeholder='Member Name' value={memberData.MemberName} onChangeText={(text) => setMemberData(pre => ({...pre, MemberName: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Member Name</Text>
+                                    <TextInput placeholder='Member Name' value={memberData.MemberName} onChangeText={(text) => setMemberData(pre => ({...pre, MemberName: text }))} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                             </View>
                             <View className="flex-row gap-3">
                                 {user.UserLevelSeq === uType.PATIENT.level && <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Relation</Text>
-                                    <TextInput placeholder='Relation' value={memberData.RelationShipWithHolder} onChangeText={(text) => setMemberData(pre => ({...pre, RelationShipWithHolder: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Relation</Text>
+                                    <TextInput placeholder='Relation' value={memberData.RelationShipWithHolder} onChangeText={(text) => setMemberData(pre => ({...pre, RelationShipWithHolder: text }))} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>}
 
 
                                 <Pressable onPress={() => setGenderDropdown(true)} className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Gender</Text>
-                                    <TextInput readOnly placeholder='Gender' value={memberData.GenderDesc} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Gender</Text>
+                                    <TextInput readOnly placeholder='Gender' value={memberData.GenderDesc} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                     <MyModal modalActive={genderDropdown} onClose={() => setGenderDropdown(false)} child={<GenderDropdown handleSelect={(genderValue: any) => setMemberData(pre => ({...pre, Gender: genderValue.CodeId, GenderDesc: genderValue.Description}))} />} />
                                 </Pressable>
 
 
                                 <Pressable className='z-10 flex-1' onPress={() => setDobDate(true)}>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">DOB</Text>
-                                    <TextInput placeholder='DD/MM/YYYY' readOnly value={memberData.DOB} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">DOB</Text>
+                                    <TextInput placeholder='DD/MM/YYYY' readOnly value={memberData.DOB} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                     {dobDate ? <DateTimePicker value={parsedDOB} mode="date" display="default" onChange={(e: any, d: any) => {calculateDuration(new Date(d).toLocaleDateString('en-TT')); setDobDate(false)}} /> : null}
                                 </Pressable>
                             </View>
 
                             <View className="flex-row gap-3">
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Years</Text>
-                                    <TextInput placeholder='00' maxLength={2} value={String(memberData.Age)} onChangeText={(text) => handleNumberInputsWithDate({name: 'Age', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Years</Text>
+                                    <TextInput placeholder='00' maxLength={2} value={String(memberData.Age)} onChangeText={(text) => handleNumberInputsWithDate({name: 'Age', value: text})} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Months</Text>
-                                    <TextInput placeholder='00' value={String(memberData.AgeMonth)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeMonth', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Months</Text>
+                                    <TextInput placeholder='00' value={String(memberData.AgeMonth)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeMonth', value: text})} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Days</Text>
-                                    <TextInput placeholder='00' value={String(memberData.AgeDay)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeDay', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Days</Text>
+                                    <TextInput placeholder='00' value={String(memberData.AgeDay)} onChangeText={(text) => handleNumberInputsWithDate({name: 'AgeDay', value: text})} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                             </View>
                             <View className="flex-row gap-3">
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Address</Text>
-                                    <TextInput placeholder='Address' value={memberData.Address} onChangeText={(text) => setMemberData(pre => ({...pre, Address: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Address</Text>
+                                    <TextInput placeholder='Address' value={memberData.Address} onChangeText={(text) => setMemberData(pre => ({...pre, Address: text }))} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">City</Text>
-                                    <TextInput placeholder='City' value={memberData.City} onChangeText={(text) => setMemberData(pre => ({...pre, City: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">City</Text>
+                                    <TextInput placeholder='City' value={memberData.City} onChangeText={(text) => setMemberData(pre => ({...pre, City: text }))} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                             </View>
                             <View className="flex-row gap-3">
                                 <Pressable className='z-10 flex-1' onPress={() => setStateDropdown(true)}>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">State</Text>
-                                    <TextInput placeholder='State' readOnly value={states.find((opt) => opt.CodeId == memberData.State)?.Description} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">State</Text>
+                                    <TextInput placeholder='State' readOnly value={states.find((opt) => opt.CodeId == memberData.State)?.Description} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                     <MyModal modalActive={stateDropdown} onClose={() => setStateDropdown(false)} child={<StateDropdown />} />
                                 </Pressable>
                                 <View className='z-10 flex-1'> 
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Pin Code</Text>
-                                    <TextInput placeholder='Pin Code' maxLength={6} value={memberData.Pin} onChangeText={(text) => setMemberData(pre => ({...pre, Pin: text}))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Pin Code</Text>
+                                    <TextInput placeholder='Pin Code' maxLength={6} value={memberData.Pin} onChangeText={(text) => setMemberData(pre => ({...pre, Pin: text}))} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                             </View>
 
@@ -609,11 +609,11 @@ const AddMember = ({ isModal }: any) => {
                             <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Other Details</Text>
                             <View className="flex-row gap-3">
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">{compDetail.UnderDoctCaption || 'Executive'}</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">{compDetail.UnderDoctCaption || 'Executive'}</Text>
                                     <TextInput 
                                         readOnly={!fields.sales.active} 
                                         value={fields.sales.label} 
-                                        className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' 
+                                        className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' 
                                         onChangeText={(text) => handleInput('sales', text)} 
                                         ref={salesInputRef}
                                         onPress={() => setSalesOpen(true)}
@@ -621,12 +621,12 @@ const AddMember = ({ isModal }: any) => {
                                     />
                                 </View>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">{compDetail.ReferenceByCaption || 'Partner'}</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">{compDetail.ReferenceByCaption || 'Partner'}</Text>
                                     <TextInput 
                                         readOnly={!fields.refBy.active} 
                                         value={fields.refBy.label} 
                                         onChangeText={(text) => handleInput('refBy', text)} 
-                                        className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' 
+                                        className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' 
                                         ref={refByInputRef}
                                         onPress={() => setRefOpen(true)}
                                         onBlur={() => setRefOpen(false)} 
@@ -636,19 +636,19 @@ const AddMember = ({ isModal }: any) => {
 
                             <View className="flex-row gap-3">
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Provider</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Provider</Text>
                                     <TextInput 
                                         readOnly={!fields.provider.active} 
                                         value={fields.provider.label} 
                                         onChangeText={(text) => handleInput('provider', text)} 
-                                        className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' 
+                                        className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' 
                                         ref={providerInputRef}
                                         onPress={() => setProviderOpen(true)}
                                         onBlur={() => setProviderOpen(false)} 
                                     />
                                 </View>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">{compDetail.MarketedByCaption || 'Business Executive'}</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">{compDetail.MarketedByCaption || 'Business Executive'}</Text>
                                     <TextInput 
                                         ref={marketingInputRef}
                                         onPress={() => setMarketOpen(true)}
@@ -656,7 +656,7 @@ const AddMember = ({ isModal }: any) => {
                                         readOnly={!fields.marketing.active} 
                                         value={fields.marketing.label} 
                                         onChangeText={(text) => handleInput('marketing', text)} 
-                                        className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' 
+                                        className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' 
                                     />
 
                                 </View>

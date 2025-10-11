@@ -60,9 +60,9 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     </View>
                 </View>
                 <View className='flex-row gap-4 p-[13px]'>
-                    <Image className='' source={require('../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
+                    <Image className='' source={require('../../assets/images/doctor.jpg')} style={{ width: 76, height: 76 }} />
                     <View>
-                        <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{data.AppointmentTo}</Text>
+                        <Text className="font-PoppinsSemibold text-sky-800 text-[14px] mb-2">{data.AppointmentTo}</Text>
                         <View className='flex-row gap-2'>
                             <FontAwesome name="graduation-cap" size={15} color="#075985" />
                             <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{data.DocQualification}</Text>
@@ -73,31 +73,31 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                         </View>
                     </View>
                 </View>
-                <View className='flex-row justify-between p-4 border-y border-gray-300 border-solid'>
+                <View className='flex-row justify-between px-3 py-3.5 border-y border-gray-200 border-solid'>
                     <View className='items-center flex-1'>
-                        <Feather name="phone-call" size={24} className='mb-2' color={myColors.primary[500]} />
-                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Call</Text>
+                        <Feather name="phone-call" size={22} className='mb-2' color={myColors.primary[500]} />
+                        <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Call</Text>
                     </View>
-                    <View className='items-center flex-1 border-x border-gray-300'>
-                        <MaterialCommunityIcons name="message-text-outline" size={24} className='mb-2' color={myColors.primary[500]} />
-                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Message</Text>
+                    <View className='items-center flex-1 border-x border-gray-200'>
+                        <MaterialCommunityIcons name="message-text-outline" size={22} className='mb-2' color={myColors.primary[500]} />
+                        <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Message</Text>
                     </View>
                     <View className='items-center flex-1'>
-                        <Feather name="video" size={24} className='mb-2' color={myColors.primary[500]} />
-                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Video</Text>
+                        <Feather name="video" size={22} className='mb-2' color={myColors.primary[500]} />
+                        <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Video</Text>
                     </View>
                 </View>
             </View>
             <View className='justify-between flex-row px-4 pt-4 items-center'>
             <View className='flex-row items-center gap-3'>
-                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Patient Details</Text>
+                <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Patient Details</Text>
             </View>
             </View>
-            <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
+            <View className='bg-white rounded-3xl p-5 m-4 shadow-sm shadow-gray-400'>
             <View className='flex-row items-center'>
                 <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
                 <View>
-                    <Text className="font-PoppinsBold text-[14px]">{data.PartyName}</Text>
+                    <Text className="font-PoppinsSemibold text-[14px]">{data.PartyName}</Text>
                     <Text className="font-Poppins text-gray-500 text-[11px]">Myself</Text>
                 </View>
                 <FontAwesome name="chevron-down" size={20} color='gray' className="ms-auto" />
@@ -124,39 +124,39 @@ const AppnDetail = ({ data, handleOpen }: any) => {
             </View>
             <View className='justify-between flex-row px-4 pt-1 pb-4 items-center'>
                 <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment</Text>
+                    <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Appointment</Text>
                 </View>
             </View>
-            <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
-                {/* <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
+            <View className='bg-white mx-4 py-1 rounded-3xl shadow-sm shadow-gray-400'>
+                {/* <View className='justify-between flex-row p-4 items-center border-b border-gray-200'>
                     <View className='flex-row items-center gap-3'>
                         <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Reference No.</Text>
                     </View>
                     <Text className="font-PoppinsSemibold text-slate-500 text-[14px] ml-auto leading-5">{data.TranNo}</Text>
                 </View> */}
-                <View className='flex-row gap-3 p-4 border-b border-gray-300'>
-                    <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Department</Text>
-                    <Text className="font-PoppinsSemibold text-[14px] text-slate-600">{data.DeptName}</Text>
+                <View className='flex-row gap-3 px-4 py-3 border-b border-gray-200'>
+                    <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Department</Text>
+                    <Text className="font-PoppinsSemibold text-[13px] text-slate-600">{data.DeptName}</Text>
                 </View>
-                <View className='flex-row gap-3 p-4 border-b border-gray-300'>
-                    <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Reference No.</Text>
-                    <Text className="font-PoppinsSemibold text-[14px] text-slate-600">{data.TranNo}</Text>
+                <View className='flex-row gap-3 px-4 py-3 border-b border-gray-200'>
+                    <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Reference No.</Text>
+                    <Text className="font-PoppinsSemibold text-[13px] text-slate-600">{data.TranNo}</Text>
                 </View>
-                <View className='flex-row gap-3 p-4 border-b border-gray-300'>
-                    <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Status</Text>
+                <View className='flex-row gap-3 px-4 py-3 border-b border-gray-200'>
+                    <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Status</Text>
                     <FontAwesome name="check" size={17} color={data.IsAppConfirmed === 'Y' ? '#00ad44' : '#009efb'} />
-                    <Text className="font-PoppinsSemibold text-[14px]" style={{color: data.IsAppConfirmed === 'Y' ? '#00ad44' : '#009efb'}}>{ data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Booked' }</Text>
+                    <Text className="font-PoppinsSemibold text-[13px]" style={{color: data.IsAppConfirmed === 'Y' ? '#00ad44' : '#009efb'}}>{ data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Booked' }</Text>
                 </View>
-                <View className='flex-row gap-3 p-4'>
-                    <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">Service Status</Text>
+                <View className='flex-row gap-3 px-4 py-3'>
+                    <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Service Status</Text>
                     <FontAwesome name="check" size={17} color={data.Status === 'Y' ? '#00ad44' : '#f29101'} />
-                    <Text className="font-PoppinsSemibold text-[14px]" style={{color: data.Status === 'Y' ? '#00ad44' : '#f29101'}}>{ data.Status === 'Y' ? 'Done' : 'Pending' }</Text>
+                    <Text className="font-PoppinsSemibold text-[13px]" style={{color: data.Status === 'Y' ? '#00ad44' : '#f29101'}}>{ data.Status === 'Y' ? 'Done' : 'Pending' }</Text>
                 </View>
             </View>
-            <View className='bg-white m-4 rounded-3xl shadow-md shadow-gray-400'>
-                <View className='justify-between flex-row p-4 items-center border-b border-gray-300'>
+            <View className='bg-white m-4 rounded-3xl shadow-sm shadow-gray-400'>
+                <View className='justify-between flex-row p-4 items-center border-b border-gray-200'>
                     <View className='flex-row items-center gap-3'>
-                        <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Time & Date</Text>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-5">Time & Date</Text>
                     </View>
                     <View className="gap-3 flex-row items-center ml-auto">
                         <FontAwesome name="pencil" size={18} color="#6b7280" />
@@ -165,17 +165,17 @@ const AppnDetail = ({ data, handleOpen }: any) => {
 
                 <View className='flex-row gap-3 p-4'>
                 <FontAwesome5 name="clock" size={17} color={myColors.primary[500]} />
-                <Text className="font-PoppinsSemibold text-slate-500 text-[14px] mr-auto">{data.NextAppTime}</Text>
+                <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">{data.NextAppTime}</Text>
                 <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
-                <Text className="font-PoppinsSemibold text-slate-500 text-[14px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')}</Text>
+                <Text className="font-PoppinsSemibold text-slate-500 text-[13px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')}</Text>
                 </View>
             </View>
             <View className='justify-between flex-row px-4 pt-1 items-center'>
                 <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Clinic Details</Text>
+                    <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Clinic Details</Text>
                 </View>
             </View>
-            <View className='bg-primary-500 mb-[1.15rem] rounded-3xl shadow-md shadow-primary-700 overflow-hidden m-4'>
+            <View className='bg-primary-500 mb-[1.15rem] rounded-3xl shadow-sm shadow-primary-700 overflow-hidden m-4'>
                 <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
                     <View className='flex-1'>
                         <Text className="font-PoppinsSemibold text-[15px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
@@ -199,50 +199,50 @@ const AppnDetail = ({ data, handleOpen }: any) => {
             </View>
             <View className='justify-between flex-row px-4 pt-1 items-center'>
                 <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Payment</Text>
+                    <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Payment</Text>
                 </View>
             </View>
-            <View className='bg-white m-4 rounded-3xl shadow-md shadow-gray-400'>
-            <View className='justify-between flex-row p-4 pl-5 items-center border-b border-gray-300'>
+            <View className='bg-white m-4 rounded-3xl shadow-sm shadow-gray-400'>
+            <View className='justify-between flex-row p-4 pl-5 items-center border-b border-gray-200'>
                 <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Bill Details</Text>
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-5">Bill Details</Text>
                 </View>
             </View>
 
-            <View className='gap-3 px-5 py-4'>
+            <View className='gap-3 px-4 py-3'>
                 <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[13px]">Booking Fee</Text>
-                    <Text className="font-PoppinsSemibold text-slate-700 text-[13px]">₹ 200</Text>
+                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Booking Fee</Text>
+                    <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 200</Text>
                 </View>
                 <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[13px]">Platform Fee</Text>
-                    <Text className="font-PoppinsSemibold text-slate-700 text-[13px]">₹ 10</Text>
+                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Platform Fee</Text>
+                    <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 10</Text>
                 </View>
                 <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[13px]">Total Amount</Text>
-                    <Text className="font-PoppinsSemibold text-blue-600 text-[13px]">₹ 210</Text>
+                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Total Amount</Text>
+                    <Text className="font-PoppinsSemibold text-blue-600 text-[12px]">₹ 210</Text>
                 </View>
                 <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[13px]">Payment Status</Text>
-                    <Text className="font-PoppinsSemibold text-green-600 text-[13px]">
+                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Payment Status</Text>
+                    <Text className="font-PoppinsSemibold text-green-600 text-[12px]">
                         <FontAwesome name="check" size={17} color="#16a34a" />  Paid
                     </Text>
                 </View>
                 {/* <View className="flex-row justify-between items-center">
                     <Text className="font-PoppinsSemibold text-gray-500 text-[12px]">Payment Method</Text>
-                    <Text className="font-PoppinsSemibold text-slate-700 text-[13px]">ONLINE / UPI</Text>
+                    <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">ONLINE / UPI</Text>
                 </View> */}
             </View>
-            <View className='justify-between flex-row p-4 items-center border-t border-gray-300'>
-                <Text className="font-PoppinsSemibold text-gray-700 text-[14px]">Payment Method</Text>
-                <Text className="font-PoppinsSemibold text-purple-600 text-[14px]">ONLINE / UPI</Text>
+            <View className='justify-between flex-row p-4 items-center border-t border-gray-200'>
+                <Text className="font-PoppinsSemibold text-gray-700 text-[13px]">Payment Method</Text>
+                <Text className="font-PoppinsSemibold text-purple-600 text-[13px]">ONLINE / UPI</Text>
             </View>
             </View>
             {/* <View className='flex-row gap-2 p-4 bg-white'>
                 <ButtonPrimary title='Reschedule' active={false} onPress={() => {}} classes='flex-1 py-3' textClasses='text-gray-800' />
                 <ButtonPrimary title='Cancel' active={true} onPress={() => {}} classes='flex-1 py-3' />
             </View> */}
-            <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>
+            <View className='flex-row justify-between border-y border-gray-200 border-solid p-4 bg-white gap-2'>
                 <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
                 </TouchableOpacity>

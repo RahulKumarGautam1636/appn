@@ -269,131 +269,129 @@ const Booking = () => {
         <>
             <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
                 <View className='bg-white'>
-                    <Pressable onPress={() => router.back()} className='justify-between flex-row p-4 items-center'>
-                        <View className='flex-row items-center gap-3'>
-                            <Ionicons name="arrow-back-outline" size={24} color="black" />
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">General Doctors</Text>
+                    <Pressable onPress={() => router.back()} className='justify-between flex-row p-3 items-center'>
+                        <View className='flex-row items-center gap-2'>
+                            <Ionicons name="arrow-back-outline" size={22} color="black" />
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">General Doctors</Text>
                         </View>
-                        <View className="gap-3 flex-row items-center ml-auto">
-                            <Feather name="heart" size={20} color='black' />
-                            <Feather name="share-2" size={20} color='black' />
+                        <View className="gap-2 flex-row items-center ml-auto">
+                            <Feather name="heart" size={18} color='black' />
+                            <Feather name="share-2" size={18} color='black' />
                         </View>
                     </Pressable>
-                    <View className='flex-row gap-4 p-[13px]'>
-                        <Image className='' source={require('./../../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
+                    <View className='flex-row gap-3 p-[12px]'>
+                        <Image className='' source={require('./../../../assets/images/doctor.jpg')} style={{ width: 75, height: 75 }} />
                         <View className='flex-1'>
-                            <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">{doctor.Name}</Text>
+                            <Text className="font-PoppinsSemibold text-sky-800 text-[14px] mb-1.5">{doctor.Name}</Text>
                             {doctor.Qualification ? <View className='flex-row gap-2'>
-                                <FontAwesome name="graduation-cap" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-800 text-[12px] mb-[6px]">{doctor.Qualification}</Text>
+                                <FontAwesome name="graduation-cap" size={13} color="#075985" />
+                                <Text className="font-PoppinsMedium text-gray-800 text-[12px] mb-[5px]">{doctor.Qualification}</Text>
                             </View> : null}
                             {doctor.SpecialistDesc ? <View className='flex-row gap-2'>
-                                <FontAwesome5 name="stethoscope" size={15} color="#075985" />
+                                <FontAwesome5 name="stethoscope" size={13} color="#075985" />
                                 <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{doctor.SpecialistDesc}</Text>
                             </View> : null}
 
                             {stripHtml(doctor.PrescriptionFooter).result ? 
 
-                            <View className='flex-row gap-2 mt-1'>
-                                <Text className="font-PoppinsMedium text-gray-700 text-[13px] leading-6">{stripHtml(doctor.PrescriptionFooter).result}</Text>
+                            <View className='flex-row gap-2 mt-2'>
+                                <Text className="font-PoppinsMedium text-gray-700 text-[12px] leading-6">{stripHtml(doctor.PrescriptionFooter).result}</Text>
                             </View>
                             // <Text className="font-PoppinsMedium text-gray-500 text-[13px] leading-6"></Text>
                             
                             : null}
                         </View>
                     </View>
-                    {compCode === BC_ROY ? null : <View className='flex-row justify-between p-4 border-y border-gray-300 border-solid'>
+                    {compCode === BC_ROY ? null : <View className='flex-row justify-between p-3 border-y border-gray-200'>
                         <View className='items-center flex-1'>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[14px] mb-1">14 Years</Text>
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Experience</Text>
+                            <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Experience</Text>
                         </View>
                         <View className='items-center flex-1 border-x border-gray-300'>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[14px] mb-1">2566</Text>
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Patients</Text>
+                            <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Patients</Text>
                         </View>
                         <View className='items-center flex-1'>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[14px] mb-1">⭐ 4.5k</Text>
-                            <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Reviews</Text>
+                            <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Reviews</Text>
                         </View>
                     </View>}
                 </View>
-                <View className='px-4 flex-row gap-2 justify-between bg-white border-b-2 border-gray-300'>
-                    <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center border-b-2 border-primary-600">Schedule</Text>
-                    <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">About</Text>
-                    <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Clinics</Text>
-                    <Text className="font-PoppinsMedium pt-4 pb-3 text-gray-600 text-[12px] flex-1 text-center">Reviews</Text>
+                <View className='px-3 flex-row gap-2 justify-between bg-white border-b-2 border-gray-300'>
+                    <Text className="font-PoppinsMedium pt-[12px] pb-[9px] text-gray-600 text-[12px] flex-1 text-center border-b-2 border-primary-600">Schedule</Text>
+                    <Text className="font-PoppinsMedium pt-[12px] pb-[9px] text-gray-600 text-[12px] flex-1 text-center">About</Text>
+                    <Text className="font-PoppinsMedium pt-[12px] pb-[9px] text-gray-600 text-[12px] flex-1 text-center">Clinics</Text>
+                    <Text className="font-PoppinsMedium pt-[12px] pb-[9px] text-gray-600 text-[12px] flex-1 text-center">Reviews</Text>
                 </View>
 
                 {compCode === BC_ROY ? null : <>
-                    <View className='justify-between flex-row items-center px-4 pt-4'>
-                        <View className='flex-row items-center gap-3'>
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                    <View className='justify-between flex-row items-center px-3 pt-3'>
+                        <View className='flex-row items-center gap-2'>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">Select Clinic</Text>
                         </View>
                         <Pressable onPress={() => dispatch(setModal({ name: 'COMPANIES', state: true }))} className="gap-2 flex-row items-center ml-auto">
-                            <Text className="font-PoppinsMedium text-sky-700 text-[13px] leading-5">1 more clinics</Text>
-                            <Feather name="chevron-down" size={24} color='#0369a1' />
+                            <Text className="font-PoppinsMedium text-sky-700 text-[12px] leading-4">1 more clinics</Text>
+                            <Feather name="chevron-down" size={22} color='#0369a1' />
                         </Pressable>
                     </View>
-                    <View className='bg-primary-500 mx-3 mt-3 rounded-3xl shadow-md shadow-primary-700 overflow-hidden'>
-                        <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
+                    <View className='bg-primary-500 mx-3 mt-2 rounded-3xl shadow-md shadow-primary-700 overflow-hidden'>
+                        <View className='flex-row items-center gap-3 pl-4 pr-3 pb-4 pt-3 bg-primary-500 '>
                             <View className='flex-1'>
-                                <Text className="font-PoppinsSemibold text-[15px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
-                                <View className='mt-2 '>
-                                    <View className='flex gap-3 flex-row items-center'>
-                                        <FontAwesome5 name="clock" size={14} color="#fff" />
-                                        <Text className="font-PoppinsMedium text-gray-100 text-[11px] leading-5">08:30 AM - 12:00 PM</Text>
+                                <Text className="font-PoppinsSemibold text-[13px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
+                                <View className='mt-1.5 '>
+                                    <View className='flex gap-2 flex-row items-center'>
+                                        <FontAwesome5 name="clock" size={12} color="#fff" />
+                                        <Text className="font-PoppinsMedium text-gray-100 text-[10px] leading-4">08:30 AM - 12:00 PM</Text>
                                     </View>
-                                    <View className='flex gap-3 flex-row items-center mt-2'>
-                                        <FontAwesome5 name="map-marker-alt" size={14} color="#fff" />
-                                        <Text className="font-Poppins text-gray-100 text-[11px] leading-5" numberOfLines={1}>{selectedCompany.ADDRESS}</Text>
+                                    <View className='flex gap-2 flex-row items-center mt-1.5'>
+                                        <FontAwesome5 name="map-marker-alt" size={12} color="#fff" />
+                                        <Text className="font-Poppins text-gray-100 text-[10px] leading-4" numberOfLines={1}>{selectedCompany.ADDRESS}</Text>
                                     </View>
                                 </View>
                             </View>
                             <Link href={`/appn/clinic/${selectedCompany.CompanyId}`}>
                                 <View>
-                                    <Feather name="chevron-right" size={24} color="#fff" className='px-[9px] py-[9px] bg-primary-400 rounded-full'  />
+                                    <Feather name="chevron-right" size={22} color="#fff" className='px-[8px] py-[8px] bg-primary-400 rounded-full'  />
                                 </View>
                             </Link>
                         </View>
                     </View>
                 </>}
 
-                <View className='justify-between flex-row px-4 pt-1 items-center mt-4'>
-                    <View className='flex-row items-center gap-3'>
+                <View className='justify-between flex-row px-3 pt-1 items-center mt-3'>
+                    <View className='flex-row items-center gap-2'>
                         {/* <Ionicons name="arrow-back-outline" size={24} color="black" /> */}
-                        <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Schedule Appointment</Text>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">Schedule Appointment</Text>
                     </View>
-                    <View className="gap-3 flex-row items-center ml-auto">
-                        <Feather name="chevron-left" size={24} color='#6b7280' />
-                        <Feather name="chevron-right" size={24} color='#6b7280' />
+                    <View className="gap-2 flex-row items-center ml-auto">
+                        <Feather name="chevron-left" size={22} color='#6b7280' />
+                        <Feather name="chevron-right" size={22} color='#6b7280' />
                     </View>
                 </View>
-                <View className='px-4'>
+                <View className='px-3'>
                     {(() => {
                         if (dateTabsList.loading) {
-                            return <GridLoader classes='h-[70px] w-[50px]' containerClass='flex-row gap-3 mt-4' />
+                            return <GridLoader classes='h-[60px] w-[45px]' containerClass='flex-row gap-2 mt-3' />
                         } else if (dateTabsList.err.status) {
                             return;
                         } else if (!dateTabsList.data.length) {
-                            return <Text className='p-4 border border-rose-500 text-red-500 leading-5 text-center mt-8 rounded-lg font-PoppinsSemibold'>No Schedule Found</Text>
+                            return <Text className='p-3 border border-rose-500 text-red-500 leading-4 text-[12px] text-center mt-6 rounded-lg font-PoppinsSemibold'>No Schedule Found</Text>
                         } else {
                             return (
-                                <ScrollView horizontal={true} contentContainerClassName='gap-4 pb-2' showsHorizontalScrollIndicator={false}>
+                                <ScrollView horizontal={true} contentContainerClassName='gap-3 pb-2' showsHorizontalScrollIndicator={false}>
                                     {dateTabsList.data.map((i: any) => <DayBtn key={i.SDateStr} date={i.Day} day={i.DName.substring(0, 3)} active={i.SDateStr === selectedDate} handleActive={() => handleDateChange(i)} />)}
                                 </ScrollView>
                             ) 
                         }
                     })()}
                 </View>
-                <View className='py-4 px-4 pb-2 bg-white shadow-md shadow-gray-300 mt-4'>
+                <View className='py-3 px-3 pb-2 bg-white shadow-md shadow-gray-300 mt-3'>
                     <View className='justify-start flex-row flex-wrap' style={{
-                        // columnGap: '3.5%'   // 6 items
-                        columnGap: '5%',    // 4 items
-                        // columnGap: '10%',      // 3 items
+                        columnGap: '5%',    
                     }}>
                         {(() => {
                             if (dateSlotsList.loading) {
-                                return <GridLoader classes='h-[50px] w-[30%] mb-3' count={6} containerClass='flex-row flex-wrap' />
+                                return <GridLoader classes='h-[45px] w-[30%] mb-2' count={6} containerClass='flex-row flex-wrap' />
                             } else if (dateSlotsList.err.status) {
                                 return;
                             } else {
@@ -407,7 +405,7 @@ const Booking = () => {
                         })()}
                     </View>
                 </View>
-                {compCode === BC_ROY ? null : <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-4 ${compCode === BC_ROY ? 'pointer-events-none' : ''}`} />}
+                {compCode === BC_ROY ? null : <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-3 ${compCode === BC_ROY ? 'pointer-events-none' : ''}`} />}
             </ScrollView>
             <ReactNativeModal
                 isVisible={confirmation}
@@ -454,7 +452,6 @@ const styles = StyleSheet.create({
 });
 
 const SlotBtn = ({ time, active, handleSelect, blank }: any) => {
-    console.log(time);
     
     // return (        
     //     <TouchableOpacity onPress={handleSelect} className={`${blank ? 'opacity-60' : ''} justify-center border-2 rounded-lg px-3 py-1 mb-3 ${active ? 'bg-primary-50 border-primary-400' : 'bg-gray-50 border-gray-300'}`} style={{
@@ -487,11 +484,18 @@ const SlotBtn = ({ time, active, handleSelect, blank }: any) => {
 const DayBtn = ({ date, day, active, handleActive }: any) => {
 
     return (
-        <TouchableOpacity onPress={handleActive} className='gap-3 flex-1 text-center items-center'>
-            <Text className={`font-PoppinsMedium pt-4 text-[12px] ${active ? 'text-gray-600' : 'text-gray-400'}`}>{day}</Text>
-            <View className={`items-center justify-center h-11 w-12 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-primary-500' : 'bg-white'}`}>
-                <Text className={`font-PoppinsMedium text-gray-600 text-[13px] leading-5 ${active ? 'text-white' : ''}`}>{date}</Text>
-            </View>
+        // <TouchableOpacity onPress={handleActive} className='gap-3 flex-1 text-center items-center'>
+        //     <Text className={`font-PoppinsMedium pt-4 text-[12px] ${active ? 'text-gray-600' : 'text-gray-400'}`}>{day}</Text>
+        //     <View className={`items-center justify-center h-11 w-12 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-primary-500' : 'bg-white'}`}>
+        //         <Text className={`font-PoppinsMedium text-gray-600 text-[13px] leading-5 ${active ? 'text-white' : ''}`}>{date}</Text>
+        //     </View>
+        // </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleActive} className='gap-2 flex-1 text-center items-center'>
+          <Text className={`font-PoppinsMedium pt-3 text-[11px] ${active ? 'text-gray-600' : 'text-gray-400'}`}>{day}</Text>
+          <View className={`items-center justify-center h-9 w-10 rounded-lg shadow-sm shadow-gray-400 ${active ? 'bg-primary-500' : 'bg-white'}`}>
+              <Text className={`font-PoppinsMedium text-gray-600 text-[12px] leading-4 ${active ? 'text-white' : ''}`}>{date}</Text>
+          </View>
         </TouchableOpacity>
     )
 } 
