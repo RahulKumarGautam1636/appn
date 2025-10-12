@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '@/src/store/slices/slices';
 import { myColors } from '@/src/constants';
 import { RootState } from '@/src/store/store';
-import { GradientBG } from '@/src/components/utils';
+import { dialCall, GradientBG, openWhatsApp } from '@/src/components/utils';
 import { MyModal } from '@/src/components';
 import InvoicePreview from '@/app/appn/bill';
 import { useState } from 'react';
@@ -74,18 +74,18 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     </View>
                 </View>
                 <View className='flex-row justify-between px-3 py-3.5 border-y border-gray-200 border-solid'>
-                    <View className='items-center flex-1'>
+                    <Pressable onPress={() => dialCall(data.DocMobile)} className='items-center flex-1'>
                         <Feather name="phone-call" size={22} className='mb-2' color={myColors.primary[500]} />
                         <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Call</Text>
-                    </View>
-                    <View className='items-center flex-1 border-x border-gray-200'>
+                    </Pressable>
+                    <Pressable onPress={() => openWhatsApp(data.DocMobile, 'Can we talk please.')} className='items-center flex-1 border-x border-gray-200'>
                         <MaterialCommunityIcons name="message-text-outline" size={22} className='mb-2' color={myColors.primary[500]} />
                         <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Message</Text>
-                    </View>
-                    <View className='items-center flex-1'>
+                    </Pressable>
+                    <Pressable onPress={() => alert('This feature will be awailable soon.')} className='items-center flex-1'>
                         <Feather name="video" size={22} className='mb-2' color={myColors.primary[500]} />
                         <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Video</Text>
-                    </View>
+                    </Pressable>
                 </View>
             </View>
             <View className='justify-between flex-row px-4 pt-4 items-center'>

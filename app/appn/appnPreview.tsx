@@ -186,11 +186,11 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                   <View className='gap-2 px-4 py-3'>
                   <View className="flex-row justify-between">
                       <Text className="font-PoppinsMedium text-gray-600 text-[12px]">Consultation Fees</Text>
-                      <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 200</Text>
+                      <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ {doctor.Rate}</Text>
                   </View>
                   <View className="flex-row justify-between">
                       <Text className="font-PoppinsMedium text-gray-600 text-[12px]">Platform Fees</Text>
-                      <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 10</Text>
+                      <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">Free</Text>
                   </View>
                   <View className="flex-row justify-between">
                       <Text className="font-PoppinsMedium text-gray-600 text-[12px]">Promo Applied</Text>
@@ -199,7 +199,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                   </View>
                   <View className='justify-between flex-row p-4 items-center border-t border-gray-200'>
                       <Text className="font-PoppinsSemibold text-gray-700 text-[13px] leading-4">Total Payable</Text>
-                      <Text className="font-PoppinsSemibold text-gray-700 text-[13px] leading-4">₹ 210</Text>
+                      <Text className="font-PoppinsSemibold text-gray-700 text-[13px] leading-4">₹ {doctor.Rate}</Text>
                   </View>
               </View>
               <ButtonPrimary title='Confirm Booking' isLoading={loading} active={true} onPress={handleConfirmation} classes='mx-3 mb-4 mt-1' />

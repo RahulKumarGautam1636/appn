@@ -1,6 +1,6 @@
 import axios, { GenericAbortSignal } from "axios";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity, Pressable } from 'react-native';
+import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity, Pressable, Linking, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
 import { addToCart, dumpCart, removeFromCart, setModal, setUserRegType } from "../store/slices/slices";
@@ -939,3 +939,29 @@ export const invalidDate = '0001-01-01T00:00:00'
 export const isEmpty = (obj: any) => {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
+
+export const dialCall = async (phoneNumber: string) => {
+  if (!phoneNumber || phoneNumber.length < 9) return alert('The Phone Number is Invalid.')
+  try {
+    await Linking.openURL(`tel:${phoneNumber}`);
+  } catch (error) {
+    console.error('Error opening dialer:', error);
+    Alert.alert('Error', 'Unable to open phone dialer.');
+  }
+};
+
+export const openWhatsApp = async (phone: string, message: string) => {
+  if (!phone || phone.length < 9) return alert('The Phone Number is Invalid.')
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message || '')}`;   // International format, no "+"
+  try {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert('Error', 'WhatsApp is not installed on this device');
+    }
+  } catch (error) {
+    console.error('Error opening WhatsApp:', error);
+    Alert.alert('Error', 'Failed to open WhatsApp');
+  }
+};
