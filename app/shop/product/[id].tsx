@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import colors from 'tailwindcss/colors';
-import { ChevronRighChevronRight, t, ChevronUp, Copy, Smile, ChevronRight } from 'lucide-react-native';
+import { ChevronRight } from 'lucide-react-native';
 
 const ProductPage = () => {
   const [count, setCount] = useState(1);

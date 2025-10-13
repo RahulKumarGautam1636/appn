@@ -12,7 +12,7 @@ import { getFrom, ListLoader, NoContent } from '../../src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 
 
-const AppnList = () => {
+const AppnList = ({ memberId }: any) => {
 
     const router = useRouter();
     const user = useSelector((i: RootState) => i.user);
@@ -20,20 +20,11 @@ const AppnList = () => {
     const [active, setActive] = useState('ENQ');
     const { selected, list } = useSelector((i: RootState) => i.companies);
     const [appData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
-    // const user = {
-    //     Name: 'Dr. Theressa Wahler',
-    //     Age: '08:30 AM,    23/05/2025',
-    //     GenderDesc: 'Female',
-    //     Qualification: 'Gynacologist',
-    //     LabTests: 7,
-    //     Appontments: 15,
-
-    // }   
 
     useEffect(() => {
         const getAppnData = async (query: string, userId: string, companyId: string) => {
             if (user.UserId > 1) {
-              const res = await getFrom(`${BASE_URL}/api/Appointment/Get?id=${userId}&CID=${companyId}&Type=${query}&CatType=OPD&MemberId=${'0'}`, {}, setAppnData);
+              const res = await getFrom(`${BASE_URL}/api/Appointment/Get?id=${userId}&CID=${companyId}&Type=${query}&CatType=OPD&MemberId=${memberId || '0'}`, {}, setAppnData);
               if (res) {
                 setTimeout(() => {
                   setAppnData(res);            
@@ -43,17 +34,6 @@ const AppnList = () => {
         }
         getAppnData(active, user.UserId, selected.EncCompanyId);
     }, [active, user.UserId, selected.EncCompanyId])
-
-    // const getLabData = async (query, userId = user.UserId, companyId = user.selectedCompany.EncCompanyId) => {
-    //     if (user.UserId > 1) {
-    //       const res = await getFrom(`${BASE_URL}/api/Appointment/Get?id=${userId}&CID=${companyId}&Type=${query}&CatType=INVESTIGATION&MemberId=${'0'}`, {}, setLabData);
-    //       if (res) {
-    //         setTimeout(() => {
-    //           setLabData(res);            
-    //         }, 400)
-    //       }
-    //     }
-    // }
 
     const renderAppnData = (data: any) => {
 
@@ -69,11 +49,11 @@ const AppnList = () => {
     }
 
     const dispatch = useDispatch();
-    const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
+    // const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
 
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>                
-            <View className='justify-between flex-row p-4 items-center'>
+            {memberId ? null : <View className='justify-between flex-row p-4 items-center'>
                 <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
                     <Ionicons name="arrow-back-outline" size={24} color="black" />
                     <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Appointments</Text>
@@ -82,10 +62,10 @@ const AppnList = () => {
                     <Feather name="heart" size={20} color='black' />
                     <Feather name="share-2" size={20} color='black' />
                 </View>
-            </View>
+            </View>}
 
             {compCode === defaultId ? <><View className='px-4 pt-1'>
-                <View className=''>
+                {memberId ? null : <View className=''>
                     <View className='bg-primary-500 mb-4 rounded-2xl shadow-sm shadow-gray-400'>
                         <View className='justify-between flex-row p-[13px] items-center border-b border-primary-300'>
                             <View className='flex-row items-center gap-3'>
@@ -100,7 +80,7 @@ const AppnList = () => {
                             <Text className="font-PoppinsSemibold text-white text-[13px]">Not Found</Text>
                         </View>
                     </View> 
-                </View>
+                </View>}
                 {compCode === defaultId || list.length > 1 ? <View>
                     <View className='justify-between flex-row pt-1 items-center'>
                         <View className='flex-row items-center gap-2'>

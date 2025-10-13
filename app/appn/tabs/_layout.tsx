@@ -18,7 +18,7 @@ export default function TabsLayout() {
     // { name: 'Home', icon: 'home', key: 'home' },
     { name: 'OPD', icon: 'calendar', key: 'opd', visible: true },
     { name: 'Lab Test', icon: 'flask', key: 'lab', visible: hasAccess("labtest", compCode)},
-    { name: 'Account', icon: 'person', key: 'profile', visible: true },
+    { name: 'Account', icon: 'person', key: 'account', visible: true },
     { name: 'Cart', icon: 'cart', key: 'cart', visible: hasAccess("labtest", compCode)},
   ];
 
@@ -75,7 +75,7 @@ export default function TabsLayout() {
             if (!tab.visible) return;
             const isFocused = state.routes[state.index]?.name === tab.key;
             const onPress = () => {
-              if (tab.key === 'profile') {
+              if (tab.key === 'account') {
                 if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
               } 
               router.push(`/appn/tabs/${tab.key}`);

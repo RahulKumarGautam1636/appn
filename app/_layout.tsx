@@ -56,10 +56,12 @@ function LayoutContent() {
             <Stack.Screen name="index" options={{animation: 'slide_from_right'}} />
             <Stack.Screen name="appn/tabs" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="login" />
-            <Stack.Screen name="profile" options={{animation: 'slide_from_right'}} />
+            <Stack.Screen name="account" options={{animation: 'slide_from_right'}} />
+            <Stack.Screen name="appn/profile" options={{animation: 'slide_from_right'}} />
             <Stack.Screen name="appn/appnList" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="search" />
             <Stack.Screen name="members" options={{animation: 'slide_from_right'}} />
+            <Stack.Screen name="members/[id]" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="appn/addMember" options={{animation: 'slide_from_right'}} />
             <Stack.Screen name="appn/cart" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="appn/testDetail" />
@@ -155,7 +157,7 @@ export default function RootLayout() {
 //                 <Stack.Screen name="index" options={{ headerShown: false, animation: 'slide_from_right' }} />
 //                 <Stack.Screen name="appn/tabs" options={{ headerShown: false, animation: 'slide_from_left' }} />
 //                 <Stack.Screen name="login" options={{ headerShown: false }} />
-//                 <Stack.Screen name="profile" options={{ headerShown: false, animation: 'slide_from_right' }} />
+//                 <Stack.Screen name="account" options={{ headerShown: false, animation: 'slide_from_right' }} />
 //                 <Stack.Screen name="appn/appnList" options={{ headerShown: false, animation: 'slide_from_left' }} />
 //                 <Stack.Screen name="search" options={{ headerShown: false }} />
 //                 <Stack.Screen name="members" options={{ headerShown: false, animation: 'slide_from_right' }} />

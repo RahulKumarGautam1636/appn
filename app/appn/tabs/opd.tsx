@@ -132,7 +132,7 @@ const HomeScreen = () => {
                                 <Text className="font-Poppins text-gray-600 text-[10px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
                             </View>
                             <View className="gap-2 flex-row items-center ml-auto">
-                                <Link href={'/appn/tabs/profile'}>
+                                <Link href={'/appn/tabs/account'}>
                                     <View className="bg-white p-2.5 rounded-full shadow-lg">
                                         <FontAwesome name="bell" size={18} color='#3b82f6' className='text-blue-500'/>
                                     </View>

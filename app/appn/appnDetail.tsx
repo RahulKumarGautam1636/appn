@@ -82,7 +82,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                         <MaterialCommunityIcons name="message-text-outline" size={22} className='mb-2' color={myColors.primary[500]} />
                         <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Message</Text>
                     </Pressable>
-                    <Pressable onPress={() => alert('This feature will be awailable soon.')} className='items-center flex-1'>
+                    <Pressable onPress={() => alert('This feature will be available soon.')} className='items-center flex-1'>
                         <Feather name="video" size={22} className='mb-2' color={myColors.primary[500]} />
                         <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Video</Text>
                     </Pressable>

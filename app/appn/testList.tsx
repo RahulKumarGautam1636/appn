@@ -13,7 +13,7 @@ import { getFrom, ListLoader, NoContent } from '@/src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 
 
-const TestList = () => {
+const TestList = ({ memberId }: any) => {
 
     const router = useRouter();
     const user = useSelector((i: RootState) => i.user);
@@ -21,20 +21,11 @@ const TestList = () => {
     const [active, setActive] = useState('ENQ');
     const { selected, list } = useSelector((i: RootState) => i.companies);
     const [labData, setLabData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
-    // const user = {
-    //     Name: 'Dr. Theressa Wahler',
-    //     Age: '08:30 AM,    23/05/2025',
-    //     GenderDesc: 'Female',
-    //     Qualification: 'Gynacologist',
-    //     LabTests: 7,
-    //     Appontments: 15,
-
-    // }   
 
     useEffect(() => {
         const getLabData = async (query: string, userId: string, companyId: string) => {
             if (user.UserId > 1) {
-              const res = await getFrom(`${BASE_URL}/api/Appointment/Get?id=${userId}&CID=${companyId}&Type=${query}&CatType=INVESTIGATION&MemberId=${'0'}`, {}, setLabData);
+              const res = await getFrom(`${BASE_URL}/api/Appointment/Get?id=${userId}&CID=${companyId}&Type=${query}&CatType=INVESTIGATION&MemberId=${memberId || '0'}`, {}, setLabData);
               if (res) {
                 setTimeout(() => {
                   setLabData(res);            
@@ -44,17 +35,6 @@ const TestList = () => {
         }
         getLabData(active, user.UserId, selected.EncCompanyId);
     }, [active, user.UserId, selected.EncCompanyId])
-
-    // const getLabData = async (query, userId = user.UserId, companyId = user.selectedCompany.EncCompanyId) => {
-    //     if (user.UserId > 1) {
-    //       const res = await getFrom(`${BASE_URL}/api/Appointment/Get?id=${userId}&CID=${companyId}&Type=${query}&CatType=INVESTIGATION&MemberId=${'0'}`, {}, setLabData);
-    //       if (res) {
-    //         setTimeout(() => {
-    //           setLabData(res);            
-    //         }, 400)
-    //       }
-    //     }
-    // }
 
     const renderLabData = (data: any) => {
 
@@ -70,22 +50,18 @@ const TestList = () => {
     }
 
     const dispatch = useDispatch();
-    const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
+    // const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
     
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
-            <View className='justify-between flex-row p-4 items-center'>
+            {memberId ? null : <View className='justify-between flex-row p-4 items-center'>
                 <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
                     <Ionicons name="arrow-back-outline" size={24} color="black" />
                     <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Appointments</Text>
                 </Pressable>
-                {/* <View className="gap-3 flex-row items-center ml-auto">
-                    <Feather name="heart" size={20} color='black' />
-                    <Feather name="share-2" size={20} color='black' />
-                </View> */}
-            </View>
+            </View>}
             <View className='px-4 pt-1'>
-                <View className='bg-white mb-3 rounded-2xl shadow-sm shadow-gray-400'>
+                {memberId ? null : <View className='bg-white mb-3 rounded-2xl shadow-sm shadow-gray-400'>
                     <View className='justify-between flex-row p-[14px] items-center border-b border-gray-300'>
                         <View className='flex-row items-center gap-3'>
                             <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-5">Total</Text>
@@ -98,7 +74,7 @@ const TestList = () => {
                         <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
                         <Text className="font-PoppinsSemibold text-slate-500 text-[13px]">Not Found</Text>
                     </View>
-                </View> 
+                </View> }
                 {compCode === defaultId || list.length > 1 ? <View>
                     <View className='justify-between flex-row pt-1 mb-1 items-center'>
                         <View className='flex-row items-center gap-2'>

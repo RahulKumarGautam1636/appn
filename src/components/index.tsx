@@ -235,11 +235,15 @@ export const Card_2 = ({ data, active }: any) => {
   const Dropdown = () => {
     return (
       <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400 py-2'>
+          <TouchableOpacity onPress={() => {router.push(`/members/${data.MemberId}`); setDropdown(false)}} className='flex-row gap-4 py-4 pl-6 border-b border-gray-300' >
+            <FontAwesome5 name="eye" size={17} color={colors.rose[500]} />
+            <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Member</Text>
+          </TouchableOpacity>
           {(() => {
             if (vType === 'ErpHospital') {
               return (
                 <>
-                  <TouchableOpacity onPress={() => handleTask('')} className='flex-row gap-4 py-4 pl-6 border-b border-gray-300' >
+                  <TouchableOpacity onPress={() => {router.push(`/members/${data.MemberId}?mainTab=appns`); setDropdown(false)}} className='flex-row gap-4 py-4 pl-6 border-b border-gray-300' >
                     <FontAwesome5 name="flask" size={17} color={colors.rose[500]} />
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>View Bookings</Text>
                   </TouchableOpacity>
