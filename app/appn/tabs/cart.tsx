@@ -80,7 +80,7 @@ const Cart = ({}: any) => {
                         <View className='bg-white mt-4 rounded-2xl shadow-lg border-b-2 border-gray-300'>
                             <View className='flex-row gap-4 w-full p-4 items-center'>
                                 <View className='w-full items-center flex-row rounded-2xl shadow-sm shadow-gray-500 bg-[#ebecef] pr-4'>
-                                    <TextInput placeholder='Search Lab Tests..' placeholderTextColor="#9CA3AF" className='text-gray-700 py-4 items-start px-5 flex-1' />
+                                    <TextInput placeholderTextColor={colors.gray[400]} placeholder='Search Lab Tests..' className='text-gray-700 py-4 items-start px-5 flex-1' />
                                     <Feather className='' name="search" size={24} color={myColors.primary[500]} />
                                 </View>
                             </View>
@@ -119,8 +119,7 @@ const BookingSuccess = ({ handleClose }: any) => {
   const labTests = Object.values(lab);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(labTests);    
+  useEffect(() => {   
     return () => dispatch(dumpCart());
   }, [])
   return (

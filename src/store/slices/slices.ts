@@ -11,9 +11,7 @@ const compCodeSlice = createSlice({
   name: 'compCode',
   initialState: compId ? compId : defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
   reducers: {
-    setCompCode: (state, action: PayloadAction<string>) => {
-      console.log(action.payload);
-      
+    setCompCode: (state, action: PayloadAction<string>) => {     
       return action.payload;
     },
   },

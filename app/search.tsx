@@ -63,7 +63,7 @@ function MainSearch() {
                         <Ionicons name="arrow-back-outline" size={22} color="#3b82f6" />
                     </TouchableOpacity>
                     <View className='z-10'>
-                        <TextInput value={searchKey.query} onChangeText={(text) => setSearchKey(pre => ({...pre, query: text }))} placeholder='Search Doctors..' className='bg-white pl-[3.5rem] pr-4 py-[1.1rem] rounded-full shadow-md shadow-blue-500' />
+                        <TextInput placeholderTextColor={'#6b7280'} value={searchKey.query} onChangeText={(text) => setSearchKey(pre => ({...pre, query: text }))} placeholder='Search Doctors..' className='bg-white pl-[3.5rem] pr-4 py-[1.1rem] rounded-full shadow-md shadow-blue-500' />
                     </View>
                     <Feather className='absolute z-50 top-[4px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>

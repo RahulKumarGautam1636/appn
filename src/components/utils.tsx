@@ -352,7 +352,7 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  console.log(`Product card --------------------------- ${parent}`);
+  // console.log(`Product card --------------------------- ${parent}`);
 
   useEffect(() => {
 		const packSizeList = data.ItemPackSizeList;

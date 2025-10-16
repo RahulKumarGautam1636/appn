@@ -1,4 +1,4 @@
-import { BASE_URL, hasAccess } from '@/src/constants';
+import { BASE_URL, defaultId, hasAccess } from '@/src/constants';
 import { CompCard } from '@/src/components';
 import { BannerCarousel, getFrom, getRequiredFields, getRequiredFieldsOnly, GradientBG, GridLoader, ListLoader } from '@/src/components/utils';
 import { addToCart, setModal } from '@/src/store/slices/slices';
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { myColors } from '@/src/constants';
 import LabCard from '@/src/components/cards';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import colors from 'tailwindcss/colors';
 
 const LabTests = ({}: any) => {
     const dispatch = useDispatch()
@@ -71,38 +72,25 @@ const LabTests = ({}: any) => {
                 <BannerCarousel />
                 <View className='p-3'>
 
-                    {/* <View className='justify-between flex-row items-center'>
-                        <View className='flex-row items-center gap-3'>
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Select Clinic</Text>
+                    {compCode === defaultId || companyList.length > 1 ? <View className='mb-2'>
+                        <View className='justify-between flex-row items-center mb-1'>
+                            <View className='flex-row items-center gap-2'>
+                                <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-4">Select Clinic</Text>
+                            </View>
+                            <View className="gap-2 flex-row items-center ml-auto">
+                                {/* <Feather name="chevron-left" size={24} color='#6b7280' />
+                                <Feather name="chevron-right" size={24} color='#6b7280' /> */}
+                                <Pressable onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))}>
+                                    <Text className="font-PoppinsMedium text-primary-600 text-[14px] leading-[20px]">View All</Text>
+                                </Pressable>
+                            </View>
                         </View>
-                        <View className="gap-3 flex-row items-center ml-auto">
-                            <Pressable onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))}>
-                                <Text className="font-PoppinsMedium text-primary-600 text-[15px] leading-[23px]">View All</Text>
-                            </Pressable>
-                        </View>
-                    </View>                    
-                    <ScrollView horizontal={true} contentContainerClassName='pt-3 pb-4 px-[2] gap-4' showsHorizontalScrollIndicator={false}>
-                        {companyList.map((i: any) => <CompCard data={i} key={i.EncCompanyId} active={selectedCompany?.EncCompanyId === i.EncCompanyId}/>)}
-                    </ScrollView> */}
+                        <ScrollView horizontal={true} contentContainerClassName='py-2 px-[2] gap-3' showsHorizontalScrollIndicator={false}>
+                            {companyList.map((i: any) => <CompCard data={i} key={i.EncCompanyId} active={selectedCompany?.EncCompanyId === i.EncCompanyId}/>)}
+                        </ScrollView>
+                    </View> : null}
                     
-                    {/* <Text className="font-PoppinsSemibold text-gray-700 text-[16px] mb-2">Book Lab Tests</Text>  */}
-                    {/* <TouchableOpacity onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))} className="bg-primary-500 gap-4 rounded-2xl mb-4 p-5 shadow-lg shadow-gray-400">
-                        <Text className="font-PoppinsSemibold text-white text-[14px] border-b border-gray-200">Select Clinic</Text>   
-                        <View className="gap-4 flex-row items-center justify-between rounded-2xl flex-1">
-                            <View className='flex-1'>
-                                <Text className="font-PoppinsMedium text-white text-[13px] pt-1 pb-[10px] leading-5" numberOfLines={1}>{selectedCompany.COMPNAME} </Text>
-                                <View className='mt-1 gap-2 flex-row items-center'>
-                                    <FontAwesome5 name="map-marker-alt" size={12} color="#fff" />
-                                    <Text className="text-white font-Poppins text-[11px] leading-5" numberOfLines={1}>{selectedCompany.ADDRESS}</Text>
-                                </View>
-                            </View>
-                            <View className='px-[9px] py-[9px] bg-primary-400 rounded-full'>
-                                <Feather name="chevron-down" size={18} color='#fff' />
-                            </View>
-                        </View> 
-                    </TouchableOpacity> */}
-
-                    <View className='justify-between flex-row items-center mb-2'>
+                    {/* <View className='justify-between flex-row items-center mb-2'>
                         <View className='flex-row items-center gap-2'>
                             <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">Select Clinic</Text>
                         </View>
@@ -133,7 +121,7 @@ const LabTests = ({}: any) => {
                                 </View>
                             </Link>
                         </View>
-                    </View>
+                    </View> */}
                     
                     <View className='bg-white mb-3 rounded-2xl shadow-lg border-b-2 border-gray-300'>
                         <View className='flex-row w-full px-4 py-[13px] border-b border-gray-200 items-center'>
@@ -147,7 +135,7 @@ const LabTests = ({}: any) => {
                         </View>               
                         <View className='flex-row gap-3 w-full p-3 items-center'>
                             <View className='w-full items-center flex-row rounded-2xl shadow-sm shadow-gray-500 bg-[#ebecef] pr-3'>
-                                <TextInput value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' placeholderTextColor="#9CA3AF" className='text-gray-700 text-[13px] py-3 items-start px-4 flex-1' />
+                                <TextInput placeholderTextColor={colors.gray[400]} value={searchItem.name} onChangeText={(text) => setSearchItem(pre => ({...pre, name: text }))} placeholder='Search Lab Tests..' className='text-gray-700 text-[13px] py-3 items-start px-4 flex-1' />
                                 <Feather className='' name="search" size={22} color={myColors.primary[500]} />
                             </View>
                         </View>

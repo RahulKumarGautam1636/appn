@@ -2,7 +2,7 @@ import { hasAccess, myColors } from "@/src/constants";
 import { RootState } from "@/src/store/store";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter, useSegments } from "expo-router";
-import { BackHandler, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, BackHandler, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setModal } from "@/src/store/slices/slices";
@@ -50,15 +50,21 @@ export default function TabsLayout() {
           router.push(`/appn/tabs/${previousTab}`);
           return true;                                         // prevent default
         }
+      } else {
+        // Alert.alert("Exit App", "Do you want to exit the app?",
+        //   [
+        //     { text: "Cancel", style: "cancel" },
+        //     { text: "Yes", onPress: () => BackHandler.exitApp() },
+        //   ],
+        //   { cancelable: true }
+        // );
+        // return true;
       }
       return false;                                            // allow default back behavior (exit app)
     };
 
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    };
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => subscription.remove(); // ✅ modern cleanup
   }, []);
 
   return (

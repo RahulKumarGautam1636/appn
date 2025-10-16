@@ -27,8 +27,7 @@ export default function Prescription({ id }: any) {
       const res = await getFrom(`${BASE_URL}/api/Appointment/GetPrescription?PId=${query}&CID=${compCode}&LOCID=${LOCID}`, {}, setData);
       if (res) {
         setTimeout(() => {
-            setData(res); 
-            console.log(res.data);                       
+            setData(res);                       
         }, 400)
       }
     }

@@ -81,7 +81,7 @@ const ShoppingAppScreen = () => {
             <Ionicons name="caret-down" size={20} color={colors.orange[500]} />
           </TouchableOpacity>
         </View>
-        {/* <View className="flex-row justify-around py-4 bg-white rounded-2xl">
+        <View className="flex-row justify-around py-4 bg-white rounded-2xl mt-2">
           <TouchableOpacity className="items-center">
             <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
               <Feather name="gift" size={20} color="white" />
@@ -110,7 +110,7 @@ const ShoppingAppScreen = () => {
             <Text className="text-xs text-gray-600">Grocery</Text>
           </TouchableOpacity>
           
-        </View> */}
+        </View>
       </View>
       {isLoggedIn && showLastOrder ? <View className='px-5 mt-3 mb-[-0.5rem]'>
         <LastOrder locationId={location.LocationId} handleShow={setShowLastOrder} isLoggedIn={isLoggedIn} userPartyCode={user.PartyCode} />
@@ -271,18 +271,26 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
     }
   }, [mainCategories, productsData])
 
+  // return mainCategories.map((item: any) => (
+  //   <View key={item.Parent.toString()}>
+  //     {renderProductSection(productsData, parseInt(item.Parent))}
+  //   </View>
+  // ))
+
   return (
     <FlatList
-        data={mainCategories}
-        renderItem={({ item }) =>  (
-          <View>
-            {renderProductSection(productsData, parseInt(item.Parent))}
-          </View>
-        )}
-        keyExtractor={(item) => item.Parent.toString()}
-        className=""
-        contentContainerClassName=""
-        scrollEnabled={false}
+      data={mainCategories}
+      renderItem={({ item }) =>  (
+        <View>
+          {renderProductSection(productsData, parseInt(item.Parent))}
+        </View>
+      )}
+      keyExtractor={(item) => item.Parent.toString()}
+      className=""
+      contentContainerClassName=""
+      scrollEnabled={false}
+      // nestedScrollEnabled
+      // removeClippedSubviews={false}
     />
   )
 })

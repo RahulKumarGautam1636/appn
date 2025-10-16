@@ -398,14 +398,16 @@ const Booking = () => {
                                 return (
                                     <>
                                         {dateSlotsList.data.map((i: any) => (<SlotBtn key={i.TimeStr} time={i.TimeStr} active={selectedSlot === i.AutoId} handleSelect={() => selectSlot(i.AutoId, i.SDateStr, i.SInTimeStr, i.EncCompanyId)}/>))}
-                                        {Array.from(Array(blankSlot).keys()).map(i => (<SlotBtn time={'00:00 PM - 00:00 PM'} blank={true} key={i} />))}
+                                        {Array.from(Array(blankSlot === 3 ? 0 : blankSlot).keys()).map(i => (<SlotBtn time={'00:00 PM - 00:00 PM'} blank={true} key={i} />))}
                                     </>
                                 )
                             }
                         })()}
                     </View>
                 </View>
-                {compCode === BC_ROY ? null : <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-3 ${compCode === BC_ROY ? 'pointer-events-none' : ''}`} />}
+                {/* {compCode === BC_ROY ? null :  */}
+                <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-3`} />
+                {/* } */}
             </ScrollView>
             <ReactNativeModal
                 isVisible={confirmation}

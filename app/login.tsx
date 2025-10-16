@@ -169,7 +169,6 @@ const Login = ({ modalMode }: any) => {
                 UserLevelSeq: data.UserLevelSeq,
                 UserCompList: data.UserCompList[0],
             };
-            console.log(userLoginData);
             // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: data.UserPassword, compCode: params.companyCode }));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
@@ -221,11 +220,11 @@ const Login = ({ modalMode }: any) => {
                             <View className="p-4 gap-8 min-h-[60%]">
                                 <View className='z-10'>
                                     <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
-                                    <TextInput placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <TextInput placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10'>
                                     <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
-                                    <TextInput placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    <TextInput placeholderTextColor={colors.gray[400]} placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 {loginError.status ?
                                     <Text className="text-blue-500 text-[13px] font-PoppinsSemibold mr-auto">{loginError.message}</Text>
@@ -351,9 +350,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
         }
     }, [isLoggedIn, user, userRegTypeId]);
 
-    const makeRegisterationRequest = async (params: any) => {
-        console.log(params);
-        
+    const makeRegisterationRequest = async (params: any) => {        
         try {
             setLoading(true);
             const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);     //  { data: ['Y', 456446]}
@@ -577,11 +574,11 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                 <View className="gap-6 mt-4 min-h-[60%]">
                     <View className='z-10'>
                         <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
-                        <TextInput placeholder='Phone Number' maxLength={10} value={regData.RegMob1} onChangeText={(text) => setRegData(pre => ({...pre, RegMob1: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                        <TextInput placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={regData.RegMob1} onChangeText={(text) => setRegData(pre => ({...pre, RegMob1: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                     </View>
                     {otp.isOpen ? <View className='z-10'>
                         <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Enter OTP</Text>
-                        <TextInput placeholder='Enter your OTP..' value={otp.enteredValue} onChangeText={(text) => setOTP(pre => ({...pre, enteredValue: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                        <TextInput placeholderTextColor={colors.gray[400]} placeholder='Enter your OTP..' value={otp.enteredValue} onChangeText={(text) => setOTP(pre => ({...pre, enteredValue: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                     </View> : null}
                     {!personalFields ? <>
                         <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto mb-10">We'll send you an OTP !</Text>
@@ -708,7 +705,7 @@ const ForgotPassword = ({ backToLogin }: any) => {
         <View className="p-4 gap-8 min-h-[55%]">
             <View className='z-10'>
                 <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
-                <TextInput placeholder='Phone Number' maxLength={10} value={forgotPassword.recoveryNumber} onChangeText={(text) => setForgotPassword(pre => ({...pre, recoveryNumber: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                <TextInput placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={forgotPassword.recoveryNumber} onChangeText={(text) => setForgotPassword(pre => ({...pre, recoveryNumber: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
             </View>
             
             <Text className="text-orange-500 text-[13px] font-PoppinsSemibold mr-auto">{forgotPassword.msg}</Text>

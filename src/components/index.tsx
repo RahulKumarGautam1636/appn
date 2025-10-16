@@ -1,14 +1,13 @@
 import { blur, hasAccess, myColors, SRC_URL } from "@/src/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
 import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler } from "react-native"
-import { Link, useRouter } from "expo-router";
+import { Link, Redirect, useRouter } from "expo-router";
 import { setAppnData, setCompanies, setDepts, setMembers, setModal, setPrescription } from "@/src/store/slices/slices";
 import { stripHtml } from "string-strip-html";
 
 import React, { useRef, useState } from 'react';
 import Modal, { ReactNativeModal } from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
-// import { RootState } from "@/src/store/store";
 
 // import MapView, { Marker } from 'react-native-maps';
 
@@ -558,6 +557,15 @@ export function DatePickerExample() {
     </View>
   );
 }
+
+export const Authenticate = ({ children }: { children: React.ReactNode }) => {
+  const isLoggedIn = useSelector((state: RootState) => state.isLoggedIn);
+  if (!isLoggedIn) {
+    return <Redirect href="/login" />;
+  }
+  return <>{children}</>;
+};
+
 
 
 

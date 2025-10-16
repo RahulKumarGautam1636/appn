@@ -36,6 +36,12 @@ export const hasAccess = (module: string, role: string) => {
   return permissions[module]?.includes(role);
 };
 
+export const versions = {
+  takehome: '1.0.4',
+  bcroy: '1.0.2',
+  gbooks: '1.0.0'
+}
+
 export const initLocation = {
   required: true, 
   LocationId: 0,

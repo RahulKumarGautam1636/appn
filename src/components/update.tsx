@@ -7,6 +7,7 @@ import colors from "tailwindcss/colors";
 import Constants from "expo-constants";
 import axios from "axios";
 import { Linking } from "react-native";
+import { versions } from "../constants";
 
 const openPlayStore = async (url: string) => {
   try {
@@ -29,11 +30,11 @@ export default function UpdateBanner() {
 
     async function checkForStoreUpdate() {
       try {
-        const pakage = Constants.expoConfig?.android?.package;
-        const [ major, minor, patch ] = Constants.expoConfig?.version?.split(".").map(Number);
+        const pakage = Constants.expoConfig?.android?.package;       
+        const [ major, minor, patch ] = (versions[Constants.expoConfig?.scheme]).split(".").map(Number)                                     // Constants.expoConfig?.version?.split(".").map(Number);        
         const res = await axios.get(`https://myapps.gsterpsoft.com/api/AppVersion/GetLatestVersion?Type=app&AppWebName=${pakage}`);   
-        // const res = await axios.get(`http://10.0.2.2:3000/versions/${pakage?.split('.')[2]}`);                     // Emulator      
-        // const res = await axios.get(`http://http://192.168.0.127:3000/versions/${pakage}`);      // Ipconfig 2
+        // const res = await axios.get(`http://10.0.2.2:3000/versions/${pakage?.split('.')[2]}`);                                           // Emulator      
+        // const res = await axios.get(`http://http://192.168.0.127:3000/versions/${pakage}`);                                              // Ipconfig 2
         const { Major, Minor, Patch, AppWebName } = res.data.VersionObj
         const playStoreUrl = `https://play.google.com/store/apps/details?id=${AppWebName}`;
         console.log(Major, Minor, Patch, playStoreUrl, major, minor, patch);

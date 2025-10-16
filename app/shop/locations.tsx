@@ -28,9 +28,7 @@ function Locations() {
             const res = await getFrom(`${BASE_URL}/api/Location/Get?CID=${companyCode}&SearchStr=${key}&BusinessTypeId=${businessType}`, {}, setAutoCompleteList2);
             if (res) {                                                                   
                 setAutoCompleteList2(res);
-                if (!locationId) {
-                    console.log(res.data.LocationMasterList[0]);
-                    
+                if (!locationId) {                   
                     getServiceLocations(res.data.LocationMasterList[0].Area)
                 }
             } else {

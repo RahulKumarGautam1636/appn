@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLogin, setUser } from '@/src/store/slices/slices';
 import { useState } from 'react';
 import { Registeration } from '../../login';
-import { MyModal } from '@/src/components';
+import { Authenticate, MyModal } from '@/src/components';
 import { RootState } from '@/src/store/store';
 import { GradientBG } from '@/src/components/utils';
 import colors from 'tailwindcss/colors';
@@ -24,13 +24,13 @@ const Profile = () => {
     const dispatch = useDispatch()
     
     return (
-        <>
+        <Authenticate>
         <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={
             <ScrollView>
                 <Registeration isModal={true} closeEdit={() => setPersonalInfoActive(false)} />
             </ScrollView>
         } />
-        <ScrollView contentContainerClassName='bg-slate-200/60 min-h-full'>
+        <ScrollView contentContainerClassName='bg-white min-h-full'>
             {/* <GradientBG> */}
                 <View className='bg-white'>
                     <View className='justify-between flex-row p-4 items-center'>
@@ -76,52 +76,52 @@ const Profile = () => {
                         </View>
                     </View> : null}
                 </View>
-                <View className='m-4 gap-[1px] shadow-sm rounded-xl'>
+                <View className='mt-1'>
                     {/* onPress={() => setPersonalInfoActive(true)} */}
                     <Pressable onPress={() => router.push('/appn/profile')}>
-                        <View className='flex-row gap-4 w-full bg-white p-[15px] items-center rounded-tl-xl rounded-tr-xl'>
+                        <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200 items-center'>
                             <FontAwesome name="user" size={24} color={colors.teal[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Personal Information</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Pressable>                
                     <Link href={'/appn/appnList'}>
-                        <View className='flex-row gap-4 w-full bg-white p-[15px] items-center'>
+                        <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200 items-center'>
                             <FontAwesome5 name="calendar-alt" size={22} color={colors.pink[500]} style={{width: 26}} />
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Appointments</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
                     {hasAccess("labtest", compCode) ? <Link href={'/appn/testList'}>
-                        <View className='flex-row gap-4 w-full bg-white p-[15px]'>
+                        <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <Ionicons name="flask" size={22} color={colors.purple[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Lab Tests</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link> : null}
-                    <Link href={'/members'}>
-                        <View className='flex-row gap-4 w-full bg-white p-[15px]'>
+                    <Link href={'/appn/profile?mainTab=members'}>
+                        <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <FontAwesome5 name="users" size={20} color={colors.orange[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Members</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
                     {/* <Link href={'/login'}>
-                        <View className='flex-row gap-4 w-full bg-white p-[15px]'>
+                        <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <FontAwesome5 name="history" size={20} color={colors.primary[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Patient History</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link> */}
                     <Link href={'/appn/tabs/opd'}>
-                        <View className='flex-row gap-4 w-full bg-white p-[15px]'>
+                        <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <FontAwesome5 name="headset" size={20} color={colors.fuchsia[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Get Support</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
                     <Link href={'/appn/tabs/opd'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
-                        <View className='flex-row gap-4 w-full bg-white p-[15px] rounded-bl-xl rounded-br-xl'>
+                        <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <Entypo name="log-out" size={20} color={colors.cyan[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Logout</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
@@ -130,7 +130,7 @@ const Profile = () => {
                 </View>
             {/* </GradientBG> */}
         </ScrollView>
-        </>
+        </Authenticate>
     )
 }
 

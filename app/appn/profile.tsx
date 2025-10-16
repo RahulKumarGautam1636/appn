@@ -2,8 +2,8 @@ import { Card_2 } from "@/src/components";
 import { setModal } from "@/src/store/slices/slices";
 import { RootState } from "@/src/store/store";
 import { Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useGlobalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { Image, Pressable, RefreshControl, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,11 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState("profile");
     const [searchQuery, setSearchQuery] = useState("");
     const dispatch = useDispatch();
+    let { mainTab } = useGlobalSearchParams();
+
+    useEffect(() => {
+      if (mainTab) setActiveTab(mainTab);
+    }, [])
 
     const filteredMembersList = membersList.length ? membersList.filter((i: any) => (i.MemberName.toLowerCase()).includes(searchQuery.toLowerCase())) : []
 
@@ -55,8 +60,8 @@ const Profile = () => {
           <TouchableOpacity onPress={() => setActiveTab("profile")} className={`flex-1 py-3 items-center ${activeTab === "profile" ? "border-b-2 border-blue-500" : ""}`}>
             <Text className={`font-medium ${activeTab === "profile" ? "text-blue-500" : "text-gray-500"}`}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab("family")} className={`flex-1 py-3 items-center ${activeTab === "family" ? "border-b-2 border-blue-500" : ""}`}>
-            <Text className={`font-medium ${activeTab === "family" ? "text-blue-500" : "text-gray-500"}`}>Members</Text>
+          <TouchableOpacity onPress={() => setActiveTab("members")} className={`flex-1 py-3 items-center ${activeTab === "members" ? "border-b-2 border-blue-500" : ""}`}>
+            <Text className={`font-medium ${activeTab === "members" ? "text-blue-500" : "text-gray-500"}`}>Members</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab("history")} className={`flex-1 py-3 items-center ${activeTab === "history" ? "border-b-2 border-blue-500" : ""}`}>
             <Text className={`font-medium ${activeTab === "history" ? "text-blue-500" : "text-gray-500"}`}>History</Text>
@@ -105,12 +110,12 @@ const Profile = () => {
             </Animated.View>
           )}
 
-          {activeTab === "family" && (
+          {activeTab === "members" && (
             <Animated.View entering={FadeIn.duration(300)} className="p-4">
               {/* Search bar */}
               <View className="bg-white rounded-xl mb-4 flex-row items-center px-4 py-[4px] border-2 border-gray-300">
                 <Ionicons name="search" size={20} color="#9ca3af" />
-                <TextInput placeholder="Search family members..." value={searchQuery} onChangeText={setSearchQuery} className="flex-1 ml-2" placeholderTextColor="#9ca3af" />
+                <TextInput placeholder="Search members..." value={searchQuery} onChangeText={setSearchQuery} className="flex-1 ml-2" placeholderTextColor="#9ca3af" />
                 {searchQuery.length > 0 && (
                   <TouchableOpacity onPress={() => setSearchQuery("")}>
                     <Ionicons name="close-circle" size={20} color="#9ca3af" />
@@ -118,7 +123,6 @@ const Profile = () => {
                 )}
               </View>
 
-              {/* Add family member button */}
               <View className="mb-4 flex-row justify-between items-center">
                 <Text className="text-gray-700 font-bold text-lg">Members ({membersList.length})</Text>
                 <TouchableOpacity onPress={() => dispatch(setModal({ name: "ADD_MEMBER", state: true }))} className="bg-blue-50 rounded-xl p-[12px] flex-row items-center justify-center border border-blue-200">
