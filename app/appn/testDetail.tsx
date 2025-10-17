@@ -26,7 +26,9 @@ const TestDetail = ({ data }: any) => {
     // const data = { IsAppConfirmed: 'Y', BillId: '46546', PrescriptionId:  '4547745', DeptName: '', TranNo: '', Status: '', NextAppTime: '09:30 AM', NextAppDate: '02/03/2025', CompanyName: 'XYZ Hospitality Solutions' }
 
     const dispatch = useDispatch();
-    const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
+    const compInfo = useSelector((state: RootState) => state.company.info);
+    const { list: companyList, selected } = useSelector((state: RootState) => state.companies);
+    let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
     const [showDetails, setShowDetails] = useState(false);
     const [bill, setBill] = useState(false);
     const [report, setReport] = useState(false)
@@ -98,7 +100,7 @@ const TestDetail = ({ data }: any) => {
                 <Text className="font-PoppinsSemibold text-slate-500 text-[13px]">{new Date(data.NextAppDate).toDateString()}</Text>
                 </View>
             </View>
-            <View className='justify-between flex-row px-4 pb-4 mt-1 items-center'>
+            <View className='justify-between flex-row px-4 pb-4 mt-2 items-center'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Other Details</Text>
                 </View>
@@ -133,7 +135,7 @@ const TestDetail = ({ data }: any) => {
                     <Text className="font-PoppinsSemibold text-[13px]" style={{color: data.Status === 'Y' ? '#00ad44' : '#f29101'}}>{ data.Status === 'Y' ? 'Done' : 'Pending' }</Text>
                 </View>
             </View>
-            <View className='justify-between flex-row px-4 mt-4 items-center'>
+            <View className='justify-between flex-row px-4 mt-5 mb-1 items-center'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Clinic Details</Text>
                 </View>
@@ -147,7 +149,7 @@ const TestDetail = ({ data }: any) => {
                                 <FontAwesome5 name="clock" size={12} color="#fff" />
                                 <Text className="font-PoppinsMedium text-gray-100 text-[10px] leading-4">08:30 AM - 12:00 PM</Text>
                             </View>
-                            <View className='flex gap-2 flex-row items-center mt-1.5'>
+                            <View className='flex gap-2 flex-row items-center mt-2.5'>
                                 <FontAwesome5 name="map-marker-alt" size={12} color="#fff" />
                                 <Text className="font-Poppins text-gray-100 text-[10px] leading-4" numberOfLines={1}>{selectedCompany.ADDRESS}</Text>
                             </View>
@@ -160,7 +162,7 @@ const TestDetail = ({ data }: any) => {
                     </Link>
                 </View>
             </View>
-            <View className='justify-between flex-row px-3 my-1 items-center'>
+            <View className='justify-between flex-row px-3 mt-2 mb-1.5 items-center'>
                 <View className='flex-row items-center gap-2'>
                     <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-4">Payment Details</Text>
                 </View>

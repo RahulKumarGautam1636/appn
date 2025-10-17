@@ -26,7 +26,8 @@ const Booking = () => {
     const locationId = useSelector((i: RootState) => i.appData.location.LocationId)
     const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
     const { selectedMember } = useSelector((i: RootState) => i.members)
-    const { list: companiesList, selected: selectedCompany} = useSelector((i: RootState) => i.companies)
+    const { list: companiesList, selected} = useSelector((i: RootState) => i.companies)
+    const compInfo = useSelector((state: RootState) => state.company.info)
     const [selectedDate, setSelectedDate] = useState(selectedAppnDate);
     const [dateTabsList, setDateTabsList] = useState({loading: true, data: [], err: {status: false, msg: ''}});
     const [dateSlotsList, setDateSlotsList] = useState({loading: true, data: [], err: {status: false, msg: ''}});
@@ -37,6 +38,7 @@ const Booking = () => {
     const [loading, setLoading] = useState(false);
     const [remarks, setRemarks] = useState('');
     const [refNo, setRefNo] = useState('');
+    let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
     useEffect(() => {
         setSelectedDate(selectedAppnDate);

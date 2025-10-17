@@ -33,8 +33,9 @@ const Profile = () => {
                 <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Your Account</Text>
             </Pressable>
             <View className="gap-3 flex-row items-center ml-auto">
-                <Feather name="heart" size={20} color="black" />
-                <Feather name="share-2" size={20} color="black" />
+                <Feather name="edit" size={20} color="black" />
+                <Text className={`font-medium text-gray-500`}>Edit</Text>
+                {/* <Feather name="share-2" size={20} color="black" /> */}
             </View>
             </View>
             <View className="flex-row gap-4 p-[13px] items-center">

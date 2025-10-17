@@ -3,7 +3,7 @@ import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "reac
 import ButtonPrimary, { mmDDyyyyDate } from "../../src/components";
 import { setModal } from "@/src/store/slices/slices";
 import { useDispatch, useSelector } from "react-redux";
-import { myColors } from '@/src/constants';
+import { defaultId, myColors } from '@/src/constants';
 import { Link } from "expo-router";
 import { formatted, GradientBG } from "@/src/components/utils";
 import { TextInput } from "react-native-gesture-handler";
@@ -18,6 +18,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
   let parsedActiveDate = new Date(year, month - 1, day);
   let formattedDate = new Date(parsedActiveDate).toDateString();
   const prescription = useSelector((i: RootState) => i.appData.prescription);
+  const compCode = useSelector((i: RootState) => i.compCode);
   
   return (
       <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -150,15 +151,15 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                   </View>
               </View> */}
               <View className='bg-primary-500 m-3 rounded-3xl overflow-hidden'>
-                  <View className='flex-row items-center gap-3 pl-4 pr-3 pb-4 pt-3 bg-primary-500 '>
+                  <View className='flex-row items-center gap-3 px-5 pb-5 pt-4 bg-primary-500 '>
                       <View className='flex-1'>
-                          <Text className="font-PoppinsSemibold text-[13px] text-white">{clinic.COMPNAME}</Text>
-                          <View className='mt-1.5 '>
+                          <Text className="font-PoppinsSemibold text-[13px] text-white" numberOfLines={1}>{clinic.COMPNAME}</Text>
+                          <View className='mt-3'>
                               <View className='flex gap-2 flex-row items-center'>
                                   <FontAwesome5 name="clock" size={12} color="#fff" />
                                   <Text className="font-PoppinsMedium text-gray-100 text-[10px] leading-4">08:30 AM - 12:00 PM</Text>
                               </View>
-                              <View className='flex gap-2 flex-row items-center mt-1.5'>
+                              <View className='flex gap-2 flex-row items-center mt-2.5'>
                                   <FontAwesome5 name="map-marker-alt" size={12} color="#fff" />
                                   <Text className="font-Poppins text-gray-100 text-[10px] leading-4" numberOfLines={1}>{clinic.ADDRESS}</Text>
                               </View>
@@ -171,7 +172,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                       </Link>
                   </View>
               </View>
-              <View className='justify-between flex-row px-3 py-2 items-center'>
+              {compCode === defaultId || doctor.Rate ? <><View className='justify-between flex-row px-3 py-2 items-center'>
                   <View className='flex-row items-center gap-2'>
                       <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-4">Payment Details</Text>
                   </View>
@@ -201,7 +202,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                       <Text className="font-PoppinsSemibold text-gray-700 text-[13px] leading-4">Total Payable</Text>
                       <Text className="font-PoppinsSemibold text-gray-700 text-[13px] leading-4">₹ {doctor.Rate}</Text>
                   </View>
-              </View>
+              </View></> : null}
               <ButtonPrimary title='Confirm Booking' isLoading={loading} active={true} onPress={handleConfirmation} classes='mx-3 mb-4 mt-1' />
               </View>
           </GradientBG>

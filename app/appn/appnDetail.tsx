@@ -6,7 +6,7 @@ import { Link } from 'expo-router';
 import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '@/src/store/slices/slices';
-import { myColors } from '@/src/constants';
+import { defaultId, myColors } from '@/src/constants';
 import { RootState } from '@/src/store/store';
 import { dialCall, GradientBG, openWhatsApp } from '@/src/components/utils';
 import { MyModal } from '@/src/components';
@@ -24,7 +24,10 @@ const { width } = Dimensions.get('window');
 const AppnDetail = ({ data, handleOpen }: any) => {
 
     const dispatch = useDispatch();
-    const { list: companyList, selected: selectedCompany } = useSelector((state: RootState) => state.companies);
+    const compCode = useSelector((state: RootState) => state.compCode)
+    const compInfo = useSelector((state: RootState) => state.company.info)
+    const { list: companyList, selected } = useSelector((state: RootState) => state.companies);
+    let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
     // const isFocused = useIsFocused();
     // const translateX = useSharedValue(width); 
 
@@ -63,14 +66,14 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <Image className='' source={require('../../assets/images/doctor.jpg')} style={{ width: 76, height: 76 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-sky-800 text-[14px] mb-2">{data.AppointmentTo}</Text>
-                        <View className='flex-row gap-2'>
+                        {data.DocQualification ? <View className='flex-row gap-2'>
                             <FontAwesome name="graduation-cap" size={15} color="#075985" />
                             <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[6px]">{data.DocQualification}</Text>
-                        </View>
-                        <View className='flex-row gap-2'>
+                        </View> : null}
+                        {data.DocSpecialistDesc ? <View className='flex-row gap-2'>
                             <FontAwesome5 name="stethoscope" size={15} color="#075985" />
                             <Text className="font-PoppinsMedium text-gray-800 text-[12px]">{data.DocSpecialistDesc}</Text>
-                        </View>
+                        </View> : null}
                     </View>
                 </View>
                 <View className='flex-row justify-between px-3 py-3.5 border-y border-gray-200 border-solid'>
@@ -118,8 +121,8 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                 </View> */}
             </View>
             <Text className="text-sm pt-4 text-gray-500 leading-6">
-                <Text className="text-primary-500">Appointment Note : </Text>
-                Prescriptions, Reports and Documents added by Patient will apear here.
+                <Text className="text-primary-500">Appointment Remarks : </Text>
+                {data.Remarks} {data.Remarks1} {data.Remarks2}
             </Text>
             </View>
             <View className='justify-between flex-row px-4 pt-1 pb-4 items-center'>
@@ -176,13 +179,13 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                 </View>
             </View>
             <View className='bg-primary-500 mb-[1.15rem] rounded-3xl shadow-sm shadow-primary-700 overflow-hidden m-4'>
-                <View className='flex-row items-center gap-4 pl-5 pr-4 pb-5 pt-4 bg-primary-500 '>
+                <View className='flex-row items-center gap-4 pl-[1.2rem] pr-4 pb-4 pt-3 bg-primary-500 '>
                     <View className='flex-1'>
                         <Text className="font-PoppinsSemibold text-[15px] text-white" numberOfLines={1}>{selectedCompany.COMPNAME}</Text>
-                        <View className='mt-[10px]'>
+                        <View className='mt-[7px]'>
                             <View className='flex gap-3 flex-row items-center'>
                                 <FontAwesome5 name="clock" size={14} color="#fff" />
-                                <Text className="font-PoppinsMedium text-gray-100 text-[11px] leading-5">08:30 AM - 12:00 PM</Text>
+                                <Text className="font-PoppinsMedium text-gray-100 text-[11px] leading-5">08:30 AM - 06:00 PM</Text>
                             </View>
                             <View className='flex gap-3 flex-row items-center mt-2'>
                                 <FontAwesome5 name="map-marker-alt" size={14} color="#fff" />
@@ -197,51 +200,44 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     </Link>
                 </View>
             </View>
-            <View className='justify-between flex-row px-4 pt-1 items-center'>
+            {compCode === defaultId ? <>
+             <View className='justify-between flex-row px-4 pt-1 items-center'>
                 <View className='flex-row items-center gap-3'>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[14px] items-center leading-5">Payment</Text>
                 </View>
             </View>
-            <View className='bg-white m-4 rounded-3xl shadow-sm shadow-gray-400'>
-            <View className='justify-between flex-row p-4 pl-5 items-center border-b border-gray-200'>
-                <View className='flex-row items-center gap-3'>
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-5">Bill Details</Text>
+            <View className='bg-white m-4 rounded-3xl shadow-sm shadow-gray-400'>   
+                <View className='justify-between flex-row p-4 pl-5 items-center border-b border-gray-200'>
+                    <View className='flex-row items-center gap-3'>
+                        <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-5">Bill Details</Text>
+                    </View>
                 </View>
-            </View>
 
-            <View className='gap-3 px-4 py-3'>
-                <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Booking Fee</Text>
-                    <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 200</Text>
+                <View className='gap-3 px-4 py-3'>
+                    <View className="flex-row justify-between items-center">
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Booking Fee</Text>
+                        <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 200</Text>
+                    </View>
+                    <View className="flex-row justify-between items-center">
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Platform Fee</Text>
+                        <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 10</Text>
+                    </View>
+                    <View className="flex-row justify-between items-center">
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Total Amount</Text>
+                        <Text className="font-PoppinsSemibold text-blue-600 text-[12px]">₹ 210</Text>
+                    </View>
+                    <View className="flex-row justify-between items-center">
+                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Payment Status</Text>
+                        <Text className="font-PoppinsSemibold text-green-600 text-[12px]">
+                            <FontAwesome name="check" size={17} color="#16a34a" />  Paid
+                        </Text>
+                    </View>
                 </View>
-                <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Platform Fee</Text>
-                    <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">₹ 10</Text>
+                <View className='justify-between flex-row p-4 items-center border-t border-gray-200'>
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[13px]">Payment Method</Text>
+                    <Text className="font-PoppinsSemibold text-purple-600 text-[13px]">ONLINE / UPI</Text>
                 </View>
-                <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Total Amount</Text>
-                    <Text className="font-PoppinsSemibold text-blue-600 text-[12px]">₹ 210</Text>
-                </View>
-                <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Payment Status</Text>
-                    <Text className="font-PoppinsSemibold text-green-600 text-[12px]">
-                        <FontAwesome name="check" size={17} color="#16a34a" />  Paid
-                    </Text>
-                </View>
-                {/* <View className="flex-row justify-between items-center">
-                    <Text className="font-PoppinsSemibold text-gray-500 text-[12px]">Payment Method</Text>
-                    <Text className="font-PoppinsSemibold text-slate-700 text-[12px]">ONLINE / UPI</Text>
-                </View> */}
-            </View>
-            <View className='justify-between flex-row p-4 items-center border-t border-gray-200'>
-                <Text className="font-PoppinsSemibold text-gray-700 text-[13px]">Payment Method</Text>
-                <Text className="font-PoppinsSemibold text-purple-600 text-[13px]">ONLINE / UPI</Text>
-            </View>
-            </View>
-            {/* <View className='flex-row gap-2 p-4 bg-white'>
-                <ButtonPrimary title='Reschedule' active={false} onPress={() => {}} classes='flex-1 py-3' textClasses='text-gray-800' />
-                <ButtonPrimary title='Cancel' active={true} onPress={() => {}} classes='flex-1 py-3' />
-            </View> */}
+            </View></> : null}
             <View className='flex-row justify-between border-y border-gray-200 border-solid p-4 bg-white gap-2'>
                 <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
                     <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        

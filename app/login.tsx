@@ -458,6 +458,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
         const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);
         setLoading(false);
         if (res.status === 200) {
+            console.log(res.data);            
             return res.data;
         }
         alert('An Error Occured, Try again later.');
