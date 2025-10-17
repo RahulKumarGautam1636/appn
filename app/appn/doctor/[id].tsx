@@ -36,6 +36,7 @@ const Booking = () => {
     const [activeCompany, setActiveCompany] = useState({});
     const [loading, setLoading] = useState(false);
     const [remarks, setRemarks] = useState('');
+    const [refNo, setRefNo] = useState('');
 
     useEffect(() => {
         setSelectedDate(selectedAppnDate);
@@ -223,6 +224,7 @@ const Booking = () => {
             // setRef({ status: true, data: res.data });
             // bookingToast(res.data, { position: "top-center", autoClose: 4000, closeButton: false, className: 'booking-reference-toast' });
             // modalAction('APPN_BOOKING_MODAL', false);
+            setRefNo(res.data);
             handleConfirmation();
             const initBookingData = {
                 selectedAppnDate: "", 
@@ -436,7 +438,7 @@ const Booking = () => {
                 style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
             >
                 <View className={`absolute inset-0 bg-white ${success ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}>
-                    <BookingSuccess doctor={doctor} bookingData={bookingData} clinic={selectedCompany} />
+                    <BookingSuccess doctor={doctor} bookingData={bookingData} clinic={selectedCompany} reference={refNo} />
                 </View>
             </ReactNativeModal>
         </>

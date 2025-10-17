@@ -12,7 +12,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import colors from 'tailwindcss/colors';
 
-const Checkout = ({ handleClose, setSuccess }: any) => {
+const Checkout = ({ handleClose, handleSuccess }: any) => {
     const { selected: selectedCompany } = useSelector((state: RootState) => state.companies);
     const { selectedMember } = useSelector((i: RootState) => i.members)
     const router = useRouter()
@@ -161,7 +161,7 @@ const Checkout = ({ handleClose, setSuccess }: any) => {
             if (res.status === 200) {       
                 // dispatch(dumpCart());
                 handleBack();
-                setSuccess(true);
+                handleSuccess(res.data);
             } else {
                 alert('Something went wrong, try again later.');
             }

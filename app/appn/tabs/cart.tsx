@@ -21,6 +21,7 @@ const Cart = ({}: any) => {
     const dispatch = useDispatch()
     const [checkout, setCheckout] = useState(false)
     const router = useRouter();
+    const [refNo, setRefNo] = useState('')
                                                             
     const itemsLength = labTests.length;
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
@@ -37,6 +38,11 @@ const Cart = ({}: any) => {
         setSuccess(false);
         setCheckout(false);
         router.push('/appn/testList');
+    }
+
+    const handleSuccess = (reference: string) => {
+        setSuccess(true);
+        setRefNo(reference);
     }
     
     return (
@@ -104,15 +110,15 @@ const Cart = ({}: any) => {
                     <ButtonPrimary title='CHECKOUT' isLoading={false} active={true} onPress={handleCheckout} classes='m-4' />
                 </View>
             </ScrollView>
-            <MyModal modalActive={checkout} name='CHECKOUT' onClose={() => setCheckout(false)} child={<Checkout handleClose={setCheckout} setSuccess={setSuccess} />} />
-            <MyModal modalActive={success} name='SUCCESS' onClose={() => setSuccess(false)} child={<BookingSuccess handleClose={viewOrders} />} />
+            <MyModal modalActive={checkout} name='CHECKOUT' onClose={() => setCheckout(false)} child={<Checkout handleClose={setCheckout} handleSuccess={handleSuccess} />} />
+            <MyModal modalActive={success} name='SUCCESS' onClose={() => setSuccess(false)} child={<BookingSuccess handleClose={viewOrders} reference={refNo} />} />
         </>
     )
 }
 
 export default Cart;
 
-const BookingSuccess = ({ handleClose }: any) => {
+const BookingSuccess = ({ handleClose, reference }: any) => {
   const selectedMember = useSelector((i: RootState) => i.members.selectedMember)
   const clinic = useSelector((i: RootState) => i.companies.selected)
   const lab = useSelector((i: RootState) => i.cart)
@@ -135,10 +141,10 @@ const BookingSuccess = ({ handleClose }: any) => {
                 <Feather name="share-2" size={20} color='black' />
             </View>
         </View> */}
-        <View className="px-4 mb-1 items-center">
+        <View className="px-4 mb-2 items-center">
           <Heart height={250} />
-          <Text className="font-PoppinsSemibold text-gray-800 text-[18px] text-center">Thanks, Your Booking has Confirmed.</Text>
-          <Text className="font-Poppins text-gray-600 text-[13px] text-center mt-2">Please check your Email for details.</Text>
+          <Text className="font-PoppinsSemibold text-gray-800 text-[18px] text-center">Thanks, Your Booking is Received.</Text>
+          <Text className="font-medium text-gray-600 text-[14px] text-center mt-2">Your Booking Reference No. <Text className="text-orange-500">{reference}</Text></Text>
         </View>
         <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
           <View className='flex-row items-center'>

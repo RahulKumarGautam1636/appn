@@ -92,7 +92,7 @@ const HomeScreen = () => {
             let firstAppn = data.data.PartyFollowupList[0];
             return (
                 <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: firstAppn}))}>
-                    <Text className="font-PoppinsSemibold text-gray-800 text-[14px] leading-[20px] mt-1">Upcoming Schedule</Text>
+                    <Text className="font-PoppinsSemibold text-gray-800 text-[13px] leading-[20px] mt-1 mb-0.5">Upcoming Schedule</Text>
                     <View className='bg-primary-500 rounded-3xl p-4 my-2'>
                         <View className='flex-row items-start'>
                             <Image className='shadow-lg rounded-full me-2' source={require('../../../assets/images/user.png')} style={{ width: 35, height: 35 }} />

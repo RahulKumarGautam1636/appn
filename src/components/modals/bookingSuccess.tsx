@@ -5,7 +5,7 @@ import ButtonPrimary from "..";
 import { useRouter } from "expo-router";
 import { myColors } from "@/src/constants";
 
-const BookingSuccess = ({ doctor, bookingData, clinic }: any) => {
+const BookingSuccess = ({ doctor, bookingData, clinic, reference }: any) => {
   const router = useRouter()
   return (
     <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -20,10 +20,10 @@ const BookingSuccess = ({ doctor, bookingData, clinic }: any) => {
                 <Feather name="share-2" size={20} color='black' />
             </View>
         </View> */}
-        <View className="px-4 mb-1 items-center">
+        <View className="px-4 mb-2 items-center">
           <Heart height={250} />
-          <Text className="font-PoppinsSemibold text-gray-800 text-[18px] text-center">Thanks, Your Booking has Confirmed.</Text>
-          <Text className="font-Poppins text-gray-600 text-[13px] text-center mt-2">Please check your Email for details.</Text>
+          <Text className="font-PoppinsSemibold text-gray-800 text-[18px] text-center">Thanks, Your Booking is Received.</Text>
+          <Text className="font-medium text-gray-600 text-[14px] text-center mt-2">Your Booking Reference No. <Text className="text-orange-500">{reference}</Text></Text>
         </View>
         {/* <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>
