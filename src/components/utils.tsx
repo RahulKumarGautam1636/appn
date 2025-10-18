@@ -1,6 +1,6 @@
 import axios, { GenericAbortSignal } from "axios";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity, Pressable, Linking, Alert } from 'react-native';
+import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity, Pressable, Linking, Alert, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
 import { addToCart, dumpCart, removeFromCart, setModal, setUserRegType } from "../store/slices/slices";
@@ -888,7 +888,7 @@ export const getFallbackImg = () => {
 }
 
 
-export default function MyDropdown({ offsetY=0, offsetX=0, maxHeight=200, isOpen, setOpen, anchorRef, children, dropdownPosition, dropdownClassName='', stickTo='bottom', overlay=false }: any) {
+export default function MyDropdown({ offsetY=0, offsetX=0, maxHeight=200, isOpen, setOpen, anchorRef, children, dropdownPosition, dropdownClassName='', stickTo='bottom', overlay=false, dataList }: any) {
 
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0, height: 0 });
 
@@ -925,8 +925,14 @@ export default function MyDropdown({ offsetY=0, offsetX=0, maxHeight=200, isOpen
     <>
       <Pressable className={`absolute inset-0 z-[99990] ${overlay ? 'bg-gray-700/25' : ''}`} onPress={() => handleClose()}></Pressable>
         {isOpen && (
-          <View className={`absolute bg-white rounded-2xl shadow-md border border-stone-200 z-[99999] ${dropdownClassName}`} style={dropdownPosition} >
-            {children({ closeDropdown: handleClose })}
+          <View className={`absolute rounded-2xl shadow-md border border-stone-200 z-[99999] bg-cyan-700 ${dropdownClassName}`} style={dropdownPosition} >
+            <FlatList
+              data={dataList}
+              keyExtractor={(_, i) => i.toString()}
+              showsVerticalScrollIndicator
+              keyboardShouldPersistTaps="handled"
+              renderItem={({ item }) => children({ data: item })}
+            />
           </View>
         )}
     </>

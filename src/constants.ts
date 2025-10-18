@@ -20,11 +20,11 @@ const REACT_APP_TEST_BASE_URL = 'https://api.gsterpsoft.com';
 
 export const testMode = false;
 
-// export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
-// export const SRC_URL = 'https://erp.gsterpsoft.com';
+export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
+export const SRC_URL = 'https://erp.gsterpsoft.com';
 
-export const BASE_URL = 'https://apigst.gsterpsoft.com';
-export const SRC_URL = 'https://gsterpsoft.com';
+// export const BASE_URL = 'https://apigst.gsterpsoft.com';
+// export const SRC_URL = 'https://gsterpsoft.com';
 
 export const permissions = {
   appointments: [BC_ROY, defaultId],

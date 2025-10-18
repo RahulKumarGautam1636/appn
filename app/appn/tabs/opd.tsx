@@ -261,7 +261,7 @@ const HomeScreen = () => {
                                 <Text className={`text-[12px] leading-[20px] px-2.5 py-0.5 rounded-tl-2xl rounded-bl-2xl ${doctorTab === 'active_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-500'}`}>{formattedDate}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => setDoctorTab('all_date')}>
-                                <Text className={`text-[12px] leading-[20px] px-2.5 py-0.5 rounded-tr-2xl rounded-br-2xl ${doctorTab === 'all_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-500'}`}>Other Days</Text>
+                                <Text className={`text-[12px] leading-[20px] px-2.5 py-0.5 rounded-tr-2xl rounded-br-2xl ${doctorTab === 'all_date' ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-500'}`}>All Doctors</Text>
                             </TouchableOpacity>
                             {/* <Text className="font-PoppinsMedium text-white text-[15px] leading-[23px]">All</Text> */}
                         </View>

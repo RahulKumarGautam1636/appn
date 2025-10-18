@@ -1,20 +1,17 @@
-import { ChevronLeft, Calendar, Mail, ChevronDown } from 'lucide-react-native';
-
-
 import { useRouter } from "expo-router";
-import { Image, Modal, Pressable, Text, TextInput, TouchableOpacity, View, ScrollView } from "react-native";
-import ButtonPrimary, { mmDDyyyyDate, MyModal } from "@/src/components";
-import { BASE_URL, defaultId, gender, initMember, initReg, myColors, salutations, states } from "@/src/constants";
+import { Pressable, Text, TextInput, TouchableOpacity, View, ScrollView } from "react-native";
+import ButtonPrimary, { MyModal } from "@/src/components";
+import { BASE_URL, gender, initMember, myColors, salutations, states } from "@/src/constants";
 import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { setLogin, setUser, getCompanies, setModal, getMembers } from "@/src/store/slices/slices";
-// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { Feather, FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { setModal, getMembers } from "@/src/store/slices/slices";
+import { FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import MyDropdown, { createDate, getDuration, getFrom, minDate, useRegType, uType } from "@/src/components/utils";
-import { FlatList } from 'react-native-gesture-handler';
+import MyDropdown, { createDate, getDuration, getFrom, uType } from "@/src/components/utils";
+// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+// import { FlatList } from 'react-native-gesture-handler';
 
 const AddMember = ({ isModal }: any) => {
 
@@ -28,194 +25,6 @@ const AddMember = ({ isModal }: any) => {
     const [otp, setOTP] = useState({isOpen: false, recievedValue: 'null', enteredValue: '', sent: false, verified: false, read_only: false});    
     const [personalFields, setPersonalFields] = useState(false);
     const [loading, setLoading] = useState(false);
-    // const isOPD = vType === 'ErpHospital';
-    // const regType = useSelector((state: RootState) => state.modals.LOGIN.data?.mode) || {};
-    // const userRegTypeId = useSelector((state: RootState) => state.appData.userRegType.CodeId);
-    
-    // const regTypes = { 60: 'Customer', 57: 'SP', 58: 'AP', REFERRER: 'MP', 55: 'MarketBy' }; 
-    // useRegType(regTypes[regType?.level]);  
-
-    // useEffect(() => {
-    //     if (!isLoggedIn) {                                                            
-    //         setRegData(pre => ({...pre, 
-    //             EncCompanyId: compCode, 
-    //             UserRegTypeId: isOPD ? userRegTypeId : 43198, 
-    //             UserLevelSeq: isOPD ? regType?.level : 60,
-    //             UserType: isOPD ? regType?.title : 'CUSTOMER', 
-    //         }));          
-    //     } else {
-    //         setRegData((pre => ({             
-    //             ...pre,
-    //             Name: user.Name,
-    //             RegMob1: user.RegMob1,
-    //             UserId: user.UserId,
-    //             UserType: user.UserType,
-    //             PartyCode: user.PartyCode,
-    //             EncCompanyId: user.EncCompanyId,
-    //             Age: user.Age,
-    //             AgeDay: user.AgeDay,
-    //             AgeMonth: user.AgeMonth,
-    //             Gender: user.Gender,
-    //             GenderDesc: user.GenderDesc,
-    //             MPartyCode: user.MPartyCode,
-    //             Address: user.Address,
-    //             Qualification: user.Qualification,
-    //             SpecialistDesc: user.SpecialistDesc,
-    //             State: user.State, 
-    //             StateName: user.StateName,                         
-    //             City: user.City,
-    //             Pin: user.Pin,
-    //             Address2: user.Address2,
-    //             UHID: user.UHID,
-    //             MemberId: user.MemberId,
-    //             PartyId: user.PartyId,
-    //             Salutation: user.Salutation,
-        
-    //             DOB: new Date(user.DOB).toLocaleDateString('en-TT'),
-    //             DOBstr: new Date(user.DOB).toLocaleDateString('en-TT'),
-    //             AnniversaryDate: new Date(user.AnniversaryDate).toLocaleDateString('en-TT'),        
-    //             AnniversaryDatestr: new Date(user.AnniversaryDate).toLocaleDateString('en-TT'),
-    //             Aadhaar: user.Aadhaar,
-    //             IsDOBCalculated: user.IsDOBCalculated,
-        
-    //             compName: user.compName ? user.compName : '',
-    //             compAddress: user.compAddress ? user.compAddress : '',
-    //             compState: user.compState ? user.compState : '',
-    //             compPin: user.compPin ? user.compPin : '',
-    //             compPhone1: user.compPhone1 ? user.compPhone1 : '',
-    //             compPhone2: user.compPhone2 ? user.compPhone2 : '',
-    //             compMail: user.compMail ? user.compMail : '',
-
-    //             RegMob2: user.RegMob2,            // for Business type.
-    //             GstIn: user.GstIn,
-    //             LicenceNo: user.LicenceNo,
-    //             ContactPerson: user.ContactPerson,
-    //             BusinessType: user.BusinessType,
-    //             UserRegTypeId: user.UserRegTypeId,
-    //             UserLevelSeq: user.UserLevelSeq
-    //         })))
-    //         setOTP({isOpen: false, recievedValue: 'null', enteredValue: '', sent: false, verified: true, read_only: false})
-    //         setPersonalFields(true);
-    //     }
-    // }, [isLoggedIn, user]);
-
-    // const makeRegisterationRequest = async (params: any) => {
-    //     console.log(params);
-        
-    //     try {
-    //         setLoading(true);
-    //         const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);
-    //         setLoading(false);
-    //         if (res.data[1].length > 3) { 
-    //             return true;
-    //         } else {
-    //             alert('Something Went wrong, Please try again later.');
-    //             return false;
-    //         }      
-    //     } catch (err) {
-    //         console.log(err);
-    //         return false;
-    //     }
-    // } 
-
-    // const handleRegFormSubmit = async () => {
-    //     if (otp.verified) {
-    //         if (regData.RegMob1.length < 10) return alert('phone number is invalid, please try again.');
-    //         if (regData.UserPassword.length < 4) return alert('Minimum length for password is 4.');
-    //         if (regData.Pin.length < 4) return alert('Please enter a valid Pin Code.');
-    //         if (regData.DOBstr.length < 4) return alert('Please enter your Date of Birth.');
-    //         if (regData.Address.length < 4) return alert('Please enter your valid address.');
-    //         if (regData.UserRegTypeId.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 003');
-    //         if (regData.UserRegTypeId.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 003');
-    //         if (!regData.UserLevelSeq) return alert('Error Occured. Please restart the app and try again. Err - 004');
-    //         if (regData.UserType.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 005');
-    //         let status = await makeRegisterationRequest({ ...regData });
-    //         if (status) {
-    //             let loginStatus = await refreshUserInfo(regData);
-    //             if (loginStatus) {
-    //                 dispatch(setLogin(true));
-    //                 if (modalMode) {
-    //                     dispatch(setModal({ name: 'LOGIN', state: false }))
-    //                 } else if (isModal) {
-    //                     closeEdit()
-    //                 } else {
-    //                     router.back();
-    //                 }
-    //             }
-    //         } 
-    //     }
-    // } 
-
-    // const refreshUserInfo = async (params: any) => {
-    //     try {
-    //         setLoading(true);
-    //         const body = { UserName: params.RegMob1, UserPassword: params.UserPassword, EncCompanyId: compCode };
-    //         const res = await axios.post(`${BASE_URL}/api/UserAuth/CheckCompLogin`, body);
-    //         setLoading(false)
-    //         const data = res.data[0];
-            
-    //         if (data.Remarks === 'INACTIVE') {
-    //             alert('THIS USER ID IS INACTIVE')
-    //             return false;
-    //         } else if (data.UserId) {
-    //             dispatch(setUser(data));
-    //             // localStorage.setItem("userLoginData", encrypt({ phone: params.RegMob1, password: params.UserPassword, compCode: compCode }));
-    //             return true;
-    //         } else {
-    //             alert('We could not log you in, Please log in again manually.');
-    //             return false;
-    //         }
-    //     } catch (err) {
-    //         alert(err)
-    //     }
-    // }
-    
-    // const handleNext = async () => {
-    //     if (!isLoggedIn && !otp.sent) {
-    //         if (regData.RegMob1.length < 10) return alert('please enter a valid phone number.');
-    //         const userExist = await checkExistingUser();
-    //         if (userExist) return;
-    //         const receivedOtp = await makeOtpRequest();
-    //         setOTP({...otp, isOpen: true, sent: true, recievedValue: receivedOtp});
-    //     } else if (otp.sent) {
-    //         // if (compCode !== defaultId) {
-    //             if (otp.recievedValue !== otp.enteredValue) return alert('Wrong OTP.');
-    //         // }
-    //         setOTP({...otp, isOpen: false, verified: true, read_only: true});
-    //         setPersonalFields(true);
-    //     }
-    // }
-
-    // const checkExistingUser = async () => {
-    //     if (regData.RegMob1.length > 9) {
-    //         setLoading(true);
-    //         const res = await axios.get(`${BASE_URL}/api/UserReg/Get?UN=${regData.RegMob1}`);
-    //         setLoading(false);
-    //         if (res.data === 'Y') {
-    //             setLoginError({status: true, message: 'This number is already registered.'});
-    //             setLoginData(pre => ({ ...pre, phone: regData.RegMob1 }))
-    //             setRegData(pre => ({ ...pre, RegMob1: '' }))
-    //             setTab('login');
-    //             return true;
-    //         } else {
-    //             setLoginError({status: false, message: ''});
-    //             return false;
-    //         }
-    //     }
-    // }
-
-    // const makeOtpRequest = async () => {
-    //     setLoading(true);
-    //     const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);
-    //     setLoading(false);
-    //     if (res.status === 200) {
-    //         console.log(res.data);            
-    //         return res.data;
-    //     }
-    //     alert('An Error Occured, Try again later.');
-    //     return 'asdfasdasdf';
-    // }
-
     const [genderDropdown, setGenderDropdown] = useState(false);
     const [salutationDropdown, setSalutationDropdown] = useState(false);
     const [stateDropdown, setStateDropdown] = useState(false);
@@ -478,7 +287,7 @@ const AddMember = ({ isModal }: any) => {
         makeAddMemberRequest(memberData);      
     }
 
-    const makeAddMemberRequest = async (params: any) => {
+    const makeAddMemberRequest = async (params: any) => {        
         try {
             setLoading(true);
             const res = await axios.post(`${BASE_URL}/api/member/Post`, params);
@@ -501,7 +310,15 @@ const AddMember = ({ isModal }: any) => {
     const marketingInputRef = useRef(null);
     const salesInputRef = useRef(null);
     const refByInputRef = useRef(null);
-    const providerInputRef = useRef(null);       
+    const providerInputRef = useRef(null);    
+    
+    const Card_6 = ({ onPress, data }: any) => {        
+        return (
+            <Pressable onPress={onPress} className='py-3 px-4 border-b border-gray-300'>
+                <Text className='text-[13px] text-white'>{data.Name}</Text>
+            </Pressable>
+        )
+    }
 
     return (
         <>
@@ -651,7 +468,7 @@ const AddMember = ({ isModal }: any) => {
                                     <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">{compDetail.MarketedByCaption || 'Business Executive'}</Text>
                                     <TextInput 
                                         ref={marketingInputRef}
-                                        onPress={() => setMarketOpen(true)}
+                                        onPress={() => setMarketOpen(true)} 
                                         onBlur={() => setMarketOpen(false)} 
                                         readOnly={!fields.marketing.active} 
                                         value={fields.marketing.label} 
@@ -664,12 +481,37 @@ const AddMember = ({ isModal }: any) => {
                             </> : ''}
                         </View>
                         {/* <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Please use a strong password</Text> */}
-                        <ButtonPrimary onClick={handleMemberFormSubmit} isLoading={loading} title={'ADD NEW MEMBER'} active={true} classes='rounded-2xl' textClasses='tracking-widest' />
+                        <ButtonPrimary onClick={handleMemberFormSubmit} isLoading={loading} title={editId ? 'UPDATE MEMBER' : 'ADD NEW MEMBER'} active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                     </View>
                 </View>
             </ScrollView>
 
             {salesOpen ? 
+                <MyDropdown isOpen={salesOpen} setOpen={setSalesOpen} anchorRef={salesInputRef} maxHeight={230} stickTo='top' offsetY={-40} dataList={selesList.data}>
+                    {({ data }: any) => <Card_6 data={data} onPress={() => selectItem(data, 'sales')} />}
+                </MyDropdown>       
+            : null} 
+
+            {refOpen ? 
+                <MyDropdown isOpen={refOpen} setOpen={setRefOpen} anchorRef={refByInputRef} maxHeight={230} stickTo='top' offsetY={-40} dataList={refList.data}>
+                    {({ data }: any) => <Card_6 data={data} onPress={() => selectItem(data, 'refBy')} />}
+                </MyDropdown>       
+            : null} 
+
+            {providerOpen ? 
+                <MyDropdown isOpen={providerOpen} setOpen={setProviderOpen} anchorRef={providerInputRef} maxHeight={230} stickTo='top' offsetY={-40} dataList={providerList.data}>
+                    {({ data }: any) => <Card_6 data={data} onPress={() => selectItem(data, 'provider')} />}
+                </MyDropdown>       
+            : null} 
+
+            {marketOpen ? 
+                <MyDropdown isOpen={marketOpen} setOpen={setMarketOpen} anchorRef={marketingInputRef} maxHeight={230} stickTo='top' offsetY={-40} dataList={marketList.data}>
+                    {({ data }: any) => <Card_6 data={data} onPress={() => selectItem(data, 'marketing')} />}
+                </MyDropdown>       
+            : null}
+            
+
+            {/* {salesOpen ? 
                 <MyDropdown isOpen={salesOpen} setOpen={setSalesOpen} anchorRef={salesInputRef} maxHeight={230} stickTo='top' offsetY={-40}>
                     {() => (
                         <FlatList
@@ -677,24 +519,13 @@ const AddMember = ({ isModal }: any) => {
                             keyExtractor={(_, i) => i.toString()}
                             showsVerticalScrollIndicator
                             keyboardShouldPersistTaps="handled"
-                            renderItem={({ item }) => (
-                                <Pressable
-                                    onPress={() => {
-                                        // handleInput('sales', item.Name);
-                                        // setSalesOpen(false);
-                                        selectItem(item, 'sales');
-                                    }}
-                                    className='py-3 px-4 border-b border-gray-300'
-                                >
-                                    <Text className='text-[13px] text-gray-500'>{item.Name}</Text>
-                                </Pressable>
-                            )}
+                            renderItem={({ item }) => <Card_6 data={item} onPress={() => selectItem(item, 'sales')} />}
                         />
                     )}
                 </MyDropdown>       
-            : null} 
+            : null}  */}
 
-            {refOpen ? 
+            {/* {refOpen ? 
                 <MyDropdown isOpen={refOpen} setOpen={setRefOpen} anchorRef={refByInputRef} maxHeight={230} stickTo='top' offsetY={-40}>
                     {() => (
                         <FlatList
@@ -702,18 +533,7 @@ const AddMember = ({ isModal }: any) => {
                             keyExtractor={(_, i) => i.toString()}
                             showsVerticalScrollIndicator
                             keyboardShouldPersistTaps="handled"
-                            renderItem={({ item }) => (
-                                <Pressable
-                                    onPress={() => {
-                                        // handleInput('refBy', item.Name);
-                                        // setRefOpen(false);
-                                        selectItem(item, 'refBy');
-                                    }}
-                                    className='py-3 px-4 border-b border-gray-300'
-                                >
-                                    <Text className='text-[13px] text-gray-500'>{item.Name}</Text>
-                                </Pressable>
-                            )}
+                            renderItem={({ item }) => <Card_6 data={item} onPress={() => selectItem(item, 'refBy')} />}
                         />
                     )}
                 </MyDropdown>       
@@ -727,18 +547,7 @@ const AddMember = ({ isModal }: any) => {
                             keyExtractor={(_, i) => i.toString()}
                             showsVerticalScrollIndicator
                             keyboardShouldPersistTaps="handled"
-                            renderItem={({ item }) => (
-                                <Pressable
-                                    onPress={() => {
-                                        // handleInput('provider', item.Name);
-                                        // setProviderOpen(false);
-                                        selectItem(item, 'provider');
-                                    }}
-                                    className='py-3 px-4 border-b border-gray-300'
-                                >
-                                    <Text className='text-[13px] text-gray-500'>{item.Name}</Text>
-                                </Pressable>
-                            )}
+                            renderItem={({ item }) => <Card_6 data={item} onPress={() => selectItem(item, 'provider')} />}
                         />
                     )}
                 </MyDropdown>       
@@ -752,30 +561,16 @@ const AddMember = ({ isModal }: any) => {
                             keyExtractor={(_, i) => i.toString()}
                             showsVerticalScrollIndicator
                             keyboardShouldPersistTaps="handled"
-                            renderItem={({ item }) => (
-                                <Pressable
-                                    onPress={() => {
-                                        // handleInput('marketing', item.Name);
-                                        // setMarketOpen(false);
-                                        selectItem(item, 'marketing');
-                                    }}
-                                    className='py-3 px-4 border-b border-gray-300'
-                                >
-                                <Text className='text-[13px] text-gray-500'>{item.Name}</Text>
-                                </Pressable>
-                            )}
+                            renderItem={({ item }) => <Card_6 data={item} onPress={() => selectItem(item, 'marketing')} />}
                         />
                     )}
                 </MyDropdown>       
-            : null}
+            : null} */}
         </>
     )
 }
 
 export default AddMember;
-// stop here
-
-
 
 const useListFetch = (url: string, compCode: string, searchQuery: string) => {
   const [isOpen, setOpen] = useState(false); 
