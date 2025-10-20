@@ -175,9 +175,12 @@ const RenderLabTest = memo(({ labData, dateValue }: any) => {
           return;
         } else {
             return (
-                <View className='gap-3'>
-                    {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(dateValue).toLocaleDateString('en-TT')} />)}
-                </View>
+                // <View>
+                //     <Text className='font-PoppinsMedium my-3'>{parentCategoryName}</Text>
+                    <View className='gap-3'>        {/* flex-row flex-wrap */}
+                        {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(dateValue).toLocaleDateString('en-TT')} />)}   {/* classes={'min-w-80'} */} 
+                    </View>
+                // </View>
             ) 
         }
     }

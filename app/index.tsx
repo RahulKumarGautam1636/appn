@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
 import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser } from '@/src/store/slices/slices';
+
 // import { Pressable } from 'react-native';
 // import colors from 'tailwindcss/colors';
 // import { router } from 'expo-router';
@@ -400,13 +401,13 @@ export default function App() {
 
 //         {/* Top Deals on Tech */}
 //         <View className="mt-2 px-4">
-//           <View className="flex-row justify-between items-center mb-3">
+//           <View className="flex-row justify-between items-center mb-2">
 //             <Text className="text-lg font-bold">Top Deals on Tech</Text>
 //             <TouchableOpacity>
 //               <Text className="text-blue-600 text-sm font-semibold">See more</Text>
 //             </TouchableOpacity>
 //           </View>
-//           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+//           <ScrollView horizontal contentContainerClassName='py-1' showsHorizontalScrollIndicator={false}>
 //             {topDeals.map(deal => (
 //               <DealCard key={deal.id} item={deal} />
 //             ))}
@@ -414,7 +415,7 @@ export default function App() {
 //         </View>
 
 //         {/* Featured Brands */}
-//         <View className="mt-4 px-4">
+//         <View className="mt-3 px-4">
 //           <View className="flex-row justify-between items-center mb-3">
 //             <Text className="text-lg font-bold">Featured Brands</Text>
 //             <TouchableOpacity>
@@ -430,13 +431,13 @@ export default function App() {
 
 //         {/* Trending Today */}
 //         <View className="mt-4 px-4">
-//           <View className="flex-row justify-between items-center mb-3">
+//           <View className="flex-row justify-between items-center mb-2">
 //             <Text className="text-lg font-bold">Trending Today</Text>
 //             <TouchableOpacity>
 //               <Text className="text-blue-600 text-sm font-semibold">View all</Text>
 //             </TouchableOpacity>
 //           </View>
-//           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+//           <ScrollView horizontal contentContainerClassName='py-1' showsHorizontalScrollIndicator={false}>
 //             {trendingProducts.map(product => (
 //               <TrendingCard key={product.id} item={product} />
 //             ))}
@@ -444,9 +445,9 @@ export default function App() {
 //         </View>
 
 //         {/* Special Offers */}
-//         <View className="mt-4 px-4 mb-4">
-//           <Text className="text-lg font-bold mb-3">Special Offers</Text>
-//           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+//         <View className="mt-3 px-4 mb-3">
+//           <Text className="text-lg font-bold mb-2">Special Offers</Text>
+//           <ScrollView contentContainerClassName='py-1' horizontal showsHorizontalScrollIndicator={false}>
 //             {specialOffers.map(offer => (
 //               <SpecialOfferCard key={offer.id} item={offer} />
 //             ))}
@@ -454,7 +455,7 @@ export default function App() {
 //         </View>
 
 //         {/* Newsletter Banner */}
-//         <View className="bg-blue-600 mx-3 rounded-lg p-4 mb-4 items-center">
+//         <View className="bg-blue-600 mx-4 rounded-lg p-4 mb-4 items-center">
 //           <Text className="text-white font-bold">Get 10% OFF</Text>
 //           <Text className="text-white text-xs mt-1">Subscribe to our newsletter</Text>
 //           <TouchableOpacity className="bg-white rounded-lg px-4 py-2 mt-3">

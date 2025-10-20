@@ -8,7 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { mmDDyyyyDate } from ".";
 import colors from "tailwindcss/colors";
 
-export default function LabCard({ data, testDate }: any) {
+export default function LabCard({ data, testDate, classes }: any) {
 
     const dispatch = useDispatch();
     // const lab = useSelector((i: RootState) => i.cart)
@@ -24,7 +24,7 @@ export default function LabCard({ data, testDate }: any) {
     }   
 
     return (
-        <TouchableOpacity key={data.ItemId} onPress={handleAdd} className="flex-row items-start gap-4 bg-white rounded-2xl shadow-lg border-b-2 border-gray-300 p-3">
+        <TouchableOpacity key={data.ItemId} onPress={handleAdd} className={`flex-row items-start gap-4 bg-white rounded-2xl shadow-lg border-b-2 border-gray-300 p-3 ${classes}`}>
             <View className="mt-1 uppercase h-[40px] w-[40px] items-center justify-center rounded-xl bg-fuchsia-600">
                 <Ionicons name={'flask'} size={19} color={'#fff'} />
             </View>
