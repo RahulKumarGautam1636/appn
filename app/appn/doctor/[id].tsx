@@ -276,7 +276,7 @@ const Booking = () => {
                     <Pressable onPress={() => router.back()} className='justify-between flex-row p-3 items-center'>
                         <View className='flex-row items-center gap-2'>
                             <Ionicons name="arrow-back-outline" size={22} color="black" />
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">General Doctors</Text>
+                            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-6">General Doctors</Text>
                         </View>
                         <View className="gap-2 flex-row items-center ml-auto">
                             <Feather name="heart" size={18} color='black' />

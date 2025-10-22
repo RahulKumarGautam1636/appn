@@ -1,4 +1,4 @@
-import { Link, useRouter } from 'expo-router';
+import { Link, Redirect, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, Text, TextInput, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -11,10 +11,6 @@ import { RootState } from '@/src/store/store';
 import { TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
 import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser } from '@/src/store/slices/slices';
 
-// import { Pressable } from 'react-native';
-// import colors from 'tailwindcss/colors';
-// import { router } from 'expo-router';
-// import { ChevronRight, Menu, Search, ShoppingCart } from 'lucide-react-native';
 
 // import '@formatjs/intl-getcanonicallocales/polyfill';
 // import '@formatjs/intl-locale/polyfill';
@@ -31,11 +27,11 @@ export default function App() {
   const { vType, status, error } = useSelector((i: RootState) => i.company)
   const dispatch = useDispatch();
  
-  useEffect(() => {
-    if (vType === 'ErpHospital') {
-      router.push('/appn/tabs/opd')
-    }
-  }, [vType])
+  // useEffect(() => {
+  //   if (vType === 'ErpHospital') {
+  //     router.push('/appn/tabs/opd')
+  //   }
+  // }, [vType])
 
   const handleSelect = (comanyCode: string) => {
     dispatch(setCompCode(comanyCode))
@@ -172,11 +168,22 @@ export default function App() {
           </SafeAreaProvider>
         </GestureHandlerRootView>
       );
+    } 
+    else if (vType === 'ErpHospital') {
+      return <Redirect href="/appn/tabs/opd" />;
+    }
+    else {
+      return <View className='flex-1 items-center justify-center bg-gray-200'><Text className='text-xl'>ROOT PAGE</Text></View>;
     }
   } else {
-    return null;
+    return <View className='flex-1 items-center justify-center bg-gray-200'><Text className='text-xl'>ROOT PAGE ERROR</Text></View>;
   }
 }
+
+
+// import { Pressable } from 'react-native';
+// import { router } from 'expo-router';
+// import { ChevronRight, Menu, Search, ShoppingCart } from 'lucide-react-native';
 
 
 // export default function App() {

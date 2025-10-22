@@ -24,11 +24,11 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
       <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
           <GradientBG>
               <View className='flex-1'>
-              <View className='justify-between flex-row p-3 items-center'>
+              <View className='justify-between flex-row px-3 py-4 items-center'>
                   <TouchableOpacity onPress={() => handleClose(false)}>
                       <View className='flex-row items-center gap-2'>
                           <Ionicons name="arrow-back-outline" size={22} color="black" />
-                          <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">Review & Confirm</Text>
+                          <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-4">Review & Confirm</Text>
                       </View>
                   </TouchableOpacity>
                   <View className="gap-2 flex-row items-center ml-auto">

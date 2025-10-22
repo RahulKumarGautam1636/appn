@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import compCodeReducer, { appDataReducer, appnReducer, cartReducer, companiesReducer, companyReducer, deptsReducer, loginReducer, membersReducer, modalsReducer, siteDataReducer, userReducer } from './slices/slices';
+import navReducer from './slices/nav';
 // import { devToolsEnhancer } from '@redux-devtools/extension';
 // import { compose } from 'redux';
 
@@ -19,7 +20,8 @@ const store = configureStore({
     cart: cartReducer,
     appData: appDataReducer,
     company: companyReducer,
-    siteData: siteDataReducer
+    siteData: siteDataReducer,
+    navigation: navReducer,
   },
   // enhancers: (existingEnhancers) =>
   //   process.env.NODE_ENV === 'development'

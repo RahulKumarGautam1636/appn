@@ -1,6 +1,6 @@
 import { BASE_URL, defaultId, hasAccess } from '@/src/constants';
 import { CompCard } from '@/src/components';
-import { BannerCarousel, getFrom, getRequiredFields, getRequiredFieldsOnly, GradientBG, GridLoader, ListLoader } from '@/src/components/utils';
+import { BannerCarousel, getFrom, getRequiredFields, GradientBG, GridLoader, ListLoader } from '@/src/components/utils';
 import { addToCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
@@ -177,8 +177,10 @@ const RenderLabTest = memo(({ labData, dateValue }: any) => {
             return (
                 // <View>
                 //     <Text className='font-PoppinsMedium my-3'>{parentCategoryName}</Text>
-                    <View className='gap-3'>        {/* flex-row flex-wrap */}
-                        {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(dateValue).toLocaleDateString('en-TT')} />)}   {/* classes={'min-w-80'} */} 
+                    <View className='gap-3'>        
+                    {/* flex-row flex-wrap */}
+                        {productCategoryItems.map((i: any) => <LabCard key={i.LocationItemId} data={i} testDate={(dateValue).toLocaleDateString('en-TT')} />)}   
+                        {/* classes={'min-w-80'} */} 
                     </View>
                 // </View>
             ) 

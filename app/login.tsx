@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { mmDDyyyyDate, MyModal } from "../src/components";
-import { BASE_URL, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
+import { BASE_URL, BC_ROY, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +25,7 @@ const Login = ({ modalMode }: any) => {
     const compCode = useSelector((state: RootState) => state.compCode);
     const isLoggedIn = useSelector((state: RootState) => state.isLoggedIn);
     const user = useSelector((state: RootState) => state.user);
-    const company = useSelector((state: RootState) => state.company.info);
+    const { info: compInfo, vType } = useSelector((state: RootState) => state.company);
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
     const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });        // 9330241456 // 8583814626
@@ -192,6 +192,11 @@ const Login = ({ modalMode }: any) => {
         }
     }, [isLoggedIn, user]);
 
+    useEffect(() => {
+        if (vType === 'ErpHospital') {
+            setTab('register')
+        }
+    }, [vType])
 
     const backToLogin = () => {
         setTab('login');
@@ -205,7 +210,7 @@ const Login = ({ modalMode }: any) => {
             </View> */}
             <View className="relative gap-4 flex-row items-center justify-center mb-4 flex-1 pt-14 pb-12">
                 <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
-                <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} resizeMode="contain" style={{ width: 160, height: 150 }} />
+                <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${compInfo.LogoUrl}` }} resizeMode="contain" style={{ width: 160, height: 150 }} />
                 {/* <Image className='' source={require('../assets/images/logo.png')} style={{ width: 160, height: 150 }} /> */}
                 {/* <View>
                     <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2 pt-3">{comp.name}</Text>
@@ -227,7 +232,7 @@ const Login = ({ modalMode }: any) => {
                                     <TextInput placeholderTextColor={colors.gray[400]} placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 {loginError.status ?
-                                    <Text className="text-blue-500 text-[13px] font-PoppinsSemibold mr-auto">{loginError.message}</Text>
+                                    <Text className="text-rose-500 text-[13px] font-PoppinsSemibold mr-auto">{loginError.message}</Text>
                                 : null}
                                 <Pressable onPress={() => setTab('forgotPassword')}>
                                     <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
@@ -282,7 +287,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     useRegType(regTypes[regType?.level]); 
 
     useEffect(() => {
-        if (isLoggedIn) return;
+        if (isLoggedIn || compCode === BC_ROY) return;
         setRegTypeDropdown(true);
     }, [])  
 
@@ -456,6 +461,8 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     const makeOtpRequest = async () => {
         setLoading(true);
         const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);
+        console.log(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);
+        
         setLoading(false);
         if (res.status === 200) {
             console.log(res.data);            
@@ -567,7 +574,6 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
 
     const [day, month, year] = regData.DOB.split('/').map(Number);
     let parsedDOB = new Date(year, month - 1, day);
-
     return (
         <>
             <View className={`bg-white shadow-lg px-4 pt-6 pb-6 w-full ${isModal ? 'h-full' : 'mt-auto rounded-tl-[2.7rem] rounded-tr-[2.7rem]'}`}> 

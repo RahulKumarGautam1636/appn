@@ -14,6 +14,7 @@ export const BC_ROY = 'ji4C/%2BQbn%2BBofLeoFG9clw=='
 export const HEXAGON_ID = 'CHEZmvXXLYNYZOKVN9fr5A==';
 export const rent = false;
 export const blur = false;
+// export const brandCode = 'TAKEHOME   GBOOKS';
 
 const REACT_APP_BASE_URL = 'https://myapps.gsterpsoft.com';
 const REACT_APP_TEST_BASE_URL = 'https://api.gsterpsoft.com';

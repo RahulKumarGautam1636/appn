@@ -1,4 +1,4 @@
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, usePathname } from "expo-router";
 import { KeyboardAvoidingView, StatusBar } from "react-native";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -11,6 +11,8 @@ import Init from "@/src/components/init";
 import UpdateBanner from "@/src/components/update";
 import Modals from "@/src/components/modals";
 import { getCompanyDetails } from "@/src/store/slices/slices";
+import { pushRoute } from "@/src/store/slices/nav";
+import { useGlobalBackHandler } from "@/src/components";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,7 +22,11 @@ function LayoutContent() {
   const vType = useSelector((state: RootState) => state.company.vType);
   const compCode = useSelector((state: RootState) => state.compCode);
   const locationId = useSelector((state: RootState) => state.appData.location.LocationId);
+  const history = useSelector((state: RootState) => state.navigation.history);
   const dispatch = useDispatch()
+  const pathname = usePathname();
+  
+  // useGlobalBackHandler();
 
   const [loaded, error] = useFonts({
     "Space-Mono": require("./../assets/fonts/SpaceMono-Regular.ttf"),
@@ -38,6 +44,15 @@ function LayoutContent() {
   useEffect(() => {
     dispatch(getCompanyDetails({ compCode: compCode, locationId: locationId }))
   }, [compCode, locationId])
+
+  useEffect(() => {
+    if (pathname) {
+      dispatch(pushRoute(pathname));
+    }
+  }, [pathname]);
+
+  console.log(history);
+  
 
   useEffect(() => {
     if (!vType) return;

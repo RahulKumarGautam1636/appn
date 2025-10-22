@@ -1,7 +1,7 @@
 import { blur, hasAccess, myColors, SRC_URL } from "@/src/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
-import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler } from "react-native"
-import { Link, Redirect, useRouter } from "expo-router";
+import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler, Alert } from "react-native"
+import { Link, Redirect, router, useRouter } from "expo-router";
 import { setAppnData, setCompanies, setDepts, setMembers, setModal, setPrescription } from "@/src/store/slices/slices";
 import { stripHtml } from "string-strip-html";
 
@@ -30,6 +30,7 @@ import AppnDetail from "@/app/appn/appnDetail";
 import { RootState } from "../store/store";
 import { uType } from "./utils";
 import colors from "tailwindcss/colors";
+import { popRoute } from "../store/slices/nav";
 
 
 export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
@@ -566,6 +567,31 @@ export const Authenticate = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+
+export function useGlobalBackHandler() {
+  const history = useSelector((i: RootState) => i.navigation.history);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const onBackPress = () => {
+      if (history.length > 1) {
+        dispatch(popRoute());
+        const previousRoute = history[history.length - 2];
+        router.push(previousRoute);
+        return true;
+      } else {
+        Alert.alert('Exit App', 'Do you want to exit the app?', [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Yes', onPress: () => BackHandler.exitApp() },
+        ]);
+        return true;
+      }
+    };
+
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => subscription.remove();
+  }, [history]);
+}
 
 
 

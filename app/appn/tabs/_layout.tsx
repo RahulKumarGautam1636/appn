@@ -41,31 +41,31 @@ export default function TabsLayout() {
     }
   }, [segments]);
 
-  useEffect(() => {                                            // Handle hardware back button
-    const onBackPress = () => {
-      if (tabHistory.current.length > 1) {
-        tabHistory.current.pop();                              // Remove current tab
-        const previousTab = tabHistory.current[tabHistory.current.length - 1];
-        if (previousTab) {
-          router.push(`/appn/tabs/${previousTab}`);
-          return true;                                         // prevent default
-        }
-      } else {
-        // Alert.alert("Exit App", "Do you want to exit the app?",
-        //   [
-        //     { text: "Cancel", style: "cancel" },
-        //     { text: "Yes", onPress: () => BackHandler.exitApp() },
-        //   ],
-        //   { cancelable: true }
-        // );
-        // return true;
-      }
-      return false;                                            // allow default back behavior (exit app)
-    };
+  // useEffect(() => {                                            // Handle hardware back button
+  //   const onBackPress = () => {
+  //     if (tabHistory.current.length > 1) {
+  //       tabHistory.current.pop();                              // Remove current tab
+  //       const previousTab = tabHistory.current[tabHistory.current.length - 1];
+  //       if (previousTab) {
+  //         router.push(`/appn/tabs/${previousTab}`);
+  //         return true;                                         // prevent default
+  //       }
+  //     } else {
+  //       Alert.alert("Exit App", "Do you want to exit the app?",
+  //         [
+  //           { text: "Cancel", style: "cancel" },
+  //           { text: "Yes", onPress: () => BackHandler.exitApp() },
+  //         ],
+  //         { cancelable: true }
+  //       );
+  //       return true;
+  //     }
+  //     return false;                                            // allow default back behavior (exit app)
+  //   };
 
-    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    return () => subscription.remove(); // ✅ modern cleanup
-  }, []);
+  //   const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  //   return () => subscription.remove(); // ✅ modern cleanup
+  // }, []);
 
   return (
     <Tabs tabBar={({ state, descriptors, navigation }: any) => {
