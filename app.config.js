@@ -53,9 +53,9 @@ export default ({ config }) => {
     }
   }
 
-  const testBuild = true;
-  const flavor = flavorConfig["xyz"];
-  const account = accounts["rk"];
+  const testBuild = false;
+  const flavor = flavorConfig["takehome"];
+  const account = accounts["vit"];
 
   return {
     ...config,

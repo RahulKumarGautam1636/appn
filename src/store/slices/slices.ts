@@ -265,6 +265,7 @@ const modalsSlice = createSlice({
     DEPTS: { state: false, data: '' },
     PRESC: { state: false, data: '' },
     LOCATIONS: { state: false, data: '' },
+    LOADING: { state: false, data: '' },
   },
   reducers: {
     setModal: (state, action: any) => {

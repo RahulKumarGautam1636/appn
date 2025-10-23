@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { CompCard, MyModal } from "../index";
+import { CompCard, FullScreenLoading, MyModal } from "../index";
 import { setModal } from "@/src/store/slices/slices";
 import Members from "@/app/members";
 import Login from "../../../app/login";
@@ -28,6 +28,7 @@ const Modals = () => {
             <MyModal modalActive={modals.PRESC.state} name='PRESC' child={<PrescriptionForm />} />
             <MyModal modalActive={modals.LOCATIONS.state} name='LOCATIONS' child={<Locations />} />
             <MyModal modalActive={modals.ADD_MEMBER.state} name='LOCATIONS' child={<AddMember isModal={true} />} />
+            <MyModal modalActive={modals.LOADING.state} name='LOADING' child={<FullScreenLoading />} />
         </>
     )
 }

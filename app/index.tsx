@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
 import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser } from '@/src/store/slices/slices';
+import { switchSegment } from '@/src/components/utils';
 
 
 // import '@formatjs/intl-getcanonicallocales/polyfill';
@@ -25,6 +26,7 @@ export default function App() {
   
 
   const { vType, status, error } = useSelector((i: RootState) => i.company)
+  const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
   const dispatch = useDispatch();
  
   // useEffect(() => {
@@ -33,16 +35,21 @@ export default function App() {
   //   }
   // }, [vType])
 
-  const handleSelect = (comanyCode: string) => {
-    dispatch(setCompCode(comanyCode))
-    dispatch(setLocation({ LocationId: 0 }));
+  // const handleSelect = (comanyCode: string) => {
+  //   dispatch(setCompCode(comanyCode))
+  //   dispatch(setLocation({ LocationId: 0 }));
 
-    dispatch(setLogin(false));   
-    dispatch(setUser({}))
-    dispatch(dumpCart())
-    // dispatch(resetSiteProducts())
-    dispatch(setPrescription({ required: false }))
+  //   dispatch(setLogin(false));   
+  //   dispatch(setUser({}))
+  //   dispatch(dumpCart())
+  //   // dispatch(resetSiteProducts())
+  //   dispatch(setPrescription({ required: false }))
 
+  //   router.push('./shop/tabs/home')
+  // }
+
+  const changeSegment = async (companyId: string) => {
+    await switchSegment(companyId, dispatch)
     router.push('./shop/tabs/home')
   }
 
@@ -67,12 +74,12 @@ export default function App() {
                       <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
                   </View>
               </View> */}
-              <Link href={'/login'} className='absolute top-3 right-3 z-40'>
+              {isLoggedIn ? null : <Link href={'/login'} className='absolute top-3 right-3 z-40'>
                   <View className="gap-2 flex-row items-center bg-white p-2 rounded-full shadow-sm">
                       <Ionicons name="enter" size={25} color='#3b82f6' className='text-blue-500' />
                       <Text className='font-PoppinsMedium leading-5 text-slate-700'>Login </Text>
                   </View>
-              </Link>
+              </Link>}
               <View className="relative gap-4 items-center justify-center py-[2rem] bg-white">
                 <Image className='' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/752.jpeg` }} style={{ width: 200, height: 190 }} />    
                 {/* <Image className='' source={require('../assets/images/logo.png')} style={{ width: 200, height: 190 }} />    TAKEHOME */}
@@ -99,7 +106,7 @@ export default function App() {
                     </View>
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity> */}
-                  <TouchableOpacity onPress={() => handleSelect(TAKEHOME_PHARMA)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_PHARMA)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
                     <View className="flex-row items-center">
                       <View className="bg-red-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                         <FontAwesome6 name="capsules" size={33} color="white" />
@@ -125,7 +132,7 @@ export default function App() {
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity> */}
                   
-                  <TouchableOpacity onPress={() => handleSelect(TAKEHOME_AGRO)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_AGRO)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
                     <View className="flex-row items-center">
                       <View className="bg-yellow-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                         <FontAwesome6 name="carrot" size={33} color="white" />
@@ -137,7 +144,7 @@ export default function App() {
                     </View>
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleSelect(TAKEHOME_SURGICAL)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_SURGICAL)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
                     <View className="flex-row items-center">
                       <View className="bg-blue-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                         <FontAwesome6 name="user-doctor" size={33} color="white" />

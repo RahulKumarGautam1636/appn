@@ -100,6 +100,22 @@ function LayoutContent() {
   );
 }
 
+{/* Unused routes */}
+
+{/* <Stack.Screen name="_sitemap" />
+<Stack.Screen name="+not-found" />
+<Stack.Screen name="appn/appnDetail" />
+<Stack.Screen name="appn/appnPreview" />
+<Stack.Screen name="appn/bill" />
+<Stack.Screen name="appn/bookAppn" />
+<Stack.Screen name="appn/checkout" />
+<Stack.Screen name="appn/depts" />
+<Stack.Screen name="appn/prescription" />
+<Stack.Screen name="members/index" />
+<Stack.Screen name="shop/checkDelivery" />
+<Stack.Screen name="shop/locations" />
+<Stack.Screen name="shop/presc" /> */}
+
 export default function RootLayout() {
   return (
     <Provider store={store}>

@@ -189,7 +189,7 @@ const ProductPage = () => {
               {/* <Text className="text-[1rem] font-semibold text-green-600 ml-auto">{locationId && !packSize().StockQty ? '' : 'In Stock'}</Text> */}
             </View>
             {isMedicine ? <>
-              <View className="flex-row gap-3 items-center border-b border-gray-200 py-3 mb-4">
+              <View className="flex-row gap-3 items-center border-b border-gray-200 py-3">
                 <Text className="text-base font-semibold text-gray-900 mb-2">Pack Size :</Text>
                 <View className="flex-row gap-3 mr-auto">
                   {product?.ItemPackSizeList?.map((pack) => (
@@ -206,7 +206,7 @@ const ProductPage = () => {
                 </View>
               </View>
             </> : null}
-            <View className={`mb-4 flex-row items-start gap-3`}>
+            <View className={`my-4 flex-row items-start gap-3`}>
               <Text className="text-base font-semibold text-gray-900">Description : </Text>
               <Text className="text-sm text-gray-600 leading-relaxed flex-1">
                 {product?.Technicalname}
@@ -235,7 +235,7 @@ const ProductPage = () => {
             </View>
           </View>
 
-          <View className="bg-white border-y border-gray-200">
+          {/* <View className="bg-white border-y border-gray-200">
             <View className="flex-row items-center justify-between p-4 border-b border-gray-200">
               <Text className="text-lg font-semibold text-gray-900">Product Highlights</Text>
             </View>
@@ -302,7 +302,7 @@ const ProductPage = () => {
                 </View>
               </View>
             )}
-          </View>
+          </View> */}
         </View>
         <View>
           {/* <View className='m-3 shadow-sm rounded-xl overflow-hidden'>

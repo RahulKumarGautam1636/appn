@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Animated, StyleSheet, Dimensions, Image, Text, ImageBackground, TouchableOpacity, Pressable, Linking, Alert, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Carousel from "react-native-reanimated-carousel";
-import { addToCart, dumpCart, removeFromCart, setModal, setUserRegType } from "../store/slices/slices";
+import { addToCart, dumpCart, removeFromCart, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser, setUserRegType } from "../store/slices/slices";
 import store, { RootState } from "../store/store";
 import { Link, useRouter } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -15,7 +15,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { FileText } from "lucide-react-native";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
-import { BASE_URL, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from "../constants";
+import { BASE_URL, initReg, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from "../constants";
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal?: GenericAbortSignal) => {
   
@@ -391,7 +391,7 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
   if (type === 'grid') {
     return (
       <TouchableOpacity onPress={() => router.push(`/shop/product/${data.ItemId}`)} style={{width: width }}>
-        <View className={`items-start bg-white p-4 border border-gray-100 w-full`}>
+        <View className={`items-start bg-white p-3 border border-gray-100 w-full`}>
           <View className='items-center justify-center w-full p-2 rounded-xl border border-gray-100'>
             <Image className='' resizeMode='contain' source={{uri: data.ItemImageURL}} style={{ width: '100%', height: 140 }} />
           </View>
@@ -872,6 +872,7 @@ export const useRegType = (type: string) => {
 }
 
 export const minDate = "0001-01-01T00:00:00";
+export const swapMinDate = (str: string) => str === minDate ? "01/01/1" : new Date(str).toLocaleDateString('en-TT');
 
 export const getFallbackImg = () => {
   const compCode = store.getState().compCode;
@@ -971,3 +972,213 @@ export const openWhatsApp = async (phone: string, message: string) => {
     Alert.alert('Error', 'Failed to open WhatsApp');
   }
 };
+
+// export const switchSegment = () => {}
+
+export const switchSegment = async (companyId: string, dispatch: any) => {
+  let user = store.getState().user;  
+  if (user.UserId) {
+    dispatch(setModal({ name: 'LOADING', state: true }))
+    await makeLoginRequest(user, companyId, dispatch);
+    dispatch(dumpCart())
+    dispatch(setLocation({ LocationId: 0 }));
+    dispatch(setCompCode(companyId))
+    dispatch(setModal({ name: 'LOADING', state: false }))
+  } else {   
+    dispatch(setLogin(false));   
+    dispatch(setUser({}))
+    dispatch(dumpCart())
+    // dispatch(resetSiteProducts())
+    // dispatch(setPrescription({ required: false }))
+    dispatch(setLocation({ LocationId: 0 }));
+    dispatch(setCompCode(companyId))
+  }
+}
+
+
+const makeLoginRequest = async (params: any, companyId: any, dispatch: any) => {
+    const body = { UserName: params.RegMob1, UserPassword: encodeURIComponent(params.UserPassword), EncCompanyId: companyId };
+    const res = await axios.post(`${BASE_URL}/api/UserAuth/CheckCompLogin`, body);
+    console.log('Request made :', body);
+    const data = res.data[0];
+    if (data.Remarks === 'INVALID') {
+        // setLoginError({status: true, message: 'The username or password is incorrect.'});
+        alert('The username or password is incorrect.')
+    } else if (data.Remarks === 'NOTINCOMPANY') {
+        console.log(data.UserType);
+        
+        const existingUser = {             
+            Salutation: data.Salutation,
+            Name: data.Name,
+            EncCompanyId: data.EncCompanyId,
+            PartyCode: '',
+            RegMob1: data.RegMob1,
+            Gender: data.Gender,
+            GenderDesc: data.GenderDesc,
+            Address: data.Address,
+            Age: data.Age,
+            AgeMonth: data.AgeMonth,
+            AgeDay: data.AgeDay,
+            UserPassword: data.UserPassword,               // force to re-enter.
+            // UserType: data.UserType,                       // set by modal
+            Qualification: data.Qualification,
+            SpecialistId: data.SpecialistId,
+            UserId: data.UserId,
+            PartyId: data.PartyId,
+            MemberId: data.MemberId,
+        
+            State: data.State,
+            StateName: data.StateName,
+            City: data.City,
+            Pin: data.Pin,
+            Address2: data.Address2,
+        
+            DOB: swapMinDate(data.DOB),
+            DOBstr: swapMinDate(data.DOB),
+            AnniversaryDate: swapMinDate(data.AnniversaryDate),
+            AnniversaryDatestr: swapMinDate(data.AnniversaryDate),
+            Aadhaar: '',                                        // Not required.
+            IsDOBCalculated: 'N',
+
+            UHID: data.UHID,
+        
+            compName: data.compName ? data.compName : '',
+            compAddress: data.compAddress ? data.compAddress : '',
+            compState: data.compState ? data.compState : '',
+            compPin: data.compPin ? data.compPin : '',
+            compPhone1: data.compPhone1 ? data.compPhone1 : '',
+            compPhone2: data.compPhone2 ? data.compPhone2 : '',
+            compMail: data.compMail ? data.compMail : '',
+
+            RegMob2: data.RegMob2,            // for Business type.
+            GstIn: data.GstIn,
+            LicenceNo: data.LicenceNo ? data.LicenceNo : '',
+            ContactPerson: data.ContactPerson,
+            BusinessType: 'B2C',
+
+            UserType: data.UserType,
+            UserRegTypeId: data.UserRegTypeId,
+            UserLevelSeq: data.UserLevelSeq
+        }
+        autoLogin({ ...initReg, ...existingUser }, dispatch)
+
+    } else if (!data.UserId || !data.UserType) {
+        return alert("Something Went wrong, We can't log you in.");
+    } else {
+        let userLoginData = {
+            Name: data.UserFullName,
+            RegMob1: data.RegMob1,
+            Email: data.Email,
+            UserId: data.UserId,
+            UserType: data.UserType,
+            PartyCode: data.PartyCode,
+            EncCompanyId: data.EncCompanyId,
+            Age: data.Age,
+            AgeDay: data.AgeDay,
+            AgeMonth: data.AgeMonth,
+            Gender: data.Gender,
+            GenderDesc: data.GenderDesc,
+            MPartyCode: data.MPartyCode,
+            Address: data.Address,
+            Qualification: data.Qualification,
+            SpecialistDesc: data.SpecialistDesc,
+            State: data.State, 
+            StateName: data.StateName,                         
+            City: data.City,
+            Pin: data.Pin, // '741235'
+            Address2: data.Address2,
+            UHID: data.UHID,
+            MemberId: data.MemberId,
+            PartyId: data.PartyId,
+            Salutation: data.Salutation,
+            UserFullName: data.UserFullName,
+            UserPassword: data.UserPassword,
+    
+            DOB: data.DOB,
+            DOBstr: data.DOB,
+            AnniversaryDate: data.AnniversaryDate,
+            AnniversaryDatestr: data.AnniversaryDate,
+            Aadhaar: data.Aadhaar,
+            IsDOBCalculated: data.IsDOBCalculated,
+    
+            compName: data.compName ? data.compName: '',
+            compAddress: data.compAddress ? data.compAddress: '',
+            compState: data.compState ? data.compState: '',
+            compPin: data.compPin ? data.compPin: '',
+            compPhone1: data.compPhone1 ? data.compPhone1: '',
+            compPhone2: data.compPhone2 ? data.compPhone2: '',
+            compMail: data.compMail ? data.compMail: '',
+
+            RegMob2: data.RegMob2,            // for Business type.
+            GstIn: data.GstIn,
+            LicenceNo: data.LicenceNo ? data.LicenceNo : '',
+            ContactPerson: data.ContactPerson,
+            BusinessType: 'B2C',
+
+            UnderDoctId: data.UnderDoctId,
+            ReferrerId: data.ReferrerId,
+            ProviderId: data.ProviderId,
+            MarketedId: data.MarketedId,
+
+            UserRegTypeId: data.UserRegTypeId,
+            UserLevelSeq: data.UserLevelSeq,
+            UserCompList: data.UserCompList[0],
+        };
+        dispatch(setUser(userLoginData));
+        dispatch(setLogin(true));
+        console.log('Login Success'); 
+    }
+}
+
+
+const autoLogin = async (params: any, dispatch: any) => {
+  let status = await makeRegisterationRequest(params);
+  if (status) {
+      let loginStatus = await refreshUserInfo(params, dispatch);
+      if (loginStatus) {
+          dispatch(setLogin(true));
+      } else {
+          dispatch(setUser({}));
+          dispatch(setLogin(false));
+      }
+  }
+}
+
+const makeRegisterationRequest = async (params: any) => { 
+    // console.log("RegData :", params)   
+    // return true;
+    try {
+        const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);     //  { data: ['Y', 456446]}
+        if (String(res.data[1]).length > 3) { 
+            return true;
+        } else {
+            alert('Something Went wrong, Please try again later.');
+            return false;
+        }      
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+} 
+
+const refreshUserInfo = async (params: any, dispatch: any) => {
+    try {
+        const body = { UserName: params.RegMob1, UserPassword: params.UserPassword, EncCompanyId: params.EncCompanyId };
+        const res = await axios.post(`${BASE_URL}/api/UserAuth/CheckCompLogin`, body);
+        const data = res.data[0];
+        
+        if (data.Remarks === 'INACTIVE') {
+            alert('THIS USER ID IS INACTIVE')
+            return false;
+        } else if (data.UserId) {
+            dispatch(setUser({ ...data, UserCompList: data.UserCompList[0] }));
+            return true;
+        } else {
+            alert('We could not log you in, Please log in again manually.');
+            return false;
+        }
+    } catch (err) {
+        alert(err)
+        return false;
+    }
+}

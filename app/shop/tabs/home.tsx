@@ -3,12 +3,13 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Dimensions,
 import { Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { CatCard, escape, getFallbackImg, getFrom, GridLoader, ProductCard, windowWidth } from '@/src/components/utils';
+import { CatCard, escape, getFallbackImg, getFrom, GridLoader, ProductCard, switchSegment, windowWidth } from '@/src/components/utils';
 import { Link, router } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import colors from 'tailwindcss/colors';
 import { Pressable } from 'react-native-gesture-handler';
-import { BASE_URL, TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
+import { BASE_URL, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
+import { FullScreenLoading, MyModal } from '@/src/components';
 
 const web = Platform.OS === 'web';
 
@@ -18,8 +19,13 @@ const ShoppingAppScreen = () => {
   const user = useSelector((i: RootState) => i.user);
   const location = useSelector((i: RootState) => i.appData.location);
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
+  const compCode = useSelector((i: RootState) => i.compCode);
   const dispatch = useDispatch();
   const company = useSelector((state: RootState) => state.company.info);
+  
+  const changeSegment = async (companyId: string) => {
+    await switchSegment(companyId, dispatch)
+  }
 
   useEffect(() => {
     if (location.LocationId) return;
@@ -32,9 +38,9 @@ const ShoppingAppScreen = () => {
 
   return (
     <ScrollView className="flex-1 bg-purple-50">   
-      <View className="bg-purple-100 pt-5 pb-5 px-5">
+      <View className="bg-purple-100 p-4">
       {isLoggedIn ? 
-          <View className="gap-3 flex-row items-center mb-5">
+          <View className="gap-3 flex-row items-center mb-4">
               <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
               <View>
                   <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{user.Name}</Text>
@@ -49,7 +55,7 @@ const ShoppingAppScreen = () => {
                 </Link>
               </View>
           </View> :
-          <View className="gap-3 flex-row items-center mb-5">
+          <View className="gap-3 flex-row items-center mb-4">
               <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${company.LogoUrl}` }} resizeMode='contain' style={{ width: 40, height: 40 }} />
               <View className='mr-auto'>
                   {/* <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
@@ -81,43 +87,49 @@ const ShoppingAppScreen = () => {
             <Ionicons name="caret-down" size={20} color={colors.orange[500]} />
           </TouchableOpacity>
         </View>
-        <View className="flex-row justify-around py-4 bg-white rounded-2xl mt-2">
-          <TouchableOpacity className="items-center">
-            <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
-              <Feather name="gift" size={20} color="white" />
+        {/* <View className="flex-row justify-around py-4 bg-white rounded-2xl mt-2">
+          {compCode === TAKEHOME_PHARMA ? null : <TouchableOpacity onPress={() => changeSegment(TAKEHOME_PHARMA)} className="items-center">
+            <View className="w-12 h-12 bg-rose-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="heart" size={20} color="white" />
             </View>
-            <Text className="text-xs text-gray-600">Garments</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity className="items-center">
-            <View className="w-12 h-12 bg-purple-600 rounded-2xl items-center justify-center mb-2">
-              <Feather name="percent" size={20} color="white" />
-            </View>
-            <Text className="text-xs text-gray-600">Surgicals</Text>
-          </TouchableOpacity>
+            <Text className="text-xs text-gray-600">Pharmacy</Text>
+          </TouchableOpacity>}
 
-          <TouchableOpacity className="items-center">
+          {compCode === TAKEHOME_AGRO ? null : <TouchableOpacity onPress={() => changeSegment(TAKEHOME_AGRO)} className="items-center">
+            <View className="w-12 h-12 bg-orange-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="shopping-bag" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Grocery</Text>
+          </TouchableOpacity>}
+
+          {compCode === TAKEHOME_ELECTRONICS ? null : <TouchableOpacity onPress={() => changeSegment(TAKEHOME_ELECTRONICS)} className="items-center">
             <View className="w-12 h-12 bg-purple-500 rounded-2xl items-center justify-center mb-2">
               <Feather name="play" size={20} color="white" />
             </View>
             <Text className="text-xs text-gray-600">Electronics</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity className="items-center">
-            <View className="w-12 h-12 bg-red-500 rounded-2xl items-center justify-center mb-2">
-              <Feather name="shopping-bag" size={20} color="white" />
+          </TouchableOpacity>}
+
+          {compCode === TAKEHOME_GARMENTS ? null : <TouchableOpacity onPress={() => changeSegment(TAKEHOME_GARMENTS)} className="items-center">
+            <View className="w-12 h-12 bg-green-500 rounded-2xl items-center justify-center mb-2">
+              <Feather name="gift" size={20} color="white" />
             </View>
-            <Text className="text-xs text-gray-600">Grocery</Text>
-          </TouchableOpacity>
+            <Text className="text-xs text-gray-600">Garments</Text>
+          </TouchableOpacity>}
           
-        </View>
+          {compCode === TAKEHOME_SURGICAL ? null : <TouchableOpacity onPress={() => changeSegment(TAKEHOME_SURGICAL)} className="items-center">
+            <View className="w-12 h-12 bg-violet-600 rounded-2xl items-center justify-center mb-2">
+              <Feather name="percent" size={20} color="white" />
+            </View>
+            <Text className="text-xs text-gray-600">Surgicals</Text>
+          </TouchableOpacity>}
+        </View> */}
       </View>
-      {isLoggedIn && showLastOrder ? <View className='px-5 mt-3 mb-[-0.5rem]'>
-        <LastOrder locationId={location.LocationId} handleShow={setShowLastOrder} isLoggedIn={isLoggedIn} userPartyCode={user.PartyCode} />
+      {isLoggedIn && location.LocationId && showLastOrder ? <View className='px-5 mt-3 mb-[-0.5rem]'>
+        <LastOrder locationId={location.LocationId} compCode={compCode} handleShow={setShowLastOrder} isLoggedIn={isLoggedIn} userPartyCode={user.PartyCode} />
       </View> : null}
-      <View className='pt-5 pb-5'>
-        <View className="flex-row justify-between items-center mb-4 px-5">
-          <Text className="text-lg font-bold text-gray-800">Featured Categories</Text>
+      <View className='pt-4 pb-4'>
+        <View className="flex-row justify-between items-center mb-3 px-4">
+          <Text className="text-[16px] font-bold text-gray-800">Featured Categories</Text>
           <Link href={'/shop/tabs/categories'}>
             <Text className="text-purple-600 font-medium">See All</Text>
           </Link>
@@ -138,9 +150,9 @@ const ShoppingAppScreen = () => {
           <Feather name="chevron-right" size={23} color="white" />
         </View>
       </TouchableOpacity> */}
-      <View className="mb-2">
-        <View className="flex-row justify-between items-center mb-4 px-5 ">
-          <Text className="text-lg font-bold text-gray-800">Top Brands</Text>
+      <View className="mb-1">
+        <View className="flex-row justify-between items-center mb-3 px-4">
+          <Text className="text-[16px] font-bold text-gray-800">Top Brands</Text>
           <Link href={`/shop/brands`}>
             <Text className="text-purple-600 font-medium">See All</Text>
           </Link>
@@ -181,7 +193,7 @@ const CategoriesSlider = memo(({ categoriesData }: any) => {
     return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{categoriesData.error}</Text>;
   } else {
     return (
-      <ScrollView contentContainerClassName="flex-row justify-between gap-3 px-5 py-1" horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView contentContainerClassName="flex-row justify-between gap-3 px-4 py-1" horizontal showsHorizontalScrollIndicator={false}>
         {categoriesData.LinkCategoryList.map((i: any, n: number) => (<CatCard data={i} key={n} />))}
       </ScrollView>
     )
@@ -197,13 +209,13 @@ const urlSource = {
 const BrandsSlider = memo(({ productsData }: any) => {
   const compCode = useSelector((i: RootState) => i.compCode);
   if (productsData.loading) {
-      return <GridLoader classes='h-[100px] w-[100px] !rounded-full' containerClass='flex-row gap-3 mx-5 mb-3' />;
+      return <GridLoader classes='h-[100px] w-[100px] !rounded-full' containerClass='flex-row gap-3 mx-4 mb-3' />;
   } else if (productsData.error) {
       return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold ml-auto">{productsData.error}</Text>;
   } else {
     return (
-      <ScrollView contentContainerClassName="flex-row gap-3 px-5 " horizontal showsHorizontalScrollIndicator={false}>
-        {productsData.ItemBrandList?.slice(0, 50).map((brand, index) => (
+      <ScrollView contentContainerClassName="flex-row gap-3 px-4 " horizontal showsHorizontalScrollIndicator={false}>
+        {productsData.ItemBrandList?.slice(0, 25).map((brand, index) => (
           // <CategoryButton key={index} title={brand.Text} isSelected={false} onPress={() => {}}/>
           <Link href={`/shop/filters/?head=${escape(brand.Text).swap}&brands=${brand.Text}`} key={index} >
             <View className="items-center justify-center">
@@ -235,7 +247,7 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
       // console.log('Category section rerendered.');
     // const subLinks = categoriesData.LinkSubCategoryList.filter((i: any) => parentId === i.Parent);
     if (data.loading) {
-      return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-5' />;
+      return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-4' />;
     } else if (data.error) {
       return <Text className="text-blue-500 text-[13px] font-PoppinsSemibold">{data.error}</Text>;
     } else if (!productCategoryItems.length) {
@@ -243,13 +255,16 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
     } else {
       return (
         <View>
-          <View className="flex-row justify-between items-center pt-4 pb-3 px-5">
+          <View className="flex-row justify-between items-center pt-4 pb-3 px-4">
             <Text className="text-lg font-bold text-gray-800">{parentCategoryName}</Text>
             <Link href={`/shop/filters/?head=${escape(parentCategoryName).swap}&catVal=${parentId}`}>
               <Text className="text-purple-600 font-medium">See All</Text>
             </Link>
           </View> 
           <View>
+            {/* <View className='flex-row flex-wrap'>
+              {productCategoryItems.slice(0.6).map((item, index) => <ProductCard data={item} width={'50%'} key={item.LocationItemId} />)}
+            </View> */}
             <FlatList
               data={productCategoryItems.slice(0.3)}
               keyExtractor={(item) => item.LocationItemId.toString()}
@@ -297,24 +312,25 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
 
 
 
-const LastOrder = memo(({ locationId, userPartyCode, isLoggedIn, handleShow }: any) => {
+const LastOrder = memo(({ locationId, compCode, userPartyCode, isLoggedIn, handleShow }: any) => {
   
-    const [myOrderData, setMyOrderData] = useState({ loading: false, data: { OrderList: [] }, err: { status: false, msg: '' } });
-    const compCode = useSelector((i: RootState) => i.compCode);  
-  
-    const getMyOrders = useCallback(async (partyCode: string, locationId: string) => {
-        if (!partyCode) return alert('An Error Occured. Error Code 006');
-        const res = await getFrom(`${BASE_URL}/api/Pharma/GetOrderList?CID=${compCode}&PID=${partyCode}&Type=${'active'}&LOCID=${locationId}`, {}, setMyOrderData);
+    const [myOrderData, setMyOrderData] = useState({ loading: false, data: { OrderList: [] }, err: { status: false, msg: '' } });  
+    console.log('Get Last Order ---------------------------------------------------------------------------');
+    
+    
+    const getMyOrders = useCallback(async (companyId: string, partyCode: string, locationId: string) => {
+        if (!partyCode || !locationId) return console.log('An Error Occured. Error Code 006');
+        const res = await getFrom(`${BASE_URL}/api/Pharma/GetOrderList?CID=${companyId}&PID=${partyCode}&Type=${'active'}&LOCID=${locationId}`, {}, setMyOrderData);
         if (res) {
             setMyOrderData(res);
         } else {
             console.log('No data received');
         }
-    }, [])                                                           
-  
+    }, [])                                 
+
     useEffect(() => {
-        if (!isLoggedIn) return;
-        getMyOrders(userPartyCode, locationId);
+      if (!isLoggedIn) return;
+      getMyOrders(compCode, userPartyCode, locationId);
     }, [compCode, getMyOrders, isLoggedIn, userPartyCode, locationId])
   
     const renderTabs = (data: any) => {

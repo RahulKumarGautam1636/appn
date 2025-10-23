@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import ButtonPrimary, { mmDDyyyyDate, MyModal } from "../src/components";
+import ButtonPrimary, { FullScreenLoading, mmDDyyyyDate, MyModal } from "../src/components";
 import { BASE_URL, BC_ROY, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -10,7 +10,7 @@ import { setLogin, setUser, getCompanies, setModal } from "../src/store/slices/s
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { createDate, getDuration, minDate, useRegType } from "@/src/components/utils";
+import { createDate, getDuration, minDate, swapMinDate, useRegType } from "@/src/components/utils";
 import colors from "tailwindcss/colors";
 
 interface loginType {
@@ -29,10 +29,10 @@ const Login = ({ modalMode }: any) => {
     const router = useRouter();
     const [loginError, setLoginError] = useState({status: false, message: ''});
     const [loginData, setLoginData] = useState({ phone: '', password: '', EncCompanyId: compCode });        // 9330241456 // 8583814626
-    
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
- 
+    const [existingUser, setExistingUser] = useState({});
+    
 
     const handleLoginFormSubmit = () => {
       if (!loginData.phone || !loginData.password) return;
@@ -51,63 +51,69 @@ const Login = ({ modalMode }: any) => {
         if (data.Remarks === 'INVALID') {
             setLoginError({status: true, message: 'The username or password is incorrect.'});
         } else if (data.Remarks === 'NOTINCOMPANY') {
-            alert('Not In Company.')
-        // setRegData((pre => ({             
-        //     ...pre,
-        //     Salutation: data.Salutation,
-        //     Name: data.Name,
-        //     EncCompanyId: data.EncCompanyId,
-        //     PartyCode: '',
-        //     RegMob1: data.RegMob1,
-        //     Gender: data.Gender,
-        //     GenderDesc: data.GenderDesc,
-        //     Address: data.Address,
-        //     Age: data.Age,
-        //     AgeMonth: data.AgeMonth,
-        //     AgeDay: data.AgeDay,
-        //     UserPassword: data.UserPassword,               // force to re-enter.
-        //     // UserType: data.UserType,                       // set by modal
-        //     Qualification: data.Qualification,
-        //     SpecialistId: data.SpecialistId,
-        //     UserId: data.UserId,
-        //     PartyId: data.PartyId,
-        //     MemberId: data.MemberId,
-        
-        //     State: data.State,
-        //     StateName: data.StateName,
-        //     City: data.City,
-        //     Pin: data.Pin,
-        //     Address2: data.Address2,
-        
-        //     DOB: new Date(data.DOB).toLocaleDateString('en-TT'),
-        //     DOBstr: new Date(data.DOB).toLocaleDateString('en-TT'),
-        //     AnniversaryDate: new Date(data.AnniversaryDate).toLocaleDateString('en-TT'),
-        //     AnniversaryDatestr: new Date(data.AnniversaryDate).toLocaleDateString('en-TT'),
-        //     Aadhaar: '',                                        // Not required.
-        //     IsDOBCalculated: 'N',
+            console.log(data.UserType);
+            
+            setExistingUser({             
+                Salutation: data.Salutation,
+                Name: data.Name,
+                EncCompanyId: data.EncCompanyId,
+                PartyCode: '',
+                RegMob1: data.RegMob1,
+                Gender: data.Gender,
+                GenderDesc: data.GenderDesc,
+                Address: data.Address,
+                Age: data.Age,
+                AgeMonth: data.AgeMonth,
+                AgeDay: data.AgeDay,
+                UserPassword: data.UserPassword,               // force to re-enter.
+                // UserType: data.UserType,                       // set by modal
+                Qualification: data.Qualification,
+                SpecialistId: data.SpecialistId,
+                UserId: data.UserId,
+                PartyId: data.PartyId,
+                MemberId: data.MemberId,
+            
+                State: data.State,
+                StateName: data.StateName,
+                City: data.City,
+                Pin: data.Pin,
+                Address2: data.Address2,
+            
+                DOB: swapMinDate(data.DOB),
+                DOBstr: swapMinDate(data.DOB),
+                AnniversaryDate: swapMinDate(data.AnniversaryDate),
+                AnniversaryDatestr: swapMinDate(data.AnniversaryDate),
+                Aadhaar: '',                                        // Not required.
+                IsDOBCalculated: 'N',
 
-        //     UHID: data.UHID,
-        
-        //     compName: data.compName ? data.compName : '',
-        //     compAddress: data.compAddress ? data.compAddress : '',
-        //     compState: data.compState ? data.compState : '',
-        //     compPin: data.compPin ? data.compPin : '',
-        //     compPhone1: data.compPhone1 ? data.compPhone1 : '',
-        //     compPhone2: data.compPhone2 ? data.compPhone2 : '',
-        //     compMail: data.compMail ? data.compMail : '',
+                UHID: data.UHID,
+            
+                compName: data.compName ? data.compName : '',
+                compAddress: data.compAddress ? data.compAddress : '',
+                compState: data.compState ? data.compState : '',
+                compPin: data.compPin ? data.compPin : '',
+                compPhone1: data.compPhone1 ? data.compPhone1 : '',
+                compPhone2: data.compPhone2 ? data.compPhone2 : '',
+                compMail: data.compMail ? data.compMail : '',
 
-        //     RegMob2: data.RegMob2,            // for Business type.
-        //     GstIn: data.GstIn,
-        //     LicenceNo: data.LicenceNo ? data.LicenceNo : '',
-        //     ContactPerson: data.ContactPerson,
-        //     BusinessType: 'B2C',
-        // })))
-        // setShowPersonalFields(true);
-        // setShowNumberSubmitBtn(false);
-        // setGeneratedOTP('verified');                                              // hide NEXT button of OTP verification.
-        // setEnteredOTP('verified');                                                // pass OTP check at makeLoginReuest.
-        // setTabActive('register');
-        // setLoginError({status: false, message: ''});
+                RegMob2: data.RegMob2,            // for Business type.
+                GstIn: data.GstIn,
+                LicenceNo: data.LicenceNo ? data.LicenceNo : '',
+                ContactPerson: data.ContactPerson,
+                BusinessType: 'B2C',
+
+                UserType: data.UserType,
+                UserRegTypeId: data.UserRegTypeId,
+                UserLevelSeq: data.UserLevelSeq
+            })
+            setTab('register');
+            // setShowPersonalFields(true);
+            // setShowNumberSubmitBtn(false);
+            // setGeneratedOTP('verified');                                              // hide NEXT button of OTP verification.
+            // setEnteredOTP('verified');                                                // pass OTP check at makeLoginReuest.
+            // setTabActive('register');
+            // setLoginError({status: false, message: ''});
+
         } else if (!data.UserId || !data.UserType) {
             return alert("Something Went wrong, We can't log you in.");
         } else {
@@ -138,6 +144,7 @@ const Login = ({ modalMode }: any) => {
                 PartyId: data.PartyId,
                 Salutation: data.Salutation,
                 UserFullName: data.UserFullName,
+                UserPassword: data.UserPassword,
         
                 DOB: data.DOB,
                 DOBstr: data.DOB,
@@ -247,7 +254,7 @@ const Login = ({ modalMode }: any) => {
                         </View> 
                     )
                 } else if (tab === 'register') {
-                    return <Registeration modalMode={modalMode} setTab={setTab} setLoginData={setLoginData} setLoginError={setLoginError} />
+                    return <Registeration existUser={existingUser} modalMode={modalMode} setTab={setTab} setLoginData={setLoginData} setLoginError={setLoginError} />
                 } else if (tab === 'forgotPassword') {
                     return <ForgotPassword backToLogin ={backToLogin} />
                 }
@@ -265,7 +272,7 @@ const allRegTypes = [
     {title: 'MARKETBY', level: 55, description: 'Marketing Executive'}
 ];
 
-export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, closeEdit, modalMode=false }: any) => {
+export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, closeEdit, modalMode=false }: any) => {
 
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
@@ -287,11 +294,12 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
     useRegType(regTypes[regType?.level]); 
 
     useEffect(() => {
-        if (isLoggedIn || compCode === BC_ROY) return;
+        if (isLoggedIn || compCode === BC_ROY || vType !== 'ErpHospital' || existUser.UserId) return;
         setRegTypeDropdown(true);
     }, [])  
 
     useEffect(() => {
+        if (existUser.UserId) return;
         if (!isLoggedIn) {                                                            
             setRegData(pre => ({...pre, 
                 EncCompanyId: compCode, 
@@ -307,6 +315,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                 UserId: user.UserId,
                 UserType: user.UserType,
                 PartyCode: user.PartyCode,
+                Email: user.Email,
                 EncCompanyId: user.EncCompanyId,
                 Age: user.Age,
                 AgeDay: user.AgeDay,
@@ -342,7 +351,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                 compPhone2: user.compPhone2 ? user.compPhone2 : '',
                 compMail: user.compMail ? user.compMail : '',
 
-                RegMob2: user.RegMob2,            // for Business type.
+                RegMob2: user.RegMob2,            // for Business type.can we do anything to ensure an useEffect runs last when multiple useEffects are on page
                 GstIn: user.GstIn,
                 LicenceNo: user.LicenceNo,
                 ContactPerson: user.ContactPerson,
@@ -355,7 +364,36 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
         }
     }, [isLoggedIn, user, userRegTypeId]);
 
-    const makeRegisterationRequest = async (params: any) => {        
+    useEffect(() => {                                                                               // make sure this effect runs at last.
+        if (!existUser.UserId) return;
+        const autoLogin = async () => {
+            dispatch(setModal({ name: 'LOADING', state: true }))
+            let status = await makeRegisterationRequest({ ...regData, ...existUser });
+            if (status) {
+                let loginStatus = await refreshUserInfo({ ...regData, ...existUser });
+                if (loginStatus) {
+                    dispatch(setLogin(true));
+                    if (modalMode) {
+                        dispatch(setModal({ name: 'LOGIN', state: false }))
+                    } else if (isModal) {
+                        closeEdit()
+                    } else {
+                        router.back();
+                    }
+                }
+            }
+            dispatch(setModal({ name: 'LOADING', state: false })) 
+        }
+        if (vType === 'ErpHopital') {
+            setRegData(pre => ({...pre, ...existUser }));
+        } else {
+            autoLogin()  
+        }
+    }, [existUser, userRegTypeId])
+
+
+    const makeRegisterationRequest = async (params: any) => { 
+        console.log("makeRegisterationRequest : ", params) 
         try {
             setLoading(true);
             const res = await axios.post(`${BASE_URL}/api/UserReg/Post`, params);     //  { data: ['Y', 456446]}
@@ -659,7 +697,7 @@ export const Registeration = ({ setTab=()=>{}, setLoginData=()=>{}, setLoginErro
                                 </View>
                             </View>
                         </View>
-                        <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Please use a strong password</Text>
+                        <Text className="text-orange-600 text-[13px] font-medium ml-auto">Please keep your password for future logins.</Text>
                         <ButtonPrimary onClick={handleRegFormSubmit} isLoading={loading} title={isModal ? 'UPDATE DETAILS' : 'REGISTER'} active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                     </> : null}
                     {isModal ? null: <Pressable onPress={() => setTab('login')} className="mt-4">

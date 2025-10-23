@@ -593,6 +593,11 @@ export function useGlobalBackHandler() {
   }, [history]);
 }
 
-
-
-
+export const FullScreenLoading = ({ classes }: any) => {
+  return (
+    <View className={`${classes} flex-1 bg-white flex items-center justify-center`}>
+      <Text className="text-2xl mb-6 font-semibold">Loading...</Text>
+      <SvgLoader />
+    </View>
+  )
+}
