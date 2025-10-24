@@ -69,31 +69,12 @@ function LayoutContent() {
         <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? "light-content" : "dark-content"} />
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="appn/tabs" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="login" />
-            <Stack.Screen name="account" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="appn/profile" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="appn/appnList" options={{animation: 'slide_from_left'}} />
             <Stack.Screen name="search" />
-            <Stack.Screen name="members" options={{animation: 'slide_from_right'}} />
+            <Stack.Screen name="members/index" options={{animation: 'slide_from_right'}} />
             <Stack.Screen name="members/[id]" options={{animation: 'slide_from_left'}} />
-            <Stack.Screen name="appn/addMember" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="appn/cart" options={{animation: 'slide_from_left'}} />
-            <Stack.Screen name="appn/testDetail" />
-            <Stack.Screen name="appn/testList" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="appn/clinic/[compId]" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="appn/doctor/[id]" />
-
-            <Stack.Screen name="shop/tabs" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="shop/product/[id]" options={{animation: 'slide_from_left'}} />
-            <Stack.Screen name="shop/cart" />
-            <Stack.Screen name="shop/checkout" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="shop/tabs/categories" options={{animation: 'slide_from_left'}} />
-            <Stack.Screen name="shop/tabs/orders" />
-            <Stack.Screen name="shop/orderDetails/[orderId]" options={{animation: 'slide_from_right'}} />
-            <Stack.Screen name="shop/search" options={{animation: 'slide_from_left'}} />
-            <Stack.Screen name="shop/filters" />
-            <Stack.Screen name="shop/brands" options={{animation: 'slide_from_right'}} />
+            <Stack.Screen name="shop" />
+            <Stack.Screen name="appn" />
           </Stack>
       </KeyboardAvoidingView>
     </SafeAreaView>

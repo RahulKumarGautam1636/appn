@@ -124,7 +124,7 @@ const ShoppingAppScreen = () => {
           </TouchableOpacity>}
         </View> */}
       </View>
-      {isLoggedIn && location.LocationId && showLastOrder ? <View className='px-5 mt-3 mb-[-0.5rem]'>
+      {isLoggedIn && location.LocationId && showLastOrder ? <View className='px-4 mt-3 mb-[-0.5rem]'>
         <LastOrder locationId={location.LocationId} compCode={compCode} handleShow={setShowLastOrder} isLoggedIn={isLoggedIn} userPartyCode={user.PartyCode} />
       </View> : null}
       <View className='pt-4 pb-4'>
@@ -314,9 +314,7 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
 
 const LastOrder = memo(({ locationId, compCode, userPartyCode, isLoggedIn, handleShow }: any) => {
   
-    const [myOrderData, setMyOrderData] = useState({ loading: false, data: { OrderList: [] }, err: { status: false, msg: '' } });  
-    console.log('Get Last Order ---------------------------------------------------------------------------');
-    
+    const [myOrderData, setMyOrderData] = useState({ loading: false, data: { OrderList: [] }, err: { status: false, msg: '' } });   
     
     const getMyOrders = useCallback(async (companyId: string, partyCode: string, locationId: string) => {
         if (!partyCode || !locationId) return console.log('An Error Occured. Error Code 006');
@@ -344,8 +342,8 @@ const LastOrder = memo(({ locationId, compCode, userPartyCode, isLoggedIn, handl
             return data.data.OrderList.slice(0,1).map(order => {
                 return (
                   <TouchableOpacity onPress={() => router.push(`/shop/orderDetails/${order.BillId}?pane=${'active'}`)} className='w-full'>
-                    <View className='flex justify-between items-center flex-row'>
-                      <Text className="font-PoppinsSemibold text-gray-800 text-[16px] leading-[23px] mt-2">Your Last Order</Text>
+                    <View className='flex justify-between items-center flex-row mt-1'>
+                      <Text className="text-[16px] font-bold text-gray-800">Your Last Order</Text>
                       <Pressable onPress={() => handleShow(false)}>
                         <Text className="text-purple-600 font-medium">Close</Text>
                       </Pressable>

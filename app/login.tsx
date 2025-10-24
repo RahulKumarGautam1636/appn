@@ -65,8 +65,8 @@ const Login = ({ modalMode }: any) => {
                 Age: data.Age,
                 AgeMonth: data.AgeMonth,
                 AgeDay: data.AgeDay,
-                UserPassword: data.UserPassword,               // force to re-enter.
-                // UserType: data.UserType,                       // set by modal
+                UserPassword: data.UserPassword,               
+                UserType: data.UserType,                       
                 Qualification: data.Qualification,
                 SpecialistId: data.SpecialistId,
                 UserId: data.UserId,
@@ -83,8 +83,8 @@ const Login = ({ modalMode }: any) => {
                 DOBstr: swapMinDate(data.DOB),
                 AnniversaryDate: swapMinDate(data.AnniversaryDate),
                 AnniversaryDatestr: swapMinDate(data.AnniversaryDate),
-                Aadhaar: '',                                        // Not required.
-                IsDOBCalculated: 'N',
+                Aadhaar: '',                                       
+                IsDOBCalculated: data.IsDOBCalculated,
 
                 UHID: data.UHID,
             
@@ -96,13 +96,12 @@ const Login = ({ modalMode }: any) => {
                 compPhone2: data.compPhone2 ? data.compPhone2 : '',
                 compMail: data.compMail ? data.compMail : '',
 
-                RegMob2: data.RegMob2,            // for Business type.
+                RegMob2: data.RegMob2,            
                 GstIn: data.GstIn,
                 LicenceNo: data.LicenceNo ? data.LicenceNo : '',
                 ContactPerson: data.ContactPerson,
                 BusinessType: 'B2C',
 
-                UserType: data.UserType,
                 UserRegTypeId: data.UserRegTypeId,
                 UserLevelSeq: data.UserLevelSeq
             })

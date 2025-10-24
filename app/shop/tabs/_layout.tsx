@@ -68,47 +68,51 @@ export default function TabsLayout() {
   // }, []);
 
   return (
-    <>
-       <StatusBar barStyle="dark-content" backgroundColor="#f3e8ff" />    
-      <Tabs tabBar={({ state, descriptors, navigation }: any) => {
-        return (
-          <View style={styles.tabBar} className='border-y border-slate-200'>
-            <TouchableOpacity onPress={() => router.push('/')} style={styles.tabItem} className={`flex-1 py-[10px]`} >
-              <Ionicons name='arrow-back' size={20} color='#6e6e6e' />
-                <Text style={[styles.tabText]}>Back</Text>
-            </TouchableOpacity>
-            {tabs.map((tab, index) => {
-              const isFocused = state.routes[state.index]?.name === tab.key;
-              const onPress = () => {
-                if (tab.key === 'profile' || tab.key === 'orders') {
-                  if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
-                } 
-                router.push(`/shop/tabs/${tab.key}`);
-                const last = tabHistory.current[tabHistory.current.length - 1];     // Add manually to history
-                if (last !== tab.key) {
-                  tabHistory.current.push(tab.key);
-                }
-              };
+    <> 
+      <Tabs 
+        tabBar={({ state, descriptors, navigation }: any) => {
+          return (
+            <>
+              <StatusBar barStyle="dark-content" backgroundColor="#f3e8ff" />   
+              <View style={styles.tabBar} className='border-y border-slate-200'>
+                <TouchableOpacity onPress={() => router.push('/')} style={styles.tabItem} className={`flex-1 py-[10px]`} >
+                  <Ionicons name='arrow-back' size={20} color='#6e6e6e' />
+                    <Text style={[styles.tabText]}>Back</Text>
+                </TouchableOpacity>
+                {tabs.map((tab, index) => {
+                  const isFocused = state.routes[state.index]?.name === tab.key;
+                  const onPress = () => {
+                    if (tab.key === 'profile' || tab.key === 'orders') {
+                      if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
+                    } 
+                    router.push(`/shop/tabs/${tab.key}`);
+                    const last = tabHistory.current[tabHistory.current.length - 1];     // Add manually to history
+                    if (last !== tab.key) {
+                      tabHistory.current.push(tab.key);
+                    }
+                  };
 
-              return (
-                  <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px]`} >
-                    <Ionicons name={isFocused ? tab.icon : tab.icon+'-outline'} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
-                    <Text style={[styles.tabText, isFocused && styles.activeText]}>
-                      {tab.name}
-                    </Text>
-                    {tab.key === 'cart' && cart.length ? (
-                      <View className="absolute top-[8%] right-[20%] h-[16px] w-[16px] justify-center items-center bg-emerald-600 rounded-full">
-                        <Text className="text-white text-[10px] font-PoppinsMedium">{cart.length}</Text>
-                      </View>
-                    ) : null}
-                    {isFocused && (
-                      <View className="absolute w-full bottom-0 left-0 h-[2px] bg-primary-500 rounded-tl-full rounded-tr-full"></View>
-                    )}
-                  </TouchableOpacity>
-              );
-            })}
-          </View>
-        )}}
+                  return (
+                      <TouchableOpacity key={tab.name} onPress={onPress} style={styles.tabItem} className={`flex-1 py-[10px]`} >
+                        <Ionicons name={isFocused ? tab.icon : tab.icon+'-outline'} size={18} color={isFocused ? myColors.primary[500] : '#6e6e6e'} />
+                        <Text style={[styles.tabText, isFocused && styles.activeText]}>
+                          {tab.name}
+                        </Text>
+                        {tab.key === 'cart' && cart.length ? (
+                          <View className="absolute top-[8%] right-[20%] h-[16px] w-[16px] justify-center items-center bg-emerald-600 rounded-full">
+                            <Text className="text-white text-[10px] font-PoppinsMedium">{cart.length}</Text>
+                          </View>
+                        ) : null}
+                        {isFocused && (
+                          <View className="absolute w-full bottom-0 left-0 h-[2px] bg-primary-500 rounded-tl-full rounded-tr-full"></View>
+                        )}
+                      </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </>
+          )}
+        }
         screenOptions={{
           tabBarShowLabel: false,
           headerShown: false,
@@ -118,7 +122,13 @@ export default function TabsLayout() {
             config: { duration: 250 },
           },
         }}
-      ></Tabs>
+      >
+      <Tabs.Screen name="home" />
+        <Tabs.Screen name="cart" />
+        <Tabs.Screen name="orders" />
+        <Tabs.Screen name="profile" />
+        <Tabs.Screen name="categories" />
+      </Tabs>
     </>
   );
 }
