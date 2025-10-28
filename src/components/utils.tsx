@@ -6,7 +6,7 @@ import Carousel from "react-native-reanimated-carousel";
 import { addToCart, dumpCart, removeFromCart, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser, setUserRegType } from "../store/slices/slices";
 import store, { RootState } from "../store/store";
 import { Link, useRouter } from "expo-router";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "tailwindcss/colors";
 import ButtonPrimary from ".";
@@ -1181,4 +1181,9 @@ const refreshUserInfo = async (params: any, dispatch: any) => {
         alert(err)
         return false;
     }
+}
+
+
+export const Required = ({ classes, size=8 }: any) => {
+  return <FontAwesome className={classes} name="star" size={size} color={colors.rose[500]} />
 }

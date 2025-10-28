@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { FullScreenLoading, mmDDyyyyDate, MyModal } from "../src/components";
-import { BASE_URL, BC_ROY, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
+import { BASE_URL, BC_ROY, hasCommonLogin, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import { setLogin, setUser, getCompanies, setModal } from "../src/store/slices/s
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { createDate, getDuration, minDate, swapMinDate, useRegType } from "@/src/components/utils";
+import { createDate, getDuration, minDate, Required, swapMinDate, useRegType } from "@/src/components/utils";
 import colors from "tailwindcss/colors";
 
 interface loginType {
@@ -51,60 +51,60 @@ const Login = ({ modalMode }: any) => {
         if (data.Remarks === 'INVALID') {
             setLoginError({status: true, message: 'The username or password is incorrect.'});
         } else if (data.Remarks === 'NOTINCOMPANY') {
-            console.log(data.UserType);
-            
-            setExistingUser({             
-                Salutation: data.Salutation,
-                Name: data.Name,
-                EncCompanyId: data.EncCompanyId,
-                PartyCode: '',
-                RegMob1: data.RegMob1,
-                Gender: data.Gender,
-                GenderDesc: data.GenderDesc,
-                Address: data.Address,
-                Age: data.Age,
-                AgeMonth: data.AgeMonth,
-                AgeDay: data.AgeDay,
-                UserPassword: data.UserPassword,               
-                UserType: data.UserType,                       
-                Qualification: data.Qualification,
-                SpecialistId: data.SpecialistId,
-                UserId: data.UserId,
-                PartyId: data.PartyId,
-                MemberId: data.MemberId,
-            
-                State: data.State,
-                StateName: data.StateName,
-                City: data.City,
-                Pin: data.Pin,
-                Address2: data.Address2,
-            
-                DOB: swapMinDate(data.DOB),
-                DOBstr: swapMinDate(data.DOB),
-                AnniversaryDate: swapMinDate(data.AnniversaryDate),
-                AnniversaryDatestr: swapMinDate(data.AnniversaryDate),
-                Aadhaar: '',                                       
-                IsDOBCalculated: data.IsDOBCalculated,
+            if (hasCommonLogin(compCode)) {
+                setExistingUser({             
+                    Salutation: data.Salutation,
+                    Name: data.Name,
+                    EncCompanyId: data.EncCompanyId,
+                    PartyCode: '',
+                    RegMob1: data.RegMob1,
+                    Gender: data.Gender,
+                    GenderDesc: data.GenderDesc,
+                    Address: data.Address,
+                    Age: data.Age,
+                    AgeMonth: data.AgeMonth,
+                    AgeDay: data.AgeDay,
+                    UserPassword: data.UserPassword,               
+                    UserType: data.UserType,                       
+                    Qualification: data.Qualification,
+                    SpecialistId: data.SpecialistId,
+                    UserId: data.UserId,
+                    PartyId: data.PartyId,
+                    MemberId: data.MemberId,
+                
+                    State: data.State,
+                    StateName: data.StateName,
+                    City: data.City,
+                    Pin: data.Pin,
+                    Address2: data.Address2,
+                
+                    DOB: swapMinDate(data.DOB),
+                    DOBstr: swapMinDate(data.DOB),
+                    AnniversaryDate: swapMinDate(data.AnniversaryDate),
+                    AnniversaryDatestr: swapMinDate(data.AnniversaryDate),
+                    Aadhaar: '',                                       
+                    IsDOBCalculated: data.IsDOBCalculated,
 
-                UHID: data.UHID,
-            
-                compName: data.compName ? data.compName : '',
-                compAddress: data.compAddress ? data.compAddress : '',
-                compState: data.compState ? data.compState : '',
-                compPin: data.compPin ? data.compPin : '',
-                compPhone1: data.compPhone1 ? data.compPhone1 : '',
-                compPhone2: data.compPhone2 ? data.compPhone2 : '',
-                compMail: data.compMail ? data.compMail : '',
+                    UHID: data.UHID,
+                
+                    compName: data.compName ? data.compName : '',
+                    compAddress: data.compAddress ? data.compAddress : '',
+                    compState: data.compState ? data.compState : '',
+                    compPin: data.compPin ? data.compPin : '',
+                    compPhone1: data.compPhone1 ? data.compPhone1 : '',
+                    compPhone2: data.compPhone2 ? data.compPhone2 : '',
+                    compMail: data.compMail ? data.compMail : '',
 
-                RegMob2: data.RegMob2,            
-                GstIn: data.GstIn,
-                LicenceNo: data.LicenceNo ? data.LicenceNo : '',
-                ContactPerson: data.ContactPerson,
-                BusinessType: 'B2C',
+                    RegMob2: data.RegMob2,            
+                    GstIn: data.GstIn,
+                    LicenceNo: data.LicenceNo ? data.LicenceNo : '',
+                    ContactPerson: data.ContactPerson,
+                    BusinessType: 'B2C',
 
-                UserRegTypeId: data.UserRegTypeId,
-                UserLevelSeq: data.UserLevelSeq
-            })
+                    UserRegTypeId: data.UserRegTypeId,
+                    UserLevelSeq: data.UserLevelSeq
+                })
+            }
             setTab('register');
             // setShowPersonalFields(true);
             // setShowNumberSubmitBtn(false);
@@ -230,11 +230,11 @@ const Login = ({ modalMode }: any) => {
                             <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center py-4">Welcome Back</Text>
                             <View className="p-4 gap-8 min-h-[60%]">
                                 <View className='z-10'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Phone Number</Text>
                                     <TextInput placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Password</Text>
                                     <TextInput placeholderTextColor={colors.gray[400]} placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 {loginError.status ?
@@ -411,11 +411,16 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
 
     const handleRegFormSubmit = async () => {
         if (otp.verified) {
-            if (regData.RegMob1.length < 10) return alert('phone number is invalid, please try again.');
+            if (regData.RegMob1.length < 10) return alert('Please enter a valid Phone number.');
+            if (!regData.Name.length) return alert('Please enter a valid name.');
             if (regData.UserPassword.length < 4) return alert('Minimum length for password is 4.');
-            if (regData.Pin.length < 4) return alert('Please enter a valid Pin Code.');
-            if (regData.DOBstr.length < 4) return alert('Please enter your Date of Birth.');
-            if (regData.Address.length < 4) return alert('Please enter your valid address.');
+            if (regData.DOBstr.length < 4) return alert('Please enter your Age or select your Date of Birth.');
+
+            if (vType === 'ErpPharma') {   
+                if (regData.Pin.length < 6) return alert('Please enter a valid Pin Code.');
+                if (regData.Address.length < 4) return alert('Please enter your valid address.');
+            }
+
             if (regData.UserRegTypeId.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 003');
             if (regData.UserRegTypeId.length < 2) return alert('Error Occured. Please restart the app and try again. Err - 003');
             if (!regData.UserLevelSeq) return alert('Error Occured. Please restart the app and try again. Err - 004');
@@ -617,8 +622,8 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                 <Text className={`font-PoppinsSemibold text-gray-800 text-[24px] text-center ${isModal ? 'py-3' : 'py-4'}`}>{isModal ? 'Personal Details' : 'Please Register'}</Text>
                 <View className="gap-6 mt-4 min-h-[60%]">
                     <View className='z-10'>
-                        <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
-                        <TextInput placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={regData.RegMob1} onChangeText={(text) => setRegData(pre => ({...pre, RegMob1: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                        <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Phone Number</Text>
+                        <TextInput readOnly={otp.verified} placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={regData.RegMob1} onChangeText={(text) => setRegData(pre => ({...pre, RegMob1: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                     </View>
                     {otp.isOpen ? <View className='z-10'>
                         <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Enter OTP</Text>
@@ -638,13 +643,13 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                                     <MyModal modalActive={salutationDropdown} onClose={() => setSalutationDropdown(false)} child={<SalutationDropdown />} />
                                 </Pressable>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Name</Text>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Name</Text>
                                     <TextInput placeholder='Name' value={regData.Name} onChangeText={(text) => setRegData(pre => ({...pre, Name: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                             </View>
                             <View className="flex-row gap-3">
                                 <Pressable onPress={() => setGenderDropdown(true)} className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Gender</Text>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Gender</Text>
                                     <TextInput readOnly placeholder='Gender' value={regData.GenderDesc} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                                     <MyModal modalActive={genderDropdown} onClose={() => setGenderDropdown(false)} child={<GenderDropdown />} />
                                 </Pressable>
@@ -656,7 +661,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                             </View>
                             <View className="flex-row gap-3">
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Years</Text>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Years</Text>
                                     <TextInput placeholder='00' maxLength={2} value={String(regData.Age)} onChangeText={(text) => handleNumberInputsWithDate({name: 'Age', value: text})} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10 flex-1'>
@@ -680,7 +685,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                                     <TextInput placeholder='City' value={regData.City} onChangeText={(text) => setRegData(pre => ({...pre, City: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <Pressable className='z-10 flex-1' onPress={() => setStateDropdown(true)}>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">State</Text>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> State</Text>
                                     <TextInput placeholder='State' readOnly value={regData.StateName} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                                     <MyModal modalActive={stateDropdown} onClose={() => setStateDropdown(false)} child={<StateDropdown />} />
                                 </Pressable>
@@ -691,7 +696,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                                     <TextInput placeholder='Pin Code' maxLength={6} value={regData.Pin} onChangeText={(text) => setRegData(pre => ({...pre, Pin: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Password</Text>
+                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Password</Text>
                                     <TextInput placeholder='Password' maxLength={10} value={regData.UserPassword} onChangeText={(text) => setRegData(pre => ({...pre, UserPassword: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                             </View>
@@ -748,7 +753,7 @@ const ForgotPassword = ({ backToLogin }: any) => {
         <Text className="font-PoppinsSemibold text-gray-800 text-[24px] text-center pt-4 pb-8">Forgot Password ?</Text>
         <View className="p-4 gap-8 min-h-[55%]">
             <View className='z-10'>
-                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Phone Number</Text>
+                <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Phone Number</Text>
                 <TextInput placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={forgotPassword.recoveryNumber} onChangeText={(text) => setForgotPassword(pre => ({...pre, recoveryNumber: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
             </View>
             

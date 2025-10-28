@@ -20,12 +20,16 @@ const REACT_APP_BASE_URL = 'https://myapps.gsterpsoft.com';
 const REACT_APP_TEST_BASE_URL = 'https://api.gsterpsoft.com';
 
 export const testMode = false;
+export const hasCommonLogin = (companyId: string) => {
+  let companies = [ TAKEHOME_PHARMA, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_SURGICAL ];
+  return companies.includes(companyId);
+} 
 
-export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
-export const SRC_URL = 'https://erp.gsterpsoft.com';
+// export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
+// export const SRC_URL = 'https://erp.gsterpsoft.com';
 
-// export const BASE_URL = 'https://apigst.gsterpsoft.com';
-// export const SRC_URL = 'https://gsterpsoft.com';
+export const BASE_URL = 'https://apigst.gsterpsoft.com';
+export const SRC_URL = 'https://gsterpsoft.com';
 
 export const permissions = {
   appointments: [BC_ROY, defaultId],

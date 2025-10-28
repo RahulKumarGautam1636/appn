@@ -9,7 +9,7 @@ import { RootState } from "@/src/store/store";
 import { setModal, getMembers } from "@/src/store/slices/slices";
 import { FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import MyDropdown, { createDate, getDuration, getFrom, uType } from "@/src/components/utils";
+import MyDropdown, { createDate, getDuration, getFrom, Required, uType } from "@/src/components/utils";
 // import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 // import { FlatList } from 'react-native-gesture-handler';
 
@@ -283,11 +283,17 @@ const AddMember = ({ isModal }: any) => {
     }, [user, compUserDetail])
 
     const handleMemberFormSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault();        
+        if (memberData.RegMob1.length < 10) return alert('Phone number is invalid, please try again.');
+        if (!memberData.MemberName.length) return alert('Please enter the Name.');
+        if (!(memberData.GenderDesc.length)) return alert('Please select your gender.');
+        if (Number(memberData.Age) <= 0) return alert('Please enter your Age or select Date of Birth.');
+        if (!(memberData.State.toString()).length) return alert('Please select your state.');
+        if (!memberData.UserType.length) return alert('Error Occured. Please restart the app and try again. Err - 005');
         makeAddMemberRequest(memberData);      
     }
 
-    const makeAddMemberRequest = async (params: any) => {        
+    const makeAddMemberRequest = async (params: any) => {  
         try {
             setLoading(true);
             const res = await axios.post(`${BASE_URL}/api/member/Post`, params);
@@ -301,7 +307,7 @@ const AddMember = ({ isModal }: any) => {
             }
         } catch (error) {
             setLoading(false);
-            alert('An Error occured. Please try later.')
+            alert('An Error occured. Please try later.')        
             console.log(error);            
         }
     }
@@ -337,12 +343,12 @@ const AddMember = ({ isModal }: any) => {
                     <View className="gap-6 mt-4 min-h-[60%]">
                     <View className="flex-row gap-3">
                         <View className='z-10 flex-1'>
-                            <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Phone Number</Text>
+                            <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1"><Required /> Phone Number</Text>
                             <TextInput placeholder='Phone Number' maxLength={10} value={memberData.RegMob1} readOnly className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                         </View>
                         <View className='z-10 flex-1'>
                             <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Member Phone Number</Text>
-                            <TextInput placeholder='Member Phone Number' maxLength={10} value={memberData.Mobile} onChangeText={(text) => setMemberData(pre => ({...pre, Mobile: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                            <TextInput placeholder='Member Phone' maxLength={10} value={memberData.Mobile} onChangeText={(text) => setMemberData(pre => ({...pre, Mobile: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
                         </View>
                     </View>
                         {/* {!personalFields ? <>
@@ -359,7 +365,7 @@ const AddMember = ({ isModal }: any) => {
                                     <MyModal modalActive={salutationDropdown} onClose={() => setSalutationDropdown(false)} child={<SalutationDropdown handleSelect={(salutationValue: any) => setMemberData(pre => ({...pre, Salutation: salutationValue}))} />} />
                                 </Pressable>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Member Name</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1"><Required /> Member Name</Text>
                                     <TextInput placeholder='Member Name' value={memberData.MemberName} onChangeText={(text) => setMemberData(pre => ({...pre, MemberName: text }))} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                             </View>
@@ -371,7 +377,7 @@ const AddMember = ({ isModal }: any) => {
 
 
                                 <Pressable onPress={() => setGenderDropdown(true)} className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Gender</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1"><Required /> Gender</Text>
                                     <TextInput readOnly placeholder='Gender' value={memberData.GenderDesc} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                     <MyModal modalActive={genderDropdown} onClose={() => setGenderDropdown(false)} child={<GenderDropdown handleSelect={(genderValue: any) => setMemberData(pre => ({...pre, Gender: genderValue.CodeId, GenderDesc: genderValue.Description}))} />} />
                                 </Pressable>
@@ -386,7 +392,7 @@ const AddMember = ({ isModal }: any) => {
 
                             <View className="flex-row gap-3">
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Years</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1"><Required /> Years</Text>
                                     <TextInput placeholder='00' maxLength={2} value={String(memberData.Age)} onChangeText={(text) => handleNumberInputsWithDate({name: 'Age', value: text})} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 <View className='z-10 flex-1'>
@@ -410,7 +416,7 @@ const AddMember = ({ isModal }: any) => {
                             </View>
                             <View className="flex-row gap-3">
                                 <Pressable className='z-10 flex-1' onPress={() => setStateDropdown(true)}>
-                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">State</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1"><Required /> State</Text>
                                     <TextInput placeholder='State' readOnly value={states.find((opt) => opt.CodeId == memberData.State)?.Description} className='bg-white p-[12px] rounded-2xl text-[13px] border-2 border-stone-200' />
                                     <MyModal modalActive={stateDropdown} onClose={() => setStateDropdown(false)} child={<StateDropdown />} />
                                 </Pressable>
