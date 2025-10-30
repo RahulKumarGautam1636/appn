@@ -83,7 +83,7 @@ const BookAppn = () => {
                     </View>
                 </View>
                 <View className='flex-row gap-4 p-[13px]'>
-                    <Image className='' source={require('../../assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
+                    <Image className='' source={require('@/assets/images/doctor.jpg')} style={{ width: 80, height: 80 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-sky-800 text-[15px] mb-2">Dr. Amelia Emma</Text>
                         <View className='flex-row gap-2'>
@@ -131,7 +131,7 @@ const BookAppn = () => {
                 <ScrollView horizontal={true} contentContainerClassName='p-4 gap-4' showsHorizontalScrollIndicator={false}>
                     {[1,2,3,4].map(i => (
                         <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg' key={i}>
-                            <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 65, height: 65 }} />
+                            <Image className='shadow-lg rounded-xl' source={require('@/assets/images/doctor.jpg')} style={{ width: 65, height: 65 }} />
                             <View>
                                 <Text className="font-PoppinsSemibold text-sky-800 text-[13px]">XYZ Hospitals</Text>
                                 <View className='mt-1 flex gap-2 flex-row items-center'>

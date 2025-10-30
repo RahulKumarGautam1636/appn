@@ -36,6 +36,17 @@ export default ({ config }) => {
       baseUrl: "https://myapps.gsterpsoft.com",
       srcUrl: "https://erp.gsterpsoft.com",
     },
+    ecom: {
+      name: "Gbooks Shopping",
+      package: "com.gbooks.ecommerce",
+      scheme: "gbooksecommerce",
+      compId: "KHLqDFK8CUUxe1p1EotU3g==",
+      icon: "./assets/images/pharmacy/logo.png",
+      splash: "./assets/images/pharmacy/logo.png",
+      version: "1.0.0",
+      baseUrl: "https://myapps.gsterpsoft.com",
+      srcUrl: "https://erp.gsterpsoft.com",
+    },
   };
 
   const accounts = {
@@ -53,9 +64,9 @@ export default ({ config }) => {
     }
   }
 
-  const testBuild = false;
-  const flavor = flavorConfig["bc_roy"];
-  const account = accounts["vit"];
+  const testBuild = true;
+  const flavor = flavorConfig["ecom"];
+  const account = accounts["rk"];
 
   return {
     ...config,

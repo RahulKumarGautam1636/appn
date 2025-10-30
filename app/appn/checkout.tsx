@@ -210,7 +210,7 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
                     </View>
                     <View className='bg-white rounded-3xl p-4 my-4 shadow-sm shadow-gray-400'>
                         <View className='flex-row items-center'>
-                            <Image className='shadow-lg rounded-full me-4' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                            <Image className='shadow-lg rounded-full me-4' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View>
                             <Text className="font-PoppinsSemibold text-[14px]">{selectedMember.MemberName}</Text>
                             <Text className="font-Poppins text-gray-500 text-[12px]">{selectedMember.RelationShipWithHolder}</Text>

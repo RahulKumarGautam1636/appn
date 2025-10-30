@@ -12,6 +12,7 @@ export const TAKEHOME_ELECTRONICS = 'QqFodfpxRStiGjTKTYE/hA==';
 export const TAKEHOME_SURGICAL = 'aS8HN5gcPcKUC8hc/JCvBA==';
 export const BC_ROY = 'ji4C/%2BQbn%2BBofLeoFG9clw=='
 export const HEXAGON_ID = 'CHEZmvXXLYNYZOKVN9fr5A==';
+export const PHARMACY = 'KHLqDFK8CUUxe1p1EotU3g=='
 export const rent = false;
 export const blur = false;
 // export const brandCode = 'TAKEHOME   GBOOKS';
@@ -25,11 +26,11 @@ export const hasCommonLogin = (companyId: string) => {
   return companies.includes(companyId);
 } 
 
-// export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
-// export const SRC_URL = 'https://erp.gsterpsoft.com';
+export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
+export const SRC_URL = 'https://erp.gsterpsoft.com';
 
-export const BASE_URL = 'https://apigst.gsterpsoft.com';
-export const SRC_URL = 'https://gsterpsoft.com';
+// export const BASE_URL = 'https://apigst.gsterpsoft.com';
+// export const SRC_URL = 'https://gsterpsoft.com';
 
 export const permissions = {
   appointments: [BC_ROY, defaultId],

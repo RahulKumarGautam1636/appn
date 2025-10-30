@@ -1,7 +1,7 @@
 import { BASE_URL, myColors } from '@/src/constants';
-import ButtonPrimary, { mmDDyyyyDate } from '@/src/components';
+import ButtonPrimary, { AddToCartBtn, mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
-import { add2Cart, AddToCartBtn, buyNow, computeWithPackSize, getFrom, getRequiredFields, GridLoader, isEmpty, NoContent, ProductCard } from '@/src/components/utils';
+import { add2Cart, buyNow, computeWithPackSize, getFrom, GridLoader, isEmpty, NoContent, ProductCard } from '@/src/components/utils';
 import { removeFromCart } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { Feather, FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'reac
 import { useDispatch, useSelector } from 'react-redux';
 import colors from 'tailwindcss/colors';
 import { ChevronRight, ChevronUp } from 'lucide-react-native';
+import { getRequiredFields } from '@/src/components/utils/shared';
 
 const ProductPage = () => {
   const [count, setCount] = useState(1);
@@ -98,10 +99,12 @@ const ProductPage = () => {
       relatedProducts = [productData.data.ItemMaster, ...productData.data.itemMasterCollection]
     }
   
-    const relatedProductPacksizes = relatedProducts.map(item => {
+    const relatedProductPacksizes = relatedProducts.flatMap(item => {
       if (item.ItemPackSizeList && item.ItemPackSizeList.length) {
         const prices = computeWithPackSize(item, item.ItemPackSizeList[0], vType);
         return prices;
+      } else {
+        return []
       }
     })
 

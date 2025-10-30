@@ -11,7 +11,7 @@ import { myColors } from '@/src/constants';
 import { LabCartCard } from '@/src/components/cards';
 import Checkout from '@/app/appn/checkout';
 import { useEffect, useState } from 'react';
-import Heart from '../../../assets/icons/success.svg';
+import Heart from '@/assets/icons/success.svg';
 import colors from 'tailwindcss/colors';
 
 const Cart = ({}: any) => {
@@ -148,7 +148,7 @@ const BookingSuccess = ({ handleClose, reference }: any) => {
         </View>
         <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
           <View className='flex-row items-center'>
-              <Image className='shadow-md rounded-lg me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+              <Image className='shadow-md rounded-lg me-3' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
               <View>
                   <Text className="font-PoppinsBold text-[14px]">{selectedMember.MemberName}</Text>
                   <Text className="font-Poppins text-gray-500 text-[11px]">{selectedMember.RelationShipWithHolder || 'Patient'},  {selectedMember.Age} years,  {selectedMember.GenderDesc}</Text>

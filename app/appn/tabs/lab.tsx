@@ -1,6 +1,6 @@
 import { BASE_URL, defaultId, hasAccess } from '@/src/constants';
 import { CompCard } from '@/src/components';
-import { BannerCarousel, getFrom, getRequiredFields, GradientBG, GridLoader, ListLoader } from '@/src/components/utils';
+import { BannerCarousel, getFrom, GradientBG, GridLoader, ListLoader } from '@/src/components/utils';
 import { addToCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
@@ -14,6 +14,7 @@ import { myColors } from '@/src/constants';
 import LabCard from '@/src/components/cards';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import colors from 'tailwindcss/colors';
+import { getRequiredFields } from '@/src/components/utils/shared';
 
 const LabTests = ({}: any) => {
     const dispatch = useDispatch()

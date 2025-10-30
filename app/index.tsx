@@ -8,7 +8,7 @@ import { TouchableOpacity } from 'react-native';
 import { Feather, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
+import { PHARMACY, TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
 import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser } from '@/src/store/slices/slices';
 import { switchSegment } from '@/src/components/utils';
 
@@ -27,6 +27,7 @@ export default function App() {
 
   const { vType, status, error } = useSelector((i: RootState) => i.company)
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
+  const compCode = useSelector((i: RootState) => i.compCode)
   const dispatch = useDispatch();
  
   // useEffect(() => {
@@ -59,6 +60,7 @@ export default function App() {
     return <View><Text>An Error Occured.</Text></View>
   } else if (status === 'succeeded') {
     if (vType === 'ErpPharma' || vType === 'agro' || vType === 'ErpManufacturing') {
+      if (compCode === PHARMACY) return <Redirect href="/shop/tabs/home" />
       return (
         <GestureHandlerRootView>
           <SafeAreaProvider>
@@ -67,8 +69,8 @@ export default function App() {
               
               <ScrollView contentContainerClassName='bg-slate-100 min-h-full relative'>
               {/* <View className="relative gap-4 flex-row items-center justify-center py-[6rem]">
-                  <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
-                  <Image className='' source={require('../assets/images/logo.png')} style={{ width: 75, height: 65 }} />
+                  <Image source={require('@/assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
+                  <Image className='' source={require('@/assets/images/logo.png')} style={{ width: 75, height: 65 }} />
                   <View>
                       <Text className="font-Poppins text-gray-600 text-[13px]">Healthcare at it's best.</Text>
                       <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
@@ -82,14 +84,14 @@ export default function App() {
               </Link>}
               <View className="relative gap-4 items-center justify-center py-[2rem] bg-white">
                 <Image className='' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/752.jpeg` }} style={{ width: 200, height: 190 }} />    
-                {/* <Image className='' source={require('../assets/images/logo.png')} style={{ width: 200, height: 190 }} />    TAKEHOME */}
+                {/* <Image className='' source={require('@/assets/images/logo.png')} style={{ width: 200, height: 190 }} />    TAKEHOME */}
                 {/* <View className='items-center'>
                     <Text className="font-GlittherSyavinafree text-blue-800 text-[48px] mb-2 leading-[42px]">TakeHome</Text>
                     <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
                 </View> */}
               </View>
               <View className='flex-1 px-4 py-5 bg-slate-100'>
-                {/* <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="contain" /> */}
+                {/* <Image source={require('@/assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="contain" /> */}
                 {/* <View className="flex-row justify-between items-center mb-6">
                   <Text className="text-3xl font-bold text-gray-800">Our Services</Text>
                 </View> */}
@@ -206,7 +208,7 @@ export default function App() {
 //       <View className="bg-purple-100 p-3 !pb-2">
 //       {isLoggedIn ? 
 //           <View className="gap-3 flex-row items-center mb-5">
-//               <Image className='shadow-lg rounded-full' source={require('../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+//               <Image className='shadow-lg rounded-full' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
 //               <View>
 //                   <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{user.Name}</Text>
 //                   <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>

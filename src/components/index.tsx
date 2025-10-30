@@ -1,36 +1,23 @@
-import { blur, hasAccess, myColors, SRC_URL } from "@/src/constants"
+import { useEffect } from 'react';
+import { blur, hasAccess, SRC_URL } from "@/src/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
-import { Button, Image, Text, TouchableOpacity, View, StyleSheet, Pressable, findNodeHandle, UIManager, KeyboardAvoidingView, Dimensions, Platform, BackHandler, Alert } from "react-native"
+import { Button, Image, Text, TouchableOpacity, View, KeyboardAvoidingView, Platform, BackHandler, Alert
+// Dimensions, StyleSheet, Pressable, findNodeHandle, UIManager,
+} from "react-native";
 import { Link, Redirect, router, useRouter } from "expo-router";
 import { setAppnData, setCompanies, setDepts, setMembers, setModal, setPrescription } from "@/src/store/slices/slices";
 import { stripHtml } from "string-strip-html";
-
-import React, { useRef, useState } from 'react';
-import Modal, { ReactNativeModal } from 'react-native-modal';
+import React, { useState } from 'react';
+import { ReactNativeModal } from 'react-native-modal';
 import { useSelector, useDispatch } from 'react-redux';
-
-// import MapView, { Marker } from 'react-native-maps';
-
-import DateTimePicker from '@react-native-community/datetimepicker';
-
-
-import { useEffect } from 'react';
 import Svg, { Circle, G } from 'react-native-svg';
-import Animated, {
-  useSharedValue,
-  useAnimatedProps,
-  withRepeat,
-  withSequence,
-  withTiming,
-  Easing,
-  interpolate,
-  withDelay
-} from 'react-native-reanimated';
-import AppnDetail from "@/app/appn/appnDetail";
+import Animated, { useSharedValue, useAnimatedProps, withRepeat, withSequence, withTiming, Easing, interpolate, withDelay } from 'react-native-reanimated';
 import { RootState } from "../store/store";
 import { uType } from "./utils";
 import colors from "tailwindcss/colors";
 import { popRoute } from "../store/slices/nav";
+import DateTimePicker from '@react-native-community/datetimepicker';
+// import MapView, { Marker } from 'react-native-maps';
 
 
 export default function ButtonPrimary({ title, onPress, isLoading, active, classes, textClasses, onClick }: any) {
@@ -189,7 +176,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
   return (
     <Link href={`/appn/doctor/${data.PartyCode}`} onPress={handleBooking}>
       <View className='flex-row gap-3 bg-white p-[10px] rounded-xl shadow-lg border-b-2 border-gray-300 w-full'>
-          <Image className='shadow-lg rounded-xl' source={require('../../assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
+          <Image className='shadow-lg rounded-xl' source={require('@/assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
           <View className='flex-1'>
               <Text className="font-PoppinsSemibold text-sky-800 text-[13px]" numberOfLines={1}>{data.Name}</Text>
               <Text className="font-PoppinsMedium text-gray-700 text-[11px] mb-[6px]" numberOfLines={1}>{data.SpecialistDesc}</Text>
@@ -279,7 +266,7 @@ export const Card_2 = ({ data, active }: any) => {
   return (
     <TouchableOpacity onPress={handleSelect}>
       <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
-        <Image className='shadow-lg rounded-xl' source={require('../../assets/images/user.png')} style={{ width: 70, height: 70 }} />
+        <Image className='shadow-lg rounded-xl' source={require('@/assets/images/user.png')} style={{ width: 70, height: 70 }} />
         <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.MemberName}</Text>
             <Text className="font-PoppinsMedium text-gray-600 text-[12px] mb-[8px]" numberOfLines={1}>{userLevel === uType.MARKETBY.level ? 'PATIENT' : data.RelationShipWithHolder}</Text>
@@ -365,7 +352,7 @@ export const Card_3 = ({ data }: any) => {
     <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: data}))}>
       <View className="bg-white rounded-xl shadow-md shadow-gray-400">
         <View className='flex-row gap-1 w-full p-3'>
-          <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('./../../assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
+          <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('@/assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
           <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-700 text-[13px] mb-2">{data.AppointmentTo}</Text>
             <View className='flex-row gap-3 mb-[6px]'>
@@ -404,7 +391,7 @@ export const Card_4 = ({ data }: any) => {
     <>
       <View className="bg-white rounded-xl shadow-md shadow-gray-400">
         <TouchableOpacity onPress={() => dispatch(setModal({name: 'TEST_DETAIL', state: true, data: data}))} className='p-3 flex-row gap-1 w-full'>
-          <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('./../../assets/images/user.png')} style={{ width: 60, height: 60 }} />
+          <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 60, height: 60 }} />
           <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-700 text-[13px] mb-2">
               {data.PartyName}
@@ -509,7 +496,7 @@ export const MapComponent = ({ coords }: any) => {
   
     return (
       <View className="border border-gray-300 overflow-hidden">
-        <Image className="h-[200px] w-full" source={require('./../../assets/images/MAP.jpg')} resizeMode="cover" />
+        <Image className="h-[200px] w-full" source={require('@/assets/images/MAP.jpg')} resizeMode="cover" />
       </View>
     )
 
@@ -600,4 +587,40 @@ export const FullScreenLoading = ({ classes }: any) => {
       <SvgLoader />
     </View>
   )
+}
+
+export const AddToCartBtn = ({ type, product, useAuth, qty, addCart, buyNow, classes, styles }: any) => {
+
+  const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+  const vType = useSelector((i: RootState) => i.company.vType);
+  const cart = useSelector((i: RootState) => i.cart);
+  const inCart = Object.values(cart).find(i => i.LocationItemId === product.LocationItemId);
+  const isAdded = inCart?.LocationItemId;
+  const dispatch = useDispatch();
+
+  let isValid;    
+  if (useAuth) isValid = !locationId || qty;
+  else isValid = true;
+  const isRestaurant = (vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT');
+
+  if (type === 'productCard1') {
+      return (
+          <>
+              {isAdded ? 
+                  <View className={`btn btn-outline-primary`}> 
+                      <TouchableOpacity onPress={() => {if (inCart.count !== 1) dispatch(addToCart({...inCart, count: inCart.count - 1}))}} className='bx bx-minus align-middle'>-</TouchableOpacity>
+                      <Text>{inCart.count} &nbsp;</Text>
+                      <TouchableOpacity className='bx bx-plus align-middle' onPress={() => dispatch(addToCart({...inCart, count: inCart.count + 1}))}></TouchableOpacity>
+                  </View> :
+                  <TouchableOpacity onPress={addCart} className={`btn btn-outline-primary ${isValid ? '' : 'opacity-50 pe-none'}`}>{isAdded ? 'Remove' : 'Add to cart'}</TouchableOpacity> 
+              }
+              {isRestaurant || <TouchableOpacity onPress={buyNow} className={`btn btn-outline-primary ${isValid ? '' : 'opacity-50 pe-none'}`}>Buy now</TouchableOpacity>}    
+          </>
+      )
+  } else if (type === 'type_1') {
+    return (
+      <ButtonPrimary title={isAdded ? 'REMOVE' : 'ADD TO CART'} onPress={addCart} isLoading={false} active={true} classes={`flex-1 bg-purple-500 border-r border-gray-200 !rounded-none ${isValid ? '' : 'opacity-50 pointer-events-none'}`} />
+    )
+  }
+
 }

@@ -4,10 +4,11 @@ import { ScrollView, View } from "react-native";
 import { Card_1 } from "@/src/components";
 import { RootState } from "@/src/store/store";
 import { useSelector } from "react-redux";
-import { ProductCard, getFrom, getRequiredFields, wait, GridLoader } from "@/src/components/utils";
+import { ProductCard, getFrom, wait, GridLoader } from "@/src/components/utils";
 import { BASE_URL, defaultId, zero } from "@/src/constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
+import { getRequiredFields } from "@/src/components/utils/shared";
 
 function MainSearch() {
     const locationId = useSelector((state: RootState) => state.appData.location.LocationId);

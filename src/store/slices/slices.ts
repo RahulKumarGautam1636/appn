@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestStatusHandlers } from './statusHandler';
 import axios from 'axios';
 import { BASE_URL, BC_ROY, defaultId, dummyUser, initLocation, rent, TAKEHOME_AGRO, TAKEHOME_PHARMA } from '@/src/constants';
-import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/components/utils';
+import { getCategoryRequiredFieldsOnly, getRequiredFields } from '@/src/components/utils/shared';
 export const { compId, baseUrl, srcUrl } = Constants.expoConfig.extra || {};
 
 

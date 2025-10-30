@@ -284,7 +284,7 @@ const Booking = () => {
                         </View>
                     </Pressable>
                     <View className='flex-row gap-3 p-[12px]'>
-                        <Image className='' source={require('./../../../assets/images/doctor.jpg')} style={{ width: 75, height: 75 }} />
+                        <Image className='' source={require('@/assets/images/doctor.jpg')} style={{ width: 75, height: 75 }} />
                         <View className='flex-1'>
                             <Text className="font-PoppinsSemibold text-sky-800 text-[14px] mb-1.5">{doctor.Name}</Text>
                             {doctor.Qualification ? <View className='flex-row gap-2'>

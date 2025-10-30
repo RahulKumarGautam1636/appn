@@ -37,12 +37,12 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
                   </View>
               </View>
               {/* <View className="p-4 items-center">
-                  <Image className='shadow-lg rounded-full' source={require('../../assets/images/doctor.jpg')} style={{ width: 100, height: 100 }} />
+                  <Image className='shadow-lg rounded-full' source={require('@/assets/images/doctor.jpg')} style={{ width: 100, height: 100 }} />
                   <Text className="font-PoppinsSemibold text-gray-800 text-[18px] pt-5">{doctor.Name}</Text>
                   <Text className="font-Poppins text-gray-600 text-[13px]">{doctor.SpecialistDesc}</Text>
               </View> */}
               <View className='flex-row gap-3 px-3 pt-3 pb-4 mx-3 mb-3 rounded-3xl bg-white shadow-sm shadow-gray-400'>
-                  <Image className='' source={require('./../../assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
+                  <Image className='' source={require('@/assets/images/doctor.jpg')} style={{ width: 70, height: 70 }} />
                   <View className="flex-1">
                       <Text className="font-PoppinsSemibold text-sky-800 text-[13px] mb-1.5" numberOfLines={1}>{doctor.Name}</Text>
                       <View className='flex-row gap-2'>
@@ -62,7 +62,7 @@ const AppnPreview = ({ handleClose, handleConfirmation, doctor={}, bookingData={
               </View>
               <View className='bg-white rounded-3xl p-4 m-3 shadow-sm shadow-gray-400'>
                   <View className='flex-row items-center'>
-                      <Image className='shadow-lg rounded-full me-4' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                      <Image className='shadow-lg rounded-full me-4' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
                       <View>
                       <Text className="font-PoppinsSemibold text-[14px]">{member.MemberName}</Text>
                       <Text className="font-Poppins text-gray-500 text-[12px]">{member.RelationShipWithHolder}</Text>

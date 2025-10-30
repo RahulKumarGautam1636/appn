@@ -48,7 +48,7 @@ const Profile = () => {
                         </View>
                     </View>
                     <View className='flex-row gap-4 p-[13px] items-center mb-2'>
-                        <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('./../../../assets/images/user.png')} style={{ width: 80, height: 80 }} />
+                        <Image className='shadow-md shadow-gray-300 rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 80, height: 80 }} />
                         <View>
                             <Text className="font-PoppinsSemibold text-slate-800 text-[15px] mb-2">{user.Name}</Text>
                             <View className='flex-row gap-2 mb-1'>

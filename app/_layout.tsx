@@ -29,16 +29,16 @@ function LayoutContent() {
   // useGlobalBackHandler();
 
   const [loaded, error] = useFonts({
-    "Space-Mono": require("./../assets/fonts/SpaceMono-Regular.ttf"),
-    "Poppins-Bold": require("./../assets/fonts/Poppins/Poppins-Bold.ttf"),
-    "Poppins-ExtraBold": require("./../assets/fonts/Poppins/Poppins-ExtraBold.ttf"),
-    "Poppins-ExtraLight": require("./../assets/fonts/Poppins/Poppins-ExtraLight.ttf"),
-    "Poppins-Light": require("./../assets/fonts/Poppins/Poppins-Light.ttf"),
-    "Poppins-Medium": require("./../assets/fonts/Poppins/Poppins-Medium.ttf"),
-    "Poppins-Regular": require("./../assets/fonts/Poppins/Poppins-Regular.ttf"),
-    "Poppins-Semibold": require("./../assets/fonts/Poppins/Poppins-SemiBold.ttf"),
-    "Poppins-Thin": require("./../assets/fonts/Poppins/Poppins-Thin.ttf"),
-    "GlittherSyavinafree": require("./../assets/fonts/GlittherSyavinafree.otf"),
+    "Space-Mono": require("@/assets/fonts/SpaceMono-Regular.ttf"),
+    "Poppins-Bold": require("@/assets/fonts/Poppins/Poppins-Bold.ttf"),
+    "Poppins-ExtraBold": require("@/assets/fonts/Poppins/Poppins-ExtraBold.ttf"),
+    "Poppins-ExtraLight": require("@/assets/fonts/Poppins/Poppins-ExtraLight.ttf"),
+    "Poppins-Light": require("@/assets/fonts/Poppins/Poppins-Light.ttf"),
+    "Poppins-Medium": require("@/assets/fonts/Poppins/Poppins-Medium.ttf"),
+    "Poppins-Regular": require("@/assets/fonts/Poppins/Poppins-Regular.ttf"),
+    "Poppins-Semibold": require("@/assets/fonts/Poppins/Poppins-SemiBold.ttf"),
+    "Poppins-Thin": require("@/assets/fonts/Poppins/Poppins-Thin.ttf"),
+    "GlittherSyavinafree": require("@/assets/fonts/GlittherSyavinafree.otf"),
   });
 
   useEffect(() => {
@@ -137,16 +137,16 @@ export default function RootLayout() {
 //   // const router = useRouter();
 
 //   const [loaded, error] = useFonts({
-//       'Space-Mono': require('./../assets/fonts/SpaceMono-Regular.ttf'),
-//       'Poppins-Bold': require('./../assets/fonts/Poppins/Poppins-Bold.ttf'),
-//       'Poppins-ExtraBold': require('./../assets/fonts/Poppins/Poppins-ExtraBold.ttf'),
-//       'Poppins-ExtraLight': require('./../assets/fonts/Poppins/Poppins-ExtraLight.ttf'),
-//       'Poppins-Light': require('./../assets/fonts/Poppins/Poppins-Light.ttf'),
-//       'Poppins-Medium': require('./../assets/fonts/Poppins/Poppins-Medium.ttf'),
-//       'Poppins-Regular': require('./../assets/fonts/Poppins/Poppins-Regular.ttf'),
-//       'Poppins-Semibold': require('./../assets/fonts/Poppins/Poppins-SemiBold.ttf'),
-//       'Poppins-Thin': require('./../assets/fonts/Poppins/Poppins-Thin.ttf'),
-//       'GlittherSyavinafree': require('./../assets/fonts/GlittherSyavinafree.otf'),
+//       'Space-Mono': require('@/assets/fonts/SpaceMono-Regular.ttf'),
+//       'Poppins-Bold': require('@/assets/fonts/Poppins/Poppins-Bold.ttf'),
+//       'Poppins-ExtraBold': require('@/assets/fonts/Poppins/Poppins-ExtraBold.ttf'),
+//       'Poppins-ExtraLight': require('@/assets/fonts/Poppins/Poppins-ExtraLight.ttf'),
+//       'Poppins-Light': require('@/assets/fonts/Poppins/Poppins-Light.ttf'),
+//       'Poppins-Medium': require('@/assets/fonts/Poppins/Poppins-Medium.ttf'),
+//       'Poppins-Regular': require('@/assets/fonts/Poppins/Poppins-Regular.ttf'),
+//       'Poppins-Semibold': require('@/assets/fonts/Poppins/Poppins-SemiBold.ttf'),
+//       'Poppins-Thin': require('@/assets/fonts/Poppins/Poppins-Thin.ttf'),
+//       'GlittherSyavinafree': require('@/assets/fonts/GlittherSyavinafree.otf'),
 //   });
 
 //   useEffect(() => {

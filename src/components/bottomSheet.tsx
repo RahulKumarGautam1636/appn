@@ -31,7 +31,7 @@ export default function TestCard() {
     return (
         <View className='bg-primary-500 rounded-3xl p-5 mt-4'>
             <View className='flex-row'>
-                <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                <Image className='shadow-lg rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
                 <View>
                     <Text className="font-PoppinsBold text-white text-[14px]">Prof. Dr. Logan Mason</Text>
                     <Text className="font-Poppins text-gray-200 text-[11px]">Orthopedic Consultation</Text>

@@ -1,6 +1,6 @@
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Image, ScrollView, Text, View } from "react-native";
-import Heart from '../../../assets/icons/success.svg';
+import Heart from '@/assets/icons/success.svg';
 import ButtonPrimary from "..";
 import { useRouter } from "expo-router";
 import { myColors } from "@/src/constants";
@@ -32,7 +32,7 @@ const BookingSuccess = ({ doctor, bookingData, clinic, reference }: any) => {
         </View> */}
         <View className='bg-white rounded-3xl p-5 m-4 shadow-md shadow-gray-400'>
           <View className='flex-row items-center'>
-              <Image className='shadow-md rounded-lg me-3' source={require('../../../assets/images/doctor.jpg')} style={{ width: 40, height: 40 }} />
+              <Image className='shadow-md rounded-lg me-3' source={require('@/assets/images/doctor.jpg')} style={{ width: 40, height: 40 }} />
               <View>
                   <Text className="font-PoppinsBold text-[14px]">{doctor.Name}</Text>
                   <Text className="font-Poppins text-gray-500 text-[11px]">{doctor.SpecialistDesc}</Text>

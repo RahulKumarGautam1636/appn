@@ -63,7 +63,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     </View>
                 </View>
                 <View className='flex-row gap-4 p-[13px]'>
-                    <Image className='' source={require('../../assets/images/doctor.jpg')} style={{ width: 76, height: 76 }} />
+                    <Image className='' source={require('@/assets/images/doctor.jpg')} style={{ width: 76, height: 76 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-sky-800 text-[14px] mb-2">{data.AppointmentTo}</Text>
                         {data.DocQualification ? <View className='flex-row gap-2'>
@@ -98,7 +98,7 @@ const AppnDetail = ({ data, handleOpen }: any) => {
             </View>
             <View className='bg-white rounded-3xl p-5 m-4 shadow-sm shadow-gray-400'>
             <View className='flex-row items-center'>
-                <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                <Image className='shadow-lg rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
                 <View>
                     <Text className="font-PoppinsSemibold text-[14px]">{data.PartyName}</Text>
                     <Text className="font-Poppins text-gray-500 text-[11px]">Myself</Text>

@@ -43,7 +43,7 @@ const MemberDetails = () => {
             </View>
             </View>
             <View className="flex-row gap-4 p-[13px] items-center">
-            <Image className="shadow-md shadow-gray-300 rounded-full me-3" source={require("./../../assets/images/user.png")} style={{ width: 78, height: 78 }} />
+            <Image className="shadow-md shadow-gray-300 rounded-full me-3" source={require("@/assets/images/user.png")} style={{ width: 78, height: 78 }} />
             <View>
                 <Text className="font-PoppinsSemibold text-[#075985] text-[15px] mb-2">{currentMember.MemberName}</Text>
                 <View className="flex-row gap-2 mb-[8px]">

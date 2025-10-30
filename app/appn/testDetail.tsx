@@ -48,7 +48,7 @@ const TestDetail = ({ data }: any) => {
                     </View>
                 </View>
                 <View className='flex-row gap-4 p-[13px] items-center mb-2 border-t border-gray-200'>
-                    <Image className='shadow-sm shadow-gray-300 rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 70, height: 70 }} />
+                    <Image className='shadow-sm shadow-gray-300 rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 70, height: 70 }} />
                     <View>
                         <Text className="font-PoppinsSemibold text-slate-800 text-[14px] mb-2">{user ? user?.MemberName : data.PartyName}</Text>
                         {user ? <>

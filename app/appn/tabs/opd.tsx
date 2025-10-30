@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -95,7 +94,7 @@ const HomeScreen = () => {
                     <Text className="font-PoppinsSemibold text-gray-800 text-[13px] leading-[20px] mt-1 mb-0.5">Upcoming Schedule</Text>
                     <View className='bg-primary-500 rounded-3xl p-4 my-2'>
                         <View className='flex-row items-start'>
-                            <Image className='shadow-lg rounded-full me-2' source={require('../../../assets/images/user.png')} style={{ width: 35, height: 35 }} />
+                            <Image className='shadow-lg rounded-full me-2' source={require('@/assets/images/user.png')} style={{ width: 35, height: 35 }} />
                             <View className='flex-1'>
                                 <Text className="font-PoppinsBold text-white text-[13px]" numberOfLines={1}>{firstAppn.AppointmentTo}</Text>
                                 <Text className="font-Poppins text-gray-200 text-[10px]" numberOfLines={1}>{firstAppn.DocSpecialistDesc}</Text>
@@ -126,7 +125,7 @@ const HomeScreen = () => {
                 <View className='p-3'>
                     {isLoggedIn ? 
                         <View className="gap-3 flex-row items-center py-1">
-                            <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 35, height: 35 }} />
+                            <Image className='shadow-lg rounded-full' source={require('@/assets/images/user.png')} style={{ width: 35, height: 35 }} />
                             <View>
                                 <Text className="font-PoppinsSemibold text-gray-800 text-[14px]">{user.Name}</Text>
                                 <Text className="font-Poppins text-gray-600 text-[10px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
@@ -223,7 +222,7 @@ const HomeScreen = () => {
                     {/* <Text className="font-PoppinsBold text-gray-800 text-[16px] leading-[23px] mt-3">Upcoming Schedule (3)</Text>
                     <View className='bg-primary-500 rounded-3xl p-5 mt-4'>
                         <View className='flex-row'>
-                            <Image className='shadow-lg rounded-full me-3' source={require('../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                            <Image className='shadow-lg rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
                             <View>
                                 <Text className="font-PoppinsBold text-white text-[14px]">Prof. Dr. Logan Mason</Text>
                                 <Text className="font-Poppins text-gray-200 text-[11px]">Orthopedic Consultation</Text>

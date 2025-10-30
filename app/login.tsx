@@ -211,13 +211,13 @@ const Login = ({ modalMode }: any) => {
     
     return (
         <ScrollView contentContainerClassName='min-h-full bg-white' style={{minHeight: '100%'}}>
-            {/* <Image source={require('../assets/images/bg.jpg')} className="absolute w-full h-full z-0" resizeMode="cover" /> */}
+            {/* <Image source={require('@/assets/images/bg.jpg')} className="absolute w-full h-full z-0" resizeMode="cover" /> */}
             {/* <View className="w-full h-1/2 z-0 justify-center items-center relative">
             </View> */}
             <View className="relative gap-4 flex-row items-center justify-center mb-4 flex-1 pt-14 pb-12">
-                <Image source={require('../assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
+                <Image source={require('@/assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="cover" />
                 <Image className='rounded-lg' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${compInfo.LogoUrl}` }} resizeMode="contain" style={{ width: 160, height: 150 }} />
-                {/* <Image className='' source={require('../assets/images/logo.png')} style={{ width: 160, height: 150 }} /> */}
+                {/* <Image className='' source={require('@/assets/images/logo.png')} style={{ width: 160, height: 150 }} /> */}
                 {/* <View>
                     <Text className="font-PoppinsSemibold text-blue-800 text-[38px] leading-none mb-2 pt-3">{comp.name}</Text>
                     <Text className="font-Poppins text-gray-600 text-[13px]">{comp.tag}</Text>

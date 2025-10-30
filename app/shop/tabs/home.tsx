@@ -41,7 +41,7 @@ const ShoppingAppScreen = () => {
       <View className="bg-purple-100 p-4">
       {isLoggedIn ? 
           <View className="gap-3 flex-row items-center mb-4">
-              <Image className='shadow-lg rounded-full' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+              <Image className='rounded-full' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
               <View>
                   <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{user.Name}</Text>
                   <Text className="font-Poppins text-gray-600 text-[11px]">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
@@ -60,8 +60,8 @@ const ShoppingAppScreen = () => {
               <View className='mr-auto'>
                   {/* <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">Healthify</Text>
                   <Text className="font-Poppins text-gray-600 text-[11px]">Healthcare at it's best.</Text> */}
-                <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">TakeHome</Text>
-                <Text className="font-Poppins text-gray-600 text-[11px]">Simplifying Your Searches</Text>
+                <Text className="font-PoppinsSemibold text-gray-800 text-[16px]">{company.COMPNAME}</Text>
+                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">{company.CATCHLINE || 'Shopping made easy.'}</Text>
               </View>
               <Link href={'/login'}>
                   <View className="gap-2 flex-row items-center bg-white p-2 rounded-full shadow-lg">
@@ -350,7 +350,7 @@ const LastOrder = memo(({ locationId, compCode, userPartyCode, isLoggedIn, handl
                     </View>
                     <View className='bg-blue-500 rounded-3xl p-5 my-3'>
                       <View className='flex-row'>
-                        <Image className='shadow-lg rounded-full me-3' source={require('../../../assets/images/user.png')} style={{ width: 40, height: 40 }} />
+                        <Image className='shadow-lg rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 40, height: 40 }} />
                         <View className='flex-1'>
                             <Text className="font-PoppinsBold text-white text-[14px]" numberOfLines={1}>{order.CashPartyName}</Text>
                             <Text className="font-Poppins text-gray-200 text-[11px] items-center"><FontAwesome6 name="phone-volume" size={12} color="white" />  {order.CashPartyMobile}</Text>
