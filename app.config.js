@@ -32,7 +32,7 @@ export default ({ config }) => {
       compId: "yFObpUjTIGhK9%2B4bFmadRg==",
       icon: "./assets/images/takehome/splash_n_appIcon.png",
       splash: "./assets/images/takehome/logo.png",
-      version: "1.0.5",
+      version: "1.1.5",
       baseUrl: "https://myapps.gsterpsoft.com",
       srcUrl: "https://erp.gsterpsoft.com",
     },
