@@ -30,6 +30,13 @@
       },
       "channel": "xyz-hospital"
     },
+    "ecom-test": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "ecom"
+    },
     "bcroy": {
       "autoIncrement": true,
       "android": {

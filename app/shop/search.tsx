@@ -51,7 +51,7 @@ function MainSearch() {
                 renderItem={({ item }) =>  <ProductCard parent="Search" type="list" data={item} key={item.LocationItemId} />}
                 keyExtractor={(item) => item.LocationItemId.toString()}
                 className="overflow-visible"
-                contentContainerClassName="gap-3"
+                contentContainerClassName=""
                 scrollEnabled={false}
             />
         )

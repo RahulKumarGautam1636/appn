@@ -20,21 +20,21 @@ function MainSearch() {
 
     useEffect(() => {
         const getSearchResult = async (companyCode: string, key: { filterBy: string, query: string}) => {                      
-        if (!companyCode) return alert('no companyCode received');                  
-        const res = await getFrom(`${BASE_URL}/api/search/Get?CID=${companyCode}&Type=${key.filterBy}&SearchString=${key.query}`, {}, setDoctors);
-        if (res) {          
-            setDoctors(res);
-        } else {
-            console.log('No data received');
-        }
+            if (!companyCode) return alert('no companyCode received');                  
+            const res = await getFrom(`${BASE_URL}/api/search/Get?CID=${companyCode}&Type=${key.filterBy}&SearchString=${key.query}`, {}, setDoctors);
+            if (res) {          
+                setDoctors(res);
+            } else {
+                console.log('No data received');
+            }
         }  
         const timer = setTimeout(() => {
-        if (searchKey.query.length < 2) return;
-        if (compCode === defaultId) {
-            getSearchResult(zero, searchKey);                 // search every company if default company compCode.
-        } else {
-            getSearchResult(compCode, searchKey);             // search only the current company if not default company compCode.
-        }
+            if (searchKey.query.length < 2) return;
+            if (compCode === defaultId) {
+                getSearchResult(zero, searchKey);                 // search every company if default company compCode.
+            } else {
+                getSearchResult(compCode, searchKey);             // search only the current company if not default company compCode.
+            }
         }, 500);
         return () => clearTimeout(timer);
     }, [searchKey, zero, compCode])

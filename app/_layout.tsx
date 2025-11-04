@@ -12,14 +12,13 @@ import UpdateBanner from "@/src/components/update";
 import Modals from "@/src/components/modals";
 import { getCompanyDetails } from "@/src/store/slices/slices";
 import { pushRoute } from "@/src/store/slices/nav";
-import { useGlobalBackHandler } from "@/src/components";
+// import { useGlobalBackHandler } from "@/src/components";
 
 SplashScreen.preventAutoHideAsync();
 
 function LayoutContent() {
   const isDark = false;
   const backgroundColor = isDark ? "#000000" : "#FFFFFF";
-  const vType = useSelector((state: RootState) => state.company.vType);
   const compCode = useSelector((state: RootState) => state.compCode);
   const locationId = useSelector((state: RootState) => state.appData.location.LocationId);
   const history = useSelector((state: RootState) => state.navigation.history);
@@ -55,11 +54,10 @@ function LayoutContent() {
   
 
   useEffect(() => {
-    if (!vType) return;
     if (loaded || error) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, error, vType]);
+  }, [loaded, error]);
 
   if (!loaded && !error) return null;
 

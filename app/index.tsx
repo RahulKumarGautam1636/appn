@@ -8,9 +8,11 @@ import { TouchableOpacity } from 'react-native';
 import { Feather, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { PHARMACY, TAKEHOME_AGRO, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
+import { PHARMACY, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
 import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser } from '@/src/store/slices/slices';
 import { switchSegment } from '@/src/components/utils';
+import { FullScreenLoading } from '@/src/components';
+import { AppError } from '@/src/components/update';
 
 
 // import '@formatjs/intl-getcanonicallocales/polyfill';
@@ -55,9 +57,9 @@ export default function App() {
   }
 
   if (status === 'loading') {
-    return <View><Text>Loading..</Text></View>
+    return <FullScreenLoading />
   } else if (error) {
-    return <View><Text>An Error Occured.</Text></View>
+    return <AppError />
   } else if (status === 'succeeded') {
     if (vType === 'ErpPharma' || vType === 'agro' || vType === 'ErpManufacturing') {
       if (compCode === PHARMACY) return <Redirect href="/shop/tabs/home" />
@@ -90,12 +92,12 @@ export default function App() {
                     <Text className="font-Poppins text-gray-600 text-[13px]">Simplifying Your Searches</Text>
                 </View> */}
               </View>
-              <View className='flex-1 px-4 py-5 bg-slate-100'>
+              <View className='flex-1 p-4 bg-slate-100'>
                 {/* <Image source={require('@/assets/images/login-bg.png')} className="absolute inset-0 w-full" resizeMode="contain" /> */}
                 {/* <View className="flex-row justify-between items-center mb-6">
                   <Text className="text-3xl font-bold text-gray-800">Our Services</Text>
                 </View> */}
-                <View className="gap-4">
+                <View className="gap-3">
                   {/* <TouchableOpacity onPress={() => handleSelect('KHLqDFK8CUUxe1p1EotU3g==')} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
                     <View className="flex-row items-center">
                       <View className="bg-red-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
@@ -108,20 +110,20 @@ export default function App() {
                     </View>
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity> */}
-                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_PHARMA)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_PHARMA)} className="flex-row items-center justify-between bg-white border border-gray-200 p-4 rounded-xl">
                     <View className="flex-row items-center">
-                      <View className="bg-red-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
-                        <FontAwesome6 name="capsules" size={33} color="white" />
+                      <View className="bg-red-500 w-[3.5rem] h-[3.5rem] rounded-2xl items-center justify-center mr-4">
+                        <FontAwesome6 name="capsules" size={25} color="white" />
                       </View>
                       <View>
-                        <Text className="text-gray-800 font-semibold text-xl mb-2">Book Medicine</Text>
-                        <Text className="text-green-600 text-lg font-semibold">Active</Text>
+                        <Text className="text-gray-800 font-semibold text-xl">Book Medicine</Text>
+                        {/* <Text className="text-green-600 text-lg font-semibold">Active</Text> */}
                       </View>
                     </View>
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity>
                   {/* onPress={() => router.push('./appn/tabs/opd')} */}
-                  {/* <TouchableOpacity onPress={() => router.push('./appn/tabs/opd')} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  {/* <TouchableOpacity onPress={() => router.push('./appn/tabs/opd')} className="flex-row items-center justify-between bg-white border border-gray-200 p-4 rounded-xl">
                     <View className="flex-row items-center">
                       <View className="bg-blue-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
                         <FontAwesome6 name="user-doctor" size={33} color="white" />
@@ -134,42 +136,54 @@ export default function App() {
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity> */}
                   
-                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_AGRO)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_AGRO)} className="flex-row items-center justify-between bg-white border border-gray-200 p-4 rounded-xl">
                     <View className="flex-row items-center">
-                      <View className="bg-yellow-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
-                        <FontAwesome6 name="carrot" size={33} color="white" />
+                      <View className="bg-yellow-500 w-[3.5rem] h-[3.5rem] rounded-2xl items-center justify-center mr-4">
+                        <FontAwesome6 name="carrot" size={25} color="white" />
                       </View>
                       <View>
-                        <Text className="text-gray-800 font-semibold text-xl mb-2">Agro & Groceries</Text>
-                        <Text className="text-green-500 text-lg font-semibold">Active</Text>
+                        <Text className="text-gray-800 font-semibold text-xl">Agro & Groceries</Text>
+                        {/* <Text className="text-green-500 text-lg font-semibold">Active</Text> */}
                       </View>
                     </View>
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_SURGICAL)} className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_SURGICAL)} className="flex-row items-center justify-between bg-white border border-gray-200 p-4 rounded-xl">
                     <View className="flex-row items-center">
-                      <View className="bg-blue-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
-                        <FontAwesome6 name="user-doctor" size={33} color="white" />
+                      <View className="bg-blue-500 w-[3.5rem] h-[3.5rem] rounded-2xl items-center justify-center mr-4">
+                        <FontAwesome6 name="user-doctor" size={25} color="white" />
                       </View>
                       <View>
-                        <Text className="text-gray-800 font-semibold text-xl mb-2">Surgicals</Text>
-                        <Text className="text-green-500 text-lg font-semibold">Active</Text>
+                        <Text className="text-gray-800 font-semibold text-xl">Surgicals</Text>
+                        {/* <Text className="text-green-500 text-lg font-semibold">Active</Text> */}
                       </View>
                     </View>
                     <Feather name="chevron-right" size={30} color='gray' />
                   </TouchableOpacity>
-                  {/* <TouchableOpacity className="flex-row items-center justify-between bg-white border border-gray-200 p-5 rounded-xl">
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_GARMENTS)} className="flex-row items-center justify-between bg-white border border-gray-200 p-4 rounded-xl">
                     <View className="flex-row items-center">
-                      <View className="bg-teal-500 w-[4.8rem] h-[4.8rem] rounded-2xl items-center justify-center mr-4">
-                        <FontAwesome6 name="shirt" size={33} color="white" />
+                      <View className="bg-teal-500 w-[3.5rem] h-[3.5rem] rounded-2xl items-center justify-center mr-4">
+                        <FontAwesome6 name="shirt" size={25} color="white" />
                       </View>
                       <View>
-                        <Text className="text-gray-800 font-semibold text-xl mb-2">Garments & Fashion</Text>
-                        <Text className="text-rose-500 text-lg font-semibold">Coming soon..</Text>
+                        <Text className="text-gray-800 font-semibold text-xl">Garments & Fashion</Text>
+                        {/* <Text className="text-green-500 text-lg font-semibold">Active</Text> */}
                       </View>
                     </View>
                     <Feather name="chevron-right" size={30} color='gray' />
-                  </TouchableOpacity> */}
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => changeSegment(TAKEHOME_ELECTRONICS)} className="flex-row items-center justify-between bg-white border border-gray-200 p-4 rounded-xl">
+                    <View className="flex-row items-center">
+                      <View className="bg-fuchsia-500 w-[3.5rem] h-[3.5rem] rounded-2xl items-center justify-center mr-4">
+                        <FontAwesome6 name="phone" size={25} color="white" />
+                      </View>
+                      <View>
+                        <Text className="text-gray-800 font-semibold text-xl">Electronics</Text>
+                        {/* <Text className="text-green-500 text-lg font-semibold">Active</Text> */}
+                      </View>
+                    </View>
+                    <Feather name="chevron-right" size={30} color='gray' />
+                  </TouchableOpacity>
                 </View>
               </View>
               </ScrollView>

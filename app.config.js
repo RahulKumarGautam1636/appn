@@ -32,14 +32,14 @@ export default ({ config }) => {
       compId: "yFObpUjTIGhK9%2B4bFmadRg==",
       icon: "./assets/images/takehome/splash_n_appIcon.png",
       splash: "./assets/images/takehome/logo.png",
-      version: "1.0.4",
+      version: "1.0.5",
       baseUrl: "https://myapps.gsterpsoft.com",
       srcUrl: "https://erp.gsterpsoft.com",
     },
     ecom: {
       name: "Gbooks Shopping",
-      package: "com.gbooks.ecommerce",
-      scheme: "gbooksecommerce",
+      package: "com.gbooks.ecom",
+      scheme: "gbooksecom",
       compId: "KHLqDFK8CUUxe1p1EotU3g==",
       icon: "./assets/images/pharmacy/logo.png",
       splash: "./assets/images/pharmacy/logo.png",
@@ -64,9 +64,9 @@ export default ({ config }) => {
     }
   }
 
-  const testBuild = true;
-  const flavor = flavorConfig["ecom"];
-  const account = accounts["rk"];
+  const testBuild = false;
+  const flavor = flavorConfig["takehome"];
+  const account = accounts["vit"];
 
   return {
     ...config,

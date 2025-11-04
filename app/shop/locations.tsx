@@ -29,7 +29,7 @@ function Locations() {
             if (res) {                                                                   
                 setAutoCompleteList2(res);
                 if (!locationId) {                   
-                    getServiceLocations(res.data.LocationMasterList[0].Area)
+                    getServiceLocations(res.data.LocationMasterList[0]?.Area)
                 }
             } else {
                 console.log('No data received');
@@ -50,7 +50,7 @@ function Locations() {
     useEffect(() => {
         if (!selectedArea) return;
         getServiceLocations(selectedArea)
-    }, [])
+    }, [businessTypeId])
 
     const handleSelect = (i: any) => {
         let item = { Address: i.Address, StateDesc: i.StateDesc, StateCode: i.StateCode, PIN: i.PIN, Area: i.Area, LocationId: i.LocationId, LocationName: i.LocationName };
@@ -60,7 +60,7 @@ function Locations() {
     }
 
     // useEffect(() => {
-        const getServiceLocations = async (query: string) => {
+        const getServiceLocations = async (query: string) => {                                              // &BusinessTypeId=${businessTypeId}
             const res = await getFrom(`${BASE_URL}/api/Location/Get?CID=${compCode}&Area=${query}&SearchStr=`, {}, setLocationList);            // using useCallback to avoid esling warning about useEffect dependencies.
             if (res) {              
                 setLocationList(res);   
@@ -73,9 +73,9 @@ function Locations() {
         if (data.loading) {
             return <GridLoader />;
         } else if (data.err.status) {
-            return <div className='text-center my-5'><h2 className="text-danger mark">An error occured, please try again later. Error code: <span className='text-dark'>{data.err.msg}</span></h2></div>;
+            return <View className='text-center my-5'><Text className="text-rose-500">An error occured, please try again later. Error code: <Text className='text-dark'>{data.err.msg}</Text></Text></View>;
         } else if (data.data.LocationMasterList.length === 0) {
-            return <p className='text-danger mb-0 mt-2'>Now we have no service in this PIN - We will be available in your area very soon.</p>;
+            return <View className="px-6 bg-white py-6 rounded-lg shadow-sm"><Text className='text-rose-500 mt-2 text-center leading-8'>Now we have no service in this PIN - We will be available in your area very soon.</Text></View>;
         } else {
             // return <AutoComplete name='location-list' customClass='location-list' list={locationList.data.LocationMasterList} children={<LocationCard handleSelect={handleSelect} selectedLocation={globalData.location.LocationId} />} keyName={'LocationId'} itemName='Location(s) in the selected area.' closeIcon={false}/>
             return (
@@ -125,7 +125,7 @@ function Locations() {
                     </View>
                     <Feather className='absolute z-50 top-[4px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>
-                <Text className="py-5 font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Top Searches</Text>
+                {autoCompleteList2.data.LocationMasterList.length ? <><Text className="py-5 font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Top Searches</Text>
                 <View className="flex-wrap flex-row gap-[9px]">
                     {autoCompleteList2.data.LocationMasterList.map((item: any, index: number) => {
                         return (
@@ -134,7 +134,7 @@ function Locations() {
                             </TouchableOpacity>
                         )
                     })}
-                </View>
+                </View></> : null}
                 <Text className="pt-5 pb-2 font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5 mt-2">Select Your Location</Text>
                 <View className='mt-3'>
                     {renderLocationList(locationList)}

@@ -8,6 +8,7 @@ import Constants from "expo-constants";
 import axios from "axios";
 import { Linking } from "react-native";
 import { versions } from "../constants";
+import { RadioTower } from "lucide-react-native";
 
 const openPlayStore = async (url: string) => {
   try {
@@ -96,3 +97,16 @@ export default function UpdateBanner() {
 
 // npx json-server --host 0.0.0.0 --port 3000 db.json
 
+export const AppError = () => {
+  return (
+    <View className="absolute justify-center items-center inset-0 z-50 bg-gray-800/50">
+      <View className="px-10 pt-10 pb-6 bg-white rounded-3xl max-w-[20rem] items-center w-full">
+          {/* <Entypo name="download" size={60} color={colors.rose[500]} /> */}
+          <RadioTower size={100} color={colors.rose[500]} />
+        <Text className="font-PoppinsSemibold text-gray-800 text-center text-xl mt-8 mb-4">An Error Occured.</Text>
+        <Text className="font-PoppinsMedium text-gray-600 text-base mb-7 text-center">Please check internet connection and restart the app.</Text>
+        <ButtonPrimary title="RESTART" active={true} onPress={async () => {await Updates.reloadAsync()}} classes="w-full bg-slate-600 !h-[50px]" />
+      </View>
+    </View>
+  )
+}
