@@ -1,4 +1,4 @@
-import { BASE_URL, myColors } from '@/src/constants';
+import { BASE_URL, myColors, TAKEHOME_PHARMA } from '@/src/constants';
 import ButtonPrimary, { AddToCartBtn, mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
 import { add2Cart, buyNow, computeWithPackSize, getFrom, GridLoader, isEmpty, NoContent, ProductCard } from '@/src/components/utils';
@@ -217,7 +217,7 @@ const ProductPage = () => {
             </View>         
 
             <View className='gap-3 flex-row flex-wrap'>
-              <View className='flex-row gap-3 border border-gray-200 bg-slate-50 p-3 items-center rounded-lg'>
+              {compCode === TAKEHOME_PHARMA ? <View className='flex-row gap-3 border border-gray-200 bg-slate-50 p-3 items-center rounded-lg'>
                 <View className='h-11 w-11 rounded-lg justify-center items-center bg-teal-100'>
                   <FontAwesome name="check" size={20} color={colors.teal[700]} />
                 </View>
@@ -225,7 +225,7 @@ const ProductPage = () => {
                   <Text className="font-medium text-gray-500 text-[11px] mr-auto mb-1.5">Best Before</Text>
                   <Text className="font-medium text-slate-700 text-[13px] mr-auto">{date}</Text>
                 </View>
-              </View>
+              </View> : null}
               <View className='flex-row gap-3 flex-1 border border-gray-200 bg-slate-50 p-3 items-center rounded-lg'>
                 <View className='h-11 w-11 rounded-lg justify-center items-center bg-fuchsia-100'>
                   <FontAwesome name="shield" size={20} color={colors.fuchsia[600]} />
