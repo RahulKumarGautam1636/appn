@@ -73,7 +73,7 @@ const B2CCheckout = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      router.push('/login');
+      dispatch(setModal({name: 'LOGIN', state: true}))
       return;
     } else {
       setLocationModalActive(true);
@@ -424,7 +424,7 @@ const B2CCheckout = () => {
         <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(onlyOTC || (isLoggedIn && isDeliverable && prescription.file.name) || !prescription.required) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
         {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
 
-        <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />
+        <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery LOCID={locationId} setDeliverable={setDeliverable} closeModal={closeModal} />} />
       </View>
       
     </ScrollView>

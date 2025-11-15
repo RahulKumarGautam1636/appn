@@ -99,7 +99,7 @@ const Login = ({ modalMode }: any) => {
                     GstIn: data.GstIn,
                     LicenceNo: data.LicenceNo ? data.LicenceNo : '',
                     ContactPerson: data.ContactPerson,
-                    BusinessType: 'B2C',
+                    BusinessType: data.BusinessType,
 
                     UserRegTypeId: data.UserRegTypeId,
                     UserLevelSeq: data.UserLevelSeq
@@ -164,7 +164,7 @@ const Login = ({ modalMode }: any) => {
                 GstIn: data.GstIn,
                 LicenceNo: data.LicenceNo ? data.LicenceNo : '',
                 ContactPerson: data.ContactPerson,
-                BusinessType: 'B2C',
+                BusinessType: data.BusinessType,
 
                 UnderDoctId: data.UnderDoctId,
                 ReferrerId: data.ReferrerId,

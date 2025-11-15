@@ -6,26 +6,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { CartCard, createDate, num, sliceBaseStr, wait } from '@/src/components/utils';
 import { dumpCart, setModal, setPrescription } from '@/src/store/slices/slices';
-import { useRouter } from 'expo-router';
+import { useGlobalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import CheckDelivery from '@/app/shop/checkDelivery';
-import { BASE_URL } from '@/src/constants';
+import { BASE_URL, XYZ_ID } from '@/src/constants';
 import axios from 'axios';
 
 const B2BCheckout = () => {
 
-  const location = useSelector((i: RootState) => i.appData.location);
+  let { LOCID } = useGlobalSearchParams();
+  const locationId = Number(LOCID);
+
   const user = useSelector((i: RootState) => i.user);
   // const compInfo = useSelector((i: RootState) => i.company.info);
   const compCode = useSelector((i: RootState) => i.compCode);
   const selectedMember = useSelector((i: RootState) => i.members.selectedMember);
   const cart = useSelector((i: RootState) => i.cart);
-  const cartItems = Object.values(cart);   
+  const cartList = Object.values(cart);   
+  const cartItems = cartList.filter((i: any) => i.LocationId === locationId);
   const dispatch = useDispatch();  
-  const router = useRouter()     
+  const router = useRouter() 
+  const oneCartItem = cartItems[0]    
 
-  const cartItemsValueList = cartItems.map(item => item.count * item.SRate);                    
-  const cartSubtotal = num(cartItemsValueList.reduce((total, num) => total + num, 0));           
+  // const cartItemsValueList = cartItems.map(item => item.count * item.SRate);                    
+  // const cartSubtotal = num(cartItemsValueList.reduce((total, num) => total + num, 0));           
 
   const cartItemsMRPList = cartItems.map(item => item.count * item.ItemMRP);                    
   const grossTotal = num(cartItemsMRPList.reduce((total, num) => total + num, 0));  
@@ -39,11 +43,11 @@ const B2BCheckout = () => {
 
     // const cartArrayLength = cartItems.length;                   
   
-    const b2bItemsValueList = cartItems.map(item => item.count * item.PTR);                      
-    const b2bSubtotal = num(b2bItemsValueList.reduce((total, num) => total + num, 0));    
+    const cartItemsValueList = cartItems.map(item => item.count * item.PTR);                      
+    const cartSubtotal = num(cartItemsValueList.reduce((total, num) => total + num, 0));    
     
-    // const cartItemsMRPValueList = cartItems.map(item => item.count * item.ItemMRP);                      
-    // const cartMRPtotal = num(cartItemsMRPValueList.reduce((total, num) => total + num, 0)); 
+    const cartItemsMRPValueList = cartItems.map(item => item.count * item.ItemMRP);                      
+    const cartMRPtotal = num(cartItemsMRPValueList.reduce((total, num) => total + num, 0)); 
 
     const cartItemsDiscount = cartItems.map(item => ((item.PTR * item.count) * (item.DiscountPer / 100 )));                      
     const cartDiscount = num(cartItemsDiscount.reduce((total, num) => total + num, 0)); 
@@ -56,13 +60,13 @@ const B2BCheckout = () => {
     }); 
                    
     const cartGSTtotal = num(cartItemsGSTValueList.reduce((total, num) => total + num, 0));  
-    const b2bGrandTotal = num(b2bSubtotal - cartDiscount + cartGSTtotal); 
+    const grandTotal = num(cartSubtotal - cartDiscount + cartGSTtotal); 
 
   // B2B SUMMARY ENDS-----------------------------------------------------------------------------------------------------
 
   const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn);
   // const vType = useSelector((i: RootState) => i.company.vType);
-  const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+  // const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
   const prescription = useSelector((i: RootState) => i.appData.prescription);
   const [orderData, setOrderData] = useState({
     PartyCode: '',
@@ -96,9 +100,13 @@ const B2BCheckout = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      router.push('/login');
+      dispatch(setModal({name: 'LOGIN', state: true}))
       return;
     } else {
+      if (compCode === XYZ_ID) {
+        setDeliverable(true);
+        return;
+      }
       setLocationModalActive(true);
     }
   }, [user.Pin, isLoggedIn, locationId])
@@ -160,7 +168,7 @@ const B2BCheckout = () => {
                   ...preValues,
                   InsBy: user.UserId,              
                   PaymentMethod: 'COD',
-                  Amount: b2bGrandTotal,
+                  Amount: grandTotal,
                   EncCompanyId: compCode,
                   SalesDetailsList: orderList, 
 
@@ -299,7 +307,6 @@ const B2BCheckout = () => {
     }
   }
   
-
   return (
     <ScrollView contentContainerClassName="bg-purple-50 min-h-full p-4">
       <View className="flex-row items-center justify-between pb-3 border-b border-gray-100">
@@ -327,7 +334,7 @@ const B2BCheckout = () => {
           </View>
         </View>
       </View>
-      {prescription.required ? <>
+      {/* {prescription.required ? <>
         <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Patient Details</Text>
         <View className='bg-white rounded-2xl p-5 shadow-md shadow-gray-400'>
             <View className='flex-row items-center'>
@@ -380,7 +387,7 @@ const B2BCheckout = () => {
             </TouchableOpacity>
           </TouchableOpacity>}
         </>}
-      </> : null}
+      </> : null} */}
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Address Details</Text>
       <View className='bg-white rounded-3xl px-4 py-2 shadow-sm border-b border-gray-200'>
           <View className='justify-between flex-row px-1 py-[0.9rem] items-start gap-4'>
@@ -403,26 +410,30 @@ const B2BCheckout = () => {
           </View> : null}
           <ButtonPrimary onClick={() => {}} title='Edit Address' active={true} classes='!rounded-2xl !h-[43px] mt-4 mb-2 w-fit px-10 ml-auto' textClasses='tracking-widest' />
       </View>
-      <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Service Location</Text>
-      <View className='bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200'>
-        <View className="flex-row items-center gap-4">
-          <View className='w-[4rem] h-[4rem] bg-pink-50 shadow-sm rounded-2xl items-center justify-center'>
-            {/* <FontAwesome6 name="location-arrow" size={34} color={colors.purple[600]} /> */}
-            <Entypo name="location" size={31} color={colors.pink[600]} />
-          </View>
-          <View className="flex-1">
-            <View className='justify-between flex-row mb-2'>
-                <Text className="text-base font-medium text-black">{location.LocationName}</Text>
+      {oneCartItem?.LocationName ?
+        <>
+          <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Distributer Name</Text>
+          <View className='bg-white rounded-3xl p-4 shadow-sm border-b border-gray-200'>
+            <View className="flex-row items-center gap-4">
+              <View className='w-[4rem] h-[4rem] bg-pink-50 shadow-sm rounded-2xl items-center justify-center'>
+                {/* <FontAwesome6 name="location-arrow" size={34} color={colors.purple[600]} /> */}
+                <Entypo name="location" size={31} color={colors.pink[600]} />
+              </View>
+              <View className="flex-1">
+                <View className='justify-between flex-row mb-2'>
+                    <Text className="text-base font-medium text-black">{oneCartItem?.LocationName}</Text>
+                </View>
+                <View className="flex-row items-center gap-3  mb-1">
+                  <Text numberOfLines={1} className="text-gray-600 text-sm">{oneCartItem?.LocationAddress}</Text>
+                </View>
+              </View>
             </View>
-            <View className="flex-row items-center gap-3  mb-1">
-              <Text numberOfLines={1} className="text-gray-600 text-sm">{location.Address}</Text>
-            </View>
           </View>
-        </View>
-      </View>
+        </>  
+        : null}
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Your Order List</Text>
       <View className='gap-3'>
-        {cartItems.map((item) => (<CartCard data={item} key={item.LocationItemId} />))}
+        {cartItems.map((item) => (<CartCard data={item} key={item.LocationItemId} b2bMode={true} />))}
       </View>
       <Text className='text-[1.05rem] mt-4 mb-3 font-PoppinsSemibold'>Billing Details</Text>
       <View className='bg-white rounded-3xl shadow-sm mb-4 border-b border-gray-200'>
@@ -430,35 +441,35 @@ const B2BCheckout = () => {
               <View className='flex-row items-center gap-3'>
                   <Text className="font-PoppinsSemibold text-gray-500 text-[13px] items-center leading-5">Gross Amount</Text>
               </View>
-              <Text className="font-PoppinsSemibold text-slate-700 text-[13px] ml-auto leading-5">{grossTotal}</Text>
+              <Text className="font-PoppinsSemibold text-slate-700 text-[13px] ml-auto leading-5">{cartSubtotal}</Text>
           </View>
           <View className='flex-row gap-3 px-5 py-4 border-y border-gray-200'>
               <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Less Discount</Text>
-              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">- {discountTotal}</Text>
+              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">- {cartDiscount}</Text>
           </View>
           <View className='flex-row gap-3 px-5 py-4 border-y border-gray-200'>
-              <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Service Charge</Text>
-              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">+ 58.88</Text>
+              <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Total GST</Text>
+              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">+ {cartGSTtotal}</Text>
           </View>
           <View className='flex-row gap-3 px-5 py-4'>
               <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Payable Amount</Text>
-              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ {cartSubtotal}</Text>
+              <Text className="font-PoppinsSemibold text-[13px] text-slate-700">₹ {grandTotal}</Text>
           </View>
       </View>
       <View className="">
           <View className="flex-row justify-between items-center mt-2 mb-4">
               <Text className="text-md text-gray-600 font-semibold">Grand Total</Text>
-              <Text className="text-2xl font-bold text-sky-800">₹ {cartSubtotal}</Text>
+              <Text className="text-2xl font-bold text-sky-800">₹ {grandTotal}</Text>
           </View>
 
-        {(!onlyOTC && prescription.required) ? <>
+        {/* {(!onlyOTC && prescription.required) ? <>
           {!prescription.file.name && <Text className='text-rose-500 text-sm mb-3'>Please Attach your prescription to place an order.</Text>}
-        </> : ''}
+        </> : ''} */}
         {isDeliverable ? null : <Pressable onPress={() => setLocationModalActive(true)}><Text className='text-blue-600 text-sm mb-3 font-medium'>Now we have no service at your PIN code. Click to know more.</Text></Pressable>}
-        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(onlyOTC || (isLoggedIn && isDeliverable && prescription.file.name) || !prescription.required) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
+        <ButtonPrimary onClick={placeOrder} title='PLACE ORDER' isLoading={loading} active={true} classes={`${(isLoggedIn && isDeliverable) ? 'flex-1 !rounded-2xl !bg-gray-700' : 'pointer-events-none !bg-gray-400'}`} />
         {/* <LinkBtn href={'/shop/tabs/orders'} title='VIEW ORDERS' isLoading={false} active={true} classes='flex-1 !rounded-2xl !bg-gray-700' /> */}
 
-        <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery setDeliverable={setDeliverable} closeModal={closeModal} />} />
+        <MyModal modalActive={locationModalActive} name='CHECK_DELIVERY' child={<CheckDelivery LOCID={locationId} setDeliverable={setDeliverable} closeModal={closeModal} />} />
       </View>
       
     </ScrollView>

@@ -64,9 +64,9 @@ export default ({ config }) => {
     }
   }
 
-  const testBuild = false;
-  const flavor = flavorConfig["takehome"];
-  const account = accounts["vit"];
+  const testBuild = true;
+  const flavor = flavorConfig["ecom"];
+  const account = accounts["rk"];
 
   return {
     ...config,

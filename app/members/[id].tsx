@@ -15,6 +15,7 @@ import TestList from "../appn/testList";
 const MemberDetails = () => {
 
     const user = useSelector((i: RootState) => i.user);
+    const vType = useSelector((i: RootState) => i.company.vType);
     const { membersList } = useSelector((i: RootState) => i.members);
     const [activeTab, setActiveTab] = useState("details");
     const [searchQuery, setSearchQuery] = useState("");
@@ -61,7 +62,7 @@ const MemberDetails = () => {
         </View>
 
         {/* Tabs */}
-        <View className="flex-row bg-white border-y border-gray-200">
+        {vType === 'ErpHospital' ? <View className="flex-row bg-white border-y border-gray-200">
           <TouchableOpacity onPress={() => setActiveTab("details")} className={`flex-1 py-3 items-center ${activeTab === "details" ? "border-b-2 border-blue-500" : ""}`}>
             <Text className={`font-medium ${activeTab === "details" ? "text-blue-500" : "text-gray-500"}`}>Profile</Text>
           </TouchableOpacity>
@@ -71,7 +72,7 @@ const MemberDetails = () => {
           <TouchableOpacity onPress={() => setActiveTab("labTests")} className={`flex-1 py-3 items-center ${activeTab === "labTests" ? "border-b-2 border-blue-500" : ""}`}>
             <Text className={`font-medium ${activeTab === "labTests" ? "text-blue-500" : "text-gray-500"}`}>Lab Tests</Text>
           </TouchableOpacity>
-        </View>
+        </View>: null}
 
         {/* Content based on active tab */}
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} colors={["#3b82f6"]} />}>

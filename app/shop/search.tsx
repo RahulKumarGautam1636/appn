@@ -15,13 +15,14 @@ function MainSearch() {
     const compCode = useSelector((state: RootState) => state.compCode);
     const [products, setProducts] = useState({loading: false, data: {itemMasterCollection: []}, err: {status: false, msg: ''}}); 
     const [searchTerm, setSearchTerm] = useState({query: '', filterTerm: 'All', filterId: ''});
+    const vType = useSelector((i: RootState) => i.company.vType);
 
     const topSearches = ['Tab', 'Calpol', 'Pan', 'Parace', 'Dynap', 'Cap', 'Forte']
     const router = useRouter();
 
     useEffect(() => {
         let controller = new AbortController();
-        const getSearchResult = async (companyCode: string, key, signal) => {                      
+        const getSearchResult = async (companyCode: string, key: any, signal?: any) => {                      
             if (!companyCode) return alert('no companyCode received');                  
             const res = await getFrom(`${BASE_URL}/api/item/Get?CID=${companyCode}&SearchStr=${key.query}&LOCID=${locationId}`, {}, setProducts, signal);
             if (res) {                                                                    
@@ -33,7 +34,14 @@ function MainSearch() {
         }  
 
         const timer = setTimeout(() => {
-            if (searchTerm.query.length === 0) return setProducts({loading: false, data: {itemMasterCollection: []}, err: {status: false, msg: ''}});
+            if (searchTerm.query.length === 0) {
+                if (vType === 'ErpPharma') {
+                    getSearchResult(compCode, {query: 'tab', filterTerm: 'All', filterId: ''}, controller.signal);
+                } else {
+                    setProducts({loading: false, data: {itemMasterCollection: []}, err: {status: false, msg: ''}});
+                }
+                return;
+            }
             getSearchResult(compCode, searchTerm, controller.signal);  
         }, 1000);
 
@@ -65,7 +73,7 @@ function MainSearch() {
                         <Ionicons name="arrow-back-outline" size={22} color="#3b82f6" />
                     </TouchableOpacity>
                     <View className='z-10'>
-                        <TextInput value={searchTerm.query} onChangeText={(text) => setSearchTerm(pre => ({...pre, query: text }))} placeholder='Search Products...' className='bg-white pl-[3.5rem] pr-4 py-[1.1rem] rounded-full shadow-md shadow-blue-500' />
+                        <TextInput autoFocus={true} value={searchTerm.query} onChangeText={(text) => setSearchTerm(pre => ({...pre, query: text }))} placeholder='Search Products...' className='bg-white pl-[3.5rem] pr-4 py-[1.1rem] rounded-full shadow-md shadow-blue-500' />
                     </View>
                     <Feather className='absolute z-50 top-[4px] right-[3px] bg-primary-500 py-[10px] px-[11px] rounded-full items-center' name="sliders" size={21} color="#fff" />
                 </View>

@@ -10,11 +10,11 @@ import { X } from 'lucide-react-native';
 import { MyModal } from '@/src/components';
 import { Registeration } from '../login';
 
-const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
+const CheckDelivery = ({ setDeliverable, closeModal, LOCID }: any) => {
 
     const compCode = useSelector((i: RootState) => i.compCode);
     const user = useSelector((i: RootState) => i.user);
-    const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+    const locationId = LOCID || '' // useSelector((i: RootState) => i.appData.location.LocationId);
 
     const [location, setLocation] = useState({ Pin: user.Pin });
     const [locationList, setLocationList] = useState({loading: true, data: '', err: {status: false, msg: ''}});
@@ -29,7 +29,7 @@ const CheckDelivery = ({ setDeliverable, closeModal }: any) => {
             closeModal();
             return;
         }
-        const getServiceLocations = async () => {
+        const getServiceLocations = async () => {            
             const res = await getFrom(`${BASE_URL}/api/Location/Get?CID=${compCode}&LocationId=${locationId}&PinCode=${location.Pin}`, {}, setLocationList);            // using useCallback to avoid esling warning about useEffect dependencies.
             if (res) {
                 setLocationList(res);   

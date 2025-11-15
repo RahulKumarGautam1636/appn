@@ -249,10 +249,11 @@ export const GradientBG = ({ children, imgStyles={opacity: 0.8}, classes }: any)
 export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count=1) => {
   if (data.Category === 24856) return alert('As Government Norms this Product is not to be sold Online - Contact with Service Provider for buying this product.');
   const state = store.getState();
-  const locationId = state.appData.location.LocationId;
+  const location = state.appData.location;
+  const locationId = location.LocationId;
   if (!locationId) return alert('Please choose a Location.');
   if (isAdded) return dispatch(removeFromCart(data.LocationItemId));
-  dispatch(addToCart({...data, ...computeWithPackSize(), count: count})); 
+  dispatch(addToCart({...data, ...computeWithPackSize(), count: count, LocationName: location.LocationName, LocationAddress: location.Address})); 
   // let productToastData = { msg: 'Added to Cart', product: {name: data.Description, price: computeWithPackSize().SRate}, button: {text: 'Visit Cart', link: '/cartPage'} };
   // productToast(productToastData);
 }
@@ -406,7 +407,7 @@ export const CatCard = ({ data, classes, styles }: any) => {
   )
 }
 
-export const CartCard = ({ data }: any) => {
+export const CartCard = ({ data, b2bMode=false }: any) => {
   const dispatch = useDispatch();
   const activeItem = data.ItemPackSizeList.find((i: any) => i.CodeId === data.PackSizeId);
   const activePackSize = activeItem ? activeItem.Description : 'N/A';
@@ -423,7 +424,7 @@ export const CartCard = ({ data }: any) => {
         
         <View className="flex-row items-center mb-3">
           {/* <ColorIndicator color={data.color} /> */}
-          <Text className="text-sm text-gray-600 mr-3">₹ {data.SRate}</Text>
+          <Text className="text-sm text-gray-600 mr-3">₹ {b2bMode ? data.PTR : data.SRate}</Text>
           {/* {data.size && (
             <> */}
               <View className="w-1 h-1 bg-gray-400 rounded-full mr-3" />
@@ -433,7 +434,10 @@ export const CartCard = ({ data }: any) => {
         </View>
         
         <View className="flex-row items-center justify-between">
-          <Text className="text-lg font-semibold text-gray-700">₹ {(data.count * data.SRate).toFixed(2)}</Text>
+          {b2bMode ?  
+          <Text className="text-lg font-semibold text-gray-700">₹ {num(data.PTR * data.count)}</Text>
+          : 
+          <Text className="text-lg font-semibold text-gray-700">₹ {num(data.SRate * data.count)}</Text>}
           
           <View className="flex-row items-center bg-gray-100 rounded-2xl">
             <TouchableOpacity onPress={() => {if (data.count !== 1) dispatch(addToCart({...data, count: data.count - 1}))}} className="w-9 h-9 items-center justify-center">
@@ -1090,4 +1094,15 @@ const refreshUserInfo = async (params: any, dispatch: any) => {
 
 export const Required = ({ classes, size=8 }: any) => {
   return <FontAwesome className={classes} name="star" size={size} color={colors.rose[500]} />
+}
+
+export function filterUnique(list: [], fieldName: string) {
+  const seen = new Set();
+  return list.filter(item => {
+    if (!seen.has(item[fieldName])) {
+      seen.add(item[fieldName]);
+      return true;
+    }
+    return false;
+  });
 }

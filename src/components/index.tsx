@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { blur, hasAccess, SRC_URL } from "@/src/constants"
 import { Entypo, Feather, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons"
-import { Button, Image, Text, TouchableOpacity, View, KeyboardAvoidingView, Platform, BackHandler, Alert
+import { Button, Image, Text, TouchableOpacity, View, KeyboardAvoidingView, Platform, BackHandler, Alert, TextInput
 // Dimensions, StyleSheet, Pressable, findNodeHandle, UIManager,
 } from "react-native";
 import { Link, Redirect, router, useRouter } from "expo-router";
-import { setAppnData, setCompanies, setDepts, setMembers, setModal, setPrescription } from "@/src/store/slices/slices";
+import { addToCart, removeFromCart, setAppnData, setCompanies, setDepts, setMembers, setModal, setPrescription } from "@/src/store/slices/slices";
 import { stripHtml } from "string-strip-html";
 import React, { useState } from 'react';
 import { ReactNativeModal } from 'react-native-modal';
@@ -13,10 +13,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import Svg, { Circle, G } from 'react-native-svg';
 import Animated, { useSharedValue, useAnimatedProps, withRepeat, withSequence, withTiming, Easing, interpolate, withDelay } from 'react-native-reanimated';
 import { RootState } from "../store/store";
-import { uType } from "./utils";
+import { num, uType } from "./utils";
 import colors from "tailwindcss/colors";
 import { popRoute } from "../store/slices/nav";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Trash2 } from 'lucide-react-native';
 // import MapView, { Marker } from 'react-native-maps';
 
 
@@ -623,4 +624,136 @@ export const AddToCartBtn = ({ type, product, useAuth, qty, addCart, buyNow, cla
     )
   }
 
+}
+
+export const B2BCartCard = ({ data }: any) => {
+
+  const activeItem = data.ItemPackSizeList.find((x: any) => x.CodeId === data.PackSizeId);
+  const activePackSize = activeItem ? activeItem.Description : 'N/A';
+  const totalMRP = num(data.ItemMRP * data.count)
+  const totalPTR = num(data.PTR * data.count)
+  // const totalMargin = (parseFloat(totalMRP) - parseFloat(totalPTR)).toFixed(2)
+  const itemDiscount = num((data.PTR * data.count) * (data.DiscountPer / 100 ))
+  const dispatch = useDispatch();
+
+  return (
+    <View key={data.LocationItemId} className="border-b border-gray-200 p-4">
+      <View className="flex-row justify-between mb-2">
+        <Text className="text-base font-medium text-gray-800 flex-1">{data.Description}</Text>
+
+        <View className="bg-blue-50 px-2 py-1 rounded">
+          <Text className="text-blue-600 text-xs font-medium">{activePackSize}</Text>
+        </View>
+      </View>
+
+      <View className="flex-row justify-between mb-3">
+        <Text className="text-gray-600 text-sm">GST: {data.IGSTRATE}%</Text>
+        <Text className="text-gray-600 text-sm">Discount: {data.DiscountPer}%</Text>
+        <Text className="text-gray-600 text-sm">MRP: ₹ {data.ItemMRP}</Text>
+      </View>
+
+      <View className="flex-row items-center mb-3 gap-3">
+        <View className="flex-row items-center border border-gray-300 rounded">
+          <TouchableOpacity className="px-3 py-2 border-r border-gray-300" onPress={() => dispatch(addToCart({...data, count: data.count + 1}))}>
+            <Text className="text-gray-700 font-bold text-xs">▲</Text>
+          </TouchableOpacity>
+
+          <TextInput value={String(data.count)} className="px-4 py-2 text-center w-16 text-gray-800" editable={false} />
+
+          <TouchableOpacity className="px-3 py-2 border-l border-gray-300" onPress={() => {if (data.count !== 1) dispatch(addToCart({...data, count: data.count - 1}))}}>
+            <Text className="text-gray-700 font-bold text-xs">▼</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity onPress={() => dispatch(removeFromCart(data.LocationItemId))} className="p-2">
+          <Trash2 size={20} color="red" />
+        </TouchableOpacity>
+
+        <View className="flex-1" />
+
+        <Text className="text-base font-semibold text-blue-600">PTR: ₹ {data.PTR}</Text>
+      </View>
+
+      <View className="bg-gray-100 rounded p-3 flex-row justify-between">
+        <View className="flex-1">
+          <Text className="text-xs text-gray-600 mb-1">Total MRP</Text>
+          <Text className="text-sm font-semibold text-gray-800">₹ {totalMRP}</Text>
+        </View>
+
+        <View className="flex-1">
+          <Text className="text-xs text-gray-600 mb-1">Total PTR</Text>
+          <Text className="text-sm font-semibold text-gray-800">₹ {totalPTR}</Text>
+        </View>
+
+        <View className="flex-1">
+          <Text className="text-xs text-gray-600 mb-1">Total Discount</Text>
+          <Text className="text-sm font-semibold text-gray-800">₹ {itemDiscount}</Text>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+export const B2BCOrderCard = ({ data }: any) => {
+
+  return (
+    <View key={data.LocationItemId} className="border-b border-gray-200 p-4 bg-white shadow-sm rounded-3xl">
+      <View className="flex-row justify-between mb-3">
+        <Text className="text-base font-medium text-gray-800 flex-1">{data.Description}</Text>
+
+        <View className="bg-blue-50 px-2 py-1 rounded">
+          <Text className="text-blue-600 text-xs font-medium">{data.PackSizeId ? data.PackSizeDesc : 'No pack size'}</Text>
+        </View>
+      </View>
+
+      <View className="flex-row justify-between mb-3">
+        <Text className="text-gray-600 text-sm">QTY: &nbsp; {data.BillQty}</Text>
+        <Text className="text-gray-600 text-sm">Discount: {(data.DiscountText).toFixed(2)}%</Text>
+        <Text className="text-gray-600 text-sm">MRP: ₹ {(data.ItemMRP).toFixed(2)}</Text>
+      </View>
+
+      {/* <View className="flex-row items-center mb-3 gap-3">
+        <View className="flex-row items-center border border-gray-300 rounded">
+          <TouchableOpacity className="px-3 py-2 border-r border-gray-300" onPress={() => dispatch(addToCart({...data, count: data.count + 1}))}>
+            <Text className="text-gray-700 font-bold text-xs">▲</Text>
+          </TouchableOpacity>
+
+          <TextInput value={String(data.count)} className="px-4 py-2 text-center w-16 text-gray-800" editable={false} />
+
+          <TouchableOpacity className="px-3 py-2 border-l border-gray-300" onPress={() => {if (data.count !== 1) dispatch(addToCart({...data, count: data.count - 1}))}}>
+            <Text className="text-gray-700 font-bold text-xs">▼</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity onPress={() => dispatch(removeFromCart(data.LocationItemId))} className="p-2">
+          <Trash2 size={20} color="red" />
+        </TouchableOpacity>
+
+        <View className="flex-1" />
+
+        <Text className="text-base font-semibold text-blue-600">PTR: ₹ {data.PTR}</Text>
+      </View> */}
+
+      <View className="bg-gray-100 rounded p-3 flex-row justify-between">
+        <View className="flex-1">
+          <Text className="text-xs text-gray-600 mb-1">PTR</Text>
+          <Text className="text-sm font-semibold text-gray-800">{num(data.Rate)}</Text>
+        </View>
+
+        <View className="flex-1">
+          <Text className="text-xs text-gray-600 mb-1">GST</Text>
+          <Text className="text-sm font-semibold text-gray-800">+{data.CGST + data.SGST}</Text>
+        </View>
+
+        <View className="flex-1">
+          <Text className="text-xs text-gray-600 mb-1">Discount</Text>
+          <Text className="text-sm font-semibold text-gray-800">-{num(data.DiscountText)}</Text>
+        </View>
+        <View className="flex-1">
+          <Text className="text-xs text-gray-600 mb-1">Total</Text>
+          <Text className="text-sm font-semibold text-gray-800">₹ {num(data.Amount)}</Text>
+        </View>
+      </View>
+    </View>
+  )
 }

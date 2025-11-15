@@ -1,4 +1,4 @@
-import { BASE_URL, myColors, TAKEHOME_PHARMA } from '@/src/constants';
+import { BASE_URL } from '@/src/constants';
 import ButtonPrimary, { AddToCartBtn, mmDDyyyyDate } from '@/src/components';
 import ProductImagePreview from '@/src/components/previewBox';
 import { add2Cart, buyNow, computeWithPackSize, getFrom, GridLoader, isEmpty, NoContent, ProductCard } from '@/src/components/utils';
@@ -217,7 +217,7 @@ const ProductPage = () => {
             </View>         
 
             <View className='gap-3 flex-row flex-wrap'>
-              {compCode === TAKEHOME_PHARMA ? <View className='flex-row gap-3 border border-gray-200 bg-slate-50 p-3 items-center rounded-lg'>
+              {vType === 'ErpPharma' ? <View className='flex-row gap-3 border border-gray-200 bg-slate-50 p-3 items-center rounded-lg'>
                 <View className='h-11 w-11 rounded-lg justify-center items-center bg-teal-100'>
                   <FontAwesome name="check" size={20} color={colors.teal[700]} />
                 </View>

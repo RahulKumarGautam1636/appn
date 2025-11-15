@@ -54,14 +54,14 @@ function Locations() {
 
     const handleSelect = (i: any) => {
         let item = { Address: i.Address, StateDesc: i.StateDesc, StateCode: i.StateCode, PIN: i.PIN, Area: i.Area, LocationId: i.LocationId, LocationName: i.LocationName };
-        dispatch(dumpCart())
+        // dispatch(dumpCart())
         dispatch(setLocation(item));
         dispatch(setModal({ name: 'LOCATIONS', state: false }));
     }
 
     // useEffect(() => {
-        const getServiceLocations = async (query: string) => {                                              // &BusinessTypeId=${businessTypeId}
-            const res = await getFrom(`${BASE_URL}/api/Location/Get?CID=${compCode}&Area=${query}&SearchStr=`, {}, setLocationList);            // using useCallback to avoid esling warning about useEffect dependencies.
+        const getServiceLocations = async (query: string) => {                                              
+            const res = await getFrom(`${BASE_URL}/api/Location/Get?CID=${compCode}&Area=${query}&SearchStr=&BusinessTypeId=${businessTypeId}`, {}, setLocationList);            // using useCallback to avoid esling warning about useEffect dependencies.
             if (res) {              
                 setLocationList(res);   
             }

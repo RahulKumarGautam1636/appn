@@ -9,8 +9,8 @@ export const { compId, baseUrl, srcUrl } = Constants.expoConfig.extra || {};
 
 const compCodeSlice = createSlice({
   name: 'compCode',
-  initialState: compId ? compId : defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
-  // initialState: 'yFObpUjTIGhK9%2B4bFmadRg==', 
+  // initialState: compId ? compId : defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
+  initialState: 'KHLqDFK8CUUxe1p1EotU3g==', 
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {     
       return action.payload;
@@ -327,8 +327,8 @@ const appDataSlice = createSlice({
     restaurant: { table: {  } },
     businessType: { Description: '', CodeValue: '', CodeId: '' },
     userRegType:
-                  { CodeId: 43198, Description: 'Customer', CodeValue: 'Customer', for: 'B2C / Patient' }
-                  // { CodeId: 43194, Description: 'Retailer', CodeValue: 'Retailer', for: 'B2B / Retailer' }
+                  // { CodeId: 43198, Description: 'Customer', CodeValue: 'Customer', for: 'B2C / Patient' }
+                  { CodeId: 43194, Description: 'Retailer', CodeValue: 'Retailer', for: 'B2B / Retailer' }
                   // { CodeId: 43195, Description: 'Strategic Partner', CodeValue: 'SP', for: 'Doctor' }
                   // { CodeId: 43196, Description: 'Master Partner', CodeValue: 'MP', for: 'Referrer' }
                   // { CodeId: 43197, Description: 'Associate Partner', CodeValue: 'AP', for: 'Provider' }

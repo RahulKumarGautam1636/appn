@@ -13,6 +13,7 @@ export const TAKEHOME_SURGICAL = 'aS8HN5gcPcKUC8hc/JCvBA==';
 export const BC_ROY = 'ji4C/%2BQbn%2BBofLeoFG9clw=='
 export const HEXAGON_ID = 'CHEZmvXXLYNYZOKVN9fr5A==';
 export const PHARMACY = 'KHLqDFK8CUUxe1p1EotU3g=='
+export const XYZ_ID = 'KHLqDFK8CUUxe1p1EotU3g=='
 export const rent = false;
 export const blur = false;
 // export const brandCode = 'TAKEHOME   GBOOKS';
@@ -20,7 +21,7 @@ export const blur = false;
 const REACT_APP_BASE_URL = 'https://myapps.gsterpsoft.com';
 const REACT_APP_TEST_BASE_URL = 'https://api.gsterpsoft.com';
 
-export const testMode = false;
+export const testMode = true;
 export const hasCommonLogin = (companyId: string) => {
   let companies = [ TAKEHOME_PHARMA, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_SURGICAL ];
   return companies.includes(companyId);
