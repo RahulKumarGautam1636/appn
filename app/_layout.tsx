@@ -12,7 +12,7 @@ import UpdateBanner from "@/src/components/update";
 import Modals from "@/src/components/modals";
 import { getCompanyDetails } from "@/src/store/slices/slices";
 import { pushRoute } from "@/src/store/slices/nav";
-// import { useGlobalBackHandler } from "@/src/components";
+import { useGlobalBackHandler } from "@/src/components";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,7 +25,7 @@ function LayoutContent() {
   const dispatch = useDispatch()
   const pathname = usePathname();
   
-  // useGlobalBackHandler();
+  useGlobalBackHandler();
 
   const [loaded, error] = useFonts({
     "Space-Mono": require("@/assets/fonts/SpaceMono-Regular.ttf"),

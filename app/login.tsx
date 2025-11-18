@@ -334,11 +334,12 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                 MemberId: user.MemberId,
                 PartyId: user.PartyId,
                 Salutation: user.Salutation,
-        
-                DOB: new Date(user.DOB).toLocaleDateString('en-TT'),
-                DOBstr: new Date(user.DOB).toLocaleDateString('en-TT'),
-                AnniversaryDate: new Date(user.AnniversaryDate).toLocaleDateString('en-TT'),        
-                AnniversaryDatestr: new Date(user.AnniversaryDate).toLocaleDateString('en-TT'),
+
+                DOB: swapMinDate(user.DOB),
+                DOBstr: swapMinDate(user.DOB),
+                AnniversaryDate: swapMinDate(user.AnniversaryDate),
+                AnniversaryDatestr: swapMinDate(user.AnniversaryDate),
+
                 Aadhaar: user.Aadhaar,
                 IsDOBCalculated: user.IsDOBCalculated,
         

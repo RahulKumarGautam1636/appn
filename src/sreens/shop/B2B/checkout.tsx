@@ -404,11 +404,11 @@ const B2BCheckout = () => {
               <Text className="text-slate-600 font-bold text-[12px] mr-auto">Phone Number</Text>
               <Text className="text-[12px] text-slate-700">{user.RegMob1}</Text>
           </View>
-          {user.Email ? <View className='flex-row gap-3 px-1 py-[0.9rem] border-b border-gray-100'>
+          {user.Email ? <View className='flex-row gap-3 px-1 py-[0.9rem] '>   {/* border-b border-gray-100 */}
               <Text className="text-slate-600 font-bold text-[12px] mr-auto">E-mail :</Text>
               <Text className="text-[12px] text-slate-700">{user.Email}</Text>
           </View> : null}
-          <ButtonPrimary onClick={() => {}} title='Edit Address' active={true} classes='!rounded-2xl !h-[43px] mt-4 mb-2 w-fit px-10 ml-auto' textClasses='tracking-widest' />
+          {/* <ButtonPrimary onClick={() => {}} title='Edit Address' active={true} classes='!rounded-2xl !h-[43px] mt-4 mb-2 w-fit px-10 ml-auto' textClasses='tracking-widest' /> */}
       </View>
       {oneCartItem?.LocationName ?
         <>

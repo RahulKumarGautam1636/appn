@@ -399,7 +399,7 @@ export const CatCard = ({ data, classes, styles }: any) => {
   return (
     // <Link href={`/shop/filters/?brands=Abbott India Limited,Alcon Laboratories(India) Pvt. Ltd.&catVal=23485,23501&head=Pharmacy&hideOutStock=Y&page=1&query=tab&sortBy=NameASC&subCatVal=`}>
     <Link href={`/shop/filters/?head=${escape(data.ParentDesc).swap}&catVal=${data.Parent}&page=1`} className={classes} style={styles}>
-      <View className={`items-center bg-white rounded-xl shadow-sm border-b border-gray-200 overflow-hidden w-full h-full`}>
+      <View className={`items-center bg-white rounded-xl shadow-sm border-b border-gray-200 overflow-hidden w-full`}>
         <Image className='' source={{uri: data.ImageURL}} style={{ width: 135, height: 100 }} resizeMode="contain" />
         <Text className="text-sm text-gray-600 border-t w-full text-center border-gray-100 p-2">{data.ParentDesc}</Text>
       </View>
