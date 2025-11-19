@@ -41,93 +41,91 @@ export default function B2BCart() {
         </View>
       </View>
 
-      {!cartArrayLength ? <NoContent label={'Your Cart is Empty'} containerClass={'mb-0'} /> : 
+      {!cartArrayLength ? <NoContent label={'Your Cart is Empty'} containerClass='flex-1 mt-20' imgClass='h-[200px] mb-5'/> : 
         <>
           {
             uniqueLocations.map((i: any, n: number) => (
-              <>  
-                <View className="" key={i.LocationItemId}>
-                  <TouchableOpacity className="w-full bg-cyan-500 px-4 py-3 flex-row items-center justify-between" onPress={() => {
-                    setCollapseIndex((pre: any) => {
-                      if (pre.includes(n)) {
-                        return pre.filter((a: number) => a !== n)
-                      }
-                      return [...pre, n];
-                    })
-                  }}>
-                    <Text className="text-white text-sm font-semibold leading-5">Distributor</Text>
-                    <View className="flex-1 flex-row justify-end gap-2">
-                      <Text className="text-white text-sm font-semibold leading-5">{i.LocationName}</Text>
-                      <ChevronDown size={20} color="white" style={{ transform: [{ rotate: !collapseIndex.includes(n) ? "0deg" : "-90deg" }] }} />
-                    </View>
-                  </TouchableOpacity>
+              <View className="" key={i.LocationItemId}>
+                <TouchableOpacity className="w-full bg-blue-500 px-4 py-3 flex-row items-center justify-between border-b border-white" onPress={() => {
+                  setCollapseIndex((pre: any) => {
+                    if (pre.includes(n)) {
+                      return pre.filter((a: number) => a !== n)
+                    }
+                    return [...pre, n];
+                  })
+                }}>
+                  <Text className="text-white text-sm font-semibold leading-5">Distributor</Text>
+                  <View className="flex-1 flex-row justify-end gap-2">
+                    <Text className="text-white text-sm font-semibold leading-5">{i.LocationName}</Text>
+                    <ChevronDown size={20} color="white" style={{ transform: [{ rotate: !collapseIndex.includes(n) ? "180deg" : "0deg" }] }} />
+                  </View>
+                </TouchableOpacity>
 
-                  {!collapseIndex.includes(n) && (
-                    <View className="bg-white">
-                      
-                      {(() => {
-                          let cartItems = cartList.filter(x => x.LocationId === i.LocationId)
+                {!collapseIndex.includes(n) && (
+                  <View className="bg-white">
+                    
+                    {(() => {
+                        let cartItems = cartList.filter(x => x.LocationId === i.LocationId)
 
-                          const cartItemsValueList = cartItems.map(item => item.count * item.PTR);                      
-                          const cartSubtotal = num(cartItemsValueList.reduce((total, num) => total + num, 0));    
-                          
-                          const cartItemsMRPValueList = cartItems.map(item => item.count * item.ItemMRP);                      
-                          const cartMRPtotal = num(cartItemsMRPValueList.reduce((total, num) => total + num, 0)); 
+                        const cartItemsValueList = cartItems.map(item => item.count * item.PTR);                      
+                        const cartSubtotal = num(cartItemsValueList.reduce((total, num) => total + num, 0));    
+                        
+                        const cartItemsMRPValueList = cartItems.map(item => item.count * item.ItemMRP);                      
+                        const cartMRPtotal = num(cartItemsMRPValueList.reduce((total, num) => total + num, 0)); 
 
-                          const cartItemsDiscount = cartItems.map(item => ((item.PTR * item.count) * (item.DiscountPer / 100 )));                      
-                          const cartDiscount = num(cartItemsDiscount.reduce((total, num) => total + num, 0)); 
+                        const cartItemsDiscount = cartItems.map(item => ((item.PTR * item.count) * (item.DiscountPer / 100 )));                      
+                        const cartDiscount = num(cartItemsDiscount.reduce((total, num) => total + num, 0)); 
 
-                          const cartItemsGSTValueList = cartItems.map(i => {
-                            let taxbleAmt = num((i.count * i.PTR)- ((i.count * i.PTR) * (i.DiscountPer / 100 )));
-                            let cgst = num(taxbleAmt * (i.CGSTRATE / 100));
-                            let sgst = num(taxbleAmt * (i.SGSTRATE / 100));
-                            return num(sgst + cgst);
-                          }); 
-                                          
-                          const cartGSTtotal = num(cartItemsGSTValueList.reduce((total, num) => total + num, 0));  
-                          const grandTotal = num(cartSubtotal - cartDiscount + cartGSTtotal); 
+                        const cartItemsGSTValueList = cartItems.map(i => {
+                          let taxbleAmt = num((i.count * i.PTR)- ((i.count * i.PTR) * (i.DiscountPer / 100 )));
+                          let cgst = num(taxbleAmt * (i.CGSTRATE / 100));
+                          let sgst = num(taxbleAmt * (i.SGSTRATE / 100));
+                          return num(sgst + cgst);
+                        }); 
+                                        
+                        const cartGSTtotal = num(cartItemsGSTValueList.reduce((total, num) => total + num, 0));  
+                        const grandTotal = num(cartSubtotal - cartDiscount + cartGSTtotal); 
 
-                          return (
-                            <>
-                              {cartItems.map((i, n): any => <B2BCartCard data={i} key={n}/>)}
-                              <View className="bg-white p-4">
-                                <View className="flex-row justify-between py-2">
-                                  <Text className="text-gray-700">Total MRP</Text>
-                                  <Text className="text-gray-800 font-medium">{cartMRPtotal}</Text>
-                                </View>
-
-                                <View className="flex-row justify-between py-2">
-                                  <Text className="text-blue-600 font-medium">Total PTR</Text>
-                                  <Text className="text-blue-600 font-bold">{cartSubtotal}</Text>
-                                </View>
-
-                                <View className="flex-row justify-between py-2">
-                                  <Text className="text-gray-700">Distributor Discount</Text>
-                                  <Text className="text-gray-800 font-medium">- {cartDiscount}</Text>
-                                </View>
-
-                                <View className="flex-row justify-between py-2">
-                                  <Text className="text-gray-700">Total GST</Text>
-                                  <Text className="text-gray-800 font-medium">+ {cartGSTtotal}</Text>
-                                </View>
-
-                                <View className="flex-row justify-between border-t border-gray-300 mt-2 py-3">
-                                  <Text className="text-gray-900 font-bold text-base">Order value*</Text>
-                                  <Text className="text-gray-900 font-bold text-base">₹ {grandTotal}</Text>
-                                </View>
-                                <View className="bg-white border-t border-gray-300 pt-4">
-                                  <TouchableOpacity onPress={() => router.push(`/shop/checkout?LOCID=${i.LocationId}`)} className="w-full bg-gray-700 py-4 rounded">
-                                    <Text className="text-white text-center text-base font-bold tracking-wide">Checkout</Text>
-                                  </TouchableOpacity>
-                                </View>
+                        return (
+                          <>
+                            {cartItems.map((i, n): any => <B2BCartCard data={i} key={n}/>)}
+                            <View className="bg-white p-4">
+                              <View className="flex-row justify-between py-2">
+                                <Text className="text-gray-700">Total MRP</Text>
+                                <Text className="text-gray-800 font-medium">{cartMRPtotal}</Text>
                               </View>
-                            </>
-                          )
-                      })()}
-                    </View>
-                  )}
-                </View>
-              </>
+
+                              <View className="flex-row justify-between py-2">
+                                <Text className="text-blue-600 font-medium">Total PTR</Text>
+                                <Text className="text-blue-600 font-bold">{cartSubtotal}</Text>
+                              </View>
+
+                              <View className="flex-row justify-between py-2">
+                                <Text className="text-gray-700">Distributor Discount</Text>
+                                <Text className="text-gray-800 font-medium">- {cartDiscount}</Text>
+                              </View>
+
+                              <View className="flex-row justify-between py-2">
+                                <Text className="text-gray-700">Total GST</Text>
+                                <Text className="text-gray-800 font-medium">+ {cartGSTtotal}</Text>
+                              </View>
+
+                              <View className="flex-row justify-between border-t border-gray-300 mt-2 py-3">
+                                <Text className="text-gray-900 font-bold text-base">Order value*</Text>
+                                <Text className="text-gray-900 font-bold text-base">₹ {grandTotal}</Text>
+                              </View>
+                              <View className="bg-white border-t border-gray-300 pt-4">
+                                <TouchableOpacity onPress={() => router.push(`/shop/checkout?LOCID=${i.LocationId}`)} className="w-full bg-gray-700 py-4 rounded">
+                                  <Text className="text-white text-center text-base font-bold tracking-wide">Checkout</Text>
+                                </TouchableOpacity>
+                              </View>
+                            </View>
+                          </>
+                        )
+                    })()}
+                  </View>
+                )}
+              </View>
             ))
           }
         </>

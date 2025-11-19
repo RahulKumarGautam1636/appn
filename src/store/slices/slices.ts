@@ -267,6 +267,7 @@ const modalsSlice = createSlice({
     PRESC: { state: false, data: '' },
     LOCATIONS: { state: false, data: '' },
     LOADING: { state: false, data: '' },
+    COMPARE_PRODUCTS: { state: false, data: '' },
   },
   reducers: {
     setModal: (state, action: any) => {

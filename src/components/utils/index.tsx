@@ -6,7 +6,7 @@ import Carousel from "react-native-reanimated-carousel";
 import { addToCart, dumpCart, removeFromCart, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser, setUserRegType } from "@/src/store/slices/slices";
 import store, { RootState } from "@/src/store/store";
 import { Link, useRouter } from "expo-router";
-import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Feather, FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "tailwindcss/colors";
 import * as DocumentPicker from 'expo-document-picker';
@@ -253,7 +253,7 @@ export const add2Cart = (isAdded, data, computeWithPackSize, dispatch, count=1) 
   const locationId = location.LocationId;
   if (!locationId) return alert('Please choose a Location.');
   if (isAdded) return dispatch(removeFromCart(data.LocationItemId));
-  dispatch(addToCart({...data, ...computeWithPackSize(), count: count, LocationName: location.LocationName, LocationAddress: location.Address})); 
+  dispatch(addToCart({...data, ...computeWithPackSize(), count: count})); 
   // let productToastData = { msg: 'Added to Cart', product: {name: data.Description, price: computeWithPackSize().SRate}, button: {text: 'Visit Cart', link: '/cartPage'} };
   // productToast(productToastData);
 }
@@ -285,7 +285,7 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
 
   // const compCode = useSelector((i: RootState) => i.compCode);
   // const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
-  const { vType } = useSelector((i: RootState) => i.company);
+  const vType = useSelector((i: RootState) => i.company.vType);
   const isAdded = useSelector((i: RootState) => Object.values(i.cart).some((x : any) => x.LocationItemId === data.LocationItemId));
   // const isAdded = Object.values(cart).find((i: any) => i.LocationItemId === data.LocationItemId)
 
@@ -379,11 +379,16 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
             :
             <Text className="text-[0.92rem] font-semibold text-orange-500 mb-1">Out of Stock</Text>}
             {/* <Text className="text-[0.8rem] font-medium text-rose-500 mb-2">In Stock</Text> */}
-            <View className='justify-between flex-row items-center w-full'>
+            <View className='flex-row items-center w-full'>
               {packSizeList}
-              <TouchableOpacity onPress={handleAdd}>
-                <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
-              </TouchableOpacity>
+              <View className="flex-row gap-3 ml-auto">
+                <TouchableOpacity onPress={handleAdd}>
+                  <Ionicons name={`cart${isAdded ? '' : '-outline'}`} className='mt-2' size={22} color='#0ea5e9' />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => dispatch(setModal({ name: 'COMPARE_PRODUCTS', state: true, data: { itemId: data.ItemId} }))}>
+                  <FontAwesome6 name="arrow-right-arrow-left" className='mt-2' size={20} color={colors.orange[600]} />
+                </TouchableOpacity>
+              </View>
             </View>
             {data.Category === 24856 ? <Text className="text-[0.75rem] font-semibold text-rose-700 mt-2">FOR SALE OVER COUNTER ONLY</Text> : null}
           </View>
@@ -1106,3 +1111,6 @@ export function filterUnique(list: [], fieldName: string) {
     return false;
   });
 }
+
+
+

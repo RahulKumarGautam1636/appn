@@ -65,6 +65,7 @@ const PrescriptionForm = () => {
       address: selectedMember.Address,
       city: selectedMember.City,
       pinCode: selectedMember.Pin,
+      userId: selectedMember.UserId,
       state: { CodeId: selectedMember.State, Description: selectedMember.StateDesc },
       docName: '',
       docAddress: '',
@@ -73,7 +74,7 @@ const PrescriptionForm = () => {
         ...patient,
         docName: '',
         docAddress: '',
-    })      
+    })          
     return selectedMemberStr === currPatientStr;
   }
   
@@ -86,6 +87,7 @@ const PrescriptionForm = () => {
     address: '',
     city: '',
     pinCode: '',
+    userId: 0,
     state: {Description: 'West Bengal', CodeId: 3},
     docName: '', 
     docAddress: '', 
@@ -111,6 +113,7 @@ const PrescriptionForm = () => {
             address: prescription.patient.address,
             city: prescription.patient.city,
             pinCode: prescription.patient.pinCode,
+            userId: prescription.patient.userId,
             state: { CodeId: prescription.patient.state.CodeId, Description: prescription.patient.state.Description },
             docName: prescription.patient.docName,
             docAddress: prescription.patient.docAddress,
@@ -129,6 +132,7 @@ const PrescriptionForm = () => {
             address: selectedMember.Address,
             city: selectedMember.City,
             pinCode: selectedMember.Pin,
+            userId: selectedMember.UserId,
             state: { CodeId: selectedMember.State, Description: selectedMember.StateDesc },
             docName: prescription.patient.docName,
             docAddress: prescription.patient.docAddress,
@@ -226,7 +230,7 @@ const PrescriptionForm = () => {
               <View className="flex-1">
                 <TextInput
                   className="border border-gray-300 rounded-md px-3 py-3 text-gray-700 bg-gray-50"
-                  value={patient.age}
+                  value={String(patient.age)}
                   onChangeText={(text) =>
                     setPatient({ ...patient, age: text })
                   }

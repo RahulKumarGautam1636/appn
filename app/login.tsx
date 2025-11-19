@@ -503,9 +503,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
 
     const makeOtpRequest = async () => {
         setLoading(true);
-        const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);
-        console.log(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);
-        
+        const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);        
         setLoading(false);
         if (res.status === 200) {
             console.log(res.data);            

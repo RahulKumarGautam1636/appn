@@ -244,7 +244,7 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
   const renderProductSection = useCallback((data: any, parentId: number) => {
     const productCategoryItems = data.itemMasterCollection.filter((i: any) => i.Category === parentId).slice(0, 8);   
     const parentCategoryName = mainCategories.filter((i: any) => i.Parent === parentId)[0]?.ParentDesc;
-      // console.log('Category section rerendered.');
+    // console.log('Category section rerendered.');
     // const subLinks = categoriesData.LinkSubCategoryList.filter((i: any) => parentId === i.Parent);
     if (data.loading) {
       return <GridLoader classes='h-[45px] w-[100px] rounded-xl' containerClass='flex-row gap-3 m-4' />;
@@ -272,7 +272,7 @@ const ProductSection = memo(({ mainCategories, productsData }: any) => {
               contentContainerClassName="flex-row"
               scrollEnabled={true}
               horizontal
-              renderItem={({item}: any) => (<ProductCard parent='Home' data={item} width={deviceWidth / 2} />)}
+              renderItem={({item}: any) => (<ProductCard parent={`Home - ${parentCategoryName}`} data={item} width={deviceWidth / 2} />)}
             />
             <View className='flex-row justify-center gap-4 py-3 bg-white'>
               <View className='h-2 w-2 bg-gray-500 rounded-full'></View>

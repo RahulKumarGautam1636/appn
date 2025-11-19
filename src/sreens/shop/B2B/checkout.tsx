@@ -224,7 +224,7 @@ const B2BCheckout = () => {
                     MemberTypeId : 0,
                     UserType: user.UserType,
                     UID: '',
-                    UserId: 0,
+                    UserId: user.UserId,      // B2B will not have member feature.
                     
                     DOB: prescription.patient.age ? createDate(0, 0, prescription.patient.age) : new Date(user.DOB).toLocaleDateString('en-TT'),
                     DOBstr: prescription.patient.age ? createDate(0, 0, prescription.patient.age) : new Date(user.DOB).toLocaleDateString('en-TT'),

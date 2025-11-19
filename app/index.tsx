@@ -13,6 +13,7 @@ import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setMod
 import { switchSegment } from '@/src/components/utils';
 import { FullScreenLoading } from '@/src/components';
 import { AppError } from '@/src/components/update';
+import { resetHistory } from '@/src/store/slices/nav';
 
 
 // import '@formatjs/intl-getcanonicallocales/polyfill';
@@ -50,6 +51,10 @@ export default function App() {
 
   //   router.push('./shop/tabs/home')
   // }
+
+  useEffect(() => {
+      dispatch(resetHistory("/"));
+  }, []);
 
   const changeSegment = async (companyId: string) => {
     await switchSegment(companyId, dispatch)

@@ -12,6 +12,7 @@ import TestDetail from "@/app/appn/testDetail";
 import PrescriptionForm from "@/app/shop/presc";
 import Locations from "@/app/shop/locations";
 import AddMember from "@/app/appn/addMember";
+import CompareProducts from "@/src/sreens/shop/B2B/compare";
 
 
 const Modals = () => {
@@ -29,6 +30,7 @@ const Modals = () => {
             <MyModal modalActive={modals.LOCATIONS.state} name='LOCATIONS' child={<Locations />} />
             <MyModal modalActive={modals.ADD_MEMBER.state} name='LOCATIONS' child={<AddMember isModal={true} />} />
             <MyModal modalActive={modals.LOADING.state} name='LOADING' child={<FullScreenLoading />} />
+            <MyModal modalActive={modals.COMPARE_PRODUCTS.state} name='LOADING' child={<CompareProducts itemId={modals.COMPARE_PRODUCTS.data?.itemId} />} />
         </>
     )
 }

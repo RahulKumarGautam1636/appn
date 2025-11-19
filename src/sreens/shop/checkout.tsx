@@ -182,7 +182,7 @@ const B2CCheckout = () => {
                     MemberTypeId : 0,
                     UserType: user.UserType,
                     UID: '',
-                    UserId: 0,
+                    UserId: prescription.patient.name ? prescription.patient.userId : user.UserId,      // if prescription patient is set the use it's userId. if its not set then current user must be parent user.,
                     
                     DOB: prescription.patient.age ? createDate(0, 0, prescription.patient.age) : new Date(user.DOB).toLocaleDateString('en-TT'),
                     DOBstr: prescription.patient.age ? createDate(0, 0, prescription.patient.age) : new Date(user.DOB).toLocaleDateString('en-TT'),

@@ -46,7 +46,8 @@ export const hasAccess = (module: string, role: string) => {
 export const versions = {
   takehome: '1.0.4',      // version in config file was increased but here was not increased and the update banner doesn't triggered, so reconsider the changes before building again.
   bcroy: '1.0.2',
-  gbooks: '1.0.0'
+  gbooks: '1.0.0',
+  ecom: '1.0.0'
 }
 
 export const initLocation = {

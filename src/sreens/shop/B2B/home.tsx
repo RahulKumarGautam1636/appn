@@ -7,8 +7,8 @@ import { CatCard, escape, getFallbackImg, getFrom, GridLoader, ProductCard, swit
 import { Link, router } from 'expo-router';
 import { setModal } from '@/src/store/slices/slices';
 import colors from 'tailwindcss/colors';
-import { Pressable } from 'react-native-gesture-handler';
-import { BASE_URL, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
+// import { Pressable } from 'react-native-gesture-handler';
+import { BASE_URL } from '@/src/constants';
 import { getRequiredFields } from '@/src/components/utils/shared';
 
 const web = Platform.OS === 'web';
@@ -108,13 +108,13 @@ const Home = () => {
                 </Link>
               </View>
             }
-            <Pressable onPress={() => router.push("/shop/search")}>
+            <TouchableOpacity onPress={() => router.push("/shop/search")}>
               <View className="bg-white rounded-2xl px-4 py-[0.42rem] flex-row items-center mb-2">
                 <Feather name="search" size={20} color="#9CA3AF" />
                 <TextInput placeholder="Search..." readOnly className="flex-1 ml-3 text-gray-700" placeholderTextColor="#9CA3AF" />
                 <Feather name="sliders" size={20} color="#9CA3AF" />
               </View>
-            </Pressable>
+            </TouchableOpacity>
             <View className="flex-row justify-between items-center gap-12">
               {/*mb-3*/}
               <Text className="text-[12px] text-gray-600 font-medium mr-3">Service provider:</Text>
