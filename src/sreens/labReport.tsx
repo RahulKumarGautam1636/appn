@@ -10,8 +10,9 @@ import ButtonPrimary, { MyModal } from '../components';
 import { WebView } from "react-native-webview";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
+import { Ionicons } from '@expo/vector-icons';
 
-export default function LabReport({ id, type }: any ) {
+export default function LabReport({ id, type, onClose }: any ) {
   const tests = [
     { name: 'T3 T4 TSH test', reportDate: '', status: 'Pending' },
     { name: 'LIPID PROFILE', reportDate: '01/08/2025', status: 'Done' },
@@ -49,6 +50,12 @@ export default function LabReport({ id, type }: any ) {
   return (
     <>
       <ScrollView className="flex-1 bg-gray-50 p-3">
+        <View className='justify-between flex-row p-4 items-center bg-white'>
+            <Pressable onPress={() => onClose(false)} className='flex-row items-center gap-3'>
+                <Ionicons name="arrow-back-outline" size={24} color="black" />
+                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Go Back</Text>
+            </Pressable>
+        </View>
         {(() => {
           if (data.loading) {
             return <GridLoader />;
@@ -63,7 +70,7 @@ export default function LabReport({ id, type }: any ) {
                 <View className="flex-row items-center p-4 border-b border-gray-200">
                   <Image className='rounded-lg mr-4 w-[6rem] h-[6rem] border border-gray-300' source={{ uri: `${SRC_URL}/Content/CompanyLogo/${pageData.CompanyMaster?.LogoUrl}` }}/>
                   <View className="flex-1">
-                    <Text className="text-xl font-bold text-gray-800">{pageData.CompanyMaster.COMPNAME}</Text>
+                    <Text className="text-lg font-bold text-gray-800">{pageData.CompanyMaster.COMPNAME}</Text>
                     <Text className="text-cyan-500 font-semibold">{pageData.CompanyMaster.CATCHLINE}</Text>
                     <Text className="text-gray-600 text-sm mt-1">{pageData.CompanyMaster.ADDRESS}</Text>
                     <Text className="text-gray-600 text-sm">PH: {pageData.CompanyMaster.CONTACT1} {pageData.CompanyMaster.CONTACT2 ? ` / ` + pageData.CompanyMaster.CONTACT2 : null}</Text>
@@ -115,8 +122,8 @@ export default function LabReport({ id, type }: any ) {
                           <View className="w-24 flex-row items-center justify-center">
                             {test.ReportGenerated === 'Y' ? (
                               <Pressable className='flex-row items-center gap-2' onPress={() => setOpenReport({ state: true, billId: test.BillId, autoId: test.LabRecId })}>
-                                <Eye size={16} color="#0891B2" />
-                                <Text className="text-cyan-600 ml-1">Done</Text>
+                                <Eye size={16} color="#3b82f6" />
+                                <Text className="text-blue-500 ml-1">View</Text>
                               </Pressable>
                             ) : (
                               <>
@@ -215,7 +222,7 @@ const ReportPad = ({ compInfo, handleClose, billId, autoId }: any) => {
                                   } else {
                                       return `
                                           <div style="text-align: center; border-bottom: 1px solid">
-                                              <div style="padding-right: 3px; position: relative; background-color:#fff">
+                                              <div style="padding-right: 3px; position: relative; background-color:#fff; line-height: 0.6rem">
                                                   <div style="position: absolute; left: 0; bottom: 0; top: 0; display: flex; align-items: center">
                                                       <img style="max-width: 100%; padding: 0px 11px; height: 100%" src="${SRC_URL}/Content/CompanyLogo/${compInfo.LogoUrl}" alt="logo">
                                                   </div>

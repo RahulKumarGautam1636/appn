@@ -47,21 +47,19 @@ const AppnDetail = ({ data, handleOpen }: any) => {
 
     return (
         <>
+        <GradientBG>
+        <View className='justify-between flex-row p-4 items-center bg-white border-b border-gray-200'>
+            <Pressable onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: false}))} className='flex-row items-center gap-3'>
+                <Ionicons name="arrow-back-outline" size={24} color="black" />
+                <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment Details</Text>
+            </Pressable>
+            <View className="gap-3 flex-row items-center ml-auto">
+                <Feather name="heart" size={20} color='black' />
+                <Feather name="share-2" size={20} color='black' />
+            </View>
+        </View>
         <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
-            <GradientBG>
             <View className='bg-white'>
-                <View className='justify-between flex-row p-4 items-center'>
-                    {/* <Link href={'/login'}> */}
-                        <Pressable onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: false}))} className='flex-row items-center gap-3'>
-                            <Ionicons name="arrow-back-outline" size={24} color="black" />
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Appointment Details</Text>
-                        </Pressable>
-                    {/* </Link> */}
-                    <View className="gap-3 flex-row items-center ml-auto">
-                        <Feather name="heart" size={20} color='black' />
-                        <Feather name="share-2" size={20} color='black' />
-                    </View>
-                </View>
                 <View className='flex-row gap-4 p-[13px]'>
                     <Image className='' source={require('@/assets/images/doctor.jpg')} style={{ width: 76, height: 76 }} />
                     <View>
@@ -238,19 +236,19 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <Text className="font-PoppinsSemibold text-purple-600 text-[13px]">ONLINE / UPI</Text>
                 </View>
             </View></> : null}
-            <View className='flex-row justify-between border-y border-gray-200 border-solid p-4 bg-white gap-2'>
-                <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
-                    <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setPresc(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200 pointer-events-none' : 'bg-blue-500'}`}>
-                    <Text className={`font-PoppinsMedium ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Prescription</Text>
-                </TouchableOpacity>
-                {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
-                    <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
-                </TouchableOpacity> : null}
-            </View>
-            </GradientBG>
         </ScrollView>
+        <View className='flex-row justify-between border-y border-gray-200 border-solid p-4 bg-white gap-2'>
+            <TouchableOpacity onPress={() => setBill(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
+                <Text className={`font-PoppinsMedium ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>                        
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setPresc(true)} className={`items-center flex-1 py-3 rounded-lg ${!data.PrescriptionId ? 'bg-slate-200 pointer-events-none' : 'bg-blue-500'}`}>
+                <Text className={`font-PoppinsMedium ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Prescription</Text>
+            </TouchableOpacity>
+            {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-3 rounded-lg bg-red-500`}>
+                <Text className={`font-PoppinsMedium text-white`}>Cancel</Text>
+            </TouchableOpacity> : null}
+        </View>
+        </GradientBG>
         <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview id={data.BillId} type={'OPD'} />} />
         <MyModal modalActive={presc} onClose={() => setPresc(false)}  name='BILL' child={<Prescription id={data.PrescriptionId} />} />
         </>

@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { hasAccess, myColors } from '@/src/constants';
+import { BC_ROY, defaultId, hasAccess, myColors } from '@/src/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogin, setUser } from '@/src/store/slices/slices';
 import { useState } from 'react';
@@ -61,7 +61,7 @@ const Profile = () => {
                         <View className='items-center flex-1 border-r border-gray-300'>
                             <Link href={'/appn/testList'}>
                                 <View className='items-center p-4'>
-                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">7</Text>
+                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 7 : 0}</Text>
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
                                 </View>
                             </Link>
@@ -69,7 +69,7 @@ const Profile = () => {
                         <View className='items-center flex-1'>
                             <Link href={'/appn/appnList'}>
                                 <View className='items-center p-4'>
-                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">15</Text>
+                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 15 : 0}</Text>
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
                                 </View>
                             </Link>
@@ -92,7 +92,7 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
-                    {hasAccess("labtest", compCode) ? <Link href={'/appn/testList'}>
+                    {hasAccess("labtest", compCode) || compCode === BC_ROY ? <Link href={'/appn/testList'}>
                         <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <Ionicons name="flask" size={22} color={colors.purple[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Lab Tests</Text>

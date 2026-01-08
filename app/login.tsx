@@ -594,10 +594,11 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
 
     const RegTypesDropdown = () => {
         return (
-            <ScrollView className="">
-                <View className='bg-white m-4 rounded-3xl shadow-md shadow-gray-400'>
+            <View className="p-6 bg-white rounded-tl-3xl rounded-tr-3xl">
+                <Text className="font-PoppinsBold text-2xl text-gray-900 mb-4">Register As :</Text>
+                <View className='bg-white rounded-3xl border border-gray-200'>
                     {allRegTypes.map((i: any, n: number) => (
-                        <TouchableOpacity key={i.level} className={`flex-row gap-3 p-4 ${n === (allRegTypes.length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {setRegType(i); setRegTypeDropdown(false)}}>
+                        <TouchableOpacity key={i.level} className={`flex-row gap-3 p-4 ${n === (allRegTypes.length -1) ? '' : 'border-b border-gray-200'}`} onPress={() => {setRegType(i); setRegTypeDropdown(false)}}>
                             <FontAwesome6 name="circle-right" size={20} color={colors.fuchsia[500]} />
                             <Text className="font-PoppinsSemibold text-gray-700 text-[14px] mr-auto" numberOfLines={1}>{i.Description || i.title}</Text>
                             {i.level === regType.level ? 
@@ -609,7 +610,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                         </TouchableOpacity>
                     ))}
                 </View>
-            </ScrollView>
+            </View>
         )
     }
 
@@ -710,7 +711,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                     </Pressable>}
                 </View>
             </View>
-            <MyModal modalActive={regTypeDropdown} onClose={() => setRegTypeDropdown(false)} child={<RegTypesDropdown />} />
+            <MyModal modalActive={regTypeDropdown} containerClass='mt-auto' onClose={() => setRegTypeDropdown(false)} child={<RegTypesDropdown />} />
         </>
     )
 }

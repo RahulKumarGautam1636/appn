@@ -36,9 +36,17 @@ export default function LabCard({ data, testDate, classes }: any) {
                     <Text className="text-red-700 opacity-65 mt-1.5 text-[12px] font-PoppinsMedium leading-4 line-through"><FontAwesome name="rupee" size={12} color="#b91c1c" /> {data.ItemMRP}</Text>
                 </View>
             </View>
-            {isAdded ?
+            {/* {isAdded ?
             <Ionicons name="cart" className='p-[9px] bg-sky-100 rounded-full my-auto' size={19} color={colors.sky[500]} /> :
-            <Ionicons name="cart-outline" className='p-[9px] bg-sky-50 rounded-full my-auto' size={19} color={colors.sky[500]} />}
+            <Ionicons name="cart-outline" className='p-[9px] bg-sky-50 rounded-full my-auto' size={19} color={colors.sky[500]} />} */}
+            
+            {isAdded ?
+            <View className='px-3 py-[7px] bg-sky-500 rounded-lg my-auto'>
+                <Text className="text-white">Remove</Text>
+            </View> :
+            <View className='px-4 py-[7px] bg-sky-100 rounded-lg my-auto'>
+                <Text className="text-sky-500">Add</Text>
+            </View>}
             
         </TouchableOpacity>
     )

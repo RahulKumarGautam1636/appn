@@ -1,4 +1,4 @@
-import { hasAccess, myColors } from "@/src/constants";
+import { BC_ROY, hasAccess, myColors } from "@/src/constants";
 import { RootState } from "@/src/store/store";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useRouter, useSegments } from "expo-router";
@@ -14,17 +14,28 @@ export default function TabsLayout() {
   const compCode = useSelector((i: RootState) => i.compCode)
   const dispatch = useDispatch();
 
-  const tabs = [
-    // { name: 'Home', icon: 'home', key: 'home' },
-    { name: 'OPD', icon: 'calendar', key: 'opd', visible: true },
-    { name: 'Lab Test', icon: 'flask', key: 'lab', visible: hasAccess("labtest", compCode)},
-    { name: 'Account', icon: 'person', key: 'account', visible: true },
-    { name: 'Cart', icon: 'cart', key: 'cart', visible: hasAccess("labtest", compCode)},
-  ];
+  let tabs = [];
+
+  if (compCode === BC_ROY) {
+    tabs = [
+      { name: 'OPD', icon: 'fitness', key: 'opd', visible: true },
+      { name: 'Appointments', icon: 'calendar', key: 'opdBookings', visible: isLoggedIn },
+      { name: 'Lab Report', icon: 'document-text', key: 'labBookings', visible: isLoggedIn },
+      { name: 'Account', icon: 'person', key: 'account', visible: true },
+    ]
+  } else {
+    tabs = [
+      { name: 'OPD', icon: 'fitness', key: 'opd', visible: true },
+      { name: 'Appointments', icon: 'calendar', key: 'opdBookings', visible: isLoggedIn },
+      { name: 'Lab Test', icon: 'flask', key: 'lab', visible: hasAccess("labtest", compCode)},
+      { name: 'Lab Report', icon: 'document-text', key: 'labBookings', visible: isLoggedIn },
+      { name: 'Account', icon: 'person', key: 'account', visible: true },
+      { name: 'Cart', icon: 'cart', key: 'cart', visible: hasAccess("labtest", compCode)},
+    ];
+  }
 
   const lab = useSelector((i: RootState) => i.cart);
   const cart = Object.values(lab);
-
 
   const tabHistory = useRef<string[]>([]);                      // Keep track of tab history
 

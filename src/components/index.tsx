@@ -18,6 +18,10 @@ import colors from "tailwindcss/colors";
 import { popRoute } from "../store/slices/nav";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ChevronDown, Trash2 } from 'lucide-react-native';
+import InvoicePreview from '@/app/appn/bill';
+import Prescription from '@/app/appn/prescription';
+import LabReport from '../sreens/labReport';
+import { TestItemDetails } from '@/app/appn/testDetail';
 // import MapView, { Marker } from 'react-native-maps';
 
 
@@ -348,46 +352,83 @@ export const getDatesArray = function(start: Date, end: number) {
 
 
 export const Card_3 = ({ data }: any) => {
-  const dispatch = useDispatch();
-  return (
-    <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: data}))}>
-      <View className="bg-white rounded-xl shadow-md shadow-gray-400">
-        <View className='flex-row gap-1 w-full p-3'>
-          <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('@/assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
-          <View className='flex-1'>
-            <Text className="font-PoppinsSemibold text-sky-700 text-[13px] mb-2">{data.AppointmentTo}</Text>
-            <View className='flex-row gap-3 mb-[6px]'>
-                <FontAwesome5 name="clock" size={15} color="#075985" />
-                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')},    {data.NextAppTime}</Text>
-            </View>
-            <View className='flex-row gap-3'>
-                <FontAwesome name="user-o" size={15} color="#075983" />    
-                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">{data.PartyName}</Text>
-            </View>
-            {/* <View className='flex-row px-4 py-2 rounded-full mt-4 bg-sky-400 self-start'>
-                <Text className="font-PoppinsMedium text-[12px] text-white">Clinic Consultation</Text>
-            </View> */}
-          </View>
-          <Feather name="chevron-right" className='my-auto' size={30} color='#ec4899' />
-        </View>
-        <View className="flex-row items-center gap-2 border-t border-gray-200 px-4 py-[10px]">
-          <Text className={`font-PoppinsMedium text-gray-600 text-[11px]`}>Status : </Text>
-          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${data.IsAppConfirmed === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
-            <Text className={`font-PoppinsMedium text-[11px] ${data.IsAppConfirmed === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Booked'}</Text>
-          </View>
 
-          <Text className="font-PoppinsMedium text-gray-600 text-[11px]">Service : </Text>
-          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${data.Status === 'Y' ? 'bg-green-50' : 'bg-yellow-50'}`}>
-            <Text className={`font-PoppinsMedium text-[11px] ${data.Status === 'Y' ? 'text-green-600' : 'text-yellow-600'}`}>{data.Status === 'Y' ? 'Done' : 'Pending'}</Text>
+  const dispatch = useDispatch();
+  const [bill, setBill] = useState(false);
+  const [presc, setPresc] = useState(false);
+
+  return (
+    <>
+      <View>
+        <View className="bg-white rounded-xl shadow-md shadow-gray-400">
+          <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: data}))} className='flex-row gap-1 w-full p-3'>
+            <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('@/assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
+            <View className='flex-1'>
+              <Text className="font-PoppinsSemibold text-sky-700 text-[13px] mb-2">{data.AppointmentTo}</Text>
+              <View className='flex-row justify-between items-between'>
+                <View className='flex-row gap-3 mb-[6px]'>
+                    <Text className="font-medium text-gray-600 text-[11px]">Patient :  {data.PartyName}</Text>
+                </View>
+                <View className='flex-row gap-3 mb-[6px]'>
+                    <Text className="font-medium text-gray-600 text-[11px]">UHID :  {data.UHID ? data.UHID : 'N/A'}</Text>
+                </View>
+              </View>
+              <View className='flex-row justify-between items-between'>
+                <View className='flex-row gap-3'>
+                    <Text className="font-medium text-gray-600 text-[11px]">Date :  {new Date(data.NextAppDate).toLocaleDateString('en-TT')}</Text>
+                </View>
+                <View className='flex-row gap-3'>
+                    <Text className="font-medium text-gray-600 text-[11px]">Time :  {data.NextAppTime}</Text>
+                </View>
+              </View>
+              {/* <View className='flex-row px-4 py-2 rounded-full mt-4 bg-sky-400 self-start'>
+                  <Text className="font-medium text-[12px] text-white">Clinic Consultation</Text>
+              </View> */}
+              <View className="flex-row items-center gap-2 mt-2">
+                <Text className={`font-medium text-gray-600 text-[11px]`}>Status : </Text>
+                {/* <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${data.IsAppConfirmed === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}> */}
+                  <Text className={`font-medium text-[11px] ${data.IsAppConfirmed === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Booked'}</Text>
+                {/* </View> */}
+
+                <Text className="font-medium text-gray-600 text-[11px] ml-auto">Service : </Text>
+                {/* <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${data.Status === 'Y' ? 'bg-green-50' : 'bg-yellow-50'}`}> */}
+                  <Text className={`font-medium text-[11px] ${data.Status === 'Y' ? 'text-green-600' : 'text-yellow-600'}`}>{data.Status === 'Y' ? 'Done' : 'Pending'}</Text>
+                {/* </View> */}
+              </View>
+            </View>
+            <Feather name="arrow-right" size={27} color='#ec4899' />
+          </TouchableOpacity>
+          <View className="flex-row items-center gap-2 border-t border-gray-200 px-4 py-[10px]">
+            <Text className={`font-medium text-gray-600 text-[11px] mr-auto`}>REF : {data.TranNo}</Text>
+            {/* <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${data.IsAppConfirmed === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
+              <Text className={`font-medium text-[11px] ${data.IsAppConfirmed === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Booked'}</Text>
+            </View> */}
+
+            <TouchableOpacity onPress={() =>  setBill(true)} className={`px-4 py-1.5 rounded-lg shadow-sm shadow-gray-600 ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
+              <Text className={`font-medium text-[11px] ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setPresc(true)} className={`px-3 py-1.5 rounded-lg shadow-sm shadow-gray-600 ${!data.PrescriptionId ? 'bg-slate-200 pointer-events-none' : 'bg-blue-500'}`}>
+              <Text className={`font-medium text-[11px] ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Prescription</Text>
+            </TouchableOpacity>
+            {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity onPress={() => {}} className={`px-3 py-1.5 rounded-lg shadow-sm shadow-gray-600 bg-red-500`}>
+              <Text className={`font-medium text-[11px] text-white`}>Cancel</Text>
+            </TouchableOpacity> : null}
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+      <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview id={data.BillId} type={'OPD'} />} />
+      <MyModal modalActive={presc} onClose={() => setPresc(false)}  name='BILL' child={<Prescription id={data.PrescriptionId} />} />
+    </>
   )
 }
 
 export const Card_4 = ({ data }: any) => {
   const dispatch = useDispatch();
+
+  const [showDetails, setShowDetails] = useState(false);
+  const [bill, setBill] = useState(false);
+  const [report, setReport] = useState(false)
+
   return (
     <>
       <View className="bg-white rounded-xl shadow-md shadow-gray-400">
@@ -398,36 +439,62 @@ export const Card_4 = ({ data }: any) => {
               {data.PartyName}
             </Text>
             <View className='flex-row gap-3 mb-[6px]'>
-                <FontAwesome5 name="clock" size={15} color="#075985" />
+                {/* <FontAwesome5 name="clock" size={15} color="#075985" /> */}
                 {/* <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')},    {data.NextAppTime}</Text> */}
-                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">{data.NextAppDate.split('T')[0] + " "}</Text>
+                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">Date :  {data.NextAppDate.split('T')[0] + " "}</Text>
             </View>
-            <View className='flex-row gap-3'>
-                <FontAwesome name="user-o" size={15} color="#075983" />    
-                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">{data.DeptName}</Text>
+            <View className='flex-row justify-between items-between'>
+              <View className='flex-row gap-3'>
+                  <Text className="font-PoppinsMedium text-gray-600 text-[11px]">MRD : {data.UHID ? data.UHID : 'N/A'}</Text>
+              </View>
+              <View className='flex-row gap-3'>
+                  <Text className="font-PoppinsMedium text-gray-600 text-[11px]">REF : {data.TranNo}</Text>
+              </View>
+            </View>
+            <View className="flex-row items-center gap-2 mt-2">
+              <Text className={`font-PoppinsMedium text-gray-600 text-[11px]`}>Bill : </Text>
+              {/* <View className={`px-3 py-[4px] rounded-xl shadow-gray-600 mr-auto ${data.IsAppConfirmed === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}> */}
+                <Text className={`font-PoppinsMedium text-[11px] ${data.IsAppConfirmed === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Processing'}</Text>
+              {/* </View> */}
+
+              <Text className="font-PoppinsMedium text-gray-600 text-[11px] ml-auto">Service : </Text>
+              {/* <View className={`px-3 py-[4px] rounded-xl shadow-gray-600 ${data.Status === 'Y' ? 'bg-green-50' : 'bg-yellow-50'}`}> */}
+                <Text className={`font-PoppinsMedium text-[11px] ${data.Status === 'Y' ? 'text-green-600' : 'text-yellow-600'}`}>{data.Status === 'Y' ? 'Done' : 'Pending'}</Text>
+              {/* </View> */}
             </View>
           </View>
-          <Feather name="chevron-right" className='my-auto' size={30} color='#ec4899' />
+          <Feather name="arrow-right" size={30} color='#ec4899' />
         </TouchableOpacity>
 
-        <View className="flex-row items-center gap-2 border-t border-gray-300 px-4 py-[10px]">
-          <Text className={`font-PoppinsMedium text-gray-600 text-[11px]`}>Bill : </Text>
-          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 mr-auto ${data.IsAppConfirmed === 'Y' ? 'bg-green-50' : 'bg-sky-50'}`}>
-            <Text className={`font-PoppinsMedium text-[11px] ${data.IsAppConfirmed === 'Y' ? 'text-green-600' : 'text-sky-600'}`}>{data.IsAppConfirmed === 'Y' ? 'Confirmed' : 'Processing'}</Text>
-          </View>
-
-          <Text className="font-PoppinsMedium text-gray-600 text-[11px]">Service : </Text>
-          <View className={`px-3 py-[4px] rounded-xl shadow-sm shadow-gray-600 ${data.Status === 'Y' ? 'bg-green-50' : 'bg-yellow-50'}`}>
+        <View className="flex-row items-center gap-4 justify-end border-t border-gray-300 px-4 py-[10px]">
+          {/* <Text className={`font-PoppinsMedium text-gray-600 text-[11px]`}>Bill : </Text> */}
+          <TouchableOpacity onPress={() => setBill(true)} className={`px-6 py-[4px] rounded-lg shadow-sm shadow-gray-600 ${!data.BillId ? 'bg-slate-200 pointer-events-none' : 'bg-green-500'}`}>
+            <Text className={`font-PoppinsMedium text-[11px] ${!data.BillId ? 'text-gray-500' : 'text-white'}`}>Bill</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowDetails(true)} className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 bg-blue-500`}>
+            <Text className={`font-PoppinsMedium text-[11px] text-white`}>Details</Text>
+          </TouchableOpacity>
+          {data.IsAppConfirmed !== 'Y' ? <View className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 bg-red-500`}>
+            <Text className={`font-PoppinsMedium text-[11px] text-white`}>Cancel</Text>
+          </View> : null}
+          {data.BillId ? <TouchableOpacity onPress={() => setReport(true)} className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 bg-purple-500`}>
+            <Text className={`font-PoppinsMedium text-[11px] text-white`}>Report</Text>
+          </TouchableOpacity> : null}
+          {/* <Text className="font-PoppinsMedium text-gray-600 text-[11px]">Service : </Text> */}
+          {/* <View className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 ${data.Status === 'Y' ? 'bg-green-50' : 'bg-yellow-50'}`}>
             <Text className={`font-PoppinsMedium text-[11px] ${data.Status === 'Y' ? 'text-green-600' : 'text-yellow-600'}`}>{data.Status === 'Y' ? 'Done' : 'Pending'}</Text>
-          </View>
+          </View> */}
         </View>
       </View>
+      <MyModal modalActive={showDetails} name='TEST_DETAILS' onClose={() => setShowDetails(false)} child={<TestItemDetails RefId={data.RefId} handleClose={setShowDetails} />} />
+      <MyModal modalActive={bill} onClose={() => setBill(false)}  name='BILL' child={<InvoicePreview id={data.BillId} type={'INVESTIGATION'} />} />
+      <MyModal modalActive={report} onClose={() => setReport(false)}  name='REPORT' child={<LabReport id={data.BillId} type={'INVESTIGATION'} />} />
     </>
   )
 }
 
 
-export const MyModal = ({ modalActive, child, name, customClass, onClose, styles, containerClass }: any) => {
+export const MyModal = ({ modalActive, child, name, customClass, onClose, styles, containerClass='flex-1 justify-center' }: any) => {
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -470,8 +537,8 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose, styles
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />
     >
-      <KeyboardAvoidingView className={`flex-1 justify-center ${containerClass}`} pointerEvents="box-none">
-        {React.cloneElement(child, { name: name, modalActive: modalActive })}
+      <KeyboardAvoidingView className={`${containerClass}`} pointerEvents="box-none">
+        {React.cloneElement(child, { name: name, modalActive: modalActive, onClose: onClose })}
       </KeyboardAvoidingView>
     </ReactNativeModal>
   );
@@ -562,9 +629,17 @@ export function useGlobalBackHandler() {
 
   useEffect(() => {
     const onBackPress = () => {
+      const currentRoute = history[history.length - 1]; 
+      if (currentRoute === "/appn/tabs/opd") {
+        Alert.alert('Exit App', 'Do you want to exit the app?', [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Yes', onPress: () => BackHandler.exitApp() },
+        ]);
+        return true;
+      }
       if (history.length > 1) {
         dispatch(popRoute());
-        const previousRoute = history[history.length - 2];
+        const previousRoute = history[history.length - 2];        
         router.push(previousRoute);
         return true;
       } else {

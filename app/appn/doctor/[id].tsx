@@ -409,10 +409,10 @@ const Booking = () => {
                         })()}
                     </View>
                 </View>
-                {/* {compCode === BC_ROY ? null :  */}
-                <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-3`} />
-                {/* } */}
             </ScrollView>
+            {/* {compCode === BC_ROY ? null :  */}
+                <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-3`} />
+            {/* } */}
             <ReactNativeModal
                 isVisible={confirmation}
                 onBackdropPress={() => setConfirmation(false)}
