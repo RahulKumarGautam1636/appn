@@ -1,33 +1,34 @@
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Card_3, Card_4, CompCard, MyModal } from '@/src/components';
+import { Card_3, Card_4, CompCard, mmDDyyyyDate, MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL, BC_ROY, defaultId, hasAccess, myColors } from '@/src/constants';
-import { getFrom, ListLoader, NoContent } from '@/src/components/utils';
+import { getFrom, GridLoader, groupBy, ListLoader, NoContent, sumByKey, useFetch } from '@/src/components/utils';
 import { setModal } from '@/src/store/slices/slices';
 import { CalendarDays, ChevronRight, FlaskConical, Stethoscope, Users, ChevronDown } from 'lucide-react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 const Reports = ({ memberId }: any) => {
 
     const router = useRouter();
-    // const user = useSelector((i: RootState) => i.user);
-    const compCode = useSelector((i: RootState) => i.compCode);
-    // const [active, setActive] = useState('ENQ');
-    // const { selected, list } = useSelector((i: RootState) => i.companies);
-    // const [labData, setLabData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
-    // const dispatch = useDispatch();
     const [report, setReport] = useState('');
+    const compCode = useSelector((i: RootState) => i.compCode);
+    const user = useSelector((i: RootState) => i.user);
+    const [reportData, isLoading, error] = useFetch(`${BASE_URL}/api/SalesInvoice/GetBusinessCount?CID=${compCode}&UserId=${user.UserId}&PartyCode=${user.PartyCode}`, compCode);
+    
+    const patients = reportData?.Journal?.Sales?.SalesDetailsList;
+    const cases = sumByKey(patients || [], 'NosOfCase')
     
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
             <View className='justify-between flex-row p-4 items-center'>
                 <Pressable onPress={() => router.back()} className='flex-row items-center gap-3'>
                     <Ionicons name="arrow-back-outline" size={24} color="black" />
-                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">View Reports</Text>
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">Booking History</Text>
                 </Pressable>
             </View>
 
@@ -40,7 +41,7 @@ const Reports = ({ memberId }: any) => {
                           </View>
                           <View>
                               <Text className="text-gray-500 text-[1rem] font-medium tracking-wider mb-1.5">Number of Patients</Text>
-                              <Text className="text-gray-800 text-[1.3rem] font-bold">1408</Text>
+                              <Text className="text-gray-800 text-[1.3rem] font-bold">{patients?.length || 0}</Text>
                           </View>
                       </View>
                       <ChevronDown color={'#6b7280'} size={27} />
@@ -52,7 +53,7 @@ const Reports = ({ memberId }: any) => {
                           </View>
                           <View>
                               <Text className="text-gray-500 text-[1rem] font-medium tracking-wider mb-1.5">Number of Cases</Text>
-                              <Text className="text-gray-800 text-[1.3rem] font-bold">690</Text>
+                              <Text className="text-gray-800 text-[1.3rem] font-bold">{cases}</Text>
                           </View>
                       </View>
                       <ChevronDown color={'#6b7280'} size={27} />
@@ -86,7 +87,7 @@ const Reports = ({ memberId }: any) => {
                     <ChevronRight color={'#6b7280'} size={27} />
                 </TouchableOpacity> : null}
             </View>
-            <MyModal modalActive={report ? true : false} name='REPORT' child={<Cases handleClose={() => setReport('')} />} />
+            <MyModal modalActive={report ? true : false} name='REPORT' child={report === 'cases' ? <Cases handleClose={() => setReport('')} /> : <Patients handleClose={() => setReport('')} />} />
         </ScrollView>
     )
 }
@@ -95,21 +96,74 @@ export default Reports;
 
 
 
-const Cases = ({ handleClose }: any) => {
+export const Cases = ({ handleClose }: any) => {
 
-    const [active, setActive] = useState('');
+    const [active, setActive] = useState(null);
+    const [fromDate, setFromDate] = useState(new Date());
+    const [fromDateActive, setFromDateActive] = useState(false);
+    const [toDate, setToDate] = useState(new Date(fromDate));
+    const [toDateActive, setToDateActive] = useState(false);
+    let range = { Day: 1, Week: 7, Month: 30 }
+    const [duration, setDuration] = useState('Day');
+    const [firstClick, setFirstClick] = useState(false);
 
-    const departments = [
-        { name: 'USG', patients: 456, cases: 507, avgAmount: 8998, dbc: 6564, netAmount: 10555, total: 11000 },
-        { name: 'Pathology', patients: 236, cases: 507, avgAmount: 1565, dbc: 1005, netAmount: 10555, total: 11000 },
-        { name: 'Non-Pathology', patients: 116, cases: 507, avgAmount: 7887, dbc: 5655, netAmount: 10555, total: 11000 },
-        { name: 'OPD', patients: 471, cases: 507, avgAmount: 4577, dbc: 455, netAmount: 4000, total: 11000 },
-        { name: 'IPD', patients: 450, cases: 507, avgAmount: 3555, dbc: 455, netAmount: 3500, total: 11000 },
-        { name: 'OT', patients: 109, cases: 507, avgAmount: 9861, dbc: 455, netAmount: 9200, total: 11000 },
-    ];
+    const handleDate = (type) => {
+      let from = fromDate;
+      let to2 = toDate;
+      let preDate = from // mmDDyyyyDate(from, '/', '/');
+      let d = new Date(preDate);
+      let a;
+
+      if (firstClick) {
+        if (type === 'next') {
+          let to = new Date(from);
+          setToDate(new Date(to.setDate(to.getDate() + range[duration])));
+        } else {
+          let to = new Date(to2);
+          setFromDate(new Date(to.setDate(to.getDate() - range[duration])));
+        }
+        setFirstClick(false);
+        return;
+      }
+
+      if (type === 'next') {
+        a = new Date(d.setDate(d.getDate() + range[duration]));  
+      } else {
+        a = new Date(d.setDate(d.getDate() - range[duration]));
+      }
+
+      let to = new Date(a);
+      setFromDate(a)
+      setToDate(new Date(to.setDate(to.getDate() + range[duration])));
+    }
+
+    const [durationDropdown, setDurationDropdown] = useState(false);
+
+    const DurationDropdown = () => {
+      return (
+        <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+          {Object.keys(range).map((i: any, n: number) => (
+              <TouchableOpacity key={n} className={`flex-row gap-3 p-4 ${n === (Object.keys(range).length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {setDuration(i); setDurationDropdown(false)}}>
+                  <MaterialCommunityIcons name={i === duration ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'} size={23} color={myColors.primary[500]} />
+                  <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>{i}</Text>
+              </TouchableOpacity>
+          ))}
+        </View>
+      )
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    const compCode = useSelector((i: RootState) => i.compCode);
+    const user = useSelector((i: RootState) => i.user);
+    const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+    const [reportData, isLoading, error] = useFetch(`${BASE_URL}/api/SalesInvoice/GetCommissionManage?EncCompanyId=${compCode}&LocationId=${locationId}&FromDateStr=${fromDate.toLocaleDateString('en-TT')}&ToDateStr=${toDate.toLocaleDateString('en-TT')}&RefType=${'B2C'}&RefDateType=${'COMDATE'}&TransType=${'All'}&Category=${'0'}&PartyID=${'0'}&ProfId=${user.PartyCode}&BillStatus=${'All'}`, compCode);
+
+    const tests = groupBy(reportData?.DirectSalesCollection, 'Description');
+    const testList = Object.values(tests);
 
     return (
-        <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>                
+        <View className='bg-slate-100 min-h-full'>       
             <View className='justify-between flex-row p-4 items-center'>
                 <Pressable onPress={handleClose} className='flex-row items-center gap-3'>
                     <Ionicons name="arrow-back-outline" size={24} color="black" />
@@ -117,101 +171,324 @@ const Cases = ({ handleClose }: any) => {
                 </Pressable>
             </View>
 
-            <View className='gap-3 px-4 pb-4'>
-                {departments.map((i: any, index: Number) => <NewCard key={i.name} data={i} index={index} active={active} setActive={setActive}/>)}
+            <View className='w-full p-4 bg-blue-500'>
+              <Text className='text-base text-white mb-4 font-semibold'>Filter By Date</Text>
+              <View className='flex-row justify-between items-center flex-wrap'>
+
+                <Pressable onPress={() => {setFirstClick(true); setDurationDropdown(true)}} className='flex-row items-center bg-white p-2 rounded-lg'>
+                  <View>
+                      <Text className="font-medium text-gray-600 text-[13px] mr-2">{duration}</Text>
+                  </View>
+                  <Feather name="chevron-down" size={20} color='gray' />
+                  <MyModal modalActive={durationDropdown} onClose={() => setDurationDropdown(false)} child={<DurationDropdown />} />
+                </Pressable>
+                <View className='flex-row items-center gap-1'>
+                  <TouchableOpacity onPress={() => handleDate('prev')}>
+                    <Feather name="chevron-left" size={23} color='white' />
+                  </TouchableOpacity>
+                  <View className='flex-row items-center bg-gray-100 p-2 rounded-lg'>
+                    <Pressable onPress={() => setFromDateActive(true)}>
+                        <Text className="font-medium text-gray-600 text-[13px] leading-5 px-1">{new Date(fromDate).toLocaleDateString('en-TT')}</Text>
+                    </Pressable>
+                    {fromDateActive ? <DateTimePicker value={fromDate} mode="date" display="default" onChange={(e: any, d: any) => {setFromDateActive(false); setFromDate(d); setFirstClick(true);}} /> : null}
+                  </View>
+                  <Text className='text-white font-semibold'> To </Text>
+                  <View className='flex-row items-center bg-gray-100 p-2 rounded-lg'>
+                    <Pressable onPress={() => setToDateActive(true)}>
+                        <Text className="font-medium text-gray-600 text-[13px] leading-5 px-1">{new Date(toDate).toLocaleDateString('en-TT')}</Text>
+                    </Pressable>
+                    {toDateActive ? <DateTimePicker value={toDate} mode="date" display="default" onChange={(e: any, d: any) => {setToDateActive(false); setToDate(d); setFirstClick(true);}} /> : null}
+                  </View>
+                  <TouchableOpacity onPress={() => handleDate('next')}>
+                    <Feather name="chevron-right" size={23} color='white' />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-            
-        </ScrollView>
+            <ScrollView contentContainerClassName='bg-slate-100'> 
+              {(() => {
+                if (isLoading) {
+                  return <GridLoader classes='h-[70px]' count={4} containerClass='gap-3 p-4' />
+                } else if (!testList.length) {
+                  return <NoContent imgClass='h-[190] mt-24' textClass='text-gray-500 text-xl mt-8'/>
+                } else if (error) {
+                  alert('Some Error Occured!')
+                } else {
+                  return (
+                    <View className='gap-3 p-4'>
+                      {testList?.map((dept: any, index: Number) => <NewCard key={index} data={dept} index={index} active={active} setActive={setActive}/>)}
+                    </View>
+                  )
+                }
+              })()}
+            </ScrollView>
+        </View>
     )
 }
 
-const patients = [
-    { name: 'Asim Munir', patients: 456, cases: 5, avgAmount: 2360, dbc: 1623, netAmount: 10555, total: 11000 },
-    { name: 'Ajeet Bharti', patients: 557, cases: 1, avgAmount: 8236, dbc: 4682, netAmount: 10555, total: 11000 },
-    { name: 'Abhijit Iyer Mitra', patients: 122, cases: 10, avgAmount: 4236, dbc: 2642, netAmount: 10555, total: 11000 },
-    { name: 'Anand Ranganathan', patients: 89, cases: 7, avgAmount: 8777, dbc: 5787, netAmount: 10555, total: 11000 },
-]; 
+export const Patients = ({ handleClose }: any) => {
+
+    const [active, setActive] = useState(null);
+    const [fromDate, setFromDate] = useState(new Date());
+    const [fromDateActive, setFromDateActive] = useState(false);
+    const [toDate, setToDate] = useState(new Date(fromDate));
+    const [toDateActive, setToDateActive] = useState(false);
+    let range = { Day: 1, Week: 7, Month: 30 }
+    const [duration, setDuration] = useState('Day');
+    const [firstClick, setFirstClick] = useState(false);
+
+    const handleDate = (type) => {
+      let from = fromDate;
+      let to2 = toDate;
+      let preDate = from // mmDDyyyyDate(from, '/', '/');
+      let d = new Date(preDate);
+      let a;
+
+      if (firstClick) {
+        if (type === 'next') {
+          let to = new Date(from);
+          setToDate(new Date(to.setDate(to.getDate() + range[duration])));
+        } else {
+          let to = new Date(to2);
+          setFromDate(new Date(to.setDate(to.getDate() - range[duration])));
+        }
+        setFirstClick(false);
+        return;
+      }
+
+      if (type === 'next') {
+        a = new Date(d.setDate(d.getDate() + range[duration]));  
+      } else {
+        a = new Date(d.setDate(d.getDate() - range[duration]));
+      }
+
+      let to = new Date(a);
+      setFromDate(a)
+      setToDate(new Date(to.setDate(to.getDate() + range[duration])));
+    }
+
+    const [durationDropdown, setDurationDropdown] = useState(false);
+
+    const DurationDropdown = () => {
+      return (
+        <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+          {Object.keys(range).map((i: any, n: number) => (
+              <TouchableOpacity key={i} className={`flex-row gap-3 p-4 ${n === (Object.keys(range).length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {setDuration(i); setDurationDropdown(false)}}>
+                  <MaterialCommunityIcons name={i === duration ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'} size={23} color={myColors.primary[500]} />
+                  <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>{i}</Text>
+              </TouchableOpacity>
+          ))}
+        </View>
+      )
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    const compCode = useSelector((i: RootState) => i.compCode);
+    const user = useSelector((i: RootState) => i.user);
+    const locationId = useSelector((i: RootState) => i.appData.location.LocationId);
+    const [reportData, isLoading, error] = useFetch(`${BASE_URL}/api/SalesInvoice/GetCommissionManage?EncCompanyId=${compCode}&LocationId=${locationId}&FromDateStr=${fromDate.toLocaleDateString('en-TT')}&ToDateStr=${toDate.toLocaleDateString('en-TT')}&RefType=${'B2C'}&RefDateType=${'COMDATE'}&TransType=${'All'}&Category=${'0'}&PartyID=${'0'}&ProfId=${user.PartyCode}&BillStatus=${'All'}`, compCode);
+
+    const tests = groupBy(reportData?.DirectSalesCollection, 'PartyName');
+    const testList = Object.values(tests);
+
+    return (
+        <View className='bg-slate-100 min-h-full'>       
+            <View className='justify-between flex-row p-4 items-center bg-slate-100'>
+                <Pressable onPress={handleClose} className='flex-row items-center gap-3'>
+                    <Ionicons name="arrow-back-outline" size={24} color="black" />
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[15px] items-center leading-5">View by Patients</Text>
+                </Pressable>
+            </View>
+
+            <View className='w-full p-4 bg-blue-500'>
+              <Text className='text-base text-white mb-4 font-semibold'>Filter By Date</Text>
+              <View className='flex-row justify-between items-center flex-wrap'>
+
+                <Pressable onPress={() => {setFirstClick(true); setDurationDropdown(true)}} className='flex-row items-center bg-white p-2 rounded-lg'>
+                  <View>
+                      <Text className="font-medium text-gray-600 text-[13px] mr-2">{duration}</Text>
+                  </View>
+                  <Feather name="chevron-down" size={20} color='gray' />
+                  <MyModal modalActive={durationDropdown} onClose={() => setDurationDropdown(false)} child={<DurationDropdown />} />
+                </Pressable>
+                <View className='flex-row items-center gap-1'>
+                  <TouchableOpacity onPress={() => handleDate('prev')}>
+                    <Feather name="chevron-left" size={23} color='white' />
+                  </TouchableOpacity>
+                  <View className='flex-row items-center bg-gray-100 p-2 rounded-lg'>
+                    <Pressable onPress={() => setFromDateActive(true)}>
+                        <Text className="font-medium text-gray-600 text-[13px] leading-5 px-1">{new Date(fromDate).toLocaleDateString('en-TT')}</Text>
+                    </Pressable>
+                    {fromDateActive ? <DateTimePicker value={fromDate} mode="date" display="default" onChange={(e: any, d: any) => {setFromDateActive(false); setFromDate(d); setFirstClick(true);}} /> : null}
+                  </View>
+                  <Text className='text-white font-semibold'> To </Text>
+                  <View className='flex-row items-center bg-gray-100 p-2 rounded-lg'>
+                    <Pressable onPress={() => setToDateActive(true)}>
+                        <Text className="font-medium text-gray-600 text-[13px] leading-5 px-1">{new Date(toDate).toLocaleDateString('en-TT')}</Text>
+                    </Pressable>
+                    {toDateActive ? <DateTimePicker value={toDate} mode="date" display="default" onChange={(e: any, d: any) => {setToDateActive(false); setToDate(d); setFirstClick(true);}} /> : null}
+                  </View>
+                  <TouchableOpacity onPress={() => handleDate('next')}>
+                    <Feather name="chevron-right" size={23} color='white' />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <ScrollView contentContainerClassName='bg-slate-100 flex-1'> 
+              {(() => {
+                if (isLoading) {
+                  return <GridLoader classes='h-[70px]' count={4} containerClass='gap-3 p-4' />
+                } else if (!testList.length) {
+                  return <NoContent imgClass='h-[190] mt-24' textClass='text-gray-500 text-xl mt-8'/>
+                } else if (error) {
+                  alert('Some Error Occured!')
+                } else {
+                  return (
+                    <View className='gap-3 p-4'>
+                      {testList?.map((dept: any, index: Number) => <NewCard2 key={index} data={dept} index={index} active={active} setActive={setActive}/>)}
+                    </View>
+                  )
+                }
+              })()}
+            </ScrollView>
+        </View>
+    )
+}
+
 
 
 
 const NewCard = ({ data, classes, index, active, setActive }: any) => {
 
+    const testName = data[0].Description;
+    const patients = groupBy(data, 'PartyName');
+    const patientsList = Object.values(patients).flat();
+    const patientCount = patientsList.length;
+    const ipAmount = sumByKey(data, 'TaxableAmount');
+    const paidAmount = sumByKey(data, 'Rate');
+
     return (
       <>
-        <TouchableOpacity onPress={() => setActive(active === index ? "" : index)} className={`flex-row items-start gap-4 bg-white rounded-2xl shadow-sm border border-gray-200 p-3 ${classes}`}>
+        <TouchableOpacity onPress={() => setActive(active === index ? "" : index)} className={`flex-row items-start gap-4 bg-white rounded-2xl shadow-sm border p-3 relative ${classes} ${active === index ? 'border-orange-500' : 'border-gray-200'}`}>
           <View className="mr-auto flex-1">
-            <Text className="font-PoppinsSemibold text-sky-800 leading-6 text-[13px]">{data.name}</Text>
-            <Text className="text-gray-600 mt-[6px] text-[11px] font-PoppinsMedium">No. of Patients : {data.patients}</Text>
-            <View className="flex-row gap-6 items-end mt-[5px]">
+            <Text className="font-PoppinsSemibold text-sky-800 leading-6 text-[13px]">{testName}</Text>
+            {/* <Text className="text-gray-600 mt-[6px] text-[11px] font-PoppinsMedium">No. of Patients : {patientCount}</Text> */}
+            <View className="flex-row justify-between items-end mt-[5px]">
+              <Text className="mt-1.5 text-[12px] text-orange-600 font-PoppinsMedium leading-4">
+                Patients : {patientCount}
+              </Text>
               <Text className="mt-1.5 text-[12px] text-blue-600 font-PoppinsMedium leading-4">
-                IP Amount : <FontAwesome name="rupee" size={12} color="#2563eb" /> {data.cases}
+                IP Amount : {ipAmount}
               </Text>
               <Text className="text-green-600 mt-1.5 text-[12px] font-PoppinsMedium leading-4">
-                Paid : <FontAwesome name="rupee" size={12} color="#16a34a" /> {data.avgAmount}
+                Paid : {paidAmount}
               </Text>
             </View>
           </View>
-          <Ionicons name="chevron-down" className={`p-[9px] rounded-full my-auto ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} />
+          {/* <Ionicons name="chevron-down" className={`p-[9px] rounded-full my-auto ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} /> */}
+          <Ionicons name="chevron-down" className={`absolute px-1 top-2 right-2 rounded-md ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} />
         </TouchableOpacity>
 
         {active === index && (
           <View className="gap-3">
             <View className="bg-white rounded-lg shadow-sm w-full max-w-2xl">
               <View className="flex flex-row border border-gray-200 bg-orange-50 rounded-t-lg">
-                <View className="flex-1 py-4 px-4">
+                <View className="flex-1 p-3">
                   <Text className="text-sm font-medium text-gray-800">Patients</Text>
                 </View>
-                <View className="py-4 px-4">
+                <View className="p-3">
                   <Text className="text-sm font-medium text-gray-800 text-right">IP Amount</Text>
                 </View>
-                <View className="py-4 px-4">
+                <View className="p-3">
                   <Text className="text-sm font-medium text-gray-800 text-right">Paid</Text>
                 </View>
               </View>
 
-              {patients.map((patient, index) => (
-                <View key={patient.name} className={`flex flex-row border-b border-gray-100 hover:bg-gray-50 transition-colors ${index === patients.length - 1 ? "rounded-b-lg" : ""}`}>
-                  <View className="flex-1 py-4 px-4">
+              {patientsList.map((patient: any, index) => (
+                <View key={index} className={`flex flex-row border-b border-gray-100 hover:bg-gray-50 transition-colors ${index === patients.length - 1 ? "rounded-b-lg" : ""}`}>
+                  <View className="flex-1 p-3">
                     <View className="flex flex-row items-center gap-3">
-                      <Text className="text-sm text-gray-900 font-medium">{patient.name}</Text>
+                      <Text className="text-sm text-gray-900 font-medium">{patient.PartyName}</Text>
                     </View>
                   </View>
-                  <View className="py-4 px-4">
-                    <Text className="text-sm text-gray-900 text-right">{patient.avgAmount}</Text>
+                  <View className="p-3">
+                    <Text className="text-sm text-gray-900 text-right">{patient.TaxableAmount}</Text>
                   </View>
-                  <View className="py-4 px-4">
-                    <Text className="text-sm text-gray-900 font-medium text-right">{patient.dbc}</Text>
+                  <View className="p-3">
+                    <Text className="text-sm text-gray-900 font-medium text-right">{patient.Rate}</Text>
                   </View>
                 </View>
               ))}
             </View>
+          </View>
+        )}
+      </>
+    );
+}
 
-            {/* <div className="bg-white rounded-lg shadow-sm w-full">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200 bg-orange-50">
-                      <th className="text-left py-4 px-6 text-xs font-medium text-gray-800">Patients</th>
-                      <th className="py-4 px-6 text-xs font-medium text-gray-800 text-right">IP Amount</th>
-                      <th className="py-4 px-6 text-xs font-medium text-gray-800 text-right">Paid</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {patients.map((patient) => (
-                      <tr key={patient.name} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-3">
-                            <span className="text-xs text-gray-900 font-medium">{patient.name}</span>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-xs text-gray-900 text-right">{patient.avgAmount}</td>
-                        <td className="py-4 px-6 text-xs text-gray-900 font-medium text-right">{patient.dbc}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div> */}
+const NewCard2 = ({ data, classes, index, active, setActive }: any) => {
+
+    const testName = data[0].PartyName;
+    const patients = groupBy(data, 'Description');
+    const patientsList = Object.values(patients).flat();
+    const patientCount = patientsList.length;
+    const ipAmount = sumByKey(data, 'TaxableAmount');
+    const paidAmount = sumByKey(data, 'Rate');
+
+    return (
+      <>
+        <TouchableOpacity onPress={() => setActive(active === index ? "" : index)} className={`flex-row items-start gap-4 bg-white rounded-2xl shadow-sm border p-3 relative ${classes} ${active === index ? 'border-orange-500' : 'border-gray-200'}`}>
+          <View className="mr-auto flex-1">
+            <Text className="font-PoppinsSemibold text-sky-800 leading-6 text-[13px]">{testName}</Text>
+            {/* <Text className="text-gray-600 mt-[6px] text-[11px] font-PoppinsMedium">No. of Patients : {patientCount}</Text> */}
+            <View className="flex-row justify-between items-end mt-[5px]">
+              <Text className="mt-1.5 text-[12px] text-orange-600 font-PoppinsMedium leading-4">
+                Cases : {patientCount}
+              </Text>
+              <Text className="mt-1.5 text-[12px] text-blue-600 font-PoppinsMedium leading-4">
+                IP Amount : {ipAmount}
+              </Text>
+              <Text className="text-green-600 mt-1.5 text-[12px] font-PoppinsMedium leading-4">
+                Paid : {paidAmount}
+              </Text>
+            </View>
+          </View>
+          {/* <Ionicons name="chevron-down" className={`p-[9px] rounded-full my-auto ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} /> */}
+          <Ionicons name="chevron-down" className={`absolute top-2 right-2 rounded-md px-1 ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} />
+        </TouchableOpacity>
+
+        {active === index && (
+          <View className="gap-3">
+            <View className="bg-white rounded-lg shadow-sm w-full max-w-2xl">
+              <View className="flex flex-row border border-gray-200 bg-orange-50 rounded-t-lg">
+                <View className="flex-1 p-3">
+                  <Text className="text-sm font-medium text-gray-800">Cases</Text>
+                </View>
+                <View className="p-3">
+                  <Text className="text-sm font-medium text-gray-800 text-right">IP Amount</Text>
+                </View>
+                <View className="p-3">
+                  <Text className="text-sm font-medium text-gray-800 text-right">Paid</Text>
+                </View>
+              </View>
+
+              {patientsList.map((patient: any, index) => (
+                <View key={index} className={`flex flex-row border-b border-gray-100 hover:bg-gray-50 transition-colors ${index === patients.length - 1 ? "rounded-b-lg" : ""}`}>
+                  <View className="flex-1 p-3">
+                    <View className="flex flex-row items-center gap-3">
+                      <Text className="text-sm text-gray-900 font-medium">{patient.Description}</Text>
+                    </View>
+                  </View>
+                  <View className="p-3">
+                    <Text className="text-sm text-gray-900 text-right">{patient.TaxableAmount}</Text>
+                  </View>
+                  <View className="p-3">
+                    <Text className="text-sm text-gray-900 font-medium text-right">{patient.Rate}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
         )}
       </>

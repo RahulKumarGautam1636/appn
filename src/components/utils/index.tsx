@@ -752,19 +752,20 @@ export const PreviewImage = ({ url }: any) => {
 }
 
 export const userLevel = { MARKETBY: 55, SALESPOINT: 56, DOCTOR: 57, PROVIDER: 58, PATIENT: 60, CUSTOMER: 60 }; 
-export const uType = { 
-  MARKETBY: { title: 'MARKETBY', level: 55}, 
-  SALESPOINT: { title: 'SALESPOINT', level: 56},
-  DOCTOR: { title: 'DOCTOR', level: 57}, 
-  PROVIDER: { title: 'PROVIDER', level: 58}, 
-  COLLECTOR: { title: 'COLLECTOR', level: 59},
-  POLYCLINIC: { title: 'POLYCLINIC', level: 465464}, 
-  
-  PATIENT: { title: 'PATIENT', level: 60}, 
-  RETAILER: { title: 'RETAILER', level: 60},
-  CUSTOMER: { title: 'CUSTOMER', level: 60},
-};
 
+export const uType = { 
+  MARKETBY: { title: 'MARKETBY', level: 55, description: 'Marketing Executive'}, 
+  SALESPOINT: { title: 'SALESPOINT', level: 56, description: 'Sales Executive'},
+  DOCTOR: { title: 'DOCTOR', level: 57, description: 'Doctor'}, 
+  PROVIDER: { title: 'PROVIDER', level: 58, description: 'Provider'}, 
+  REFERER: { title: 'PROVIDER', level: 58, description: 'Provider'},            // Not a mistake. REFERER is also a provider.
+  COLLECTOR: { title: 'COLLECTOR', level: 59, description: 'Collector'},
+  POLYCLINIC: { title: 'POLYCLINIC', level: 465464, description: 'Polyclinic'}, 
+  
+  PATIENT: { title: 'PATIENT', level: 60, description: 'Patient'}, 
+  RETAILER: { title: 'RETAILER', level: 60, description: 'Retailer'},
+  CUSTOMER: { title: 'CUSTOMER', level: 60, description: 'Customer'},
+};
 
 export const useRegType = (type: string) => {
   let { info: compInfo, vType } = store.getState().company;
@@ -1112,5 +1113,27 @@ export function filterUnique(list: [], fieldName: string) {
   });
 }
 
+
+export function groupBy(list = [], key: string) {         // group items by keyname.
+  if (!Array.isArray(list) || !key) return {};
+
+  const map = new Map();
+
+  list.forEach(item => {
+    const groupKey = item?.[key];
+    if (groupKey === undefined || groupKey === null) return;
+
+    if (!map.has(groupKey)) {
+      map.set(groupKey, []);
+    }
+
+    map.get(groupKey).push(item);
+  });
+
+  return Object.fromEntries(map);
+}
+
+// get sum of a specific key's value in an arry of objects.
+export const sumByKey = (arr: any, key: string) => arr.reduce((sum: any, item: string) => sum + (Number(item?.[key]) || 0), 0);
 
 

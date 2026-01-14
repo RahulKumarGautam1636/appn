@@ -214,9 +214,9 @@ const TestDetail = ({ data }: any) => {
                 <TouchableOpacity onPress={() => setShowDetails(true)} className={`items-center flex-1 py-[10px] rounded-lg bg-blue-500`}>
                     <Text className={`font-PoppinsMedium text-[13px] text-white`}>Details</Text>
                 </TouchableOpacity>
-                {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-[10px] rounded-lg bg-red-500`}>
+                {/* {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity className={`items-center flex-1 py-[10px] rounded-lg bg-red-500`}>
                     <Text className={`font-PoppinsMedium text-[13px] text-white`}>Cancel</Text>
-                </TouchableOpacity> : null}
+                </TouchableOpacity> : null} */}
                 {data.BillId ? <TouchableOpacity onPress={() => setReport(true)} className={`items-center flex-1 py-[10px] rounded-lg bg-purple-500`}>
                     <Text className={`font-PoppinsMedium text-[13px] text-white`}>Report</Text>
                 </TouchableOpacity> : null}

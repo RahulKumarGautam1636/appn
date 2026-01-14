@@ -238,7 +238,7 @@ const Login = ({ modalMode }: any) => {
                                     <TextInput placeholderTextColor={colors.gray[400]} placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
                                 {loginError.status ?
-                                    <Text className="text-rose-500 text-[13px] font-PoppinsSemibold mr-auto">{loginError.message}</Text>
+                                    <Text className="text-rose-500 text-[13px] font-semibold mr-auto">{loginError.message}</Text>
                                 : null}
                                 <Pressable onPress={() => setTab('forgotPassword')}>
                                     <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
@@ -594,8 +594,8 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
 
     const RegTypesDropdown = () => {
         return (
-            <View className="p-6 bg-white rounded-tl-3xl rounded-tr-3xl">
-                <Text className="font-PoppinsBold text-2xl text-gray-900 mb-4">Register As :</Text>
+            <View className="p-6 bg-gray-100 rounded-tl-3xl rounded-tr-3xl">
+                <Text className="font-PoppinsSemibold text-xl text-gray-900 mb-6">Register As :</Text>
                 <View className='bg-white rounded-3xl border border-gray-200'>
                     {allRegTypes.map((i: any, n: number) => (
                         <TouchableOpacity key={i.level} className={`flex-row gap-3 p-4 ${n === (allRegTypes.length -1) ? '' : 'border-b border-gray-200'}`} onPress={() => {setRegType(i); setRegTypeDropdown(false)}}>

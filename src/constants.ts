@@ -21,12 +21,12 @@ export const blur = false;
 const REACT_APP_BASE_URL = 'https://myapps.gsterpsoft.com';
 const REACT_APP_TEST_BASE_URL = 'https://api.gsterpsoft.com';
 
-export const testMode = true;
 export const hasCommonLogin = (companyId: string) => {
   let companies = [ TAKEHOME_PHARMA, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_SURGICAL ];
   return companies.includes(companyId);
 } 
 
+export const testMode = false;
 export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
 export const SRC_URL = 'https://erp.gsterpsoft.com';
 
@@ -45,7 +45,7 @@ export const hasAccess = (module: string, role: string) => {
 
 export const versions = {
   takehome: '1.0.4',      // version in config file was increased but here was not increased and the update banner doesn't triggered, so reconsider the changes before building again.
-  bcroy: '1.0.2',
+  bcroy: '1.1.2',
   gbooks: '1.0.0',
   ecom: '1.0.0'
 }

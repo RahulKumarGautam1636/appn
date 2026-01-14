@@ -11,25 +11,21 @@ import { useState } from 'react';
 import { Registeration } from '../../login';
 import { Authenticate, MyModal } from '@/src/components';
 import { RootState } from '@/src/store/store';
-import { GradientBG } from '@/src/components/utils';
+import { GradientBG, uType } from '@/src/components/utils';
 import colors from 'tailwindcss/colors';
+import { Cases, Patients } from './reports';
 
 
 const Profile = () => {
 
     const user = useSelector((state: RootState) => state.user);
     const compCode = useSelector((state: RootState) => state.compCode);
-    const [personalInfoActive, setPersonalInfoActive] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch()
+    const [report, setReport] = useState('');
     
     return (
         <Authenticate>
-        <MyModal customClass={'bg-white'} modalActive={personalInfoActive} onClose={() => setPersonalInfoActive(false)} child={
-            <ScrollView>
-                <Registeration isModal={true} closeEdit={() => setPersonalInfoActive(false)} />
-            </ScrollView>
-        } />
         <ScrollView contentContainerClassName='bg-white min-h-full'>
             {/* <GradientBG> */}
                 <View className='bg-white'>
@@ -53,28 +49,51 @@ const Profile = () => {
                             </View>
                             <View className='flex-row gap-2'>
                                 <FontAwesome5 name="shield-alt" size={15} color="#075985" />
-                                <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{user.UserType}</Text>
+                                <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{uType[user.UserType]?.description === 'Customer' ? 'Patient' : uType[user.UserType]?.description}</Text>
                             </View>
                         </View>
                     </View>
-                    {hasAccess("labtest", compCode) ? <View className='flex-row justify-between border-y border-gray-300 border-solid'>
-                        <View className='items-center flex-1 border-r border-gray-300'>
-                            <Link href={'/appn/testList'}>
+
+                    {user.UserLevelSeq === 60 ? 
+                    <>
+                        {hasAccess("labtest", compCode) ? <View className='flex-row justify-between border-y border-gray-300 border-solid'>
+                            <View className='items-center flex-1 border-r border-gray-300'>
+                                <Link href={'/appn/testList'}>
+                                    <View className='items-center p-4'>
+                                        <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 7 : 0}</Text>
+                                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
+                                    </View>
+                                </Link>
+                            </View>
+                            <View className='items-center flex-1'>
+                                <Link href={'/appn/appnList'}>
+                                    <View className='items-center p-4'>
+                                        <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 15 : 0}</Text>
+                                        <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
+                                    </View>
+                                </Link>
+                            </View>
+                        </View> : null}               
+                    </>
+                    : 
+                    <>
+                         <View className='flex-row justify-between border-y border-gray-300 border-solid'>
+                            <Pressable onPress={() => setReport(report === 'patients' ? '' : 'patients')} className='items-center flex-1 border-r border-gray-300'>
                                 <View className='items-center p-4'>
                                     <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 7 : 0}</Text>
-                                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
+                                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">View By Patients</Text>
                                 </View>
-                            </Link>
-                        </View>
-                        <View className='items-center flex-1'>
-                            <Link href={'/appn/appnList'}>
+                            </Pressable>
+                            <Pressable onPress={() => setReport(report === 'cases' ? '' : 'cases')} className='items-center flex-1'>
                                 <View className='items-center p-4'>
                                     <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 15 : 0}</Text>
-                                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
+                                    <Text className="font-PoppinsMedium text-gray-500 text-[12px]">View By Cases</Text>
                                 </View>
-                            </Link>
+                            </Pressable>
                         </View>
-                    </View> : null}
+                    </>
+                }
+
                 </View>
                 <View className='mt-1'>
                     {/* onPress={() => setPersonalInfoActive(true)} */}
@@ -129,6 +148,8 @@ const Profile = () => {
                     </Link>
                 </View>
             {/* </GradientBG> */}
+
+            <MyModal modalActive={report ? true : false} name='REPORT' child={report === 'cases' ? <Cases handleClose={() => setReport('')} /> : <Patients handleClose={() => setReport('')} />} />
         </ScrollView>
         </Authenticate>
     )

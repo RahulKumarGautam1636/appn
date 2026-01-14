@@ -19,16 +19,17 @@ export default function TabsLayout() {
   if (compCode === BC_ROY) {
     tabs = [
       { name: 'OPD', icon: 'fitness', key: 'opd', visible: true },
-      { name: 'Appointments', icon: 'calendar', key: 'opdBookings', visible: isLoggedIn },
+      { name: 'Appointment', icon: 'calendar', key: 'opdBookings', visible: isLoggedIn },
       { name: 'Lab Report', icon: 'document-text', key: 'labBookings', visible: isLoggedIn },
       { name: 'Account', icon: 'person', key: 'account', visible: true },
     ]
   } else {
     tabs = [
       { name: 'OPD', icon: 'fitness', key: 'opd', visible: true },
-      { name: 'Appointments', icon: 'calendar', key: 'opdBookings', visible: isLoggedIn },
       { name: 'Lab Test', icon: 'flask', key: 'lab', visible: hasAccess("labtest", compCode)},
-      { name: 'Lab Report', icon: 'document-text', key: 'labBookings', visible: isLoggedIn },
+      // { name: 'Appointment', icon: 'calendar', key: 'opdBookings', visible: isLoggedIn },
+      { name: 'History', icon: 'calendar', key: 'reports', visible: isLoggedIn },
+      // { name: 'Reports', icon: 'document-text', key: 'reports', visible: isLoggedIn },
       { name: 'Account', icon: 'person', key: 'account', visible: true },
       { name: 'Cart', icon: 'cart', key: 'cart', visible: hasAccess("labtest", compCode)},
     ];

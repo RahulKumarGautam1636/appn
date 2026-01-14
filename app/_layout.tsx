@@ -50,7 +50,7 @@ function LayoutContent() {
     }
   }, [pathname]);
 
-  console.log(history);
+  // console.log(history);
   
 
   useEffect(() => {

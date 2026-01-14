@@ -21,7 +21,7 @@ export default ({ config }) => {
       compId: "ji4C/%2BQbn%2BBofLeoFG9clw==",
       icon: "./assets/images/bc_roy/logo.png",
       splash: "./assets/images/bc_roy/logo.png",
-      version: "1.0.2",
+      version: "1.1.2",
       baseUrl: "https://apigst.gsterpsoft.com",
       srcUrl: "https://gsterpsoft.com",
     },
@@ -65,8 +65,8 @@ export default ({ config }) => {
   }
 
   const testBuild = true;
-  const flavor = flavorConfig["bc_roy"];
-  const account = accounts["vit"];
+  const flavor = flavorConfig["xyz"];
+  const account = accounts["rk"];
 
   return {
     ...config,

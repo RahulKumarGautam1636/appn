@@ -410,9 +410,9 @@ export const Card_3 = ({ data }: any) => {
             <TouchableOpacity onPress={() => setPresc(true)} className={`px-3 py-1.5 rounded-lg shadow-sm shadow-gray-600 ${!data.PrescriptionId ? 'bg-slate-200 pointer-events-none' : 'bg-blue-500'}`}>
               <Text className={`font-medium text-[11px] ${!data.PrescriptionId ? 'text-gray-500' : 'text-white'}`}>Prescription</Text>
             </TouchableOpacity>
-            {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity onPress={() => {}} className={`px-3 py-1.5 rounded-lg shadow-sm shadow-gray-600 bg-red-500`}>
+            {/* {data.IsAppConfirmed !== 'Y' ? <TouchableOpacity onPress={() => {}} className={`px-3 py-1.5 rounded-lg shadow-sm shadow-gray-600 bg-red-500`}>
               <Text className={`font-medium text-[11px] text-white`}>Cancel</Text>
-            </TouchableOpacity> : null}
+            </TouchableOpacity> : null} */}
           </View>
         </View>
       </View>
@@ -474,9 +474,9 @@ export const Card_4 = ({ data }: any) => {
           <TouchableOpacity onPress={() => setShowDetails(true)} className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 bg-blue-500`}>
             <Text className={`font-PoppinsMedium text-[11px] text-white`}>Details</Text>
           </TouchableOpacity>
-          {data.IsAppConfirmed !== 'Y' ? <View className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 bg-red-500`}>
+          {/* {data.IsAppConfirmed !== 'Y' ? <View className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 bg-red-500`}>
             <Text className={`font-PoppinsMedium text-[11px] text-white`}>Cancel</Text>
-          </View> : null}
+          </View> : null} */}
           {data.BillId ? <TouchableOpacity onPress={() => setReport(true)} className={`px-3 py-[4px] rounded-lg shadow-sm shadow-gray-600 bg-purple-500`}>
             <Text className={`font-PoppinsMedium text-[11px] text-white`}>Report</Text>
           </TouchableOpacity> : null}

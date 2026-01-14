@@ -62,7 +62,7 @@ const TestList = ({ memberId }: any) => {
             </View>}
             <ScrollView contentContainerClassName='bg-slate-100'>
                 {compCode === defaultId ? <View className='px-4'>
-                    {memberId ? null : <View className='bg-white mb-3 rounded-2xl shadow-sm shadow-gray-400 mt-1'>
+                    {/* {memberId ? null : <View className='bg-white mb-3 rounded-2xl shadow-sm shadow-gray-400 mt-1'>
                         <View className='justify-between flex-row p-[14px] items-center border-b border-gray-300'>
                             <View className='flex-row items-center gap-3'>
                                 <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-5">Total</Text>
@@ -75,15 +75,13 @@ const TestList = ({ memberId }: any) => {
                             <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
                             <Text className="font-PoppinsSemibold text-slate-500 text-[13px]">Not Found</Text>
                         </View>
-                    </View> }
-                    {compCode === defaultId && list.length > 1 ? <View>
+                    </View> } */}
+                    {/* {compCode === defaultId && list.length > 1 ? <View>
                         <View className='justify-between flex-row pt-1 mb-1 items-center'>
                             <View className='flex-row items-center gap-2'>
                                 <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">Select Clinic</Text>
                             </View>
                             <View className="gap-2 flex-row items-center ml-auto">
-                                {/* <Feather name="chevron-left" size={24} color='#6b7280' />
-                                <Feather name="chevron-right" size={24} color='#6b7280' /> */}
                                 <Pressable onPress={() => dispatch(setModal({name: 'COMPANIES', state: true}))}>
                                     <Text className="font-PoppinsMedium text-primary-600 text-[13px] leading-[20px]">View All</Text>
                                 </Pressable>
@@ -92,7 +90,7 @@ const TestList = ({ memberId }: any) => {
                         <ScrollView horizontal={true} contentContainerClassName='py-2 px-[2] gap-3 mb-2' showsHorizontalScrollIndicator={false}>
                             {list.map((i: any) => <CompCard data={i} key={i.EncCompanyId} active={selected?.EncCompanyId === i.EncCompanyId}/>)}
                         </ScrollView>
-                    </View> : null}
+                    </View> : null} */}
                 </View> : null}
                 <View className='bg-white'>
                     <View className='flex-row justify-between border-y border-gray-300 border-solid p-4 bg-white gap-2'>
