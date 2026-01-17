@@ -77,7 +77,7 @@ export const LabCartCard = ({ data }: any) => {
                         </View>
                     </View>
                     <View className='flex-row gap-4 items-center'>
-                        <View className='px-[10px] py-[8px] bg-gray-100 rounded-full justify-between gap-4 ml-auto flex-row shadow-sm shadow-gray-500'>
+                        <View className='px-[10px] py-[6px] bg-gray-100 rounded-full justify-between gap-4 ml-auto flex-row shadow-sm shadow-gray-500'>
                             <TouchableOpacity onPress={() => {if (data.count !== 1) dispatch(addToCart({...data, count: data.count - 1}))}}>
                                 <Feather name="minus" size={16} color="#6b7280" />
                             </TouchableOpacity>

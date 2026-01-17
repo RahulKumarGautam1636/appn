@@ -7,7 +7,7 @@ import ButtonPrimary, { MyModal } from '@/src/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
-import { BASE_URL, BC_ROY } from '@/src/constants';
+import { BASE_URL, BC_ROY, defaultId } from '@/src/constants';
 import { getFrom, GridLoader, withAutoUnmount } from '@/src/components/utils';
 import axios from 'axios';
 import { setAppnData, setCompanies, setModal } from '@/src/store/slices/slices';
@@ -268,6 +268,7 @@ const Booking = () => {
 
     const slotReminder = dateSlotsList.data.length % 3;
     const blankSlot = 3 - slotReminder;
+    
 
     return (
         <>
@@ -306,7 +307,7 @@ const Booking = () => {
                             : null}
                         </View>
                     </View>
-                    {compCode === BC_ROY ? null : <View className='flex-row justify-between p-3 border-y border-gray-200'>
+                    {compCode === defaultId ? <View className='flex-row justify-between p-3 border-y border-gray-200'>
                         <View className='items-center flex-1'>
                             <Text className="font-PoppinsSemibold text-gray-800 text-[14px] mb-1">14 Years</Text>
                             <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Experience</Text>
@@ -319,7 +320,7 @@ const Booking = () => {
                             <Text className="font-PoppinsSemibold text-gray-800 text-[14px] mb-1">⭐ 4.5k</Text>
                             <Text className="font-PoppinsMedium text-gray-500 text-[11px]">Reviews</Text>
                         </View>
-                    </View>}
+                    </View> : <View className='border-t mt-2 border-gray-200'></View>}
                 </View>
                 <View className='px-3 flex-row gap-2 justify-between bg-white border-b-2 border-gray-300'>
                     <Text className="font-PoppinsMedium pt-[12px] pb-[9px] text-gray-600 text-[12px] flex-1 text-center border-b-2 border-primary-600">Schedule</Text>
@@ -328,7 +329,7 @@ const Booking = () => {
                     <Text className="font-PoppinsMedium pt-[12px] pb-[9px] text-gray-600 text-[12px] flex-1 text-center">Reviews</Text>
                 </View>
 
-                {compCode === BC_ROY ? null : <>
+                {compCode === defaultId ? <>
                     <View className='justify-between flex-row items-center px-3 pt-3'>
                         <View className='flex-row items-center gap-2'>
                             <Text className="font-PoppinsSemibold text-gray-700 text-[13px] items-center leading-4">Select Clinic</Text>
@@ -360,7 +361,7 @@ const Booking = () => {
                             </Link>
                         </View>
                     </View>
-                </>}
+                </> : null}
 
                 <View className='justify-between flex-row px-3 pt-1 items-center mt-3'>
                     <View className='flex-row items-center gap-2'>

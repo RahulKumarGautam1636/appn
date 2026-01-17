@@ -32,7 +32,7 @@ const Reports = ({ memberId }: any) => {
                 </Pressable>
             </View>
 
-            <View className='px-4 pt-1'>
+            {/* <View className='px-4 pt-1'>
               <View className="flex flex-col gap-4 mb-4">
                   <TouchableOpacity onPress={() => setReport(report === 'patients' ? '' : 'patients')} className="bg-white flex-row rounded-3xl p-5 shadow-sm border border-white border-opacity-40 cursor-pointer justify-between items-center">
                       <View className="flex-row items-start gap-5">
@@ -59,7 +59,7 @@ const Reports = ({ memberId }: any) => {
                       <ChevronDown color={'#6b7280'} size={27} />
                   </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
 
             <View className="flex flex-col gap-4 mb-4 px-4">
                 <TouchableOpacity onPress={() => router.push('/appn/appnList')} className="bg-white flex-row rounded-3xl p-5 shadow-sm border border-white border-opacity-40 cursor-pointer justify-between items-center">

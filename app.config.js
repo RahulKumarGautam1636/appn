@@ -14,6 +14,17 @@ export default ({ config }) => {
       baseUrl: "https://myapps.gsterpsoft.com",
       srcUrl: "https://erp.gsterpsoft.com",
     },
+    asthaMedical: {
+      name: "ASTHA MEDICAL",
+      package: "com.gbooks.asthaMedical",
+      scheme: "asthamedical",
+      compId: "L25tXANrEBrL5Y%2BT%2BOrTmg==",
+      icon: "./assets/images/asthaMedical/logo.jpeg",
+      splash: "./assets/images/asthaMedical/logo.jpeg",
+      version: "1.0.0",
+      baseUrl: "https://myapps.gsterpsoft.com",
+      srcUrl: "https://erp.gsterpsoft.com",
+    },
     bc_roy: {
       name: "B.C. ROY",
       package: "com.gbooks.bcroy",
@@ -64,8 +75,8 @@ export default ({ config }) => {
     }
   }
 
-  const testBuild = true;
-  const flavor = flavorConfig["xyz"];
+  const testBuild = false;
+  const flavor = flavorConfig["asthaMedical"];
   const account = accounts["rk"];
 
   return {

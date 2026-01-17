@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { FullScreenLoading, mmDDyyyyDate, MyModal } from "../src/components";
-import { BASE_URL, BC_ROY, hasCommonLogin, defaultId, gender, initReg, myColors, salutations, states } from "@/src/constants";
+import { BASE_URL, BC_ROY, hasCommonLogin, defaultId, gender, initReg, myColors, salutations, states, asthaMedicalId, wecareId } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,8 @@ interface loginType {
     EncCompanyId: string
 }
 
+const noRegistration = [asthaMedicalId, wecareId]
+
 const Login = ({ modalMode }: any) => {
 
     const dispatch = useDispatch();
@@ -32,6 +34,7 @@ const Login = ({ modalMode }: any) => {
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState('login');
     const [existingUser, setExistingUser] = useState({});
+    const hasNoRegisteration = noRegistration.includes(compCode)
     
 
     const handleLoginFormSubmit = () => {
@@ -199,6 +202,7 @@ const Login = ({ modalMode }: any) => {
     }, [isLoggedIn, user]);
 
     useEffect(() => {
+        if (hasNoRegisteration) return;
         if (vType === 'ErpHospital') {
             setTab('register')
         }
@@ -244,11 +248,11 @@ const Login = ({ modalMode }: any) => {
                                     <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
                                 </Pressable>
                                 <ButtonPrimary onClick={handleLoginFormSubmit} isLoading={loading} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
-                                <Pressable onPress={() => setTab('register')}>
+                                {hasNoRegisteration ? null : <Pressable onPress={() => setTab('register')}>
                                     <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account  ? 
                                         <Text className="text-primary-500">  Register Now</Text>
                                     </Text>
-                                </Pressable>
+                                </Pressable>}
                             </View>
                         </View> 
                     )
@@ -272,6 +276,14 @@ const allRegTypes = [
 ];
 
 export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}, setLoginError=()=>{}, isModal=false, closeEdit, modalMode=false }: any) => {
+
+    useEffect(() => {
+        if (noRegistration.includes(compCode)) {
+            alert('Not Allowed.')
+            setTab('login');
+            return;
+        }
+    }, [])
 
     const dispatch = useDispatch();
     const compCode = useSelector((state: RootState) => state.compCode);
@@ -384,10 +396,10 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
             }
             dispatch(setModal({ name: 'LOADING', state: false })) 
         }
-        if (vType === 'ErpHopital') {
-            setRegData(pre => ({...pre, ...existUser }));
-        } else {
+        if (vType === 'ErpPharma') {
             autoLogin()  
+        } else {
+            setRegData(pre => ({...pre, ...existUser }));
         }
     }, [existUser, userRegTypeId])
 

@@ -30,6 +30,13 @@
       },
       "channel": "xyz-hospital"
     },
+    "astha-medical": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "astha-medical"
+    },
     "ecom": {
       "autoIncrement": true,
       "android": {

@@ -77,7 +77,7 @@ const Profile = () => {
                     </>
                     : 
                     <>
-                         <View className='flex-row justify-between border-y border-gray-300 border-solid'>
+                        {/* <View className='flex-row justify-between border-y border-gray-300 border-solid'>
                             <Pressable onPress={() => setReport(report === 'patients' ? '' : 'patients')} className='items-center flex-1 border-r border-gray-300'>
                                 <View className='items-center p-4'>
                                     <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 7 : 0}</Text>
@@ -90,7 +90,8 @@ const Profile = () => {
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">View By Cases</Text>
                                 </View>
                             </Pressable>
-                        </View>
+                        </View> */}
+                        <View className='border-t border-gray-300'></View>
                     </>
                 }
 

@@ -5,6 +5,9 @@ import colors from 'tailwindcss/colors.js';
 
 export const zero = 'tSL0lTwETc1vrrU2ZIoFFA==';
 export const defaultId = 'FFCeIi27FQMTNGpatwiktw=='; 
+export const asthaMedicalId = 'L25tXANrEBrL5Y%2BT%2BOrTmg=='; 
+export const wecareId = 'DXjdmwQhaZDlMG0FfaHJxw=='; 
+
 export const TAKEHOME_PHARMA = 'yFObpUjTIGhK9%2B4bFmadRg==';
 export const TAKEHOME_AGRO = '5KR8RKKh%2BtHG4iszAzAjJQ==';
 export const TAKEHOME_GARMENTS = 't0ZL5KiikMgM1YeyB68a1w==';
@@ -35,7 +38,7 @@ export const SRC_URL = 'https://erp.gsterpsoft.com';
 
 export const permissions = {
   appointments: [BC_ROY, defaultId],
-  labtest: [defaultId],
+  labtest: [defaultId, asthaMedicalId],
   shop: [TAKEHOME_PHARMA, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS],
 };
 

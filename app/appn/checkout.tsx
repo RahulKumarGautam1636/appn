@@ -13,7 +13,8 @@ import axios from 'axios';
 import colors from 'tailwindcss/colors';
 
 const Checkout = ({ handleClose, handleSuccess }: any) => {
-    const { selected: selectedCompany } = useSelector((state: RootState) => state.companies);
+    const { selected } = useSelector((state: RootState) => state.companies);
+    const compInfo = useSelector((state: RootState) => state.company.info);
     const { selectedMember } = useSelector((i: RootState) => i.members)
     const router = useRouter()
     const lab = useSelector((i: RootState) => i.cart)
@@ -29,6 +30,7 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
     let cartTotal = itemsLength !== 0 ? itemsValue.reduce((total, item) => total+item).toFixed(2) : '00';
     let testDate = itemsLength ? labTests[0].testDate : '';
+    let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
     const handleBack = () => {
         if (handleClose) {
@@ -174,20 +176,19 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
     } 
 
     return (
-        <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
-            <View className=''>
-                <View className='p-4'>
-                    <Pressable onPress={handleBack} className='justify-between flex-row pb-4 items-center'>
-                        <View className='flex-row items-center gap-3'>
-                            <Ionicons name="arrow-back-outline" size={24} color="black" />
-                            <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Review & Book</Text>
-                        </View>
-                        <View className="gap-3 flex-row items-center ml-auto">
-                            <Feather name="heart" size={20} color='black' />
-                            <Feather name="share-2" size={20} color='black' />
-                        </View>
-                    </Pressable> 
-
+        <View className='bg-slate-100 flex-1'>
+            <Pressable onPress={handleBack} className='justify-between flex-row p-4 items-center'>
+                <View className='flex-row items-center gap-3'>
+                    <Ionicons name="arrow-back-outline" size={24} color="black" />
+                    <Text className="font-PoppinsSemibold text-gray-700 text-[14px] items-center leading-5">Review & Book</Text>
+                </View>
+                <View className="gap-3 flex-row items-center ml-auto">
+                    <Feather name="heart" size={20} color='black' />
+                    <Feather name="share-2" size={20} color='black' />
+                </View>
+            </Pressable> 
+            <ScrollView>
+                <View className='px-4 pb-4'>
                     <View className='bg-white mb-4 rounded-2xl shadow-sm shadow-gray-400'>
                         <View className='justify-between flex-row p-4 items-center border-b border-gray-200'>
                             <View className='flex-row items-center gap-3'>
@@ -294,9 +295,9 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
                         <Text className="font-PoppinsSemibold text-slate-800 text-[14px] leading-5">{cartTotal}</Text>
                     </View>
                 </View>
-                <ButtonPrimary title='Confirm Booking' isLoading={loading} active={true} onPress={handleBookingFormSubmit} classes='m-4' />
-            </View>
-        </ScrollView>
+            </ScrollView>
+            <ButtonPrimary title='Confirm Booking' isLoading={loading} active={true} onPress={handleBookingFormSubmit} classes='m-4' />
+        </View>
     )
 }
 
