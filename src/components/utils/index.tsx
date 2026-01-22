@@ -288,7 +288,7 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
   const vType = useSelector((i: RootState) => i.company.vType);
   const isAdded = useSelector((i: RootState) => Object.values(i.cart).some((x : any) => x.LocationItemId === data.LocationItemId));
   // const isAdded = Object.values(cart).find((i: any) => i.LocationItemId === data.LocationItemId)
-
+  const isRestaurant = (vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT');
   const [activePackSize, setPackSize] = useState('');
   const router = useRouter();
   const dispatch = useDispatch();
@@ -328,6 +328,45 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
   // const handleBuyNow = () => {
   //   buyNow(data, packSize, dispatch, router);
   // }
+
+  if (isRestaurant) {
+    return (
+      <View className="flex-row items-center justify-between bg-white rounded-2xl p-4 shadow-sm">
+        <View className="flex-row items-center flex-1">
+          <View className="w-12 h-12 bg-gray-100 rounded-xl items-center justify-center mr-3">
+            <Text className="text-2xl">🍱</Text>
+          </View>
+
+          <View className="flex-1">
+            <Text className="text-gray-900 font-semibold text-base mb-1">{data.Description}</Text>
+            
+            <View className="flex-row items-center mb-1">
+              <Text className="text-red-600 font-bold text-lg">₹{packSize().SRate}</Text>
+              <Text className="text-gray-400 line-through text-sm ml-2">₹{packSize().ItemMRP}</Text>
+              <View className="bg-green-100 px-2 py-0.5 rounded ml-2">
+                <Text className="text-green-700 font-semibold text-xs">Save ₹10</Text>
+              </View>
+            </View>
+
+            <View className="flex-row items-center">
+              <View className="w-2 h-2 bg-green-500 rounded-full mr-1.5" />
+              <Text className="text-green-600 text-xs font-medium">Available</Text>
+            </View>
+          </View>
+        </View>
+
+        <View className="items-end ml-3">
+          <View className="bg-orange-50 px-3 py-1 rounded-full mb-2">
+            <Text className="text-orange-600 text-xs font-semibold">Canteen</Text>
+          </View>
+
+          <TouchableOpacity onPress={handleAdd} className="bg-orange-500 px-6 py-2.5 rounded-lg active:bg-orange-600">
+            <Text className="text-white font-bold text-sm">{isAdded ? 'Remove' : 'Add'}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
 
   if (type === 'grid') {
     return (

@@ -9,8 +9,8 @@ export const { compId, baseUrl, srcUrl } = Constants.expoConfig.extra || {};
 
 const compCodeSlice = createSlice({
   name: 'compCode',
-  initialState: compId ? compId : defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
-  // initialState: 'KHLqDFK8CUUxe1p1EotU3g==', 
+  // initialState: compId ? compId : defaultId, // 'ji4C/%2BQbn%2BBofLeoFG9clw==', //  'yFObpUjTIGhK9%2B4bFmadRg==', //  '5KR8RKKh%2BtHG4iszAzAjJQ==', // 
+  initialState: 'FFCeIi27FQMTNGpatwiktw==', // 'KjIAg5RDS9Q4ZJTL27CH6g==', // 'KHLqDFK8CUUxe1p1EotU3g==', 
   reducers: {
     setCompCode: (state, action: PayloadAction<string>) => {     
       return action.payload;

@@ -196,9 +196,10 @@ export default function App() {
           </SafeAreaProvider>
         </GestureHandlerRootView>
       );
-    } 
-    else if (vType === 'ErpHospital') {
+    } else if (vType === 'ErpHospital') {
       return <Redirect href="/appn/tabs/opd" />;
+    } else if (vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT') {
+      return <Redirect href="/hospitality/tabs/home" />;
     }
     else {
       return <View className='flex-1 items-center justify-center bg-gray-200'><Text className='text-xl'>ROOT PAGE</Text></View>;

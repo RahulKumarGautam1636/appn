@@ -29,7 +29,7 @@ export const hasCommonLogin = (companyId: string) => {
   return companies.includes(companyId);
 } 
 
-export const testMode = false;
+export const testMode = true;
 export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
 export const SRC_URL = 'https://erp.gsterpsoft.com';
 
