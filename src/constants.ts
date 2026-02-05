@@ -17,6 +17,7 @@ export const BC_ROY = 'ji4C/%2BQbn%2BBofLeoFG9clw=='
 export const HEXAGON_ID = 'CHEZmvXXLYNYZOKVN9fr5A==';
 export const PHARMACY = 'KHLqDFK8CUUxe1p1EotU3g=='
 export const XYZ_ID = 'KHLqDFK8CUUxe1p1EotU3g=='
+export const ROYAL_INN = 'Q2kzeREhrDppgBktervZ1Q=='
 export const rent = false;
 export const blur = false;
 // export const brandCode = 'TAKEHOME   GBOOKS';
@@ -29,7 +30,7 @@ export const hasCommonLogin = (companyId: string) => {
   return companies.includes(companyId);
 } 
 
-export const testMode = true;
+export const testMode = false;
 export const BASE_URL = testMode ? REACT_APP_TEST_BASE_URL : REACT_APP_BASE_URL;
 export const SRC_URL = 'https://erp.gsterpsoft.com';
 
@@ -38,7 +39,7 @@ export const SRC_URL = 'https://erp.gsterpsoft.com';
 
 export const permissions = {
   appointments: [BC_ROY, defaultId],
-  labtest: [defaultId, asthaMedicalId],
+  labtest: [defaultId, asthaMedicalId, wecareId],
   shop: [TAKEHOME_PHARMA, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS],
 };
 
@@ -48,9 +49,11 @@ export const hasAccess = (module: string, role: string) => {
 
 export const versions = {
   takehome: '1.0.4',      // version in config file was increased but here was not increased and the update banner doesn't triggered, so reconsider the changes before building again.
-  bcroy: '1.1.2',
+  bcroy: '1.3.0',
   gbooks: '1.0.0',
-  ecom: '1.0.0'
+  ecom: '1.0.0',
+  wecare: '1.0.0',
+  asthaMedical: '1.0.0',
 }
 
 export const initLocation = {

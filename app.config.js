@@ -58,6 +58,17 @@ export default ({ config }) => {
       baseUrl: "https://myapps.gsterpsoft.com",
       srcUrl: "https://erp.gsterpsoft.com",
     },
+    wecare: {
+      name: "WECARE",
+      package: "com.gbooks.wecare",
+      scheme: "wecare",
+      compId: "DXjdmwQhaZDlMG0FfaHJxw==",
+      icon: "./assets/images/opd.png",
+      splash: "./assets/images/opd.png",
+      version: "1.0.0",
+      baseUrl: "https://myapps.gsterpsoft.com",
+      srcUrl: "https://erp.gsterpsoft.com",
+    }
   };
 
   const accounts = {
@@ -99,8 +110,9 @@ export default ({ config }) => {
           imageWidth: 200,
           resizeMode: "contain",
           backgroundColor: "#ffffff",
-        },
+        }
       ],
+      "expo-secure-store",
     ],
     experiments: { typedRoutes: true },
     extra: {

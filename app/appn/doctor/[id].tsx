@@ -40,6 +40,10 @@ const Booking = () => {
     const [refNo, setRefNo] = useState('');
     let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
+    const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
+    const opdCategory: any = categories.find((i: any) => (i.ParentDesc).trim() === 'OPD');
+    const opdCatId = opdCategory?.Parent || 0
+
     useEffect(() => {
         setSelectedDate(selectedAppnDate);
     }, [selectedAppnDate, doctor.PartyCode])
@@ -166,6 +170,8 @@ const Booking = () => {
                 ProviderId: user.ProviderId,   // provider
                 MarketedId: user.MarketedId,   // marketing,
                 Remarks: remarks,
+                DeptId: opdCatId, 
+                UserType: user.UserType, 
             }
             console.log('user booking');
             makeBookingRequest(newbookingData);
@@ -203,6 +209,8 @@ const Booking = () => {
                     ProviderId: selectedMember.ProviderId,  
                     MarketedId: selectedMember.MarketedId,      
                     Remarks: remarks,
+                    DeptId: opdCatId, 
+                    UserType: selectedMember.UserType, 
                 }
                 console.log('member booking');
                 makeBookingRequest(newbookingData);
@@ -219,7 +227,7 @@ const Booking = () => {
         // console.log(book);
         if (!book.UserId) return alert('Something went wrong, try again later. No user Id received: F');
         setLoading(true);
-        const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);    // { status: 200 }
+        const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);    // { status: 200, data: 'S000000140' }   
         setLoading(false);
         if (res.status === 200) {
             // try {const status = axios.post(`${process.env.REACT_APP_BASE_URL_}`, params)} catch (error) {}
@@ -272,7 +280,7 @@ const Booking = () => {
 
     return (
         <>
-            <ScrollView contentContainerStyle={styles.screen} contentContainerClassName='bg-slate-100'>
+            <ScrollView contentContainerClassName='bg-slate-100 min-h-screen'>
                 <View className='bg-white'>
                     <Pressable onPress={() => router.back()} className='justify-between flex-row p-3 items-center'>
                         <View className='flex-row items-center gap-2'>
@@ -414,7 +422,7 @@ const Booking = () => {
             {/* {compCode === BC_ROY ? null :  */}
                 <ButtonPrimary title='Book Appointment' active={true} onPress={handleBooking} classes={`m-3`} />
             {/* } */}
-            <ReactNativeModal
+            {/* <ReactNativeModal
                 isVisible={confirmation}
                 onBackdropPress={() => setConfirmation(false)}
                 onBackButtonPress={() => setConfirmation(false)}
@@ -424,12 +432,11 @@ const Booking = () => {
                 useNativeDriver
                 coverScreen={true}
                 style={{margin: 0, flex: 1, height: '100%', alignItems: undefined, justifyContent: 'center', }}
-            >   
-                {/* <MyModal modalActive={confirmation} name='LOGIN' child={<AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} />} /> */}
-                <AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} remarks={remarks} setRemarks={setRemarks} loading={loading} />
-            </ReactNativeModal>
+            >    */}
+                <MyModal modalActive={confirmation} name='APPN_PREVIEW' onClose={() => setConfirmation(false)} child={<AppnPreview bookAppn={handleBookingFormSubmit} handleClose={setConfirmation} handleConfirmation={handleBookingFormSubmit} doctor={doctor} bookingData={bookingData} clinic={selectedCompany} member={selectedMember} remarks={remarks} setRemarks={setRemarks} loading={loading} />} />
+            {/* </ReactNativeModal> */}
 
-            <ReactNativeModal
+            {/* <ReactNativeModal
                 isVisible={success}
                 onBackdropPress={() => setSuccess(false)}
                 onBackButtonPress={() => setSuccess(false)}
@@ -443,20 +450,20 @@ const Booking = () => {
                 <View className={`absolute inset-0 bg-white ${success ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}>
                     <BookingSuccess doctor={doctor} bookingData={bookingData} clinic={selectedCompany} reference={refNo} />
                 </View>
-            </ReactNativeModal>
+            </ReactNativeModal> */}
+
+            <MyModal modalActive={success} name='APPN_SUCCESS' onClose={() => setSuccess(false)} child={
+                <View className={`absolute inset-0 bg-white ${success ? 'flex pointer-events-auto opacity-100' : 'd-none pointer-events-none opacity-0'}`}>
+                    <BookingSuccess doctor={doctor} bookingData={bookingData} clinic={selectedCompany} reference={refNo} />
+                </View>
+            } />
         </>
     )
 }
 
 
-
 export default withAutoUnmount(Booking);
 
-const styles = StyleSheet.create({
-    screen: {
-        minHeight: "100%"
-    }
-});
 
 const SlotBtn = ({ time, active, handleSelect, blank }: any) => {
     

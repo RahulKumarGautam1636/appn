@@ -32,6 +32,10 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
     let testDate = itemsLength ? labTests[0].testDate : '';
     let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
+    const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
+    const opdCategory: any = categories.find((i: any) => (i.ParentDesc).trim() === 'INVESTIGATION');
+    const invCatId = opdCategory?.Parent || 0
+
     const handleBack = () => {
         if (handleClose) {
             handleClose(false);
@@ -97,7 +101,9 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               ReferrerId: user.ReferrerId,   // refBy
               ProviderId: user.ProviderId,   // provider
               MarketedId: user.MarketedId,   // marketing,
+              UserType: user.UserType,
               Remarks: remarks,
+              DeptId: invCatId,
             }
             console.log('user labtest booking');
             makeBookingRequest(newbookingData);
@@ -139,7 +145,9 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               ReferrerId: selectedMember.ReferrerId,   // refBy
               ProviderId: selectedMember.ProviderId,   // provider
               MarketedId: selectedMember.MarketedId,   // marketing,
+              UserType: selectedMember.UserType,
               Remarks: remarks,
+              DeptId: invCatId, 
             }
             console.log('member labtest booking');
             makeBookingRequest(newbookingData);
@@ -159,6 +167,7 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
             setLoading(true);
             await wait(2000);
             const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, params);   // { status: 200 }
+            // const res = await axios.post(`${BASE_URL}/api/Appointment/PostReg`, params);
             setLoading(false);
             if (res.status === 200) {       
                 // dispatch(dumpCart());

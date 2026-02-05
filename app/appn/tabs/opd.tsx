@@ -28,6 +28,10 @@ const HomeScreen = () => {
     const [filterdates, setFilterDates] = useState({dates: getDatesArray(new Date(), 30), activeDate: new Date().toLocaleDateString('en-TT')})
     const [appnData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
     const [doctorTab, setDoctorTab] = useState('active_date')
+    
+    const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
+    const opdCategory: any = categories.find((i: any) => (i.ParentDesc).trim() === 'OPD');
+    const opdCatId = opdCategory?.Parent || 0
 
     useEffect(() => {
         let controller = new AbortController();
@@ -46,18 +50,18 @@ const HomeScreen = () => {
 
     useEffect(() => {
         let controller = new AbortController();
-        const getOtherDayDoctors = async (companyCode: string, subCode: string) => {
-            if (!companyCode || subCode === undefined) return;
-            const res = await getFrom(`${BASE_URL}/api/Values/GetAllDoctors?CID=${companyCode}&SID=${subCode}`, {}, setOtherDayDoctors, controller.signal);                                                        
+        const getOtherDayDoctors = async (companyCode: string, subCode: string, catId: number) => {
+            if (!companyCode || subCode === undefined || !catId) return;
+            const res = await getFrom(`${BASE_URL}/api/Values/GetAllDoctors?CID=${companyCode}&SID=${subCode}&CatId=${catId}`, {}, setOtherDayDoctors, controller.signal);                                                        
             if (res) {
                 setTimeout(() => {
                     setOtherDayDoctors(pre => ({loading: false, data: {...pre.data, PartyMasterList: res.data}, err: {status: false, msg: ''}}));
                 }, 500)
             }                                                                                                   
         } 
-        getOtherDayDoctors(selected.EncCompanyId, depts.selected?.SubCode);  
+        getOtherDayDoctors(selected.EncCompanyId, depts.selected?.SubCode, opdCatId);  
         return () => controller.abort();
-    }, [selected.EncCompanyId, depts.selected?.SubCode])
+    }, [selected.EncCompanyId, depts.selected?.SubCode, opdCatId])
 
     useEffect(() => {
         const getAppnData = async (query: string, userId: string, companyId: string) => {

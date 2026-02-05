@@ -133,7 +133,7 @@ const RetaurantHome = () => {
                 } else if (autoCompleteList.data.itemMasterCollection.length) {
                     return (
                         <View className="my-4 gap-2">
-                            {autoCompleteList.data.itemMasterCollection.map((item) => <ProductCard data={item} />)}    
+                            {autoCompleteList.data.itemMasterCollection.map((item) => <ProductCard data={item} key={item.LocationItemId} />)}    
                             {/* <SearchListCard data={item} handleActive={searchResultsActive_1} /> */}
                         </View>
                     )
@@ -150,10 +150,10 @@ const RetaurantHome = () => {
             <TouchableOpacity className="bg-white rounded-full px-5 py-1.5 ml-auto font-semibold text-xs">
               <Text className='text-gray-700 text-sm'>Order Now</Text> 
             </TouchableOpacity>
-            <View className="absolute -right-8 -bottom-4 text-6xl">🍕</View>
+            <Text className="absolute -right-8 -bottom-4 text-6xl">🍕</Text>
           </View>
           
-          <View className="min-w-[256px] h-32 bg-blue-500 rounded-2xl p-4 relative overflow-hidden">
+          <View className="min-w-[256px] bg-blue-500 rounded-2xl p-4 relative overflow-hidden">
             <Text className="text-white text-lg font-bold mb-1">Get Special</Text>
             <Text className="text-white text-2xl font-bold mb-1">Up to</Text>
             <TouchableOpacity className="bg-white rounded-full px-5 py-1.5 ml-auto font-semibold text-xs">

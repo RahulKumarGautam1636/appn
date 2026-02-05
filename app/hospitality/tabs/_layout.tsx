@@ -16,10 +16,10 @@ export default function TabsLayout() {
 
   const tabs = [
     { name: 'Home', icon: 'home', key: 'home' },                                        
-    { name: 'Tables', icon: 'calendar', key: 'orders' },                                 
+    { name: 'Tables', icon: 'calendar', key: 'tables' },                                 
     { name: 'Account', icon: 'person', key: 'profile' },
     { name: 'Category', icon: 'grid', key: 'categories' },
-    { name: 'Cart', icon: 'cart', key: 'cart' },
+    { name: 'Cart', icon: 'cart', key: 'checkout' },
   ];
 
   const lab = useSelector((i: RootState) => i.cart);
@@ -57,12 +57,13 @@ export default function TabsLayout() {
                             const isFocused = state.routes[state.index]?.name === tab.key;
                             const onPress = () => {
                                 if (tab.key === 'profile' || tab.key === 'orders') {
-                                if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
-                                } 
-                                router.push(`/shop/tabs/${tab.key}`);
+                                  if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
+                                }
+                                if (tab.key === 'categories') return router.push(`/hospitality/orderPrint?id=1234`);
+                                router.push(`/hospitality/tabs/${tab.key}`);
                                 const last = tabHistory.current[tabHistory.current.length - 1];     // Add manually to history
                                 if (last !== tab.key) {
-                                tabHistory.current.push(tab.key);
+                                  tabHistory.current.push(tab.key);
                                 }
                             };
 
@@ -82,7 +83,7 @@ export default function TabsLayout() {
                                 //     )}
                                 // </TouchableOpacity>
 
-                                <TouchableOpacity className="flex flex-col items-center">
+                                <TouchableOpacity key={tab.name} onPress={onPress} className="flex flex-col items-center">
                                     <Ionicons name={isFocused ? tab.icon : tab.icon+'-outline'} size={22} color={isFocused ? '#EF4444' : '#6e6e6e'} />
                                     <Text className={`text-xs mt-1 font-semibold ${isFocused ? 'text-red-500' : 'text-gray-400'}`}>{tab.name}</Text>
                                 </TouchableOpacity>

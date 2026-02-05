@@ -36,7 +36,7 @@ export default function UpdateBanner() {
         const res = await axios.get(`https://myapps.gsterpsoft.com/api/AppVersion/GetLatestVersion?Type=app&AppWebName=${pakage}`);   
         // const res = await axios.get(`http://10.0.2.2:3000/versions/${pakage?.split('.')[2]}`);                                           // Emulator      
         // const res = await axios.get(`http://http://192.168.0.127:3000/versions/${pakage}`);                                              // Ipconfig 2
-        const { Major, Minor, Patch, AppWebName } = res.data.VersionObj
+        const { Major, Minor, Patch, AppWebName } = res.data.VersionObj       // { Major: 1, Minor: 3, Patch: 0, AppWebName: "com.gbooks.bcroy" }
         const playStoreUrl = `https://play.google.com/store/apps/details?id=${AppWebName}`;
         console.log(Major, Minor, Patch, playStoreUrl, major, minor, patch);
         if (Minor > minor) {

@@ -114,7 +114,7 @@ const AddMember = ({ isModal }: any) => {
       EncCompanyId: user.EncCompanyId,    
       RegMob1: user.RegMob1,
       ParentUserId: user.UserId,
-      UserType: user.UserType,
+      UserType: 'CUSTOMER',
       PartyId: user.PartyId,
       UnderDoctId: 0,  // sales
       ReferrerId: 0,   // refBy
@@ -152,7 +152,7 @@ const AddMember = ({ isModal }: any) => {
                 ParentUserId: item.ParentUserId,
                 MemberId: item.MemberId,
                 MemberTypeId : item.MemberTypeId ? item.MemberTypeId : '',
-                UserType: item.UserType ? item.UserType : uType.PATIENT.title,
+                UserType: item.UserType ? item.UserType : uType.CUSTOMER.title,
                 UID: item.UID ? item.UID : '',
                 UserId: item.UserId,
                 
@@ -459,7 +459,7 @@ const AddMember = ({ isModal }: any) => {
 
                             <View className="flex-row gap-3">
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">Provider</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">{fields.provider.active ? <Required /> : null} Provider</Text>
                                     <TextInput 
                                         readOnly={!fields.provider.active} 
                                         value={fields.provider.label} 
@@ -471,7 +471,7 @@ const AddMember = ({ isModal }: any) => {
                                     />
                                 </View>
                                 <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">{compDetail.MarketedByCaption || 'Business Executive'}</Text>
+                                    <Text className="text-primary-500 text-[10px] font-PoppinsSemibold absolute z-10 left-5 -top-[8px] bg-white px-1">{fields.marketing.active ? <Required /> : null} {compDetail.MarketedByCaption || 'Business Executive'}</Text>
                                     <TextInput 
                                         ref={marketingInputRef}
                                         onPress={() => setMarketOpen(true)} 

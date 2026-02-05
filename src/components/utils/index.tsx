@@ -11,10 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "tailwindcss/colors";
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { FileText } from "lucide-react-native";
+import { FileText, Soup } from "lucide-react-native";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { BASE_URL, initReg, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from "@/src/constants";
+import * as SecureStore from 'expo-secure-store';
 
 export const getFrom = async (queryUrl: any, params: any, setStateName: any, signal?: GenericAbortSignal) => {
   
@@ -331,36 +332,36 @@ export const ProductCard = ({ data, width='100%', type='grid', parent='' }) => {
 
   if (isRestaurant) {
     return (
-      <View className="flex-row items-center justify-between bg-white rounded-2xl p-4 shadow-sm">
+      <View className="flex-row items-center justify-between bg-white rounded-2xl p-3.5 shadow-sm">
         <View className="flex-row items-center flex-1">
-          <View className="w-12 h-12 bg-gray-100 rounded-xl items-center justify-center mr-3">
-            <Text className="text-2xl">🍱</Text>
+          <View className="w-12 h-12 bg-emerald-50 rounded-xl items-center justify-center mr-3 mb-auto border border-emerald-100">
+            <Soup size={24} color={colors.emerald[600]} />
           </View>
 
           <View className="flex-1">
-            <Text className="text-gray-900 font-semibold text-base mb-1">{data.Description}</Text>
+            <Text className="text-gray-900 font-semibold text-sm mb-1">{data.Description}</Text>
             
-            <View className="flex-row items-center mb-1">
-              <Text className="text-red-600 font-bold text-lg">₹{packSize().SRate}</Text>
+            <View className="flex-row items-center mb-1 gap-1">
+              <Text className="text-red-600 font-bold text-sm">₹{packSize().SRate}</Text>
               <Text className="text-gray-400 line-through text-sm ml-2">₹{packSize().ItemMRP}</Text>
-              <View className="bg-green-100 px-2 py-0.5 rounded ml-2">
+              {/* <View className="bg-green-100 px-2 py-0.5 rounded ml-2">
                 <Text className="text-green-700 font-semibold text-xs">Save ₹10</Text>
-              </View>
+              </View> */}
             </View>
 
-            <View className="flex-row items-center">
-              <View className="w-2 h-2 bg-green-500 rounded-full mr-1.5" />
-              <Text className="text-green-600 text-xs font-medium">Available</Text>
+            <View className="flex-row items-center mt-0.5">
+              <View className="w-2 h-2 bg-gray-500 rounded-full mr-1.5" />
+              <Text className="text-gray-600 text-xs font-medium">Canteen</Text>
             </View>
           </View>
         </View>
 
         <View className="items-end ml-3">
-          <View className="bg-orange-50 px-3 py-1 rounded-full mb-2">
+          {/* <View className="bg-orange-50 px-3 py-1 rounded-full mb-2">
             <Text className="text-orange-600 text-xs font-semibold">Canteen</Text>
-          </View>
+          </View> */}
 
-          <TouchableOpacity onPress={handleAdd} className="bg-orange-500 px-6 py-2.5 rounded-lg active:bg-orange-600">
+          <TouchableOpacity onPress={handleAdd} className="bg-gray-600 px-5 py-1.5 rounded-lg">
             <Text className="text-white font-bold text-sm">{isAdded ? 'Remove' : 'Add'}</Text>
           </TouchableOpacity>
         </View>
@@ -1175,4 +1176,68 @@ export function groupBy(list = [], key: string) {         // group items by keyn
 // get sum of a specific key's value in an arry of objects.
 export const sumByKey = (arr: any, key: string) => arr.reduce((sum: any, item: string) => sum + (Number(item?.[key]) || 0), 0);
 
+export const storage = {
+  async set(key: string, value: string) {
+    if (web) {
+      localStorage.setItem(key, value);
+    } else {
+      await SecureStore.setItemAsync(key, value);
+    }
+  },
 
+  async get(key: string) {
+    if (web) {
+      return localStorage.getItem(key);
+    } else {
+      return await SecureStore.getItemAsync(key);
+    }
+  },
+
+  async remove(key: string) {
+    if (web) {
+      localStorage.removeItem(key);
+    } else {
+      await SecureStore.deleteItemAsync(key);
+    }
+  },
+};
+
+export const validRegType = (UserRegTypeId: number, warn=true) => {     // Placing this in utils file triggering redux circular reference error.
+  const vType = store.getState().company.vType;
+  let userRegTypeId = store.getState().appData.userRegType.CodeId; 
+  if (vType && vType !== 'ErpPharma') return true;
+  if (UserRegTypeId === userRegTypeId) {
+    return true;
+  } else {
+    if (warn) alert('You are not Allowed to log in.');       
+    return false; 
+  }
+}
+
+export const logout = (dispatch: any) => {
+  dispatch(setLogin(false)); 
+  dispatch(setUser({}));
+  storage.remove('user');
+}
+
+export const groupMembers = (obj: any) => obj.reduce((acc: any, curr: any) => {
+  const key = [
+    curr.UnderDoctDesc.trim().toLowerCase(),
+    curr.ProviderDesc.trim().toLowerCase(),
+    curr.ReferrerDesc.trim().toLowerCase(),
+    curr.MarketedDesc.trim().toLowerCase()
+  ].join('|');                                                      // make a unique key
+
+  if (!acc[key]) {
+    acc[key] = {
+      UnderDoctDesc: curr.UnderDoctDesc,
+      ProviderDesc: curr.ProviderDesc,
+      ReferrerDesc: curr.ReferrerDesc,
+      MarketedDesc: curr.MarketedDesc,
+      items: []                                                     // store all duplicates here
+    };
+  }
+
+  acc[key].items.push(curr);
+  return acc;
+}, {});

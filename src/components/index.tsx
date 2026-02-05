@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Svg, { Circle, G } from 'react-native-svg';
 import Animated, { useSharedValue, useAnimatedProps, withRepeat, withSequence, withTiming, Easing, interpolate, withDelay } from 'react-native-reanimated';
 import { RootState } from "../store/store";
-import { add2Cart, computeWithPackSize, num, uType } from "./utils";
+import { add2Cart, computeWithPackSize, num, uType, web } from "./utils";
 import colors from "tailwindcss/colors";
 import { popRoute } from "../store/slices/nav";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -200,7 +200,7 @@ export const Card_1 = ({ data, selectedDate, docCompId='' }: any) => {
   )
 }
 
-export const Card_2 = ({ data, active }: any) => {
+export const Card_2 = ({ data, active, classes }: any) => {
 
   const dispatch = useDispatch()
   const router = useRouter();
@@ -270,7 +270,7 @@ export const Card_2 = ({ data, active }: any) => {
 
   return (
     <TouchableOpacity onPress={handleSelect}>
-      <View className='flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full'>
+      <View className={`flex-row gap-4 bg-white p-[13px] rounded-xl shadow-lg w-full ${classes}`}>
         <Image className='shadow-lg rounded-xl' source={require('@/assets/images/user.png')} style={{ width: 70, height: 70 }} />
         <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-800 text-[14px]">{data.MemberName}</Text>
@@ -287,7 +287,7 @@ export const Card_2 = ({ data, active }: any) => {
             <FontAwesome name="check" size={17} color="#16a34a" />  Selected
           </Text>}
         </View>
-          <ReactNativeModal
+          {/* <ReactNativeModal
             isVisible={dropdown}
             onBackdropPress={() => setDropdown(false)}
             animationIn="fadeInUp"
@@ -299,11 +299,10 @@ export const Card_2 = ({ data, active }: any) => {
             alignItems: undefined,
             justifyContent: 'center',
             }}
-            // deviceHeight={height}
-            // customBackdrop={<View style={{flex: 1}} />}
           >
             <Dropdown />
-          </ReactNativeModal>
+          </ReactNativeModal> */}
+          <MyModal modalActive={dropdown} name='APPN_PREVIEW' onClose={() => setDropdown(false)} child={<Dropdown />} />
       </View>
     </TouchableOpacity>
   )
@@ -537,7 +536,7 @@ export const MyModal = ({ modalActive, child, name, customClass, onClose, styles
       // deviceHeight={height}
       // customBackdrop={<View style={{flex: 1}} />
     >
-      <KeyboardAvoidingView className={`${containerClass}`} pointerEvents="box-none">
+      <KeyboardAvoidingView className={`${containerClass} ${web ? 'max-w-[500] mx-auto w-full' : ''}`} pointerEvents="box-none">
         {React.cloneElement(child, { name: name, modalActive: modalActive, onClose: onClose })}
       </KeyboardAvoidingView>
     </ReactNativeModal>
@@ -656,9 +655,9 @@ export function useGlobalBackHandler() {
   }, [history]);
 }
 
-export const FullScreenLoading = ({ classes }: any) => {
+export const FullScreenLoading = ({ classes, styles }: any) => {
   return (
-    <View className={`${classes} flex-1 bg-white flex items-center justify-center`}>
+    <View className={`${classes} flex-1 bg-white flex items-center justify-center`} style={styles}>
       <Text className="text-2xl mb-6 font-semibold">Loading...</Text>
       <SvgLoader />
     </View>

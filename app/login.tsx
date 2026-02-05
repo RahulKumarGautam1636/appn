@@ -1,16 +1,15 @@
 import { useRouter } from "expo-router";
-import { Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import ButtonPrimary, { FullScreenLoading, mmDDyyyyDate, MyModal } from "../src/components";
+import { Image, Pressable, ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
+import ButtonPrimary, { MyModal } from "../src/components";
 import { BASE_URL, BC_ROY, hasCommonLogin, defaultId, gender, initReg, myColors, salutations, states, asthaMedicalId, wecareId } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { setLogin, setUser, getCompanies, setModal } from "../src/store/slices/slices";
-// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { setLogin, setUser, setModal } from "../src/store/slices/slices";
+import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { createDate, getDuration, minDate, Required, swapMinDate, useRegType } from "@/src/components/utils";
+import { createDate, getDuration, Required, storage, swapMinDate, useRegType } from "@/src/components/utils";
 import colors from "tailwindcss/colors";
 
 interface loginType {
@@ -35,6 +34,7 @@ const Login = ({ modalMode }: any) => {
     const [tab, setTab] = useState('login');
     const [existingUser, setExistingUser] = useState({});
     const hasNoRegisteration = noRegistration.includes(compCode)
+    const [keepLoggedIn, setKeepLoggedIn] = useState(true);
     
 
     const handleLoginFormSubmit = () => {
@@ -146,7 +146,7 @@ const Login = ({ modalMode }: any) => {
                 PartyId: data.PartyId,
                 Salutation: data.Salutation,
                 UserFullName: data.UserFullName,
-                UserPassword: data.UserPassword,
+                // UserPassword: data.UserPassword,
         
                 DOB: data.DOB,
                 DOBstr: data.DOB,
@@ -178,7 +178,8 @@ const Login = ({ modalMode }: any) => {
                 UserLevelSeq: data.UserLevelSeq,
                 UserCompList: data.UserCompList[0],
             };
-            // localStorage.setItem("userLoginData", encrypt({ phone: params.phone, password: data.UserPassword, compCode: params.companyCode }));
+            const userData = { UserName: params.phone, UserPassword: data.UserPassword, EncCompanyId: params.EncCompanyId };
+            if (keepLoggedIn) await storage.set('user', JSON.stringify(userData));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
             if (modalMode) {
@@ -237,16 +238,22 @@ const Login = ({ modalMode }: any) => {
                                     <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Phone Number</Text>
                                     <TextInput placeholderTextColor={colors.gray[400]} placeholder='Phone Number' maxLength={10} value={loginData.phone} onChangeText={(text) => setLoginData(pre => ({...pre, phone: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
                                 </View>
-                                <View className='z-10'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Password</Text>
-                                    <TextInput placeholderTextColor={colors.gray[400]} placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                <View>
+                                    <View className='z-10'>
+                                        <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Password</Text>
+                                        <TextInput placeholderTextColor={colors.gray[400]} placeholder='Your Password' value={loginData.password} onChangeText={(text) => setLoginData(pre => ({...pre, password: text }))} className='bg-white p-5 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    </View>
+                                    <View className="flex-row gap-2 items-center mt-2">
+                                        <Switch value={keepLoggedIn} onValueChange={() => setKeepLoggedIn(!keepLoggedIn)} style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }} />
+                                        <Text className="text-gray-500 text-[12px] font-medium mr-auto">Keep me logged in.</Text>
+                                    </View>
+                                    {loginError.status ?
+                                        <Text className="text-rose-500 text-[13px] font-semibold mr-auto">{loginError.message}</Text>
+                                    : null}
+                                    <Pressable onPress={() => setTab('forgotPassword')}>
+                                        <Text className="text-sky-600 text-[13px] font-semibold ml-auto">Forgot Password ?</Text>
+                                    </Pressable>
                                 </View>
-                                {loginError.status ?
-                                    <Text className="text-rose-500 text-[13px] font-semibold mr-auto">{loginError.message}</Text>
-                                : null}
-                                <Pressable onPress={() => setTab('forgotPassword')}>
-                                    <Text className="text-sky-600 text-[13px] font-PoppinsSemibold ml-auto">Forgot Password ?</Text>
-                                </Pressable>
                                 <ButtonPrimary onClick={handleLoginFormSubmit} isLoading={loading} title='LOGIN' active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                                 {hasNoRegisteration ? null : <Pressable onPress={() => setTab('register')}>
                                     <Text className="text-gray-500 text-[13px] font-PoppinsMedium mx-auto">Don't have Account  ? 
@@ -297,6 +304,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
     const [loading, setLoading] = useState(false);
     const [regData, setRegData] = useState({ ...initReg, DOB: '', DOBstr: '', BusinessType: 'B2C' });
     const isOPD = vType === 'ErpHospital';
+    const [keepLoggedIn, setKeepLoggedIn] = useState(true);
     // const regType = useSelector((state: RootState) => state.modals.LOGIN.data?.mode) || {};
     const userRegTypeId = useSelector((state: RootState) => state.appData.userRegType.CodeId);
     const [regTypeDropdown, setRegTypeDropdown] = useState(false);
@@ -469,6 +477,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
             } else if (data.UserId) {
                 dispatch(setUser({ ...data, UserCompList: data.UserCompList[0] }));
                 // localStorage.setItem("userLoginData", encrypt({ phone: params.RegMob1, password: params.UserPassword, compCode: compCode }));
+                if (keepLoggedIn) storage.set('user', JSON.stringify(body));
                 return true;
             } else {
                 alert('We could not log you in, Please log in again manually.');
@@ -702,18 +711,24 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                                     <MyModal modalActive={stateDropdown} onClose={() => setStateDropdown(false)} child={<StateDropdown />} />
                                 </Pressable>
                             </View>
-                            <View className="flex-row gap-3">
-                                <View className='z-10 flex-1'> 
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Pin Code</Text>
-                                    <TextInput placeholder='Pin Code' maxLength={6} value={regData.Pin} onChangeText={(text) => setRegData(pre => ({...pre, Pin: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                            <View>
+                                <View className="flex-row gap-3">
+                                    <View className='z-10 flex-1'> 
+                                        <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1">Pin Code</Text>
+                                        <TextInput placeholder='Pin Code' maxLength={6} value={regData.Pin} onChangeText={(text) => setRegData(pre => ({...pre, Pin: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    </View>
+                                    <View className='z-10 flex-1'>
+                                        <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Password</Text>
+                                        <TextInput placeholder='Password' maxLength={10} value={regData.UserPassword} onChangeText={(text) => setRegData(pre => ({...pre, UserPassword: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                    </View>
                                 </View>
-                                <View className='z-10 flex-1'>
-                                    <Text className="text-primary-500 text-[11px] font-PoppinsSemibold absolute z-10 left-5 -top-[9px] bg-white px-1"><Required /> Password</Text>
-                                    <TextInput placeholder='Password' maxLength={10} value={regData.UserPassword} onChangeText={(text) => setRegData(pre => ({...pre, UserPassword: text }))} className='bg-white p-4 rounded-2xl text-[13px] border-2 border-stone-200' />
+                                <View className="flex-row gap-2 items-center my-1">
+                                    <Switch value={keepLoggedIn} onValueChange={() => setKeepLoggedIn(!keepLoggedIn)} style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }} />
+                                    <Text className="text-gray-500 text-[12px] font-medium mr-auto">Keep me logged in.</Text>
                                 </View>
+                                <Text className="text-orange-600 text-[13px] font-medium ml-auto">Please keep your password for future logins.</Text>
                             </View>
                         </View>
-                        <Text className="text-orange-600 text-[13px] font-medium ml-auto">Please keep your password for future logins.</Text>
                         <ButtonPrimary onClick={handleRegFormSubmit} isLoading={loading} title={isModal ? 'UPDATE DETAILS' : 'REGISTER'} active={true} classes='rounded-2xl' textClasses='tracking-widest' />
                     </> : null}
                     {isModal ? null: <Pressable onPress={() => setTab('login')} className="mt-4">

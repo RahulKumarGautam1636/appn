@@ -13,6 +13,8 @@ import Modals from "@/src/components/modals";
 import { getCompanyDetails } from "@/src/store/slices/slices";
 import { pushRoute } from "@/src/store/slices/nav";
 import { useGlobalBackHandler } from "@/src/components";
+import { web } from "@/src/components/utils";
+import Auth from "@/src/components/auth";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,7 +23,7 @@ function LayoutContent() {
   const backgroundColor = isDark ? "#000000" : "#FFFFFF";
   const compCode = useSelector((state: RootState) => state.compCode);
   const locationId = useSelector((state: RootState) => state.appData.location.LocationId);
-  const history = useSelector((state: RootState) => state.navigation.history);
+  // const history = useSelector((state: RootState) => state.navigation.history);
   const dispatch = useDispatch()
   const pathname = usePathname();
   
@@ -63,7 +65,7 @@ function LayoutContent() {
 
   return (
     <SafeAreaView className={`flex-1 ${blur && "opacity-10"}`}>
-      <KeyboardAvoidingView className="flex-1">
+      <KeyboardAvoidingView className={`flex-1`}>
         <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? "light-content" : "dark-content"} />
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" options={{animation: 'slide_from_right'}} />
@@ -98,9 +100,10 @@ function LayoutContent() {
 export default function RootLayout() {
   return (
     <Provider store={store}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView className={`flex-1 ${web ? 'h-full w-full max-w-[500px] mx-auto border border-gray-200' : ''}`}>
         <SafeAreaProvider>
           <LayoutContent />
+          <Auth />
           <Init />
           <Modals />
           <UpdateBanner />

@@ -4,14 +4,14 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { BC_ROY, defaultId, hasAccess, myColors } from '@/src/constants';
+import { BASE_URL, BC_ROY, defaultId, hasAccess, myColors } from '@/src/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLogin, setUser } from '@/src/store/slices/slices';
 import { useState } from 'react';
 import { Registeration } from '../../login';
 import { Authenticate, MyModal } from '@/src/components';
 import { RootState } from '@/src/store/store';
-import { GradientBG, uType } from '@/src/components/utils';
+import { GradientBG, logout, sumByKey, useFetch, uType } from '@/src/components/utils';
 import colors from 'tailwindcss/colors';
 import { Cases, Patients } from './reports';
 
@@ -24,6 +24,10 @@ const Profile = () => {
     const dispatch = useDispatch()
     const [report, setReport] = useState('');
     
+    const [reportData, isLoading, error] = useFetch(`${BASE_URL}/api/SalesInvoice/GetBusinessCount?CID=${compCode}&UserId=${user.UserId}&PartyCode=${user.PartyCode}`, compCode);
+    const patients = reportData?.Journal?.Sales?.SalesDetailsList;
+    const cases = sumByKey(patients || [], 'NosOfCase')
+
     return (
         <Authenticate>
         <ScrollView contentContainerClassName='bg-white min-h-full'>
@@ -80,13 +84,13 @@ const Profile = () => {
                         <View className='flex-row justify-between border-y border-gray-300 border-solid'>
                             <Pressable onPress={() => setReport(report === 'patients' ? '' : 'patients')} className='items-center flex-1 border-r border-gray-300'>
                                 <View className='items-center p-4'>
-                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 7 : 0}</Text>
+                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{patients?.length || 0}</Text>
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">View By Patients</Text>
                                 </View>
                             </Pressable>
                             <Pressable onPress={() => setReport(report === 'cases' ? '' : 'cases')} className='items-center flex-1'>
                                 <View className='items-center p-4'>
-                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 15 : 0}</Text>
+                                    <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{cases}</Text>
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">View By Cases</Text>
                                 </View>
                             </Pressable>
@@ -140,7 +144,7 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
-                    <Link href={'/appn/tabs/opd'} onPress={() => {dispatch(setLogin(false)); dispatch(setUser({}))}}>
+                    <Link href={'/appn/tabs/opd'} onPress={() => logout(dispatch)}>
                         <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <Entypo name="log-out" size={20} color={colors.cyan[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Logout</Text>
