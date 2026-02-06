@@ -30,45 +30,6 @@ import { getRequiredFields } from '@/src/components/utils/shared';
 // Also install: expo-linear-gradient
 
 export default function RestaurantBooking() {
-  const [orderItems, setOrderItems] = useState([
-    { id: 1, name: 'CHICKEN HARIYALI', quantity: 1, rate: 350, checked: true },
-    { id: 2, name: 'CHICKEN MALAI TIKKA', quantity: 1, rate: 350, checked: true },
-    { id: 3, name: 'Chicken 65', quantity: 2, rate: 330, checked: true },
-  ]);
-
-  const [tableNumber, setTableNumber] = useState('');
-  const [waiterName, setWaiterName] = useState('');
-  const [memberName, setMemberName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const updateQuantity = (id, increment) => {
-    setOrderItems(prev =>
-      prev.map(item =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + (increment ? 1 : -1)) }
-          : item
-      )
-    );
-  };
-
-  const toggleCheck = (id) => {
-    setOrderItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, checked: !item.checked } : item
-      )
-    );
-  };
-
-  const removeItem = (id) => {
-    setOrderItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const calculateTotal = () => {
-    return orderItems.reduce((sum, item) => sum + (item.rate * item.quantity), 0);
-  };
-
-  // NEW WORK
 
   const { vType, info: compInfo } = useSelector((i: RootState) => i.company);
   const cart = useSelector((i: RootState) => i.cart);
@@ -614,24 +575,27 @@ export default function RestaurantBooking() {
         <LinearGradient colors={["#1a3a2e", "#2d5442"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} className="px-4 py-4 rounded-b-2xl">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
-              <View className="w-10 h-10 bg-[#D4AF37] rounded-lg items-center justify-center shadow-lg">
+              {/* <View className="w-10 h-10 bg-[#D4AF37] rounded-lg items-center justify-center shadow-lg">
                 <Text className="text-white text-xl font-bold">P</Text>
-              </View>
+              </View> */}
+              <Image className='rounded-full' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${compInfo.LogoUrl}` }} style={{ width: 35, height: 35 }} />
               <Text className="text-[#faf8f3] font-semibold tracking-wide">{compInfo.COMPNAME.length > 27 ? compInfo.COMPNAME.substr(0, 27) + '..' : compInfo.COMPNAME}</Text>
             </View>
 
-            <View className="flex flex-row items-center">
-              {/* <View className="w-10 h-10 rounded-full bg-gray-300 mr-3" /> */}
+            {isLoggedIn ? <Pressable onPress={() => router.push('/hospitality/tabs/account')} className="flex flex-row items-center">
               <Image className='shadow-lg rounded-full mr-3' source={require('@/assets/images/user.png')} style={{ width: 35, height: 35 }} />
               <View>
                 <Text className="text-sm font-semibold mb-1 text-white">{userInfo.Name}</Text>
                 <View className="flex flex-row items-center">
-                  {/* <MapPin size={14} color="white" /> */}
                   <Text className="text-xs text-white">{(userInfo.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}</Text>
                 </View>
               </View>
               <ChevronDown size={16} color="#fff" className="ml-2" />
-            </View>
+            </Pressable> 
+            :
+            <TouchableOpacity onPress={() => dispatch(setModal({name: 'LOGIN', state: true}))} className="bg-[#D4AF37] px-5 py-1.5 rounded-lg">
+              <Text className="text-white font-bold text-sm">Login</Text>
+            </TouchableOpacity>}
             {/* <View className="flex flex-row items-center gap-4">
               <Image className='rounded-full' source={{ uri: `https://erp.gsterpsoft.com/Content/CompanyLogo/${compInfo.LogoUrl}` }} style={{ width: 35, height: 35 }} />
               <View>
@@ -705,7 +669,7 @@ export default function RestaurantBooking() {
                     <TextInput onChangeText={(text) => handleWaiterSearch('waiterName', text)} value={searchWaiter.waiterName} placeholder="Search Waiter" placeholderTextColor="#999" className="w-full px-3 py-2 text-sm" />
                   </Pressable>
                   {/* <TextInput placeholder="Search Waiter" placeholderTextColor="#999" value={waiterName} onChangeText={setWaiterName} className="flex-1 bg-[#faf8f3] border-2 border-gray-200 rounded-tl-md rounded-bl-md px-3 py-2 text-sm" /> */}
-                  {waiterSearchResultsActive || searchWaiter.waiterName ? <TouchableOpacity onPress={() => {setWaiterSearchResultsActive(false); setSearchWaiter(pre => ({...pre, waiterName: ''})); setSelectedWaiter({ Name: '', PartyCode: '' });}}><X size={20} className='my-auto mr-4' /></TouchableOpacity> : null}
+                  {waiterSearchResultsActive || searchWaiter.waiterName ? <TouchableOpacity className='my-auto mr-4' onPress={() => {setWaiterSearchResultsActive(false); setSearchWaiter(pre => ({...pre, waiterName: ''})); setSelectedWaiter({ Name: '', PartyCode: '' });}}><X size={20} /></TouchableOpacity> : null}
                   <TouchableOpacity className="bg-[#2d5442] px-4 rounded-tr-md rounded-br-md items-center justify-center">
                     <Text className="text-white text-xs font-semibold tracking-wide">Search</Text>
                   </TouchableOpacity>

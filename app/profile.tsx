@@ -7,17 +7,19 @@ import React, { useEffect, useState } from "react";
 import { Image, Pressable, RefreshControl, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
-import { Registeration } from "../login";
+import { Registeration } from "./login";
 
 const Profile = () => {
 
     const user = useSelector((i: RootState) => i.user);
+    const vType = useSelector((i: RootState) => i.company.vType);
     const { selectedMember, membersList } = useSelector((i: RootState) => i.members);
     const [activeTab, setActiveTab] = useState("profile");
     const [searchQuery, setSearchQuery] = useState("");
     const dispatch = useDispatch();
     let { mainTab } = useGlobalSearchParams();
     const [personalInfoActive, setPersonalInfoActive] = useState(false);
+    const isRestaurant = (vType === 'RESTAURANT' || vType === 'HOTEL' || vType === 'RESORT');
 
     useEffect(() => {
       if (mainTab) setActiveTab(mainTab);
@@ -81,17 +83,48 @@ const Profile = () => {
           {/* Content based on active tab */}
           <ScrollView className="flex-1" showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} colors={["#3b82f6"]} />}>
             {activeTab === "profile" && (
-              <Animated.View entering={FadeIn.duration(300)} className="p-4">
-                {/* Contact Information */}
+              isRestaurant ? <>
+                <Animated.View entering={FadeIn.duration(300)} className="p-4">
                   <Text className="text-lg font-bold text-gray-800 mb-4">Contact Information</Text>
+                  <View className="bg-white rounded-xl p-4 mb-4 shadow-sm gap-4">
+                    <View className="flex-row flex-wrap">
+                      <View className="w-1/2 pr-2 mb-4">
+                        <MedicalInfoItem icon={<Ionicons name="call-outline" size={18} color="#ef4444" />} title="Phone Number" value={selectedMember.Mobile || "Not Available"} colorClass="bg-red-100" />
+                      </View>
+                      <View className="w-1/2 pl-2 mb-4">
+                        <MedicalInfoItem icon={<Ionicons name="person-outline" size={18} color="#ef4444" />} title="Gender" value={selectedMember.GenderDesc || "Not Available"} colorClass="bg-red-100" />
+                      </View>
+                      <View className="w-1/2 pr-2">
+                        <MedicalInfoItem icon={<Ionicons name="calendar-outline" size={18} color="#ef4444" />} title="Date of Birth" value={selectedMember.DOB ? new Date(selectedMember.DOB).toLocaleDateString() : "Not Available"} colorClass="bg-red-100" />
+                      </View>
+                      <View className="w-1/2 pl-2">
+                        <MedicalInfoItem icon={<Ionicons name="time-outline" size={18} color="#ef4444" />} title="Age" value={selectedMember.Age ? `${selectedMember.Age} years` : "Not Available"} colorClass="bg-red-100" />
+                      </View>
+                    </View>
+                  </View>
+                  <View className="bg-white rounded-xl p-4 mb-4 shadow-sm gap-4">
+                    <View className="flex-row flex-wrap">
+                      <View className="w-1/2 pr-2">
+                        <MedicalInfoItem icon={<Ionicons name="home-outline" size={18} color="#3b82f6" />} title="City" value={selectedMember.City || "Not Available"} colorClass="bg-blue-100" />
+                      </View>
+                      <View className="w-1/2 pl-2">
+                        <MedicalInfoItem icon={<Ionicons name="location-outline" size={18} color="#3b82f6" />} title="Pin Code" value={selectedMember.Pin || "Not Available"} colorClass="bg-blue-100" />
+                      </View>
+                    </View>
+                    <MedicalInfoItem icon={<Ionicons name="mail-outline" size={18} color="#3b82f6" />} title="State" value={selectedMember.StateDesc || "Not Available"} colorClass="bg-blue-100" />
+                    <MedicalInfoItem icon={<Ionicons name="map-outline" size={18} color="#3b82f6" />} title="Address" value={`${selectedMember.Address}, ${selectedMember.City}, ${selectedMember.StateDesc} - ${selectedMember.Pin}`} colorClass="bg-blue-100" />
+                  </View>
+                </Animated.View>
+              </>
+              : 
+              <Animated.View entering={FadeIn.duration(300)} className="p-4">
+                <Text className="text-lg font-bold text-gray-800 mb-4">Contact Information</Text>
                 <View className="bg-white rounded-xl p-4 mb-4 shadow-sm gap-4">
                   <MedicalInfoItem icon={<Ionicons name="call-outline" size={18} color="#3b82f6" />} title="Phone Number" value={selectedMember.Mobile || "Not Available"} colorClass="bg-blue-100" />
                   <MedicalInfoItem icon={<Ionicons name="mail-outline" size={18} color="#3b82f6" />} title="Email Address" value={selectedMember.Email || "Not Available"} colorClass="bg-blue-100" />
                   <MedicalInfoItem icon={<Ionicons name="location-outline" size={18} color="#3b82f6" />} title="Address" value={`${selectedMember.Address}, ${selectedMember.City}, ${selectedMember.StateDesc} - ${selectedMember.Pin}`} colorClass="bg-blue-100" />
                 </View>
-
-                {/* Medical Information */}
-                  <Text className="text-lg font-bold text-gray-800 mb-4">Medical Information</Text>
+                <Text className="text-lg font-bold text-gray-800 mb-4">Medical Information</Text>
                 <View className="bg-white rounded-xl p-4 mb-4 shadow-sm gap-4">
                   <View className="flex-row flex-wrap">
                     <View className="w-1/2 pr-2 mb-4">
@@ -108,9 +141,7 @@ const Profile = () => {
                     </View>
                   </View>
                 </View>
-
-                {/* Additional Information */}
-                  <Text className="text-lg font-bold text-gray-800 mb-4">Additional Details</Text>
+                <Text className="text-lg font-bold text-gray-800 mb-4">Additional Details</Text>
                 <View className="bg-white rounded-xl p-4 mb-4 shadow-sm gap-4">
                   <MedicalInfoItem icon={<MaterialIcons name="badge" size={18} color="#10b981" />} title="Member ID" value={selectedMember.MemberId?.toString() || "Not Available"} colorClass="bg-green-100" />
                   <MedicalInfoItem icon={<Ionicons name="heart-outline" size={18} color="#10b981" />} title="Relationship" value={selectedMember.RelationShipWithHolder || "Primary"} colorClass="bg-green-100" />

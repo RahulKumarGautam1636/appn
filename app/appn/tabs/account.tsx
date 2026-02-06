@@ -102,7 +102,7 @@ const Profile = () => {
                 </View>
                 <View className='mt-1'>
                     {/* onPress={() => setPersonalInfoActive(true)} */}
-                    <Pressable onPress={() => router.push('/appn/profile')}>
+                    <Pressable onPress={() => router.push('/profile')}>
                         <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200 items-center'>
                             <FontAwesome name="user" size={24} color={colors.teal[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Personal Information</Text>
@@ -123,7 +123,7 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link> : null}
-                    <Link href={'/appn/profile?mainTab=members'}>
+                    <Link href={'/profile?mainTab=members'}>
                         <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <FontAwesome5 name="users" size={20} color={colors.orange[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Members</Text>

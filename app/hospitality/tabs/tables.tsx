@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Moda
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
-import { useNavigation } from 'expo-router';
 import { setModal, setRestaurant } from '@/src/store/slices/slices';
 import { getFrom, GridLoader } from '@/src/components/utils';
 import { BASE_URL } from '@/src/constants';
+import { useRouter } from 'expo-router';
 
 const tableData = {
   TERRACE: [
@@ -27,7 +27,7 @@ const tableData = {
   ],
 };
 
-export default function TableSelection() {
+export default function TableSelection({ isModal }: any) {
   const [selectedTable, setSelectedTable] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -47,7 +47,7 @@ export default function TableSelection() {
         <TouchableOpacity activeOpacity={0.7} onPress={() => handleSelect(table)} className="bg-white rounded-2xl" style={{ shadowColor: "#1a3a2e", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 12, elevation: 5 }}>
             <View className='px-4 pt-4 pb-2'>
                 <View className="items-center mb-3">
-                    <View className={`w-16 h-16 rounded-2xl items-center justify-center ${isActive ? 'border bg-rose-100/70 border-rose-200' : 'border-2 bg-[#f0e5c9] border-[#d4af374d]'}`} >
+                    <View className={`w-full max-w-16 h-16 rounded-2xl items-center justify-center ${isActive ? 'border bg-rose-100/70 border-rose-200' : 'border-2 bg-[#f0e5c9] border-[#d4af374d]'}`} >
                         <Text className="text-4xl w-10 h-10">🪑</Text>
                     </View>
                 </View>
@@ -146,7 +146,7 @@ export default function TableSelection() {
     const dispatch = useDispatch();
 
     const [data, setData] = useState({loading: true, data: { AccPartyMasterList: [], AccSubgroupObj: {}, PartyMasterObj: {} }, err: {status: false, msg: ''}});
-    const navigate = useNavigation();
+    const router = useRouter();
 
     useEffect(() => {
         if (tableAutoSelect) dispatch(setModal({ name: "TABLES", state: false }));
@@ -187,8 +187,11 @@ export default function TableSelection() {
         }
         // globalDataAction({ restaurant: { table: { ...requiredFields, autoSelect: autoSelectable } }});
         dispatch(setRestaurant({ table: { ...requiredFields, autoSelect: autoSelectable }}))
-        dispatch(setModal({ name: "TABLES", state: false }))
-        // navigate('/checkout');
+        if (isModal) {
+          dispatch(setModal({ name: "TABLES", state: false }))
+        } else {
+          router.push('/hospitality/tabs/checkout');
+        }
     }
 
     useEffect(() => {
@@ -233,21 +236,9 @@ export default function TableSelection() {
         // )
 
         return (
-            <View className="mb-6" key={groupId}>
+            <View className="mb-3" key={groupId}>
                 <View className="mb-4">
-                    <LinearGradient
-                    colors={["#1a3a2e", "#2d5442"]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    className="px-5 py-3 rounded-lg overflow-hidden flex-row items-center justify-between"
-                    style={{
-                        shadowColor: "#1a3a2e",
-                        shadowOffset: { width: 0, height: 4 },
-                        shadowOpacity: 0.3,
-                        shadowRadius: 8,
-                        elevation: 4,
-                    }}
-                    >
+                    <LinearGradient colors={["#1a3a2e", "#2d5442"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} className="px-5 py-3 rounded-lg overflow-hidden flex-row items-center justify-between" style={{ shadowColor: "#1a3a2e", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4, }} >
                     <View className="flex-row items-center gap-2.5">
                         <Text className="text-2xl">🌿</Text>
                         <Text className="text-white font-bold text-base tracking-widest">{groupName}</Text>
@@ -257,17 +248,24 @@ export default function TableSelection() {
                     </View>
                     </LinearGradient>
                 </View>
-                <View className="flex-row flex-wrap gap-3">
+                {/* <View className="flex-row flex-wrap gap-x-[5%]">
                     {groupItems.map((table: any) => (
-                        <View key={table.BedId} className="w-[31%]">
+                        <View key={table.BedId} className='min-w-[30%] flex-1 mb-3'>
                             <ActiveTable table={table} />
                         </View>
                     ))}
+                </View> */}
+                <View className="flex-row flex-wrap gap-x-3">
+                  {groupItems.map((table: any) => (
+                      <View key={table.BedId} className='mb-3 min-w-[7rem]'>
+                          <ActiveTable table={table} />
+                      </View>
+                  ))}
                 </View>
             </View>
         )
     }
-
+    
     const renderData = (data) => {
 
         var bedGroupIdList = [...new Map(data.data.AccPartyMasterList.map(item => [item['BedGroupId'], item])).values()]; 
@@ -289,18 +287,11 @@ export default function TableSelection() {
       <LinearGradient
         colors={["#ffffff", "#f9fafb"]}
         className="px-5 py-4 border-b border-gray-200"
-        style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.05,
-          shadowRadius: 8,
-          elevation: 3,
-        }}
-      >
+        style={{ shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8, elevation: 3, }}>
         <View className="flex-row items-center justify-between">
           <View>
             <Text className="text-[#D4AF37] text-sm font-semibold tracking-wide">Table Status</Text>
-            <Text className="text-gray-800 font-bold text-2xl tracking-tight">Park Luxury Hotel</Text>
+            <Text className="text-gray-800 font-bold text-[1.35rem] tracking-tight">Park Luxury Hotel</Text>
           </View>
           <TouchableOpacity className="bg-red-50 border border-red-200 px-4 py-2.5 rounded-xl" onPress={() => dispatch(setModal({ name: "TABLES", state: false }))}>
             <Text className="text-red-600 font-bold text-xs tracking-wider">CLOSE</Text>
@@ -308,9 +299,6 @@ export default function TableSelection() {
         </View>
       </LinearGradient>
       <ScrollView className="flex-1 p-3" showsVerticalScrollIndicator={false}>
-        {/* <ZoneSection title="TERRACE" tables={tableData.TERRACE} icon="🌿" />
-        <ZoneSection title="HALL" tables={tableData.HALL} icon="🏛️" />
-        <ZoneSection title="LAWN" tables={tableData.LAWN} icon="🌳" /> */}
         {renderData(data)}
       </ScrollView>
 
@@ -326,11 +314,7 @@ export default function TableSelection() {
             {selectedTable && (
               <View
                 className="rounded-2xl p-5 mb-6 border-2"
-                style={{
-                  backgroundColor: "#f0e5c9",
-                  borderColor: "rgba(212, 175, 55, 0.3)",
-                }}
-              >
+                style={{ backgroundColor: "#f0e5c9", borderColor: "rgba(212, 175, 55, 0.3)" }}>
                 <View className="flex-row items-center justify-between mb-4">
                   <View>
                     <Text className="text-gray-500 text-xs font-medium uppercase tracking-wide mb-1">Table Number</Text>
@@ -363,14 +347,7 @@ export default function TableSelection() {
                 <LinearGradient
                   colors={["#1a3a2e", "#2d5442"]}
                   className="py-4 rounded-xl items-center"
-                  style={{
-                    shadowColor: "#1a3a2e",
-                    shadowOffset: { width: 0, height: 4 },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 8,
-                    elevation: 5,
-                  }}
-                >
+                  style={{ shadowColor: "#1a3a2e", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5, }}>
                   <Text className="text-white font-bold text-sm tracking-wide">CONFIRM</Text>
                 </LinearGradient>
               </TouchableOpacity>

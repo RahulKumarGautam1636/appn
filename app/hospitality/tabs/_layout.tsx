@@ -17,7 +17,7 @@ export default function TabsLayout() {
   const tabs = [
     { name: 'Home', icon: 'home', key: 'home' },                                        
     { name: 'Tables', icon: 'calendar', key: 'tables' },                                 
-    { name: 'Account', icon: 'person', key: 'profile' },
+    { name: 'Account', icon: 'person', key: 'account' },
     { name: 'Category', icon: 'grid', key: 'categories' },
     { name: 'Cart', icon: 'cart', key: 'checkout' },
   ];
@@ -56,7 +56,7 @@ export default function TabsLayout() {
                             {tabs.map((tab, index) => {
                             const isFocused = state.routes[state.index]?.name === tab.key;
                             const onPress = () => {
-                                if (tab.key === 'profile' || tab.key === 'orders') {
+                                if (tab.key === 'account' || tab.key === 'orders') {
                                   if (!isLoggedIn) return dispatch(setModal({name: 'LOGIN', state: true}))
                                 }
                                 if (tab.key === 'categories') return router.push(`/hospitality/orderPrint?id=1234`);
