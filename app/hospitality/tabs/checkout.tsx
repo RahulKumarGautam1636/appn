@@ -650,7 +650,7 @@ export default function RestaurantBooking() {
 
         <View className="bg-white mx-3 mt-3 p-4 rounded-2xl shadow-xl">
           <View className="">
-            <Text className="text-[#1a3a2e] text-xl font-bold mb-1.5 pb-2">Billing Details</Text>
+            <Text className="text-[#1a3a2e] text-lg font-bold mb-1.5 pb-2">Billing Details</Text>
             {/* border-b-2 border-[#D4AF37]/30 */}
 
             <LinearGradient colors={["#f0e5c9", "#faf8f3"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} className="flex-row items-center p-3 rounded-lg border-2 border-[#D4AF37]/20 mb-4">
@@ -714,7 +714,7 @@ export default function RestaurantBooking() {
         </View>
         <View className='px-4 pt-6'>
           <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-[#1a3a2e] text-xl font-bold">Current Order</Text>
+            <Text className="text-[#1a3a2e] text-lg font-bold">Current Order</Text>
             <TouchableOpacity>
               <LinearGradient colors={["#D4AF37", "#c9a030"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} className="px-3 py-2 rounded-md shadow-lg">
                 <Text className="text-white font-bold text-[10px] tracking-widest uppercase">+ NEW ORDER</Text>
@@ -733,13 +733,13 @@ export default function RestaurantBooking() {
           {cartArray.map((item, index) => <CurrentItemsCard index={index} item={item} toggleNoteVisibility={() => {}} note={note} setNote={setNote} submitNote={submitNote} itemsLength={cartArray.length} />)}
 
           <LinearGradient colors={["#f0e5c9", "#faf8f3"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} className="flex-row items-center justify-between px-5 py-4 rounded-lg border-2 border-[#D4AF37]/30 mt-4 mb-2">
-            <Text className="text-[#1a3a2e] text-lg font-bold tracking-wide">Current Total</Text>
+            <Text className="text-[#1a3a2e] text-base font-bold tracking-wide">Current Total</Text>
             <Text className="text-[#2d5442] text-xl font-bold tracking-wide">₹ {cartSubtotal}</Text>
           </LinearGradient>
         </View>
         <View className='px-4 pt-4'>
           <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-[#1a3a2e] text-xl font-bold">Previous Order</Text>
+            <Text className="text-[#1a3a2e] text-lg font-bold">Previous Order</Text>
             <TouchableOpacity>
               <LinearGradient colors={["#D4AF37", "#c9a030"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} className="px-3 py-2 rounded-md shadow-lg">
                 <Text className="text-white font-bold text-[10px] tracking-widest uppercase">+ NEW ORDER</Text>
@@ -757,7 +757,7 @@ export default function RestaurantBooking() {
           {previousOrderItems.map((item, index) => <PreviousItemsCard index={index} item={item} toggleNoteVisibility={() => {}} note={note} setNote={setNote} submitNote={submitNote} itemsLength={cartArray.length} />)}
 
           <LinearGradient colors={["#f0e5c9", "#faf8f3"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} className="flex-row items-center justify-between px-5 py-4 rounded-lg border-2 border-[#D4AF37]/30 mt-4 mb-2">
-            <Text className="text-[#1a3a2e] text-lg font-bold tracking-wide">Previous Total</Text>
+            <Text className="text-[#1a3a2e] text-base font-bold tracking-wide">Previous Total</Text>
             <Text className="text-[#2d5442] text-xl font-bold tracking-wide">₹ {previousTaxableTotal}</Text>
           </LinearGradient>
         </View>
