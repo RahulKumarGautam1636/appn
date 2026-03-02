@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
 import { BASE_URL, BC_ROY, defaultId } from '@/src/constants';
-import { getFrom, GridLoader, withAutoUnmount } from '@/src/components/utils';
+import { getCatId, getFrom, GridLoader, wait, withAutoUnmount } from '@/src/components/utils';
 import axios from 'axios';
-import { setAppnData, setCompanies, setModal } from '@/src/store/slices/slices';
+import { getMembers, setAppnData, setCompanies, setModal } from '@/src/store/slices/slices';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import AppnPreview from '../appnPreview';
 import BookingSuccess from '../../../src/components/modals/bookingSuccess';
@@ -41,8 +41,7 @@ const Booking = () => {
     let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
     const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
-    const opdCategory: any = categories.find((i: any) => (i.ParentDesc).trim() === 'OPD');
-    const opdCatId = opdCategory?.Parent || 0
+    const opdCatId = getCatId(categories, 'OPD');
 
     useEffect(() => {
         setSelectedDate(selectedAppnDate);
@@ -123,7 +122,7 @@ const Booking = () => {
         } else {
             setActiveCompany(companiesList[0])
         }    
-    }, [companiesList.length, selectedCompany.EncCompanyId])
+    }, [companiesList, selectedCompany.EncCompanyId, user.UserId])
 
     const handleBookingFormSubmit = async (e: any) => {
         e.preventDefault();
@@ -134,12 +133,14 @@ const Booking = () => {
         }
         if (isLoggedIn) {
             // let appDate = getDateDifference(bookingData.AppointDate);      
-            if (!selectedMember.MemberId) {
+            if (selectedMember.MemberId === user.MemberId) {
             // let productToastData = { msg: 'Added to Cart', product: {name: 'Description', price: 1200}, button: {text: 'Visit Cart', link: '/cartPage'} };
             // productToast(productToastData);
             // if (getConfirmation(`Book Appointment for ${user.Name}`) === false) return; 
             const newbookingData = { 
                 ...bookingData,
+                EnqDate: bookingData.AppointDate,
+                EnqDateStr: bookingData.AppointDate,
                 Salutation: user.Salutation,
                 Name: user.Name,
                 EncCompanyId: activeCompany.EncCompanyId,                   
@@ -170,8 +171,57 @@ const Booking = () => {
                 ProviderId: user.ProviderId,   // provider
                 MarketedId: user.MarketedId,   // marketing,
                 Remarks: remarks,
-                DeptId: opdCatId, 
-                UserType: user.UserType, 
+                DeptId: opdCatId,
+                
+
+                UserRoleId: user.UserRoleId,
+                UserRoleLevelName: user.UserRoleLevelName,
+                UserRoleLevelCode: user.UserRoleLevelCode,
+                UserLevelSeq: user.UserLevelSeq,
+                ParentUserId: user.UserId,
+                PartyId: user.PartyId,
+                Email: user.Email,
+                UserPassword: user.UserPassword,
+                UserType: user.UserType,
+                StateName: user.StateName,
+                DOB: new Date(user.DOB).toLocaleDateString('en-TT'),
+                DOBstr: new Date(user.DOB).toLocaleDateString('en-TT'),
+                IsDOBCalculated: user.IsDOBCalculated,
+                Qualification: "",     
+                SpecialistId: user.SpecialistId,
+                AnniversaryDatestr: user.AnniversaryDatestr,
+                compName: "",              
+                compAddress: "",             
+                compState: "",            
+                compPin: "",
+                compPhone1: "",            
+                compPhone2: "",            
+                compMail: "",              
+                BusinessType: user.BusinessType,
+                ContactPerson: user.ContactPerson,
+                RegMob2: user.RegMob2,
+                GstIn: user.GstIn,
+                LicenceNo: user.LicenceNo,
+                DL_Number2: user.DL_Number2,
+                TradeLicense: user.TradeLicense,
+                UserRegTypeId: user.UserRegTypeId,
+
+                IDCardTypeId: 0,
+                IDCardTypeDesc: "",
+                IDCardTypeNo: "",                          
+                OpportunityId: 0,                       
+                IsCanceled: '',           
+
+                ItemId: 0,                    
+                Description: "",
+                Amount: 0,
+                PBankId: 0,
+                NextAppDateStr: new Date().toLocaleDateString('en-TT'),  
+                EnqStatusId: 0,                        
+                EnqStatusValue: "",                     
+                RootId: 0,                             
+                ParentId: 0,
+                RelationShipWithHolder: 'Self' 
             }
             console.log('user booking');
             makeBookingRequest(newbookingData);
@@ -179,6 +229,8 @@ const Booking = () => {
                 // if (getConfirmation(`Book Appointment for ${selectedMember.MemberName}`) === false) return;
                 const newbookingData = { 
                     ...bookingData,
+                    EnqDate: bookingData.AppointDate,
+                    EnqDateStr: bookingData.AppointDate,
                     Salutation: selectedMember.Salutation,
                     Name: selectedMember.MemberName,
                     EncCompanyId: activeCompany.EncCompanyId,
@@ -197,9 +249,7 @@ const Booking = () => {
                     Address2: selectedMember.Landmark,
                     AnniversaryDate: selectedMember.AnniversaryDate,
                     Aadhaar: selectedMember.Aadhaar,
-                    UserId: user.UserId,
                     UHID: selectedMember.UHID,
-                    MemberId: selectedMember.MemberId,
                     Country: selectedMember.Country,
                     EnqType: 'OPD',
                     LocationId: locationId, 
@@ -210,7 +260,58 @@ const Booking = () => {
                     MarketedId: selectedMember.MarketedId,      
                     Remarks: remarks,
                     DeptId: opdCatId, 
-                    UserType: selectedMember.UserType, 
+
+
+                    UserRoleId: 0,
+                    UserRoleLevelName: '',
+                    UserRoleLevelCode: '',
+                    UserLevelSeq: 0,
+                    UserId: selectedMember.UserId,
+                    MemberId: selectedMember.MemberId,
+                    ParentUserId: selectedMember.ParentUserId,
+                    PartyId: selectedMember.PartyId,
+                    Email: selectedMember.Email,
+                    UserPassword: '',
+                    UserType: selectedMember.UserType,
+                    StateName: selectedMember.StateDesc,
+                    DOB: new Date(selectedMember.DOB).toLocaleDateString('en-TT'),
+                    DOBstr: new Date(selectedMember.DOB).toLocaleDateString('en-TT'),
+                    IsDOBCalculated: selectedMember.IsDOBCalculated,
+                    Qualification: "",     
+                    SpecialistId: '',
+                    AnniversaryDatestr: '',
+                    compName: "",              
+                    compAddress: "",             
+                    compState: "",            
+                    compPin: "",
+                    compPhone1: "",            
+                    compPhone2: "",            
+                    compMail: "",              
+                    BusinessType: '',
+                    ContactPerson: '',
+                    RegMob2: selectedMember.Mobile2,
+                    GstIn: '',
+                    LicenceNo: '',
+                    DL_Number2: '',
+                    TradeLicense: '',
+                    UserRegTypeId: '',
+
+                    IDCardTypeId: 0,
+                    IDCardTypeDesc: "",
+                    IDCardTypeNo: "",                      
+                    OpportunityId: 0,                       
+                    IsCanceled: '',           
+
+                    ItemId: 0,                    
+                    Description: "",
+                    Amount: 0,
+                    PBankId: 0,
+                    NextAppDateStr: new Date().toLocaleDateString('en-TT'),  
+                    EnqStatusId: 0,                        
+                    EnqStatusValue: "",                     
+                    RootId: 0,                             
+                    ParentId: 0,
+                    RelationShipWithHolder: selectedMember.RelationShipWithHolder
                 }
                 console.log('member booking');
                 makeBookingRequest(newbookingData);
@@ -225,9 +326,12 @@ const Booking = () => {
 
     const makeBookingRequest = async (book: any) => { 
         // console.log(book);
-        if (!book.UserId) return alert('Something went wrong, try again later. No user Id received: F');
+        // if (!book.UserId) return alert('Something went wrong, try again later. No user Id received: F');
         setLoading(true);
-        const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);    // { status: 200, data: 'S000000140' }   
+        // const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, book);    // { status: 200, data: 'S000000140' }  
+        const res = await axios.post(`${BASE_URL}/api/Appointment/PostReg`, book);
+        await wait(1000) 
+        dispatch(getMembers());
         setLoading(false);
         if (res.status === 200) {
             // try {const status = axios.post(`${process.env.REACT_APP_BASE_URL_}`, params)} catch (error) {}

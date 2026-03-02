@@ -429,23 +429,23 @@ const ReportPad = ({ compInfo, handleClose, billId, autoId }: any) => {
                                                                   <table class="ResultTbl" style="width: 100%; font-size: 13px; padding: 15px 20px" align="left">
                                                                       <tbody>
                                                                           ${sale.InstrmntUsed?.trim() ? `<tr>
-                                                                              <th class="text-nowrap" width="15%">Instrument Used : </th>
+                                                                              <th class="whitespace-nowrap" width="15%">Instrument Used : </th>
                                                                               <td width="85%">${sale.InstrmntUsed}</td>
                                                                           </tr>` : ''}  
                                                                           ${sale.Method?.trim() ? `<tr>
-                                                                              <th class="text-nowrap">Method : </th>
+                                                                              <th class="whitespace-nowrap">Method : </th>
                                                                               <td class="ps-2">${sale.Method}</td>
                                                                           </tr>` : ''}
                                                                           ${sale.QC_Remarks?.trim() ? `<tr>
-                                                                              <th class="text-nowrap" valign="top">Special Remarks : </th>
+                                                                              <th class="whitespace-nowrap" valign="top">Special Remarks : </th>
                                                                               <td class="ps-2">${sale.QC_Remarks}</td>
                                                                           </tr>` : ''}
                                                                           ${sale.NB?.trim() ? `<tr>
-                                                                              <th class="text-nowrap" valign="top">NB : </th>
+                                                                              <th class="whitespace-nowrap" valign="top">NB : </th>
                                                                               <td class="ps-2">${sale.NB}</td>
                                                                           </tr>` : ''}
                                                                           ${sale.Remarks?.trim() ? `<tr>
-                                                                              <th class="text-nowrap" valign="top">Remarks : </th>
+                                                                              <th class="whitespace-nowrap" valign="top">Remarks : </th>
                                                                               <td class="ps-2">${sale.Remarks}</td>
                                                                           </tr>` : ''}
                                                                       </tbody>

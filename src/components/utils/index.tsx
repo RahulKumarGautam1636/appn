@@ -1241,3 +1241,10 @@ export const groupMembers = (obj: any) => obj.reduce((acc: any, curr: any) => {
   acc[key].items.push(curr);
   return acc;
 }, {});
+
+
+export const getCatId = (categories: any, key: string, ) => {
+  const category: any = categories.find((i: any) => ((i.ParentDesc).trim()).includes(key));
+  const catId = category?.Parent || 0
+  return catId;
+}
