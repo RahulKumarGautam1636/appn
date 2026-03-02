@@ -10,7 +10,7 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { setModal } from '@/src/store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '@/src/components';
 import { BASE_URL, defaultId } from '@/src/constants';
-import { formatted, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
+import { formatted, getCatId, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
 import colors from 'tailwindcss/colors';
 
 
@@ -30,8 +30,7 @@ const HomeScreen = () => {
     const [doctorTab, setDoctorTab] = useState('active_date')
     
     const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
-    const opdCategory: any = categories.find((i: any) => (i.ParentDesc).trim() === 'OPD');
-    const opdCatId = opdCategory?.Parent || 0
+    const opdCatId = getCatId(categories, 'OPD');
 
     useEffect(() => {
         let controller = new AbortController();
@@ -92,7 +91,7 @@ const HomeScreen = () => {
         } else if (data.data.PartyFollowupList.length === 0) {
             return;
         } else {
-            let firstAppn = data.data.PartyFollowupList[0];
+            let firstAppn = data.data.PartyFollowupList?.filter((i: any) => i.Status !== 'Y')[0];
             return (
                 <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: firstAppn}))}>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[13px] leading-[20px] mt-1 mb-0.5">Upcoming Schedule</Text>
@@ -287,9 +286,11 @@ const RenderDoctors = memo(({ doctors, otherDayDoctors, filterdates, doctorTab }
                     return <GridLoader />
                 } else if (doctors.err.status) {
                     return <Text className="text-blue-500 text-[12px] font-PoppinsSemibold ml-auto">{doctors.err.msg}</Text>
-                } else if (!doctors.data.PartyMasterList.length) {
-                    return <NoContent label='No Doctors Found' />;
-                } else {
+                } 
+                // else if (!doctors.data.PartyMasterList.length) {
+                //     return <NoContent label='No Doctors Found' />;
+                // } 
+                else {
                     if (doctorTab === 'all_date') {
                         return otherDayDoctors.data.PartyMasterList.length ? otherDayDoctors.data.PartyMasterList.slice(0, 20).map((doctor, index) => <Card_1 data={doctor} key={index} />) : <NoContent label='No Doctors Found' imgClass='h-[170]'containerClass='mt-12'/>;
                     } else {

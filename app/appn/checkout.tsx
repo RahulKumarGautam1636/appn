@@ -1,6 +1,6 @@
 import ButtonPrimary, { getDateDifference } from '@/src/components';
-import { BannerCarousel, num, wait } from '@/src/components/utils';
-import { addToCart, dumpCart, removeFromCart, setModal } from '@/src/store/slices/slices';
+import { BannerCarousel, getCatId, num, sumByKey, wait } from '@/src/components/utils';
+import { addToCart, dumpCart, getMembers, removeFromCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
@@ -29,12 +29,11 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
     const itemsLength = labTests.length;
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
     let cartTotal = itemsLength !== 0 ? itemsValue.reduce((total, item) => total+item).toFixed(2) : '00';
-    let testDate = itemsLength ? labTests[0].testDate : '';
+    let testDate = new Date().toLocaleDateString('en-TT');  // itemsLength ? labTests[0].testDate : '';
     let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
     const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
-    const opdCategory: any = categories.find((i: any) => (i.ParentDesc).trim() === 'INVESTIGATION');
-    const invCatId = opdCategory?.Parent || 0
+    const invCatId = getCatId(categories, 'INVESTIGATION');
 
     const handleBack = () => {
         if (handleClose) {
@@ -62,8 +61,9 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
         e.preventDefault();
         if (!labTests.length) return alert('Your Cart is empty. Please add some Tests in your cart to proceed.')
         if (isLoggedIn) {
-          let appDate = getDateDifference(testDate); 
-          if (!selectedMember.MemberId) {     
+        //   let appDate = getDateDifference(testDate); 
+          let orderTotal = sumByKey(orderList, 'Amount');
+          if (selectedMember.MemberId === user.MemberId) {     
             // if (getConfirmation(`Book Lab Test for ${userInfo.Name} in ${userInfo.selectedCompany.COMPNAME}`) === false) return; 
             const newbookingData = { 
             //   ...bookingInfo,
@@ -101,9 +101,58 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               ReferrerId: user.ReferrerId,   // refBy
               ProviderId: user.ProviderId,   // provider
               MarketedId: user.MarketedId,   // marketing,
-              UserType: user.UserType,
               Remarks: remarks,
               DeptId: invCatId,
+
+
+                UserRoleId: user.UserRoleId,
+                UserRoleLevelName: user.UserRoleLevelName,
+                UserRoleLevelCode: user.UserRoleLevelCode,
+                UserLevelSeq: user.UserLevelSeq,
+                ParentUserId: user.UserId,
+                PartyId: user.PartyId,
+                Email: user.Email,
+                UserPassword: user.UserPassword,
+                UserType: user.UserType,
+                StateName: user.StateName,
+                DOB: new Date(user.DOB).toLocaleDateString('en-TT'),
+                DOBstr: new Date(user.DOB).toLocaleDateString('en-TT'),
+                IsDOBCalculated: user.IsDOBCalculated,
+                Qualification: "",     
+                SpecialistId: user.SpecialistId,
+                AnniversaryDatestr: user.AnniversaryDatestr,
+                compName: "",              
+                compAddress: "",             
+                compState: "",            
+                compPin: "",
+                compPhone1: "",            
+                compPhone2: "",            
+                compMail: "",              
+                BusinessType: user.BusinessType,
+                ContactPerson: user.ContactPerson,
+                RegMob2: user.RegMob2,
+                GstIn: user.GstIn,
+                LicenceNo: user.LicenceNo,
+                DL_Number2: user.DL_Number2,
+                TradeLicense: user.TradeLicense,
+                UserRegTypeId: user.UserRegTypeId,
+
+                IDCardTypeId: 0,
+                IDCardTypeDesc: "",
+                IDCardTypeNo: "",                          
+                OpportunityId: 0,                       
+                IsCanceled: '',           
+
+                ItemId: 0,                    
+                Description: "",
+                Amount: orderTotal,
+                PBankId: 0,
+                NextAppDateStr: new Date().toLocaleDateString('en-TT'),  
+                EnqStatusId: 0,                        
+                EnqStatusValue: "",                     
+                RootId: 0,                             
+                ParentId: 0,
+                RelationShipWithHolder: 'Self'   
             }
             console.log('user labtest booking');
             makeBookingRequest(newbookingData);
@@ -129,9 +178,7 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               Address2: selectedMember.Landmark,
               AnniversaryDate: selectedMember.AnniversaryDate,
               Aadhaar: selectedMember.Aadhaar,
-              UserId: user.UserId,
               UHID: selectedMember.UHID,
-              MemberId: selectedMember.MemberId,
               Country: selectedMember.Country,
               EnqType: 'INVESTIGATION',
               LocationId: selectedCompany.LocationId,
@@ -145,9 +192,60 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               ReferrerId: selectedMember.ReferrerId,   // refBy
               ProviderId: selectedMember.ProviderId,   // provider
               MarketedId: selectedMember.MarketedId,   // marketing,
-              UserType: selectedMember.UserType,
               Remarks: remarks,
-              DeptId: invCatId, 
+              DeptId: invCatId,
+              
+              
+              UserRoleId: 0,
+                UserRoleLevelName: '',
+                UserRoleLevelCode: '',
+                UserLevelSeq: 0,
+                UserId: selectedMember.UserId,
+                MemberId: selectedMember.MemberId,
+                ParentUserId: selectedMember.ParentUserId,
+                PartyId: selectedMember.PartyId,
+                Email: selectedMember.Email,
+                UserPassword: '',
+                UserType: selectedMember.UserType,
+                StateName: selectedMember.StateDesc,
+                DOB: new Date(selectedMember.DOB).toLocaleDateString('en-TT'),
+                DOBstr: new Date(selectedMember.DOB).toLocaleDateString('en-TT'),
+                IsDOBCalculated: selectedMember.IsDOBCalculated,
+                Qualification: "",     
+                SpecialistId: '',
+                AnniversaryDatestr: '',
+                compName: "",              
+                compAddress: "",             
+                compState: "",            
+                compPin: "",
+                compPhone1: "",            
+                compPhone2: "",            
+                compMail: "",              
+                BusinessType: '',
+                ContactPerson: '',
+                RegMob2: selectedMember.Mobile2,
+                GstIn: '',
+                LicenceNo: '',
+                DL_Number2: '',
+                TradeLicense: '',
+                UserRegTypeId: '',
+
+                IDCardTypeId: 0,
+                IDCardTypeDesc: "",
+                IDCardTypeNo: "",                      
+                OpportunityId: 0,                       
+                IsCanceled: '',           
+
+                ItemId: 0,                    
+                Description: "",
+                Amount: orderTotal,
+                PBankId: 0,
+                NextAppDateStr: new Date().toLocaleDateString('en-TT'),  
+                EnqStatusId: 0,                        
+                EnqStatusValue: "",                     
+                RootId: 0,                             
+                ParentId: 0,
+                RelationShipWithHolder: selectedMember.RelationShipWithHolder
             }
             console.log('member labtest booking');
             makeBookingRequest(newbookingData);
@@ -162,12 +260,13 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
     
     const makeBookingRequest = async (params: any) => {
         // return console.log(params);      
-        if (!params.UserId) return alert('Something went wrong, try again later. No user Id received: F');
+        // if (!params.UserId) return alert('Something went wrong, try again later. No user Id received: F');
         try {
             setLoading(true);
-            await wait(2000);
-            const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, params);   // { status: 200 }
-            // const res = await axios.post(`${BASE_URL}/api/Appointment/PostReg`, params);
+            // const res = await axios.post(`${BASE_URL}/api/Appointment/Post`, params);   // { status: 200 }
+            const res = await axios.post(`${BASE_URL}/api/Appointment/PostReg`, params);         // { status: 200 };
+            await wait(2000) 
+            dispatch(getMembers());
             setLoading(false);
             if (res.status === 200) {       
                 // dispatch(dumpCart());

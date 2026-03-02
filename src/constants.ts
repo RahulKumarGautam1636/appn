@@ -95,7 +95,7 @@ export const initReg = {
   MemberId: '',
 
   Aadhaar: "",
-  Salutation: "",
+  Salutation: "Mr",
   Qualification: "",
   SpecialistId: 0,
   AnniversaryDate: "",
@@ -121,12 +121,12 @@ export const initReg = {
 }
 
 export const initMember = {
-  Salutation: '',
+  Salutation: 'Mr',
   MemberName : '',
   EncCompanyId: '',    
   RegMob1: '',
-  Gender: '',
-  GenderDesc: '',
+  Gender: 104,
+  GenderDesc: 'Male',
   Address: '',
   Age: '0',
   AgeMonth: '0',
@@ -156,7 +156,7 @@ export const initMember = {
   ContactPerson: '',
   BusinessType: '',
   // UserRegTypeId: ''
-  PartyId: '',
+  PartyId: 0,
   LinkAutoId: 0,          // when doctor add member of other user.
 }
 

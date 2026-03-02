@@ -51,23 +51,14 @@ const userReducer = userSlice.reducer;
 export const getCompanies = createAsyncThunk(
   'auth/getCompanies',
   async (params: any, { dispatch, rejectWithValue, getState }) => {
-    // const compCode = getState().compCode;
     try {              
       const res = await axios.get(`${BASE_URL}/api/CompMast/Get?CID=${params.companyCode}&UID=${params.userId}`);
-        // console.log(res);
         if (res.status === 200) {  
-          let parentCompany = res.data.find((i: any) => i.EncCompanyId === params.companyCode);                                                                                                          
-          // dispatch(setCompanies({ list: res.data, selected: parentCompany }));     
+          let parentCompany = res.data.find((i: any) => i.EncCompanyId === params.companyCode);                                                                                                              
           return { list: res.data, selected: parentCompany };        
         } else {
           throw new Error('Login failed');
       }
-      
-      // // 2. Preferences API
-      // const prefRes = await fetch(`https://api.example.com/users/${data.user.id}/preferences`);
-      // if (!prefRes.ok) throw new Error('Failed to fetch preferences');
-      // const preferences = await prefRes.json();
-      // dispatch(setPreferences(preferences));
     } catch (err: any) {
       return rejectWithValue(err.message || 'Something went wrong');
     }
@@ -76,8 +67,7 @@ export const getCompanies = createAsyncThunk(
 
 const companiesSlice = createSlice({
   name: 'companies',
-  initialState: { list: [], selected: {}, status: 'loading', error: null
-},
+  initialState: { list: [], selected: {}, status: 'loading', error: null, currentRequestId: undefined },
   reducers: {
     setCompanies: (state, action: any) => {
       Object.assign(state, action.payload);

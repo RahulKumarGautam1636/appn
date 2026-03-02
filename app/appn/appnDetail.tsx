@@ -125,8 +125,8 @@ const AppnDetail = ({ data, handleOpen }: any) => {
                     <Text className="font-PoppinsSemibold text-[13px] text-slate-600">{data.DeptName}</Text>
                 </View>
                 <View className='flex-row gap-3 px-4 py-3 border-b border-gray-200'>
-                    <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Reference No.</Text>
-                    <Text className="font-PoppinsSemibold text-[13px] text-slate-600">{data.TranNo}</Text>
+                    <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">{data.TokenNo ? 'Token No.' : 'Reference No.'}</Text>
+                    <Text className="font-PoppinsSemibold text-[13px] text-rose-600">{data.TokenNo ? data.TokenNo : data.TranNo || 'N/A'}</Text>
                 </View>
                 <View className='flex-row gap-3 px-4 py-3 border-b border-gray-200'>
                     <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Status</Text>

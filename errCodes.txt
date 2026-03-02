@@ -4,3 +4,4 @@
 004 - No UserLevelSeq recieved.
 005 - No UserType recieved.
 006 - Invalid user PartyCode. Can not get your last Order.
+007 - Test date came blank. sampleCollection page.

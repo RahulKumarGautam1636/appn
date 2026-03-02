@@ -115,7 +115,6 @@ const AddMember = ({ isModal }: any) => {
       RegMob1: user.RegMob1,
       ParentUserId: user.UserId,
       UserType: 'CUSTOMER',
-      PartyId: user.PartyId,
       UnderDoctId: 0,  // sales
       ReferrerId: 0,   // refBy
       ProviderId: 0,   // provider
@@ -173,7 +172,7 @@ const AddMember = ({ isModal }: any) => {
                 BusinessType: item.BusinessType || '',
 
                 // UserRegTypeId: item.UserRegTypeId
-                PartyId: user.PartyId,
+                PartyId: item.PartyId,
                 LinkAutoId: item.LinkAutoId,                               // When doctor add the member.
 
                 UnderDoctId: item.UnderDoctId,
@@ -285,6 +284,7 @@ const AddMember = ({ isModal }: any) => {
     const handleMemberFormSubmit = (e) => {
         e.preventDefault();        
         if (memberData.RegMob1.length < 10) return alert('Phone number is invalid, please try again.');
+        if (memberData.Mobile && memberData.Mobile.length < 10) return alert('Please enter a valid Member phone number.')
         if (!memberData.MemberName.length) return alert('Please enter the Name.');
         if (!(memberData.GenderDesc.length)) return alert('Please select your gender.');
         if (Number(memberData.Age) <= 0) return alert('Please enter your Age or select Date of Birth.');
