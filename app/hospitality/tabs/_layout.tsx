@@ -18,7 +18,7 @@ export default function TabsLayout() {
     { name: 'Home', icon: 'home', key: 'home' },                                        
     { name: 'Tables', icon: 'calendar', key: 'tables' },                                 
     { name: 'Account', icon: 'person', key: 'account' },
-    { name: 'Category', icon: 'grid', key: 'categories' },
+    { name: 'Category', icon: 'grid', key: 'Lead_Home' },
     { name: 'Cart', icon: 'cart', key: 'checkout' },
   ];
 

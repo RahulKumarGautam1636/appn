@@ -3,7 +3,7 @@ import axios from "axios";
 import { storage, uType, validRegType } from "./utils";
 // import { InactiveWarningCard } from "./cards";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../constants";
+import { BASE_URL, isLP } from "../constants";
 import { setLogin, setModal, setUser } from "../store/slices/slices";
 import { RootState } from "../store/store";
 import { FullScreenLoading } from ".";
@@ -73,7 +73,7 @@ const Auth = () => {
     let res;
     try {        
         setLoading(true);
-        res = await axios.post(`${BASE_URL}/api/UserAuth/CheckCompLogin`, params);
+        res = await axios.post(`${BASE_URL}/api/${isLP ? 'UserAuth/CheckLogin' : 'UserAuth/CheckCompLogin'}`, params);
         setLoading(false);
     } catch (error) {
         setLoading(false)

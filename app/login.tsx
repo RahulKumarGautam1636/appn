@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Image, Pressable, ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ButtonPrimary, { MyModal } from "../src/components";
-import { BASE_URL, BC_ROY, hasCommonLogin, defaultId, gender, initReg, myColors, salutations, states, asthaMedicalId, wecareId } from "@/src/constants";
+import { BASE_URL, BC_ROY, hasCommonLogin, defaultId, gender, initReg, myColors, salutations, states, asthaMedicalId, wecareId, isLP } from "@/src/constants";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
@@ -46,7 +46,7 @@ const Login = ({ modalMode }: any) => {
         setLoading(true)
         // const res = await axios.get(`${BASE_URL}/api/UserAuth/Get?UN=${params.phone}&UP=${params.password}&CID=${params.EncCompanyId}`);
         const body = { UserName: params.phone, UserPassword: encodeURIComponent(params.password), EncCompanyId: params.EncCompanyId };
-        const res = await axios.post(`${BASE_URL}/api/UserAuth/CheckCompLogin`, body);
+        const res = await axios.post(`${BASE_URL}/api/${isLP ? 'UserAuth/CheckLogin' : 'api/UserAuth/CheckCompLogin'}`, body);
         setLoading(false)
         // let appBusinessType = globalData.businessType.CodeValue;     
         // if (res.data.BusinessType !== appBusinessType) return alert('You are not Allowed to log in.');       // BLOCK LOGIN IF MISMATCH FOUND     which is the best place to make api call and update the redux store
@@ -175,7 +175,8 @@ const Login = ({ modalMode }: any) => {
                 MarketedId: data.MarketedId,
 
                 UserRegTypeId: data.UserRegTypeId,
-                UserLevelSeq: data.UserLevelSeq,
+                UserRoleLevelCode: data.UserRoleLevelCode,
+                UserLevelCode: data.UserLevelCode,
                 UserCompList: data.UserCompList[0],
             };
             const userData = { UserName: params.phone, UserPassword: data.UserPassword, EncCompanyId: params.EncCompanyId };
