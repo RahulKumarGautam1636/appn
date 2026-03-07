@@ -203,7 +203,7 @@ export const getMembers = createAsyncThunk(
   async (params: any, { dispatch, rejectWithValue, getState }) => {
     const user = getState().user;
     const compCode = getState().compCode;
-    if (!user.UserId) return;
+    if (!user.UserId) return rejectWithValue('User not logged in');
     try {              
       const res = await axios.get(`${BASE_URL}/api/member/Get?UserId=${user.UserId}&CID=${compCode}`, {});
       if (res.data) {
@@ -226,7 +226,7 @@ const membersSlice = createSlice({
   initialState: { membersList: [], selectedMember: {}, status: 'loading', error: null },
   reducers: {
     setMembers: (state, action: any) => {
-      state = Object.assign(state, action.payload);
+      Object.assign(state, action.payload);
     },
   },
   extraReducers: (builder) => {
