@@ -10,6 +10,7 @@ import { BASE_URL } from '@/src/constants';
 import { MaterialIcons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import Svg, { Path } from "react-native-svg";
+import { Link } from 'expo-router';
 
 const RetaurantHome = () => {
 
@@ -349,21 +350,23 @@ const DeptStatCard = ({ data, bg="bg-gray-100", wave="#9B7FE8", index }: any) =>
   let bgColor = getRandomColor(col, index, '100');
   let waveColor = getRandomColor(col, index, '500');
   return (
-    <TouchableOpacity activeOpacity={0.8} className={`rounded-2xl p-4 min-w-40 bg-gray-100`}>
-      <View className="flex-row justify-between items-center mb-5">
-        <Text className="text-3xl font-bold text-gray-900">{data.OpportunityCnt}</Text>
-        <WaveIcon color={waveColor} />
+    <Link href={'/hospitality/department'} className='rounded-2xl p-4 min-w-40 bg-gray-100'>
+      <View className={`w-full`}>
+        <View className="flex-row justify-between items-center mb-5">
+          <Text className="text-3xl font-bold text-gray-900">{data.OpportunityCnt}</Text>
+          <WaveIcon color={waveColor} />
+        </View>
+        <View className="flex-row justify-between items-center">
+          <Text className="text-sm text-gray-600 font-medium">{data.LinkDescription}</Text>
+          {/* <Text className="text-gray-400 text-lg">›</Text> */}
+        </View>
       </View>
-      <View className="flex-row justify-between items-center">
-        <Text className="text-sm text-gray-600 font-medium">{data.LinkDescription}</Text>
-        {/* <Text className="text-gray-400 text-lg">›</Text> */}
-      </View>
-    </TouchableOpacity>
+    </Link>
   );
 }
 
 
-let col = {
+export const col = {
   "red": {
       "50": "#fef2f2",
       "100": "#fee2e2",
@@ -600,7 +603,7 @@ let col = {
   },
 }
 
-const getRandomColor = (colors, index, shade) => {
+export const getRandomColor = (colors, index, shade) => {
   const keys = Object.keys(colors);
   if (index) {
     index = index >= keys.length ? (index % keys.length) : index

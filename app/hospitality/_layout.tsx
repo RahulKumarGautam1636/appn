@@ -4,9 +4,9 @@ export default function Layout() {
   return (
     <Stack screenOptions={{ headerShown: false }}> {/* <= important! */}
         <Stack.Screen name="hopitality/tabs" options={{animation: 'slide_from_left'}} />
-        <Stack.Screen name="hopitality/orderPrint/[id]" options={{animation: 'slide_from_right'}} />
-        {/* <Stack.Screen name="appn/appnList" options={{animation: 'slide_from_left'}} />
-        <Stack.Screen name="appn/addMember" options={{animation: 'slide_from_right'}} />
+        <Stack.Screen name="hospitality/orderPrint/[id]" options={{animation: 'slide_from_right'}} />
+        <Stack.Screen name="hospitality/department" options={{animation: 'slide_from_left'}} />
+        {/* <Stack.Screen name="appn/addMember" options={{animation: 'slide_from_right'}} />
         <Stack.Screen name="appn/cart" options={{animation: 'slide_from_left'}} />
         <Stack.Screen name="appn/testDetail" />
         <Stack.Screen name="appn/testList" options={{animation: 'slide_from_right'}} />
