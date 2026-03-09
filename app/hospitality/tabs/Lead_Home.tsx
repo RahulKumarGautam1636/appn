@@ -116,7 +116,7 @@ const RetaurantHome = () => {
   return (
     <ScrollView contentContainerClassName="bg-slate-100 relative">
       <View className="">
-        <View className="p-4">
+        <View className="p-4 bg-sky-900">
           {isLoggedIn ? 
             <View className="flex flex-row items-center justify-between mb-4">
               <View className="flex flex-row items-center gap-4">
@@ -125,17 +125,17 @@ const RetaurantHome = () => {
                   <Image className='' source={require('@/assets/images/user.png')} style={{ width: 35, height: 35 }} />
                 </View>
                 <View>
-                  <Text className="text-sm font-semibold mb-1">{user.Name}</Text>
+                  <Text className="text-sm font-semibold mb-1 text-white">{user.Name}</Text>
                   <View className="flex flex-row items-center">
                     <MapPin size={14} color="#EF4444" />
-                    <Text className="text-xs text-gray-500 ml-1">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
+                    <Text className="text-xs text-gray-200 ml-1">{(user.UserType).toLowerCase().replace(/\b\w/g, (l: any) => l.toUpperCase())}, {user.GenderDesc}, {user.Age} Years</Text>
                     <ChevronDown size={16} color="#6B7280" className="ml-1" />
                   </View>
                 </View>
               </View>
               <View className="relative">
-                <Bell size={24} color="#1F2937" />
-                <View className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                <Bell size={24} color="#fff" />
+                <View className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full" />
               </View>
             </View>
             :
@@ -159,9 +159,9 @@ const RetaurantHome = () => {
             </View>
           }
 
-          <View className="flex flex-row items-center bg-white rounded-2xl px-4 py-2">
-            <Search size={20} color="#9CA3AF" />
-            <TextInput onChangeText={(text) => handleSearchInput(text)} value={searchTerm.query} placeholder="Search Food, Drink, Restaurant, etc." className="flex-1 ml-2 text-sm bg-transparent outline-none placeholder-gray-400" />
+          <View className="flex flex-row items-center bg-white/10 rounded-2xl px-4 py-1.5">
+            <Search size={20} color="#d1d5db" />
+            <TextInput onChangeText={(text) => handleSearchInput(text)} value={searchTerm.query} placeholderTextColor={colors.gray[300]} placeholder="Search Appointments.." className="flex-1 ml-2 text-sm bg-transparent outline-none text-white" />
             <View className="w-2 h-2 bg-red-500 rounded-full" />
           </View>
 
@@ -265,20 +265,20 @@ function FoodItemCard() {
 
 const BalanceCard = () => {
   return (
-    <View className="w-full items-center bg-sky-600 px-4 py-3">
-      <View className="w-full flex-row items-center justify-between bg-white rounded-2xl p-3">
-        <View className="flex-row items-center bg-white/60 rounded-xl">
-          <View className="bg-sky-500 rounded-lg p-2 mr-3">
+    <View className="w-full items-center bg-sky-900 px-4 pb-4">
+      <View className="w-full flex-row items-center justify-between bg-sky-900 rounded-2xl">
+        <View className="flex-row items-center rounded-xl">
+          <View className="bg-white/20 rounded-lg p-2 mr-3">
             <CalendarDays size={18} color="white" />
           </View>
           <View>
-            <Text className="text-gray-500 text-xs">Balance</Text>
-            <Text className="text-black font-semibold text-base">
+            <Text className="text-gray-300 text-xs">Balance</Text>
+            <Text className="text-white font-semibold text-base">
               $ 124.5
             </Text>
           </View>
         </View>
-        <TouchableOpacity className="bg-sky-600 px-4 py-2 rounded-xl min-w-20 justify-between flex-row items-center">
+        <TouchableOpacity className="bg-white/20 px-4 py-2 rounded-xl min-w-20 justify-between flex-row items-center">
           <Text className="text-white text-sm font-medium">HO</Text>
           <Text className="text-white text-sm font-medium">▼</Text>
         </TouchableOpacity>

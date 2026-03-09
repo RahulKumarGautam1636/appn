@@ -1,27 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
-
-import {
-  ArrowLeft,
-  Bell,
-  Calendar,
-  Phone,
-  MapPin,
-  Pencil,
-  ChevronLeft,
-  ChevronRight,
-  Search,
-  Minus,
-  Plus,
-} from "lucide-react-native";
+import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, FlatList } from "react-native";
+import { ArrowLeft, Bell, Calendar, Phone, MapPin, Pencil, ChevronLeft, ChevronRight, Search, Minus, Plus } from "lucide-react-native";
 import colors from "tailwindcss/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
@@ -31,46 +10,9 @@ import { BASE_URL, myColors } from "@/src/constants";
 import { getFrom, getMonthDate, GridLoader, groupBy, NoContent } from "@/src/components/utils";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const appointments = [
-  {
-    id: 1,
-    name: "Neeraj Pandey",
-    phone: "9307487225",
-    gender: "Male",
-    region: "Uttar Pradesh",
-    remarks: "Customer hotel discussion done price list done anisha",
-    scheduledDate: "14 Feb 03:05 PM",
-    loggedTime: "15:44",
-    loggedDate: "12 Feb",
-    assignedTo: "SONALI",
-    status: "reschedule",
-    avatar: "NP",
-    avatarColor: "#6366f1",
-  },
-  {
-    id: 2,
-    name: "Sunil Puri",
-    phone: "9838021339",
-    gender: "Male",
-    region: "Uttar Pradesh",
-    remarks: "Call not received",
-    scheduledDate: "15 Feb 11:00 AM",
-    loggedTime: "15:40",
-    loggedDate: "12 Feb",
-    assignedTo: "RAHUL",
-    status: "pending",
-    avatar: "SP",
-    avatarColor: "#f59e0b",
-  },
-];
-
 const cardColor = 'sky';
 
-
 export default function MarketingSalesPage() {
-  const [activeView, setActiveView] = useState("Day");
-  const [activeTab, setActiveTab] = useState(0);
-
 
   // NEW DASHBOARD IMPLEMENTAION
   const { selected: selectedCompany, list: companiesList } = useSelector((i: RootState) => i.companies);
@@ -102,6 +44,7 @@ export default function MarketingSalesPage() {
         // let onlyOPD = res.data.PatientRegList.filter((i: any) => i.Department.includes('OPD'));
         let uniqueItems = groupBy(res.data.PatientRegList, 'Department');
         const firstStage = res.data.PatientRegList[0]?.LinkStageList[0]
+        console.log(res.data.PatientRegList[0]);        
         setSelectedDepartment(res.data.PatientRegList[0]);
         setSelectedStage(firstStage);
         setDepartment({...res, data: {PatientRegList: res.data.PatientRegList, tabs: uniqueItems}});
@@ -127,12 +70,7 @@ export default function MarketingSalesPage() {
     }
   };
 
-
-  let stageItems = appointments.data.PartyMasterList // .filter(((i: any) => i.OpportunityId === selectedStage.AutoId));
-
-  // console.log(department);
-  // console.log(stageItems);
-  console.log(new Date(fromDate).toLocaleDateString('en-TT'), '================================================================');  
+  let stageItems = appointments.data.PartyMasterList.filter(((i: any) => i.OpportunityId === selectedStage.AutoId)); 
 
   const handleDate = (type) => {
     let from = fromDate;
@@ -171,6 +109,9 @@ export default function MarketingSalesPage() {
     setToDate(new Date(to.setDate(to.getDate() + range[duration])));
   }
 
+  useEffect(() => {
+    console.log(selectedStage.LinkDescription); 
+  },[selectedStage]) 
   const [durationDropdown, setDurationDropdown] = useState(false);
 
   const DurationDropdown = () => {
@@ -209,10 +150,27 @@ export default function MarketingSalesPage() {
     }
   }
 
+  const renderStages = () => {
+    if (appointments.loading) {
+      return <GridLoader containerClass='gap-3 p-3 flex-row bg-white' count={3} classes='h-[70px] flex-1' />;
+    } else {
+      return (
+        <ScrollView horizontal contentContainerClassName="flex-row gap-3 p-3 bg-white">
+          {selectedDepartment?.LinkStageList?.map((item, index) => (                                                                                                                                         
+            <TouchableOpacity className="max-w-[10rem] bg-green-100 rounded-xl p-3 border border-green-200/70" key={index} onPress={() => {setSelectedStage(item)}}>
+              <Text className="text-green-600 text-xl font-bold">{item.OpportunityCnt}</Text>
+              <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )
+    }
+  }
+
   return (
     <View className="flex-1 bg-slate-200">
       {/* Header */}
-      <View className="bg-indigo-900 px-5 pt-6 pb-6">
+      <View className="bg-sky-900 px-5 pt-6 pb-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center gap-3">
             <Pressable className="w-9 h-9 rounded-xl bg-white/10 items-center justify-center">
@@ -278,7 +236,7 @@ export default function MarketingSalesPage() {
             {/* Day Week Month */}
             <View className="flex-row gap-2 mb-4">
               {Object.keys(range).map((v: string) => (
-                <Pressable key={v} onPress={() => setDuration(v)} className={`flex-1 py-2 rounded-lg items-center border ${ duration === v ? "bg-indigo-600 border-indigo-600" : "border-slate-400" }`}>
+                <Pressable key={v} onPress={() => setDuration(v)} className={`flex-1 py-2 rounded-lg items-center border ${ duration === v ? "bg-sky-600 border-sky-600" : "border-slate-400" }`}>
                   <Text className={`text-sm font-semibold ${duration === v ? "text-white" : "text-slate-400"}`}>
                     {v}
                   </Text>
@@ -288,7 +246,7 @@ export default function MarketingSalesPage() {
 
             {/* Date */}
             <View className="flex-row items-center justify-between">
-              <Pressable onPress={() => handleDate('prev')} className="p-1 rounded-lg bg-indigo-500/30">
+              <Pressable onPress={() => handleDate('prev')} className="p-1 rounded-lg bg-sky-500/30">
                 <ChevronLeft size={20} color="#fff" />
               </Pressable>
               <View className="flex-row items-center gap-2">
@@ -304,7 +262,7 @@ export default function MarketingSalesPage() {
                   <Text className="font-semibold text-white">{getFormattedDate(toDate)}</Text>
                 </Pressable>
               </View></>}
-              <Pressable onPress={() => handleDate('next')} className="p-1 rounded-lg bg-indigo-500/30">
+              <Pressable onPress={() => handleDate('next')} className="p-1 rounded-lg bg-sky-500/30">
                 <ChevronRight size={20} color="#fff" />
               </Pressable>
             </View>
@@ -313,14 +271,8 @@ export default function MarketingSalesPage() {
           </View>
       </View>
       <View>
-        <ScrollView horizontal contentContainerClassName="flex-row gap-3 p-3 bg-white">
         {/* <View className="flex-row gap-3 bg-white p-3"> */}
-          {selectedDepartment?.LinkStageList?.map((item, index) => (                                                                                                                                         
-            <TouchableOpacity className="max-w-[10rem] bg-green-100 rounded-xl p-3 border border-green-200/70" key={index} onPress={() => {setSelectedStage(item)}}>
-              <Text className="text-green-600 text-xl font-bold">{item.OpportunityCnt}</Text>
-              <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
-            </TouchableOpacity>
-          ))}
+          {renderStages()}
 
           {/* <View className="flex-1 bg-violet-100 rounded-xl p-3 border border-violet-200/70">
             <Text className="text-violet-600 text-xl font-bold">39</Text>
@@ -335,7 +287,6 @@ export default function MarketingSalesPage() {
             <Text className="text-gray-800 text-xs">Pending</Text>
           </View> */}
         {/* </View> */}
-        </ScrollView>
       </View>
 
 
