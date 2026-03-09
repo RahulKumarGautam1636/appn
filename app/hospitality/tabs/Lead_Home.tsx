@@ -121,7 +121,9 @@ const RetaurantHome = () => {
             <View className="flex flex-row items-center justify-between mb-4">
               <View className="flex flex-row items-center gap-4">
                 {/* <View className="w-10 h-10 rounded-full bg-gray-300 mr-3" /> */}
-                <Image className='shadow-lg rounded-full' source={require('@/assets/images/user.png')} style={{ width: 35, height: 35 }} />
+                <View className='shadow-lg rounded-full'>
+                  <Image className='' source={require('@/assets/images/user.png')} style={{ width: 35, height: 35 }} />
+                </View>
                 <View>
                   <Text className="text-sm font-semibold mb-1">{user.Name}</Text>
                   <View className="flex flex-row items-center">

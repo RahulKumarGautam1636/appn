@@ -1248,3 +1248,8 @@ export const getCatId = (categories: any, key: string, ) => {
   const catId = category?.Parent || 0
   return catId;
 }
+
+export const getMonthDate = (date: any) => {
+  const splitDate = new Date(date).toDateString().split(' ')
+  return splitDate[1] + ' ' + splitDate[2]
+}

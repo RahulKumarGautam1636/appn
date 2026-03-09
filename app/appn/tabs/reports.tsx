@@ -133,6 +133,13 @@ export const Patients = ({ handleClose }: any) => {
       }
 
       let to = new Date(a);
+
+      if (range[duration] === 1) {
+        setFromDate(a);
+        setToDate(a);
+        return;
+      }
+      
       setFromDate(a)
       setToDate(new Date(to.setDate(to.getDate() + range[duration])));
     }
