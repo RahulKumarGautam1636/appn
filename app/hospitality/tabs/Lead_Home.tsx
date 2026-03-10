@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Search, Bell, MapPin, ChevronDown, Heart, ShoppingCart, Home, Calendar, User, Wallet, Calendar1, CalendarCheck, CalendarDays, Ellipsis } from 'lucide-react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { Image } from 'react-native';
 import { getFrom, GridLoader, ProductCard, sumByKey } from '@/src/components/utils';
@@ -11,6 +11,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import Svg, { Path } from "react-native-svg";
 import { Link } from 'expo-router';
+import { setDepartment } from '@/src/store/slices/slices';
 
 const RetaurantHome = () => {
 
@@ -341,18 +342,19 @@ const DepartmentCard = memo(({ index, data }: any) => {
       </View>
       <ScrollView contentContainerClassName="p-4 gap-3" horizontal>
         {data.LinkStageList.map((item, n) => (
-          <DeptStatCard key={n} data={item} index={n} />
+          <DeptStatCard key={n} data={item} index={n} department={data} />
         ))}
       </ScrollView>
     </View>
   )
 })
 
-const DeptStatCard = ({ data, bg="bg-gray-100", wave="#9B7FE8", index }: any) => {
-  let bgColor = getRandomColor(col, index, '100');
+const DeptStatCard = ({ data, bg="bg-gray-100", wave="#9B7FE8", index, department }: any) => {
+  // let bgColor = getRandomColor(col, index, '100');
   let waveColor = getRandomColor(col, index, '500');
+  const dispatch = useDispatch();
   return (
-    <Link href={'/hospitality/department'} className='rounded-2xl p-4 min-w-40 bg-gray-100'>
+    <Link onPress={() => dispatch(setDepartment({ current: department, stage: data }))} href={'/hospitality/department'} className='rounded-2xl p-4 min-w-40 bg-gray-100'>
       <View className={`w-full`}>
         <View className="flex-row justify-between items-center mb-5">
           <Text className="text-3xl font-bold text-gray-900">{data.OpportunityCnt}</Text>

@@ -1010,3 +1010,9 @@ export const B2BProductCompareCard = ({ data, vType }: any) => {
     </View>
   )
 }
+
+export const sortByCount = (items: any, field: any, order='desc') => {
+  return [...items].sort((a, b) => {
+    return order === "asc" ? a[field] - b[field] : b[field] - a[field];
+  });
+};

@@ -319,11 +319,12 @@ const appDataSlice = createSlice({
     restaurant: { table: {  } },
     businessType: { Description: '', CodeValue: '', CodeId: '' },
     userRegType:
-                  { CodeId: 43198, Description: 'Customer', CodeValue: 'Customer', for: 'B2C / Patient' }
+                  { CodeId: 43198, Description: 'Customer', CodeValue: 'Customer', for: 'B2C / Patient' },
                   // { CodeId: 43194, Description: 'Retailer', CodeValue: 'Retailer', for: 'B2B / Retailer' }
                   // { CodeId: 43195, Description: 'Strategic Partner', CodeValue: 'SP', for: 'Doctor' }
                   // { CodeId: 43196, Description: 'Master Partner', CodeValue: 'MP', for: 'Referrer' }
                   // { CodeId: 43197, Description: 'Associate Partner', CodeValue: 'AP', for: 'Provider' }
+    department: { current: {}, stage: {} }
   },
   reducers: {
     setLocation: (state, action: any) => {
@@ -345,11 +346,15 @@ const appDataSlice = createSlice({
     setUserRegType: (state, action: any) => {
       state.userRegType = action.payload;
       return state;
-    },    
+    },
+    setDepartment: (state, action: any) => {
+      state.department = action.payload;
+      return state;
+    }, 
   }
 });
 
-export const { setLocation, setPrescription, setRestaurant, setBusinessType, setUserRegType } = appDataSlice.actions;
+export const { setLocation, setPrescription, setRestaurant, setBusinessType, setUserRegType, setDepartment } = appDataSlice.actions;
 const appDataReducer = appDataSlice.reducer;
 
 let categoriesController: AbortController | null = null;

@@ -64,7 +64,7 @@ function LayoutContent() {
   if (!loaded && !error) return null;
 
   return (
-    <SafeAreaView className={`flex-1 ${blur && "opacity-10"}`}>
+    <SafeAreaView className={`flex-1 ${blur && "opacity-5"}`}>
       <KeyboardAvoidingView className={`flex-1`}>
         <StatusBar backgroundColor={backgroundColor} barStyle={isDark ? "light-content" : "dark-content"} />
           <Stack screenOptions={{ headerShown: false }}>

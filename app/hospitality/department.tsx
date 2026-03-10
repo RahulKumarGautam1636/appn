@@ -4,21 +4,22 @@ import { ArrowLeft, Bell, Calendar, Phone, MapPin, Pencil, ChevronLeft, ChevronR
 import colors from "tailwindcss/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { mmDDyyyyDate } from "@/src/components";
+import { mmDDyyyyDate, sortByCount } from "@/src/components";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { BASE_URL, myColors } from "@/src/constants";
 import { getFrom, getMonthDate, GridLoader, groupBy, NoContent } from "@/src/components/utils";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const cardColor = 'sky';
+const cardColor = { '1': 'rose', '2': 'orange', '3': 'green' };
 
 export default function MarketingSalesPage() {
 
-  // NEW DASHBOARD IMPLEMENTAION
-  const { selected: selectedCompany, list: companiesList } = useSelector((i: RootState) => i.companies);
-  const [department, setDepartment] = useState({ loading: false, data: { PatientRegList: [], tabs: [] }, err: { status: false, msg: "" } });
-  const [selectedDepartment, setSelectedDepartment] = useState({});
   const user = useSelector((i: RootState) => i.user);
+  const { selected: selectedCompany, list: companiesList } = useSelector((i: RootState) => i.companies);
+  // const [department, setDepartment] = useState({ loading: false, data: { PatientRegList: [], tabs: [] }, err: { status: false, msg: "" } });
+  // const [selectedDepartment, setSelectedDepartment] = useState({});
+  const { current: selectedDepartment, stage: currentStage} = useSelector((i: RootState) => i.appData.department);
+  const [stages, setStages] = useState([]);
   const [selectedStage, setSelectedStage] = useState({});
   const [appointments, setAppointments] = useState({ loading: false, data: { PartyMasterList: [] }, err: { status: false, msg: "" } });
 
@@ -30,28 +31,23 @@ export default function MarketingSalesPage() {
   const [duration, setDuration] = useState('Day');
   const [firstClick, setFirstClick] = useState(false);
 
-  useEffect(() => {
-    if (!selectedCompany.EncCompanyId) return;
-    let controller = new AbortController();
-    getDepartments(controller.signal, user, selectedCompany);
-    return () => controller.abort();
-  }, [user.UserId, selectedCompany.EncCompanyId]);
+  // useEffect(() => {
+  //   if (!selectedCompany.EncCompanyId) return;
+  //   let controller = new AbortController();
+  //   getDepartments(controller.signal, user, selectedCompany);
+  //   return () => controller.abort();
+  // }, [user.UserId, selectedCompany.EncCompanyId]);
 
-  const getDepartments = async (signal, user, company) => {
-    if (user.UserId > 1) {
-      const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=01/03/2026&dttoStr=05/03/2026`, {}, setDepartment, signal);
-      if (res) {
-        // let onlyOPD = res.data.PatientRegList.filter((i: any) => i.Department.includes('OPD'));
-        let uniqueItems = groupBy(res.data.PatientRegList, 'Department');
-        const firstStage = res.data.PatientRegList[0]?.LinkStageList[0]
-        console.log(res.data.PatientRegList[0]);        
-        setSelectedDepartment(res.data.PatientRegList[0]);
-        setSelectedStage(firstStage);
-        setDepartment({...res, data: {PatientRegList: res.data.PatientRegList, tabs: uniqueItems}});
-        // setDepartment(res);
-      }
-    }
-  };
+  // const getDepartments = async (signal, user, company) => {
+  //   if (user.UserId > 1) {
+  //     const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=01/03/2026&dttoStr=05/03/2026`, {}, setDepartment, signal);
+  //     if (res) {
+  //       let uniqueItems = groupBy(res.data.PatientRegList, 'Department');
+  //       setSelectedDepartment({...res.data.PatientRegList[0]});
+  //       setDepartment({...res, data: {PatientRegList: res.data.PatientRegList, tabs: uniqueItems}});
+  //     }
+  //   }
+  // };
 
   useEffect(() => {
     if (!selectedDepartment.DeptCategory) return;
@@ -65,6 +61,19 @@ export default function MarketingSalesPage() {
     if (user.UserId > 1) {
       const res = await getFrom(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${dept.DeptCategory}&ProcedureId=${dept.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date(from).toLocaleDateString('en-TT')}&ToDateStr=${new Date(to).toLocaleDateString('en-TT')}&UserId=${userId}&RootId=0&LevelNo=0&SearchString=${''}&ReportType=${'CURRENTSTATUS'}&SrcUserId=0`, {}, setAppointments, signal);
       if (res) {
+        let deptStages = selectedDepartment?.LinkStageList;
+        let arr: any = []
+        deptStages.forEach((item: any) => {
+          const stageItems = res.data.PartyMasterList?.filter((i: any) => i.OpportunityId === item.AutoId);
+          arr.push({ ...item, OpportunityCnt: stageItems.length });
+        });
+        let sortedStages = sortByCount(arr, 'OpportunityCnt');
+        setStages(sortedStages); 
+        if (currentStage.LinkDescription) {
+          setSelectedStage(currentStage);
+        } else {
+          setSelectedStage(sortedStages[0]);
+        }      
         setAppointments(res);
       }
     }
@@ -110,7 +119,8 @@ export default function MarketingSalesPage() {
   }
 
   useEffect(() => {
-    console.log(selectedStage.LinkDescription); 
+    console.log(selectedStage.LinkDescription, selectedStage.AutoId); 
+    console.log(stageItems); 
   },[selectedStage]) 
   const [durationDropdown, setDurationDropdown] = useState(false);
 
@@ -133,7 +143,7 @@ export default function MarketingSalesPage() {
     year: 'numeric',
   });
 
-  const renderAppointments = () => {
+  const renderAppointments = () => {    
     if (appointments.loading) {
         return <GridLoader containerClass='gap-3 m-3' classes='h-[15rem]' count={3} />;
     } else {
@@ -156,12 +166,16 @@ export default function MarketingSalesPage() {
     } else {
       return (
         <ScrollView horizontal contentContainerClassName="flex-row gap-3 p-3 bg-white">
-          {selectedDepartment?.LinkStageList?.map((item, index) => (                                                                                                                                         
-            <TouchableOpacity className="max-w-[10rem] bg-green-100 rounded-xl p-3 border border-green-200/70" key={index} onPress={() => {setSelectedStage(item)}}>
-              <Text className="text-green-600 text-xl font-bold">{item.OpportunityCnt}</Text>
-              <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
-            </TouchableOpacity>
-          ))}
+          {stages?.map((item, index) => {          
+            const stageColor = cardColor[String(item.LevelId)];
+            const btnStyle = { border: colors[stageColor][200], bg: colors[stageColor][100], text: colors[stageColor][600], };
+            return (
+              <TouchableOpacity className={`max-w-[10rem] rounded-xl p-3 border`} key={index} onPress={() => {setSelectedStage(item)}} style={{borderColor: btnStyle.border, backgroundColor: btnStyle.bg}}>
+                <Text className="text-xl font-bold" style={{color: btnStyle.text}}>{item.OpportunityCnt}</Text>
+                <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
+              </TouchableOpacity>
+            )
+          })}
         </ScrollView>
       )
     }
@@ -169,29 +183,21 @@ export default function MarketingSalesPage() {
 
   return (
     <View className="flex-1 bg-slate-200">
-      {/* Header */}
       <View className="bg-sky-900 px-5 pt-6 pb-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center gap-3">
             <Pressable className="w-9 h-9 rounded-xl bg-white/10 items-center justify-center">
               <ArrowLeft size={18} color="white" />
             </Pressable>
-
             <View>
-              <Text className="text-white/60 text-[11px] tracking-widest">
-                GBOOKS INFOTECH
-              </Text>
-              <Text className="text-white text-lg font-bold">
-                Marketing & Sales
-              </Text>
+              <Text className="text-white/60 text-[11px] tracking-widest">GBOOKS INFOTECH</Text>
+              <Text className="text-white text-lg font-bold">Marketing & Sales</Text>
             </View>
           </View>
-
           <View className="flex-row gap-2">
             <Pressable className="w-9 h-9 rounded-xl bg-white/10 items-center justify-center">
               <Bell size={18} color="white" />
             </Pressable>
-
             <View className="w-9 h-9 rounded-full bg-indigo-400 items-center justify-center">
               <Text className="text-white font-bold">A</Text>
             </View>
@@ -213,87 +219,57 @@ export default function MarketingSalesPage() {
             <Text className="text-white/60 text-xs">Pending</Text>
           </View>
         </View> */}
-
-        {/* <Pressable className="bg-indigo-500 rounded-xl py-3 items-center mt-4">
-          <Text className="text-white font-semibold">+ New Appointment</Text>
-        </Pressable> */}
-
-        {/* Search */}
-          <View className="">
-            <View className="flex-row gap-3 items-center mb-4">
-              <View className="flex-1 flex-row items-center bg-white/10 rounded-xl px-3 py-1">
-                <TextInput
-                  placeholder="Search Appointments..."
-                  className="flex-1 text-sm text-white"
-                  placeholderTextColor={colors.gray[300]}
-                  />
-              </View>
-              <Pressable className="w-[3.3rem] h-[3.2rem] rounded-xl bg-orange-500/90 items-center justify-center">
-                <Plus size={22} color={'#fff'} />
-              </Pressable>
+        <View className="">
+          <View className="flex-row gap-3 items-center mb-4">
+            <View className="flex-1 flex-row items-center bg-white/10 rounded-xl px-3 py-1 h-full">
+              <TextInput placeholder="Search Appointments..." className="flex-1 text-sm text-white" placeholderTextColor={colors.gray[300]} />
             </View>
-
-            {/* Day Week Month */}
-            <View className="flex-row gap-2 mb-4">
-              {Object.keys(range).map((v: string) => (
-                <Pressable key={v} onPress={() => setDuration(v)} className={`flex-1 py-2 rounded-lg items-center border ${ duration === v ? "bg-sky-600 border-sky-600" : "border-slate-400" }`}>
-                  <Text className={`text-sm font-semibold ${duration === v ? "text-white" : "text-slate-400"}`}>
-                    {v}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-
-            {/* Date */}
-            <View className="flex-row items-center justify-between">
-              <Pressable onPress={() => handleDate('prev')} className="p-1 rounded-lg bg-sky-500/30">
-                <ChevronLeft size={20} color="#fff" />
-              </Pressable>
-              <View className="flex-row items-center gap-2">
-                {range[duration] === 1 ? <Calendar size={16} color="#fff" /> : null}
-                <Pressable onPress={() => setFromDateActive(true)}>
-                  <Text className="font-semibold text-white">{getFormattedDate(fromDate)}</Text>
-                </Pressable>
-              </View>
-              {range[duration] === 1 ? null : <><Minus size={20} color="#fff" />
-              <View className="flex-row items-center gap-2">
-                {/* <Calendar size={16} color="#6366f1" /> */}
-                <Pressable onPress={() => setToDateActive(true)}>
-                  <Text className="font-semibold text-white">{getFormattedDate(toDate)}</Text>
-                </Pressable>
-              </View></>}
-              <Pressable onPress={() => handleDate('next')} className="p-1 rounded-lg bg-sky-500/30">
-                <ChevronRight size={20} color="#fff" />
-              </Pressable>
-            </View>
-            {fromDateActive ? <DateTimePicker value={fromDate} mode="date" display="default" onChange={(e: any, d: any) => {setFromDateActive(false); setFromDate(d); setFirstClick(true);}} /> : null}
-            {toDateActive ? <DateTimePicker value={toDate} mode="date" display="default" onChange={(e: any, d: any) => {setToDateActive(false); setToDate(d); setFirstClick(true);}} /> : null}
+            <Pressable className="w-[3.3rem] h-[3.2rem] rounded-xl bg-orange-500/90 items-center justify-center">
+              <Plus size={22} color={'#fff'} />
+            </Pressable>
           </View>
+
+          {/* Day Week Month */}
+          <View className="flex-row gap-2 mb-4">
+            {Object.keys(range).map((v: string) => (
+              <Pressable key={v} onPress={() => setDuration(v)} className={`flex-1 py-2 rounded-lg items-center border ${ duration === v ? "bg-sky-600 border-sky-600" : "border-slate-400" }`}>
+                <Text className={`text-sm font-semibold ${duration === v ? "text-white" : "text-slate-400"}`}>
+                  {v}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+
+          {/* Date */}
+          <View className="flex-row items-center justify-between">
+            <Pressable onPress={() => handleDate('prev')} className="p-1 rounded-lg bg-sky-500/30">
+              <ChevronLeft size={20} color="#fff" />
+            </Pressable>
+            <View className="flex-row items-center gap-2">
+              {range[duration] === 1 ? <Calendar size={16} color="#fff" /> : null}
+              <Pressable onPress={() => setFromDateActive(true)}>
+                <Text className="font-semibold text-white">{getFormattedDate(fromDate)}</Text>
+              </Pressable>
+            </View>
+            {range[duration] === 1 ? null : <><Minus size={20} color="#fff" />
+            <View className="flex-row items-center gap-2">
+              {/* <Calendar size={16} color="#6366f1" /> */}
+              <Pressable onPress={() => setToDateActive(true)}>
+                <Text className="font-semibold text-white">{getFormattedDate(toDate)}</Text>
+              </Pressable>
+            </View></>}
+            <Pressable onPress={() => handleDate('next')} className="p-1 rounded-lg bg-sky-500/30">
+              <ChevronRight size={20} color="#fff" />
+            </Pressable>
+          </View>
+          {fromDateActive ? <DateTimePicker value={fromDate} mode="date" display="default" onChange={(e: any, d: any) => {setFromDateActive(false); setFromDate(d); setFirstClick(true);}} /> : null}
+          {toDateActive ? <DateTimePicker value={toDate} mode="date" display="default" onChange={(e: any, d: any) => {setToDateActive(false); setToDate(d); setFirstClick(true);}} /> : null}
+        </View>
       </View>
       <View>
-        {/* <View className="flex-row gap-3 bg-white p-3"> */}
-          {renderStages()}
-
-          {/* <View className="flex-1 bg-violet-100 rounded-xl p-3 border border-violet-200/70">
-            <Text className="text-violet-600 text-xl font-bold">39</Text>
-            <Text className="text-gray-800 text-xs">Total</Text>
-          </View>
-          <View className="flex-1 bg-green-100 rounded-xl p-3 border border-green-200/70">
-            <Text className="text-green-600 text-xl font-bold">12</Text>
-            <Text className="text-gray-800 text-xs">Calls Done</Text>
-          </View>
-          <View className="flex-1 bg-orange-100 rounded-xl p-3 border border-orange-200/70">
-            <Text className="text-orange-600 text-xl font-bold">19</Text>
-            <Text className="text-gray-800 text-xs">Pending</Text>
-          </View> */}
-        {/* </View> */}
+        {renderStages()}
       </View>
-
-
-      {/* Cards */}
-      {/* <ScrollView contentContainerClassName="px-3 py-3 gap-3"> */}
-        {renderAppointments()}
-      {/* </ScrollView> */}
+      {renderAppointments()}
     </View>
   );
 }
@@ -313,47 +289,35 @@ const statusConfig = {
   },
 };
 
-
-
 const AppointmentCard = ({ appt }) => {
   const sc = statusConfig['reschedule'];
-
+  const stageColor = cardColor[String(appt.LevelId)];
   const cardStyle = {
-    borderTop: colors[cardColor][500],
-    avatarBg: colors[cardColor][100],
-    avatarText: colors[cardColor][600],
-    remarksBorder: colors[cardColor][100],
-    remarksBg: colors[cardColor][50],
+    borderTop: colors[stageColor][500],
+    avatarBg: colors[stageColor][100],
+    avatarText: colors[stageColor][600],
+    remarksBorder: colors[stageColor][100],
+    remarksBg: colors[stageColor][50],
   };
 
   return (
     <View className={`bg-white rounded-2xl border-t-[3px] p-4 shadow-sm`} style={{ borderColor: cardStyle.borderTop }} >
-      {/* Header */}
       <View className="flex-row items-center mb-3">
         <View className={`w-11 h-11 rounded-xl items-center justify-center mr-3`} style={{ backgroundColor: cardStyle.avatarBg }}>
-          <Text className={`font-bold`} style={{ color: cardStyle.avatarText }}>
-            {appt.Name?.slice(0, 2).toUpperCase()}
-          </Text>
+          <Text className={`font-bold`} style={{ color: cardStyle.avatarText }}>{appt.Name?.slice(0, 2).toUpperCase()}</Text>
         </View>
-
         <View className="flex-1">
           <Text className="font-bold text-slate-900">{appt.Name}</Text>
-
           <View className="flex-row items-center gap-1 mt-1">
             <Phone size={12} color="#64748b" />
             <Text className="text-xs text-slate-500">{appt.RegMob1} {appt.RegMob2 && ` / ${appt.RegMob2}`}</Text>
           </View>
         </View>
-
         <View className="bg-slate-100 rounded-lg px-2 py-1">
           <Text className="text-xs font-bold">{getMonthDate(appt.NextAppDate)}</Text>
-          <Text className="text-[10px] text-slate-500">
-            {appt.NextAppTime}
-          </Text>
+          <Text className="text-[10px] text-slate-500">{appt.NextAppTime}</Text>
         </View>
       </View>
-
-      {/* Tags */}
       <View className="flex-row items-center gap-2 mb-3">
         {appt.GenderDesc ? <View className="bg-slate-100 px-2 py-1 rounded">
           <Text className="text-xs">{appt.GenderDesc}</Text>
@@ -366,48 +330,31 @@ const AppointmentCard = ({ appt }) => {
           <MapPin size={10} color="#475569" />
           <Text className="text-xs">{appt.City}</Text>
         </View> : null}
-
         <View className={`ml-auto px-2 py-1 rounded border ${sc.bg} ${sc.border}`}>
           <Text className={`text-xs font-semibold ${sc.text}`}>
             {sc.label}
           </Text>
         </View>
       </View>
-
-      {/* Remarks */}
       <View className={`rounded-lg p-3 mb-3 border`} style={{ borderColor: cardStyle.remarksBorder, backgroundColor: cardStyle.remarksBg, }}>
-        <Text className="text-[10px] text-slate-900 font-medium uppercase mb-1">
-          Remarks
-        </Text>
+        <Text className="text-[10px] text-slate-900 font-medium uppercase mb-1">Remarks</Text>
         <Text className="text-sm text-slate-600">{appt.Remarks2}</Text>
       </View>
-
-      {/* Schedule */}
       <View className="flex-row items-center gap-2 mb-3">
         <Calendar size={14} color="#6366f1" />
         <Text className="text-[0.8rem]">
           Date :{" "}
-          <Text className="text-indigo-600 font-semibold text-[0.8rem]">
-            {getMonthDate(appt.NextFollowupDate)}  {appt.NextFollowupTime}
-          </Text>
+          <Text className="text-indigo-600 font-semibold text-[0.8rem]">{getMonthDate(appt.NextFollowupDate)}  {appt.NextFollowupTime}</Text>
         </Text>
       </View>
-
-      {/* Bottom */}
       <View className="flex-row items-center gap-2">
         <View className="flex-1 bg-slate-100 rounded-lg px-3 py-2 flex-row items-center gap-3">
           <Text className="font-bold">{appt.DoctName[0]}</Text>
-          <Text className="text-sm font-semibold text-slate-600">
-            {appt.DoctName}
-          </Text>
+          <Text className="text-sm font-semibold text-slate-600">{appt.DoctName}</Text>
         </View>
-
         <Pressable className="bg-orange-500 px-4 py-2 rounded-lg">
-          <Text className="text-white text-xs font-semibold">
-            Call Now
-          </Text>
+          <Text className="text-white text-xs font-semibold">Call Now</Text>
         </Pressable>
-
         <Pressable className="w-9 h-9 rounded-lg bg-slate-100 items-center justify-center">
           <Pencil size={14} color="#64748b" />
         </Pressable>
