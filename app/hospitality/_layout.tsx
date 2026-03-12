@@ -6,8 +6,8 @@ export default function Layout() {
         <Stack.Screen name="hopitality/tabs" options={{animation: 'slide_from_left'}} />
         <Stack.Screen name="hospitality/orderPrint/[id]" options={{animation: 'slide_from_right'}} />
         <Stack.Screen name="hospitality/department" options={{animation: 'slide_from_left'}} />
-        {/* <Stack.Screen name="appn/addMember" options={{animation: 'slide_from_right'}} />
-        <Stack.Screen name="appn/cart" options={{animation: 'slide_from_left'}} />
+        <Stack.Screen name="hospitality/compSelection" options={{animation: 'slide_from_right'}} />
+        {/* <Stack.Screen name="appn/cart" options={{animation: 'slide_from_left'}} />
         <Stack.Screen name="appn/testDetail" />
         <Stack.Screen name="appn/testList" options={{animation: 'slide_from_right'}} />
         <Stack.Screen name="appn/clinic/[compId]" options={{animation: 'slide_from_right'}} />

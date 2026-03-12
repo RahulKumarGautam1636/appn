@@ -145,7 +145,7 @@ export default function MarketingSalesPage() {
 
   const renderAppointments = () => {    
     if (appointments.loading) {
-        return <GridLoader containerClass='gap-3 m-3' classes='h-[15rem]' count={3} />;
+        return <GridLoader containerClass='gap-3 m-3' classes='h-[14rem]' count={3} />;
     } else {
       return (
         <FlatList
@@ -162,7 +162,7 @@ export default function MarketingSalesPage() {
 
   const renderStages = () => {
     if (appointments.loading) {
-      return <GridLoader containerClass='gap-3 p-3 flex-row bg-white' count={3} classes='h-[70px] flex-1' />;
+      return <GridLoader containerClass='gap-3 p-3 flex-row bg-white' count={3} classes='h-[47px] flex-1' />;
     } else {
       return (
         <ScrollView horizontal contentContainerClassName="flex-row gap-3 p-3 bg-white">
@@ -170,9 +170,14 @@ export default function MarketingSalesPage() {
             const stageColor = cardColor[String(item.LevelId)];
             const btnStyle = { border: colors[stageColor][200], bg: colors[stageColor][100], text: colors[stageColor][600], };
             return (
-              <TouchableOpacity className={`max-w-[10rem] rounded-xl p-3 border`} key={index} onPress={() => {setSelectedStage(item)}} style={{borderColor: btnStyle.border, backgroundColor: btnStyle.bg}}>
-                <Text className="text-xl font-bold" style={{color: btnStyle.text}}>{item.OpportunityCnt}</Text>
-                <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
+              // <TouchableOpacity className={`max-w-[10rem] rounded-xl p-3 border`} key={index} onPress={() => {setSelectedStage(item)}} style={{borderColor: btnStyle.border, backgroundColor: btnStyle.bg}}>
+              //   <Text className="text-xl font-bold" style={{color: btnStyle.text}}>{item.OpportunityCnt}</Text>
+              //   <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
+              // </TouchableOpacity>
+
+              <TouchableOpacity className={`flex flex-row items-center border rounded-xl`} key={index} onPress={() => {setSelectedStage(item)}} style={{backgroundColor: btnStyle.bg, borderColor: btnStyle.border}}>
+                <Text className="text-xl font-bold p-3 text-white rounded-tl-xl rounded-bl-xl" style={{backgroundColor: btnStyle.text}}>{item.OpportunityCnt}</Text>
+                <Text className="text-gray-800 text-xs px-3 max-w-[10rem]" numberOfLines={2}>{item.LinkDescription}</Text>
               </TouchableOpacity>
             )
           })}
@@ -191,7 +196,7 @@ export default function MarketingSalesPage() {
             </Pressable>
             <View>
               <Text className="text-white/60 text-[11px] tracking-widest">GBOOKS INFOTECH</Text>
-              <Text className="text-white text-lg font-bold">Marketing & Sales</Text>
+              <Text className="text-white text-lg font-bold">{selectedDepartment.Department}</Text>
             </View>
           </View>
           <View className="flex-row gap-2">
@@ -318,23 +323,23 @@ const AppointmentCard = ({ appt }) => {
           <Text className="text-[10px] text-slate-500">{appt.NextAppTime}</Text>
         </View>
       </View>
-      <View className="flex-row items-center gap-2 mb-3">
-        {appt.GenderDesc ? <View className="bg-slate-100 px-2 py-1 rounded">
+      <View className="flex-row items-center gap-2">
+        {appt.GenderDesc ? <View className="mb-3 bg-slate-100 px-2 py-1 rounded">
           <Text className="text-xs">{appt.GenderDesc}</Text>
         </View> : null}
-        {appt.Age ? <View className="bg-slate-100 px-2 py-1 rounded flex-row items-center gap-1">
+        {appt.Age ? <View className="mb-3 bg-slate-100 px-2 py-1 rounded flex-row items-center gap-1">
           <MapPin size={10} color="#475569" />
           <Text className="text-xs">{appt.Age}</Text>
         </View> : null}
-        {appt.City ? <View className="bg-slate-100 px-2 py-1 rounded flex-row items-center gap-1">
+        {appt.City ? <View className="mb-3 bg-slate-100 px-2 py-1 rounded flex-row items-center gap-1">
           <MapPin size={10} color="#475569" />
           <Text className="text-xs">{appt.City}</Text>
         </View> : null}
-        <View className={`ml-auto px-2 py-1 rounded border ${sc.bg} ${sc.border}`}>
+        {/* <View className={`mb-3 ml-auto px-2 py-1 rounded border ${sc.bg} ${sc.border}`}>
           <Text className={`text-xs font-semibold ${sc.text}`}>
             {sc.label}
           </Text>
-        </View>
+        </View> */}
       </View>
       <View className={`rounded-lg p-3 mb-3 border`} style={{ borderColor: cardStyle.remarksBorder, backgroundColor: cardStyle.remarksBg, }}>
         <Text className="text-[10px] text-slate-900 font-medium uppercase mb-1">Remarks</Text>

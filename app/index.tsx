@@ -68,7 +68,7 @@ export default function App() {
   } else if (status === 'succeeded') {
     if (vType === 'ErpPharma' || vType === 'agro' || vType === 'ErpManufacturing') {
       if (compCode === PHARMACY) return <Redirect href="/shop/tabs/home" />
-      if (compCode === 'KuZ/n6rq%2BWwPTGNkjeF4xw==') return <Redirect href="/hospitality/tabs/Lead_Home" />
+      if (compCode === 'KuZ/n6rq%2BWwPTGNkjeF4xw==') return <Redirect href="/hospitality/compSelection" />
       return (
         <GestureHandlerRootView>
           <SafeAreaProvider>

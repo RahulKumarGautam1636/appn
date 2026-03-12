@@ -183,6 +183,7 @@ const Login = ({ modalMode }: any) => {
             if (keepLoggedIn) await storage.set('user', JSON.stringify(userData));
             dispatch(setUser(userLoginData));
             dispatch(setLogin(true));
+            if (isLP) return router.push('/hospitality/compSelection')
             if (modalMode) {
                 dispatch(setModal({ name: 'LOGIN', state: false }))
             } else {
