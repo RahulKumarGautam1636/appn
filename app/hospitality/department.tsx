@@ -118,10 +118,10 @@ export default function MarketingSalesPage() {
     setToDate(new Date(to.setDate(to.getDate() + range[duration])));
   }
 
-  useEffect(() => {
-    console.log(selectedStage.LinkDescription, selectedStage.AutoId); 
-    console.log(stageItems); 
-  },[selectedStage]) 
+  // useEffect(() => {
+  //   console.log(selectedStage.LinkDescription, selectedStage.AutoId); 
+  //   console.log(stageItems); 
+  // },[selectedStage]) 
   const [durationDropdown, setDurationDropdown] = useState(false);
 
   const DurationDropdown = () => {

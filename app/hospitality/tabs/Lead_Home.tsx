@@ -12,6 +12,7 @@ import colors from 'tailwindcss/colors';
 import Svg, { Path } from "react-native-svg";
 import { Link } from 'expo-router';
 import { setDepartment } from '@/src/store/slices/slices';
+import { sortByCount } from '@/src/components';
 
 const RetaurantHome = () => {
 
@@ -65,9 +66,14 @@ const RetaurantHome = () => {
     let controller = new AbortController();
     const getSearchResult = async (user, company, signal) => {                      
         if (!user.UserId || !company.CompanyId) return;                 
-        const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=${'03/03/2026'}&dttoStr=${'03/03/2026'}`, {}, setStats, signal);
-        if (res) {                                                                   
-            setStats(pre => ({ ...res, data: {PatientRegList: res.data.PatientRegList }}));
+        const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=${new Date().toLocaleDateString('en-TT')}&dttoStr=${new Date().toLocaleDateString('en-TT')}`, {}, setStats, signal);
+        if (res) {  
+          let arr: any = []
+          res.data.PatientRegList.forEach((item: any) => {
+            let sortedStages = sortByCount(item.LinkStageList, 'OpportunityCnt');
+            arr.push({ ...item, LinkStageList: sortedStages });
+          });
+          setStats(pre => ({ ...res, data: {PatientRegList: arr }}));
         } else {
             console.log('No data received');
         }
