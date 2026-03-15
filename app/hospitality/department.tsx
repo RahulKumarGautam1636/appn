@@ -4,13 +4,29 @@ import { ArrowLeft, Bell, Calendar, Phone, MapPin, Pencil, ChevronLeft, ChevronR
 import colors from "tailwindcss/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { mmDDyyyyDate, sortByCount } from "@/src/components";
+import { mmDDyyyyDate, MyModal, sortByCount } from "@/src/components";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { BASE_URL, myColors } from "@/src/constants";
 import { getFrom, getMonthDate, GridLoader, groupBy, NoContent } from "@/src/components/utils";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const cardColor = { '1': 'rose', '2': 'orange', '3': 'green' };
+import React from "react";
+import {
+  SafeAreaView,
+} from "react-native";
+import {
+  CalendarDays,
+  Clock,
+  User,
+  CheckCircle2,
+  CalendarClock,
+  StickyNote,
+  LayoutGrid,
+  Table2,
+} from "lucide-react-native";
+
+
+const cardColor = { '1': 'rose', '2': 'yellow', '3': 'green' };
 
 export default function MarketingSalesPage() {
 
@@ -30,6 +46,7 @@ export default function MarketingSalesPage() {
   let range = { Day: 1, Week: 7, Month: 30 }
   const [duration, setDuration] = useState('Day');
   const [firstClick, setFirstClick] = useState(false);
+  const [forceRerender, setForceRerender] = useState(false);
 
   // useEffect(() => {
   //   if (!selectedCompany.EncCompanyId) return;
@@ -49,12 +66,19 @@ export default function MarketingSalesPage() {
   //   }
   // };
 
-  useEffect(() => {
-    if (!selectedDepartment.DeptCategory) return;
-    let controller = new AbortController();
-    getAppointments(selectedDepartment, user.UserId, selectedCompany, fromDate, toDate, controller.signal);
-    return () => controller.abort();
-  }, [user.UserId, selectedCompany.CompanyId, selectedDepartment.DeptCategory, fromDate, toDate]);
+  const makeForcedRerender = async () => {
+    setForceRerender(true);
+    setTimeout(() => {
+      setForceRerender(false);
+    }, 1000);
+  }
+
+  // useEffect(() => {
+  //   if (!selectedDepartment.DeptCategory) return;
+  //   let controller = new AbortController();
+  //   getAppointments(selectedDepartment, user.UserId, selectedCompany, fromDate, toDate, controller.signal);
+  //   return () => controller.abort();
+  // }, [user.UserId, selectedCompany.CompanyId, selectedDepartment.DeptCategory, fromDate, toDate]);
 
   const getAppointments = async (dept, userId, company, from, to, signal) => {
     console.log(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${dept.DeptCategory}&ProcedureId=${dept.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date(from).toLocaleDateString('en-TT')}&ToDateStr=${new Date(to).toLocaleDateString('en-TT')}&UserId=${userId}&RootId=0&LevelNo=0&SearchString=${''}&ReportType=${'CURRENTSTATUS'}&SrcUserId=0`);    
@@ -124,7 +148,7 @@ export default function MarketingSalesPage() {
   // },[selectedStage]) 
   const [durationDropdown, setDurationDropdown] = useState(false);
 
-  const DurationDropdown = () => {
+  const LocationDropdown = () => {
     return (
       <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
         {Object.keys(range).map((i: any, n: number) => (
@@ -144,8 +168,8 @@ export default function MarketingSalesPage() {
   });
 
   const renderAppointments = () => {    
-    if (appointments.loading) {
-        return <GridLoader containerClass='gap-3 m-3' classes='h-[14rem]' count={3} />;
+    if (appointments.loading || forceRerender) {
+        return <GridLoader containerClass='gap-3 m-3 flex-col' classes='h-[14rem]' count={3} />;
     } else {
       return (
         <FlatList
@@ -156,6 +180,10 @@ export default function MarketingSalesPage() {
           renderItem={({item}: any) => (<AppointmentCard appt={item} />)}
           ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
         />
+
+        // <View className="px-3 py-3 gap-3">
+        //   {stageItems.map((item, index) => (<AppointmentCard appt={item} key={index} />))}
+        // </View> 
       )
     }
   }
@@ -175,9 +203,10 @@ export default function MarketingSalesPage() {
               //   <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
               // </TouchableOpacity>
 
-              <TouchableOpacity className={`flex flex-row items-center border rounded-xl`} key={index} onPress={() => {setSelectedStage(item)}} style={{backgroundColor: btnStyle.bg, borderColor: btnStyle.border}}>
+              <TouchableOpacity className={`flex flex-row items-center border rounded-xl relative`} key={index} onPress={() => {setSelectedStage(item); makeForcedRerender()}} style={{backgroundColor: btnStyle.bg, borderColor: btnStyle.border}}>
                 <Text className="text-xl font-bold p-3 text-white rounded-tl-xl rounded-bl-xl" style={{backgroundColor: btnStyle.text}}>{item.OpportunityCnt}</Text>
                 <Text className="text-gray-800 text-xs px-3 max-w-[10rem]" numberOfLines={2}>{item.LinkDescription}</Text>
+                {selectedStage.AutoId === item.AutoId ? <View className="w-2 h-2 rounded-full absolute top-1 right-1 bg-blue-500" /> : null}
               </TouchableOpacity>
             )
           })}
@@ -274,7 +303,9 @@ export default function MarketingSalesPage() {
       <View>
         {renderStages()}
       </View>
-      {renderAppointments()}
+      {/* {renderAppointments()} */}
+      {/* <AppointmentActivity /> */}
+      <MyModal modalActive={true} onClose={() => {}} child={<AppointmentActivity />} />
     </View>
   );
 }
@@ -304,6 +335,8 @@ const AppointmentCard = ({ appt }) => {
     remarksBorder: colors[stageColor][100],
     remarksBg: colors[stageColor][50],
   };
+
+  const [openDetails, setOpenDetails] = useState(false);
 
   return (
     <View className={`bg-white rounded-2xl border-t-[3px] p-4 shadow-sm`} style={{ borderColor: cardStyle.borderTop }} >
@@ -357,13 +390,245 @@ const AppointmentCard = ({ appt }) => {
           <Text className="font-bold">{appt.DoctName[0]}</Text>
           <Text className="text-sm font-semibold text-slate-600">{appt.DoctName}</Text>
         </View>
-        <Pressable className="bg-orange-500 px-4 py-2 rounded-lg">
+        <Pressable onPress={() => setOpenDetails(true)} className="bg-orange-500 px-4 py-2 rounded-lg">
           <Text className="text-white text-xs font-semibold">Call Now</Text>
         </Pressable>
         <Pressable className="w-9 h-9 rounded-lg bg-slate-100 items-center justify-center">
           <Pencil size={14} color="#64748b" />
         </Pressable>
       </View>
+      {/* <MyModal modalActive={openDetails} onClose={() => setOpenDetails(false)} child={<AppointmentActivity />} /> */}
     </View>
+  );
+}
+
+
+
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const TABS = [
+  { label: "All", value: "all" },
+  { label: "15 Mar", sublabel: "Sun", value: "15-mar", color: "#F59E0B" },
+  { label: "02 Mar", sublabel: "Mon", value: "02-mar", color: "#EF4444" },
+];
+
+const ACTIVITIES = [
+  {
+    id: 1,
+    date: "15 Mar 26",
+    time: "04:25 PM",
+    day: "15-mar",
+    purpose: "Registration",
+    purposeColor: "#7C3AED",
+    purposeBg: "#EDE9FE",
+    staff: "Vivek Prasad",
+    remarks: "Registered",
+    nextAppt: null,
+    status: "completed",
+  },
+  {
+    id: 2,
+    date: "02 Mar 26",
+    time: "06:18 PM",
+    day: "02-mar",
+    purpose: "Appointment / Schedule",
+    purposeColor: "#0369A1",
+    purposeBg: "#E0F2FE",
+    staff: "Rahul Developer",
+    remarks: null,
+    nextAppt: "02 Mar 26",
+    status: "scheduled",
+  },
+];
+
+type Activity = (typeof ACTIVITIES)[0];
+
+const DateTab = ({ tab, active, onPress }: { tab: (typeof TABS)[0]; active: boolean; onPress: () => void }) => {
+  if (tab.value === "all") {
+    return (
+      <TouchableOpacity onPress={onPress} className={`px-5 rounded-2xl mr-2 border ${ active ? "bg-violet-600 border-violet-600" : "bg-white border-gray-200" }`} >
+        <Text className={`text-sm font-bold my-auto ${ active ? "text-white" : "text-gray-500" }`} >All</Text>
+      </TouchableOpacity> );
+  }
+
+  const isAmber = tab.color === "#F59E0B";
+  return (
+    <TouchableOpacity onPress={onPress} className={`px-4 py-2 rounded-2xl mr-2 border items-center min-w-[72px] ${ active ? isAmber ? "bg-amber-500 border-amber-500" : "bg-rose-500 border-rose-500" : "bg-white border-gray-200" }`} >
+      <Text className={`text-sm font-bold leading-tight ${ active ? "text-white" : "text-gray-700" }`} >
+        {tab.label}
+      </Text>
+      <Text className={`text-xs ${active ? "text-white/80" : "text-gray-400"}`}>
+        {tab.sublabel}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
+const COL = { appt: 80, purpose: 110, staff: 110, remarks: 80, next: 90, action: 52 };
+
+const TH = ({ label, width }: { label: string; width: number }) => (
+  <View style={{ width }} className="py-3 px-2.5 justify-center">
+    <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+      {label}
+    </Text>
+  </View>
+);
+
+const TD = ({ width, children }: { width: number; children: React.ReactNode }) => (
+  <View style={{ width }} className="py-3 px-2.5 justify-center border-e border-gray-100">
+    {children}
+  </View>
+);
+
+const TableView = ({ data, onEdit }: { data: Activity[]; onEdit: (id: number) => void }) => (
+  <View className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View>
+        <View className="flex-row bg-gray-100 border-b border-gray-100">
+          <TH label="Appt" width={COL.appt} />
+          <TH label="Purpose" width={COL.purpose} />
+          {/* <TH label="Staff" width={COL.staff} /> */}
+          <TH label="Remarks" width={COL.remarks} />
+          <TH label="Next Appt" width={COL.next} />
+          <TH label="" width={COL.action} />
+        </View>
+
+        {data.map((item, index) => (
+          <View key={item.id} className={`flex-row ${ index < data.length - 1 ? "border-b border-gray-50" : "" }`} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#fafafa" }} >
+            <TD width={COL.appt}>
+              <View style={{ borderLeftColor: item.purposeColor, borderLeftWidth: 3 }} className="pl-2 rounded-sm" >
+                <Text className="text-xs font-semibold text-gray-800">
+                  {item.date}
+                </Text>
+                <Text className="text-xs text-gray-400 mt-1">{item.time}</Text>
+              </View>
+            </TD>
+
+            <TD width={COL.purpose}>
+              <View style={{ backgroundColor: item.purposeBg }} className="self-start rounded-lg px-2 py-1 mb-1.5" >
+                <Text style={{ color: item.purposeColor }} className="text-xs font-semibold" numberOfLines={2} >
+                  {item.purpose}
+                </Text>
+              </View>
+              <Text className="text-xs text-gray-500 flex-1 mt-1" numberOfLines={2}>
+                {item.staff}
+              </Text>
+            </TD>
+
+            {/* <TD width={COL.staff}>
+              <View className="flex-row items-center gap-1.5">
+                <View className="w-6 h-6 rounded-full bg-gray-100 items-center justify-center shrink-0">
+                  <User size={11} color="#9CA3AF" />
+                </View>
+                <Text className="text-xs text-gray-600 flex-1" numberOfLines={2}>
+                  {item.staff}
+                </Text>
+              </View>
+            </TD> */}
+
+            <TD width={COL.remarks}>
+              <Text className="text-xs text-gray-600 text-center">{item.remarks || '------'}</Text>
+            </TD>
+
+            <TD width={COL.next}>
+              {item.nextAppt ? (
+                <View className="flex-row items-center gap-1 bg-violet-50 px-2 py-1 rounded-lg self-center">
+                  {/* <CalendarClock size={10} color="#7C3AED" /> */}
+                  <Text className="text-xs font-semibold text-violet-700">
+                    {item.nextAppt || '------'}
+                  </Text>
+                </View>
+              ) : (
+                <Text className="text-xs text-gray-600 text-center">------</Text>
+              )}
+            </TD>
+
+            <TD width={COL.action}>
+              <TouchableOpacity onPress={() => onEdit(item.id)} className="p-2 rounded-xl bg-gray-50 active:bg-gray-100 self-center" >
+                <Pencil size={14} color="#6B7280" /> 
+              </TouchableOpacity>
+            </TD>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  </View>
+);
+
+// ─── View Toggle ─────────────────────────────────────────────────────────────
+
+const ViewToggle = ({ view, onChange }: { view: "card" | "table"; onChange: (v: "card" | "table") => void }) => (
+  <View className="flex-row bg-gray-100 rounded-xl p-1 gap-1">
+    <TouchableOpacity onPress={() => onChange("card")} className={`flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg ${ view === "card" ? "bg-white shadow-sm" : "" }`} >
+      <LayoutGrid size={14} color={view === "card" ? "#7C3AED" : "#9CA3AF"} />
+      <Text className={`text-xs font-semibold ${ view === "card" ? "text-violet-600" : "text-gray-400" }`} >
+        Cards
+      </Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => onChange("table")} className={`flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg ${ view === "table" ? "bg-white shadow-sm" : "" }`} >
+      <Table2 size={14} color={view === "table" ? "#7C3AED" : "#9CA3AF"} />
+      <Text className={`text-xs font-semibold ${ view === "table" ? "text-violet-600" : "text-gray-400" }`} >
+        Table
+      </Text>
+    </TouchableOpacity>
+  </View>
+);
+
+// ─── Root Screen ─────────────────────────────────────────────────────────────
+
+export function AppointmentActivity() {
+  const [activeTab, setActiveTab] = useState("all");
+  const [view, setView] = useState<"card" | "table">("card");
+
+  const filtered = activeTab === "all" ? ACTIVITIES : ACTIVITIES.filter((a) => a.day === activeTab);
+
+  const handleEdit = (id: number) => console.log("Edit", id);
+  const [loading, setLoading] = useState(false);
+
+  const makeForcedRerender = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }
+
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView className="flex-1" contentContainerClassName="p-4" showsVerticalScrollIndicator={false} >
+        {/* Header */}
+        <View className="flex-row items-start justify-between mb-5">
+          <View>
+            <Text className="text-lg font-bold text-gray-900 mb-0.5">
+              Activity Details
+            </Text>
+            <Text className="text-sm text-gray-400">
+              {filtered.length} appointment{filtered.length !== 1 ? "s" : ""}
+            </Text>
+          </View>
+          <ViewToggle view={view} onChange={setView} />
+        </View>
+        {/* {TABS.map((i: any) => (<Pressable onPress={() => {makeForcedRerender(); setActiveTab(i.value)}}><Text>{i.value}</Text></Pressable>))} */}
+
+        {/* Date filter tabs */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerClassName="mb-5"
+        >
+          {TABS.map((tab) => (
+            <DateTab
+              key={tab.value}
+              tab={tab}
+              active={activeTab === tab.value}
+              onPress={() => {makeForcedRerender(); setActiveTab(tab.value)}}
+            />
+          ))}
+        </ScrollView>
+
+        {/* Content */}
+        {loading ? null : <TableView data={filtered} onEdit={handleEdit} />}
+      </ScrollView>
+    </SafeAreaView>
   );
 }

@@ -178,6 +178,7 @@ const Login = ({ modalMode }: any) => {
                 UserRoleLevelCode: data.UserRoleLevelCode,
                 UserLevelCode: data.UserLevelCode,
                 UserCompList: data.UserCompList[0],
+                UserCompList2: isLP ? data.UserCompList : null,
             };
             const userData = { UserName: params.phone, UserPassword: data.UserPassword, EncCompanyId: params.EncCompanyId };
             if (keepLoggedIn) await storage.set('user', JSON.stringify(userData));
@@ -477,7 +478,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                 alert('THIS USER ID IS INACTIVE')
                 return false;
             } else if (data.UserId) {
-                dispatch(setUser({ ...data, UserCompList: data.UserCompList[0] }));
+                dispatch(setUser({ ...data, UserCompList: data.UserCompList[0], UserCompList2: isLP ? data.UserCompList : null }));
                 // localStorage.setItem("userLoginData", encrypt({ phone: params.RegMob1, password: params.UserPassword, compCode: compCode }));
                 if (keepLoggedIn) storage.set('user', JSON.stringify(body));
                 return true;

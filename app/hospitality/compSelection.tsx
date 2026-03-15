@@ -1,22 +1,12 @@
 import React from "react";
 import { View, Text, ScrollView, Pressable } from "react-native";
-import {
-  ShoppingCart,
-  Target,
-  PenLine,
-  Megaphone,
-  MousePointer,
-  Monitor,
-  ImagePlay,
-  TrendingUp,
-  MapPin,
-  ChevronDown,
-  Bell,
-} from "lucide-react-native";
+import { ShoppingCart,  Target,  PenLine,  Megaphone,  MousePointer,  Monitor,  ImagePlay,  TrendingUp,  MapPin,  ChevronDown,  LogOut } from "lucide-react-native";
 import { Image } from "react-native";
 import { RootState } from "@/src/store/store";
-import { useSelector } from "react-redux";
-import { router } from "expo-router";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, router } from "expo-router";
+import { getRandomColor, logout } from "@/src/components/utils";
+import { setCompanies } from "@/src/store/slices/slices";
 
 type Service = {
   id: string;
@@ -103,36 +93,29 @@ const services: Service[] = [
   },
 ];
 
-function ServiceCard({ service }: { service: Service }) {
-  const Icon = service.icon;
+function CompanyCard({ company, index }: { company: Service, index: Number }) {
+  // const Icon = company.icon;
+
+  let randColor = getRandomColor(index);
+  const dispatch = useDispatch();
+
+  const handleSelect = (item) => {
+    dispatch(setCompanies({ selected: item }))
+    router.push("/hospitality/tabs/Lead_Home")
+  }
 
   return (
-    <Pressable
-      className="flex-1 m-1.5 rounded-2xl p-4 flex-row items-center gap-4 active:opacity-80"
-      style={{ backgroundColor: "white" }}
-      android_ripple={{ color: "#f0f0f0", borderless: false }}
-      onPress={() => router.push('/hospitality/tabs/Lead_Home')}
-    >
-      {/* Icon container */}
-      <View
-        className={`${service.bgColor} rounded-xl w-14 h-14 items-center justify-center`}
-      >
-        <Icon size={24} color={service.iconColor} strokeWidth={2} />
+    <Pressable className="flex-1 m-1.5 rounded-2xl p-4 flex-row items-center gap-4 active:opacity-80 bg-white" android_ripple={{ color: "#f0f0f0", borderless: false }} onPress={() => handleSelect(company)}>
+      <View className={`rounded-xl w-14 h-14 items-center justify-center`} style={{ backgroundColor: randColor['50'] }}>
+        {/* <Icon size={24} color={company.iconColor} strokeWidth={2} /> */}
+        <Text className="text-xl font-bold" style={{color: randColor['600']}}>{company.COMPNAME?.slice(0, 2)}</Text>
       </View>
-
-      {/* Text */}
       <View className="flex-1">
-        <Text
-          className="text-gray-900 font-semibold leading-tight text-[1rem]"
-          numberOfLines={2}
-        >
-          {service.title}
+        <Text className="text-gray-900 font-semibold leading-tight text-[1rem]" numberOfLines={2}>
+          {company.COMPNAME}
         </Text>
-        <Text
-          className={`${service.subtitleColor} text-sm mt-1`}
-          numberOfLines={1}
-        >
-          {service.subtitle}
+        <Text className={`text-sm mt-1.5 font-medium`} numberOfLines={1} style={{color: randColor['600']}}>
+          {company.LocationName}
         </Text>
       </View>
     </Pressable>
@@ -140,11 +123,10 @@ function ServiceCard({ service }: { service: Service }) {
 }
 
 export default function ServicesGrid() {
-
   const user = useSelector((state: RootState) => state.user);  
-
+  const dispatch = useDispatch();
   return (
-    <ScrollView className="flex-1 bg-gray-100" showsVerticalScrollIndicator={false} >
+    <ScrollView className="flex-1 bg-slate-100" showsVerticalScrollIndicator={false}>
       <View className="p-4 bg-sky-900">
           <View className="flex flex-row items-center justify-between">
             <View className="flex flex-row items-center gap-4">
@@ -161,19 +143,21 @@ export default function ServicesGrid() {
                 </View>
               </View>
             </View>
-            <View className="relative">
-              <Bell size={24} color="#fff" />
-              <View className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full" />
-            </View>
+            <Link href='/login' onPress={() => logout(dispatch)}>
+              <View className="relative flex flex-row items-center gap-2">
+                <LogOut size={22} color="#fff" />
+                <Text className="text-sm text-white">Logout</Text>
+              {/* <View className="absolute -top-1 -right-1 w-2 h-2 bg-red-400 rounded-full" /> */}
+              </View>
+            </Link>
           </View>
       </View>
       <View className="p-2">
         <Text className="text-lg text-slate-400 font-PoppinsSemibold px-2 py-3">Select Company</Text>
         <View>
-          {services.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+          {user?.UserCompList2?.map((item, index) => (
+            <CompanyCard key={index} company={item} index={index} />
           ))}
-          {/* Fill empty slot if odd number */}
           {services.length === 1 && <View className="flex-1 m-1.5" />}
         </View>
       </View>

@@ -99,7 +99,7 @@ const Auth = () => {
         alert('User Not Activated.')
     //   toast(<InactiveWarningCard />, { position: "top-center", autoClose: false, closeButton: false, className: 'product-toast' });
     } else if (data.UserId) {
-      let userData = { ...data, UserCompList: data?.UserCompList[0] };
+      let userData = { ...data, UserCompList: data?.UserCompList[0], UserCompList2: isLP ? data.UserCompList : null };
       dispatch(setUser(userData));
       dispatch(setModal({name: "LOGIN", state: false, data: { type: uType.PATIENT }}))
       dispatch(setLogin(true));
