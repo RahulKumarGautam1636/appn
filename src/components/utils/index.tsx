@@ -1248,3 +1248,10 @@ export const getCatId = (categories: any, key: string, ) => {
   const catId = category?.Parent || 0
   return catId;
 }
+
+export const useDeptId = (key: string) => {
+  const categories = useSelector((state: RootState) => state.menu.departments);
+  const targetDept: any = categories.find((i: any) => ((i.DeptCategory).trim()).includes(key));
+  const deptId = targetDept?.DeptId || 0
+  return [deptId];
+}

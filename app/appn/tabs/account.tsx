@@ -62,7 +62,7 @@ const Profile = () => {
                     <>
                         {hasAccess("labtest", compCode) ? <View className='flex-row justify-between border-y border-gray-300 border-solid'>
                             <View className='items-center flex-1 border-r border-gray-300'>
-                                <Link href={'/appn/testList'}>
+                                <Link href={'/appn/investigation_list'}>
                                     <View className='items-center p-4'>
                                         <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 7 : 0}</Text>
                                         <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Lab Tests</Text>
@@ -70,7 +70,7 @@ const Profile = () => {
                                 </Link>
                             </View>
                             <View className='items-center flex-1'>
-                                <Link href={'/appn/appnList'}>
+                                <Link href={'/appn/opd_list'}>
                                     <View className='items-center p-4'>
                                         <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">{compCode === defaultId ? 15 : 0}</Text>
                                         <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Appointments</Text>
@@ -109,14 +109,14 @@ const Profile = () => {
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Pressable>                
-                    <Link href={'/appn/appnList'}>
+                    <Link href={'/appn/opd_list'}>
                         <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200 items-center'>
                             <FontAwesome5 name="calendar-alt" size={22} color={colors.pink[500]} style={{width: 26}} />
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Appointments</Text>
                             <Feather name="chevron-right" size={24} color='#6b7280' />
                         </View>
                     </Link>
-                    {hasAccess("labtest", compCode) || compCode === BC_ROY ? <Link href={'/appn/testList'}>
+                    {hasAccess("labtest", compCode) || compCode === BC_ROY ? <Link href={'/appn/investigation_list'}>
                         <View className='flex-row gap-4 w-full bg-white px-[25px] py-[15px] border-b border-gray-200'>
                             <Ionicons name="flask" size={22} color={colors.purple[500]} style={{width: 26}}/>
                             <Text className="font-PoppinsMedium text-slate-700 text-[14px] mr-auto">Lab Tests</Text>

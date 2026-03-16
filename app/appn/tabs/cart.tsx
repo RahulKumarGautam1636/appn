@@ -17,6 +17,7 @@ import colors from 'tailwindcss/colors';
 const Cart = ({}: any) => {
     const lab = useSelector((i: RootState) => i.cart)
     const isLoggedIn = useSelector((i: RootState) => i.isLoggedIn)
+    const labTestDate = useSelector((i: RootState) => i.appnData.labTestDate)
     const labTests = Object.values(lab)
     const dispatch = useDispatch()
     const [checkout, setCheckout] = useState(false)
@@ -37,7 +38,7 @@ const Cart = ({}: any) => {
     const viewOrders = () => {
         setSuccess(false);
         setCheckout(false);
-        router.push('/appn/testList');
+        router.push('/appn/investigation_list');
     }
 
     const handleSuccess = (reference: string) => {
@@ -72,7 +73,7 @@ const Cart = ({}: any) => {
                             <View className='flex-row gap-3 p-4'>
                                 <Text className="font-PoppinsSemibold text-white text-[13px] mr-auto">Booking Date</Text>
                                 <FontAwesome5 name="calendar-alt" size={17} color={`#fff`} />
-                                <Text className="font-PoppinsSemibold text-white text-[13px]">{new Date().toLocaleDateString('en-TT')}</Text>
+                                <Text className="font-PoppinsSemibold text-white text-[13px]">{labTestDate || 'N/A'}</Text>
                             </View>
                         </View> 
                         <View className='justify-between flex-row pt-1 items-center'>

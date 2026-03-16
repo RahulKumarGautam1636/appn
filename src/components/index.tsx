@@ -366,10 +366,10 @@ export const Card_3 = ({ data }: any) => {
           <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: data}))} className='flex-row gap-1 w-full p-3'>
             <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('@/assets/images/doctor.jpg')} style={{ width: 60, height: 60 }} />
             <View className='flex-1'>
-              <Text className="font-PoppinsSemibold text-sky-700 text-[13px] mb-2">{data.AppointmentTo}</Text>
+              <Text className="font-PoppinsSemibold text-sky-700 text-[13px] mb-2">{data.DoctName}</Text>
               <View className='flex-row justify-between items-between'>
                 <View className='flex-row gap-3 mb-[6px]'>
-                    <Text className="font-medium text-gray-600 text-[11px]">Patient :  {data.PartyName}</Text>
+                    <Text className="font-medium text-gray-600 text-[11px]">Patient :  {data.Name}</Text>
                 </View>
                 <View className='flex-row gap-3 mb-[6px]'>
                     <Text className="font-medium text-gray-600 text-[11px]">MRD :  {data.UHID ? data.UHID : 'N/A'}</Text>
@@ -450,12 +450,12 @@ export const Card_4 = ({ data }: any) => {
           <Image className='shadow-md shadow-gray-400 rounded-full me-3' source={require('@/assets/images/user.png')} style={{ width: 60, height: 60 }} />
           <View className='flex-1'>
             <Text className="font-PoppinsSemibold text-sky-700 text-[13px] mb-2">
-              {data.PartyName}
+              {data.Name}
             </Text>
             <View className='flex-row gap-3 mb-[6px]'>
                 {/* <FontAwesome5 name="clock" size={15} color="#075985" /> */}
                 {/* <Text className="font-PoppinsMedium text-gray-600 text-[12px]">{new Date(data.NextAppDate).toLocaleDateString('en-TT')},    {data.NextAppTime}</Text> */}
-                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">Date :  {data.NextAppDate.split('T')[0] + " "}</Text>
+                <Text className="font-PoppinsMedium text-gray-600 text-[11px]">Date :  {new Date(data.NextAppDate).toLocaleDateString("en-TT") + " "}</Text>
             </View>
             <View className='flex-row justify-between items-between'>
               <View className='flex-row gap-3'>

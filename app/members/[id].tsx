@@ -9,8 +9,8 @@ import React, { useEffect, useState } from "react";
 import { Image, Pressable, RefreshControl, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useDispatch, useSelector } from "react-redux";
-import AppnList from "../appn/appnList";
-import TestList from "../appn/testList";
+import AppnList from "../appn/opd_list";
+import TestList from "../appn/investigation_list";
 
 const MemberDetails = () => {
 

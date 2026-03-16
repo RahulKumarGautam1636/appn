@@ -59,7 +59,7 @@ const BookingSuccess = ({ doctor, bookingData, clinic, reference }: any) => {
                   <Text className="font-Poppins text-gray-500 text-[11px]" numberOfLines={1}>{clinic.ADDRESS}</Text>
               </View>
           </View>
-          <ButtonPrimary title='View Appointments' onPress={() => router.push('/appn/appnList')} classes='!h-[46px] bg-white border border-gray-400 mt-2' textClasses='text-[14px]' />
+          <ButtonPrimary title='View Appointments' onPress={() => router.push('/appn/opd_list')} classes='!h-[46px] bg-white border border-gray-400 mt-2' textClasses='text-[14px]' />
         </View>
         {/* <View className='justify-between flex-row px-4 pt-1 items-center'>
             <View className='flex-row items-center gap-3'>

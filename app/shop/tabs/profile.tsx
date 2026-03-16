@@ -63,7 +63,7 @@ const Profile = () => {
                     </View>
                     {/* <View className='flex-row justify-between border-y border-gray-300 border-solid'>
                         <View className='items-center flex-1 border-r border-gray-300'>
-                            <Link href={'/testList'}>
+                            <Link href={'/investigation_list'}>
                                 <View className='items-center p-4'>
                                     <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">2</Text>
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Members</Text>
@@ -71,7 +71,7 @@ const Profile = () => {
                             </Link>
                         </View>
                         <View className='items-center flex-1'>
-                            <Link href={'/appn/appnList'}>
+                            <Link href={'/appn/opd_list'}>
                                 <View className='items-center p-4'>
                                     <Text className="font-PoppinsBold text-blue-600 text-[18px] mb-0">6</Text>
                                     <Text className="font-PoppinsMedium text-gray-500 text-[12px]">Orders</Text>

@@ -176,6 +176,7 @@ const Login = ({ modalMode }: any) => {
 
                 UserRegTypeId: data.UserRegTypeId,
                 UserLevelSeq: data.UserLevelSeq,
+                UserRoleLevelCode: data.UserRoleLevelCode,
                 UserCompList: data.UserCompList[0],
             };
             const userData = { UserName: params.phone, UserPassword: data.UserPassword, EncCompanyId: params.EncCompanyId };

@@ -1,5 +1,5 @@
 import ButtonPrimary, { getDateDifference } from '@/src/components';
-import { BannerCarousel, getCatId, num, sumByKey, wait } from '@/src/components/utils';
+import { BannerCarousel, useDeptId, num, sumByKey, wait } from '@/src/components/utils';
 import { addToCart, dumpCart, getMembers, removeFromCart, setModal } from '@/src/store/slices/slices';
 import { RootState } from '@/src/store/store';
 import { FontAwesome, FontAwesome5, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -29,11 +29,12 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
     const itemsLength = labTests.length;
     let itemsValue = labTests.map((i: any) => i.SRate * i.count);
     let cartTotal = itemsLength !== 0 ? itemsValue.reduce((total, item) => total+item).toFixed(2) : '00';
-    let testDate = new Date().toLocaleDateString('en-TT');  // itemsLength ? labTests[0].testDate : '';
+    const labTestDate = useSelector((i: RootState) => i.appnData.labTestDate)
     let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
-    const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
-    const invCatId = getCatId(categories, 'INVESTIGATION');
+    // const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
+    // const invDeptId = useDeptId(categories, 'INVESTIGATION');
+    const invDeptId = useDeptId('INVESTIGATION')[0];  
 
     const handleBack = () => {
         if (handleClose) {
@@ -53,15 +54,15 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
         DepartmentId: i.DepartmentId,
         SubCategoryId: i.SubCategoryId,
 
-        TranDate: i.testDate,
-        TranDateStr: i.testDate
+        TranDate: labTestDate,           // Using labTestDate instead of i.testDate because tests with different dates are not allowed.
+        TranDateStr: labTestDate
     }))
 
       const handleBookingFormSubmit = async (e) => {
         e.preventDefault();
         if (!labTests.length) return alert('Your Cart is empty. Please add some Tests in your cart to proceed.')
         if (isLoggedIn) {
-        //   let appDate = getDateDifference(testDate); 
+        //   let appDate = getDateDifference(labTestDate); 
           let orderTotal = sumByKey(orderList, 'Amount');
           if (selectedMember.MemberId === user.MemberId) {     
             // if (getConfirmation(`Book Lab Test for ${userInfo.Name} in ${userInfo.selectedCompany.COMPNAME}`) === false) return; 
@@ -89,12 +90,12 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               UHID: user.UHID,
               MemberId: user.MemberId,
               Country: user.Country,
-              EnqType: 'INVESTIGATION',
+              EnqType: 'Lab Test Booking',
               LocationId: selectedCompany.LocationId,
     
               EnquiryDetailsList: orderList,
-              EnqDate: testDate,
-              EnqDateStr: testDate,
+              EnqDate: labTestDate,
+              EnqDateStr: labTestDate,
               Doctor: {},
               
               UnderDoctId: user.UnderDoctId,  // sales
@@ -102,7 +103,7 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               ProviderId: user.ProviderId,   // provider
               MarketedId: user.MarketedId,   // marketing,
               Remarks: remarks,
-              DeptId: invCatId,
+              DeptId: invDeptId,
 
 
                 UserRoleId: user.UserRoleId,
@@ -180,12 +181,12 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               Aadhaar: selectedMember.Aadhaar,
               UHID: selectedMember.UHID,
               Country: selectedMember.Country,
-              EnqType: 'INVESTIGATION',
+              EnqType: 'Lab Test Booking',
               LocationId: selectedCompany.LocationId,
     
               EnquiryDetailsList: orderList,
-              EnqDate: testDate,
-              EnqDateStr: testDate,
+              EnqDate: labTestDate,
+              EnqDateStr: labTestDate,
               Doctor: {},
               
               UnderDoctId: selectedMember.UnderDoctId,                // sales
@@ -193,7 +194,7 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
               ProviderId: selectedMember.ProviderId,   // provider
               MarketedId: selectedMember.MarketedId,   // marketing,
               Remarks: remarks,
-              DeptId: invCatId,
+              DeptId: invDeptId,
               
               
               UserRoleId: 0,
@@ -308,7 +309,7 @@ const Checkout = ({ handleClose, handleSuccess }: any) => {
                         <View className='flex-row gap-3 p-4'>
                             <Text className="font-PoppinsSemibold text-slate-500 text-[13px] mr-auto">Booking Date</Text>
                             <FontAwesome5 name="calendar-alt" size={17} color={myColors.primary[500]} />
-                            <Text className="font-PoppinsSemibold text-slate-500 text-[13px]">{new Date().toLocaleDateString('en-TT')}</Text>
+                            <Text className="font-PoppinsSemibold text-slate-500 text-[13px]">{labTestDate}</Text>
                         </View>
                     </View> 
                     

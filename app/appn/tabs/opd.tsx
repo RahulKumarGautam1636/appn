@@ -10,7 +10,7 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { setModal } from '@/src/store/slices/slices';
 import { CompCard, DeptCard, Card_1, DayBtn, getDatesArray, mmDDyyyyDate } from '@/src/components';
 import { BASE_URL, defaultId } from '@/src/constants';
-import { formatted, getCatId, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
+import { formatted, useDeptId, getFrom, GridLoader, ListLoader, NoContent } from '@/src/components/utils';
 import colors from 'tailwindcss/colors';
 
 
@@ -29,8 +29,7 @@ const HomeScreen = () => {
     const [appnData, setAppnData] = useState({loading: false, data: {PartyFollowupList: []}, err: {status: false, msg: ''}});
     const [doctorTab, setDoctorTab] = useState('active_date')
     
-    const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
-    const opdCatId = getCatId(categories, 'OPD');
+    const opdDeptId = useDeptId('OPD')[0];
 
     useEffect(() => {
         let controller = new AbortController();
@@ -58,9 +57,9 @@ const HomeScreen = () => {
                 }, 500)
             }                                                                                                   
         } 
-        getOtherDayDoctors(selected.EncCompanyId, depts.selected?.SubCode, opdCatId);  
+        getOtherDayDoctors(selected.EncCompanyId, depts.selected?.SubCode, opdDeptId);  
         return () => controller.abort();
-    }, [selected.EncCompanyId, depts.selected?.SubCode, opdCatId])
+    }, [selected.EncCompanyId, depts.selected?.SubCode, opdDeptId])
 
     useEffect(() => {
         const getAppnData = async (query: string, userId: string, companyId: string) => {
@@ -92,6 +91,7 @@ const HomeScreen = () => {
             return;
         } else {
             let firstAppn = data.data.PartyFollowupList?.filter((i: any) => i.Status !== 'Y')[0];
+            if (!firstAppn) return;            
             return (
                 <TouchableOpacity onPress={() => dispatch(setModal({name: 'APPN_DETAIL', state: true, data: firstAppn}))}>
                     <Text className="font-PoppinsSemibold text-gray-800 text-[13px] leading-[20px] mt-1 mb-0.5">Upcoming Schedule</Text>

@@ -17,11 +17,38 @@ const Reports = ({ memberId }: any) => {
     const router = useRouter();
     const [report, setReport] = useState('');
     const compCode = useSelector((i: RootState) => i.compCode);
+    const selectedCompany = useSelector((i: RootState) => i.companies.selected);
     const user = useSelector((i: RootState) => i.user);
     const [reportData, isLoading, error] = useFetch(`${BASE_URL}/api/SalesInvoice/GetBusinessCount?CID=${compCode}&UserId=${user.UserId}&PartyCode=${user.PartyCode}`, compCode);
     
     const patients = reportData?.Journal?.Sales?.SalesDetailsList;
     const cases = sumByKey(patients || [], 'NosOfCase')
+
+    // NEW DYNAMIC TABS WORK
+    const [department, setDepartment] = useState({ loading: false, data: { PatientRegList: [], tabs: [] }, err: { status: false, msg: "" } });
+
+    useEffect(() => {
+      if (!selectedCompany.EncCompanyId) return;
+      let controller = new AbortController();
+      getDepartments(controller.signal, user, selectedCompany);
+      return () => controller.abort();
+    }, [user.UserId, selectedCompany.EncCompanyId]);
+
+    const getDepartments = async (signal, user, company) => {
+      console.log(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=01/03/2026&dttoStr=05/03/2026`);      
+      if (user.UserId > 1) {
+        const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=01/03/2026&dttoStr=05/03/2026`, {}, setDepartment, signal);
+        if (res) {
+          let uniqueItems = groupBy(res.data.PatientRegList, 'Department');
+          setDepartment({...res, data: {PatientRegList: res.data.PatientRegList, tabs: uniqueItems}});
+        }
+      }
+    };
+
+    //---------------------------------------------------------------------------------------------------------------------
+    const departments = useSelector((i: RootState) => i.menu.departments);
+
+    // console.log(department);    
     
     return (
         <ScrollView contentContainerClassName='bg-slate-100 min-h-full'>
@@ -62,30 +89,43 @@ const Reports = ({ memberId }: any) => {
             </View>}
 
             <View className="flex flex-col gap-4 mb-4 px-4">
-                <TouchableOpacity onPress={() => router.push('/appn/appnList')} className="bg-white flex-row rounded-3xl p-5 shadow-sm border border-white border-opacity-40 cursor-pointer justify-between items-center">
+              {departments.map((i: any) => (
+                <TouchableOpacity key={i.DeptId} onPress={() => router.push(`/appn/${i.DeptCategory.toLowerCase()}_list`)} className="bg-white flex-row rounded-3xl p-5 shadow-sm border border-white border-opacity-40 cursor-pointer justify-between items-center">
                     <View className="flex-row items-start gap-5">
                         <View className="bg-purple-400 rounded-2xl p-3 shadow-md">
                             <CalendarDays color="white" size={27} />
                         </View>
                         <View>
                             {/* <Text className="text-gray-500 text-[1.1rem] font-medium tracking-wider mb-2">Total Appointments</Text> */}
-                            <Text className="text-gray-800 text-xl font-bold mt-2">Appointments</Text>
+                            <Text className="text-gray-800 text-xl font-bold mt-2">{i.Department}</Text>
                         </View>
                     </View>
                     <ChevronRight color={'#6b7280'} size={27} />
                 </TouchableOpacity>
-                {hasAccess("labtest", compCode) || compCode === BC_ROY ? <TouchableOpacity onPress={() => router.push('/appn/testList')} className="bg-white flex-row rounded-3xl p-5 shadow-sm border border-white border-opacity-40 cursor-pointer justify-between items-center">
-                    <View className="flex-row items-start gap-5">
-                        <View className="bg-pink-400 rounded-2xl p-3 shadow-md">
-                            <FlaskConical color="white" size={27} />
-                        </View>
-                        <View>
-                            {/* <Text className="text-gray-500 text-[1.1rem] font-medium tracking-wider mb-2">Total Lab Tests</Text> */}
-                            <Text className="text-gray-800 text-xl font-bold mt-2">Lab Tests</Text>
-                        </View>
-                    </View>
-                    <ChevronRight color={'#6b7280'} size={27} />
-                </TouchableOpacity> : null}
+              ))}
+
+              {/* <TouchableOpacity onPress={() => router.push('/appn/opd_list')} className="bg-white flex-row rounded-3xl p-5 shadow-sm border border-white border-opacity-40 cursor-pointer justify-between items-center">
+                  <View className="flex-row items-start gap-5">
+                      <View className="bg-purple-400 rounded-2xl p-3 shadow-md">
+                          <CalendarDays color="white" size={27} />
+                      </View>
+                      <View>
+                          <Text className="text-gray-800 text-xl font-bold mt-2">Appointments</Text>
+                      </View>
+                  </View>
+                  <ChevronRight color={'#6b7280'} size={27} />
+              </TouchableOpacity>
+              {hasAccess("labtest", compCode) || compCode === BC_ROY ? <TouchableOpacity onPress={() => router.push('/appn/investigation_list')} className="bg-white flex-row rounded-3xl p-5 shadow-sm border border-white border-opacity-40 cursor-pointer justify-between items-center">
+                  <View className="flex-row items-start gap-5">
+                      <View className="bg-pink-400 rounded-2xl p-3 shadow-md">
+                          <FlaskConical color="white" size={27} />
+                      </View>
+                      <View>
+                          <Text className="text-gray-800 text-xl font-bold mt-2">Lab Tests</Text>
+                      </View>
+                  </View>
+                  <ChevronRight color={'#6b7280'} size={27} />
+              </TouchableOpacity> : null} */}
             </View>
             <MyModal modalActive={report ? true : false} name='REPORT' child={report === 'cases' ? <Cases handleClose={() => setReport('')} /> : <Patients handleClose={() => setReport('')} />} />
         </ScrollView>
@@ -133,6 +173,13 @@ export const Patients = ({ handleClose }: any) => {
       }
 
       let to = new Date(a);
+
+      if (range[duration] === 1) {
+        setFromDate(a);
+        setToDate(a);
+        return;
+      }
+
       setFromDate(a)
       setToDate(new Date(to.setDate(to.getDate() + range[duration])));
     }
