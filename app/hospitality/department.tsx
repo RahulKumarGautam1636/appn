@@ -1,29 +1,18 @@
 import { useEffect, useState } from "react";
 import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, FlatList } from "react-native";
-import { ArrowLeft, Bell, Calendar, Phone, MapPin, Pencil, ChevronLeft, ChevronRight, Search, Minus, Plus } from "lucide-react-native";
+import { ArrowLeft, Bell, Calendar, Phone, MapPin, Pencil, ChevronLeft, ChevronRight, Search, Minus, Plus, CreditCard, Check, ArrowLeftRight, Shield, Gift, MessageCircle, FileText, Funnel, } from "lucide-react-native";
 import colors from "tailwindcss/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { mmDDyyyyDate, MyModal, sortByCount } from "@/src/components";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BASE_URL, myColors } from "@/src/constants";
-import { getFrom, getMonthDate, GridLoader, groupBy, NoContent } from "@/src/components/utils";
+import { getFrom, getMonthDate, getRandomColor, GridLoader, groupBy, NoContent } from "@/src/components/utils";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import React from "react";
-import {
-  SafeAreaView,
-} from "react-native";
-import {
-  CalendarDays,
-  Clock,
-  User,
-  CheckCircle2,
-  CalendarClock,
-  StickyNote,
-  LayoutGrid,
-  Table2,
-} from "lucide-react-native";
+import { SafeAreaView } from "react-native";
+import { CalendarDays, Clock, User, CheckCircle2, CalendarClock, StickyNote, LayoutGrid, Table2 } from "lucide-react-native";
 
 
 const cardColor = { '1': 'rose', '2': 'yellow', '3': 'green' };
@@ -47,6 +36,11 @@ export default function MarketingSalesPage() {
   const [duration, setDuration] = useState('Day');
   const [firstClick, setFirstClick] = useState(false);
   const [forceRerender, setForceRerender] = useState(false);
+  const [openFilters, setOpenFilters] = useState(false);
+  const [selectedFilterUserId, setSelectedFilterUserId] = useState(0);
+  const [reportType, setReportType] = useState("CURRENTSTATUS");            // set reportType === 'SEARCH' and selectedFilterUserId === 0 when searching in input box.
+  const [query, setQuery] = useState('');
+  const [debounceQuery, setDebounceQuery] = useState('');
 
   // useEffect(() => {
   //   if (!selectedCompany.EncCompanyId) return;
@@ -73,17 +67,17 @@ export default function MarketingSalesPage() {
     }, 1000);
   }
 
-  // useEffect(() => {
-  //   if (!selectedDepartment.DeptCategory) return;
-  //   let controller = new AbortController();
-  //   getAppointments(selectedDepartment, user.UserId, selectedCompany, fromDate, toDate, controller.signal);
-  //   return () => controller.abort();
-  // }, [user.UserId, selectedCompany.CompanyId, selectedDepartment.DeptCategory, fromDate, toDate]);
+  useEffect(() => {
+    if (!selectedDepartment.DeptCategory) return;
+    let controller = new AbortController();
+    getAppointments(selectedDepartment, user.UserId, selectedCompany, fromDate, toDate, selectedFilterUserId, reportType, query, controller.signal);
+    return () => controller.abort();
+  }, [user.UserId, selectedCompany.CompanyId, selectedDepartment.DeptCategory, fromDate, toDate, selectedFilterUserId, reportType, query]);
 
-  const getAppointments = async (dept, userId, company, from, to, signal) => {
-    console.log(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${dept.DeptCategory}&ProcedureId=${dept.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date(from).toLocaleDateString('en-TT')}&ToDateStr=${new Date(to).toLocaleDateString('en-TT')}&UserId=${userId}&RootId=0&LevelNo=0&SearchString=${''}&ReportType=${'CURRENTSTATUS'}&SrcUserId=0`);    
+  const getAppointments = async (dept, userId, company, from, to, filterUserId, currReportType, serchString, signal) => {
+    console.log(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${dept.DeptCategory}&ProcedureId=${dept.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date(from).toLocaleDateString('en-TT')}&ToDateStr=${new Date(to).toLocaleDateString('en-TT')}&UserId=${userId}&RootId=0&LevelNo=0&SearchString=${serchString}&ReportType=${currReportType}&SrcUserId=${filterUserId}`);    
     if (user.UserId > 1) {
-      const res = await getFrom(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${dept.DeptCategory}&ProcedureId=${dept.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date(from).toLocaleDateString('en-TT')}&ToDateStr=${new Date(to).toLocaleDateString('en-TT')}&UserId=${userId}&RootId=0&LevelNo=0&SearchString=${''}&ReportType=${'CURRENTSTATUS'}&SrcUserId=0`, {}, setAppointments, signal);
+      const res = await getFrom(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${dept.DeptCategory}&ProcedureId=${dept.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date(from).toLocaleDateString('en-TT')}&ToDateStr=${new Date(to).toLocaleDateString('en-TT')}&UserId=${userId}&RootId=0&LevelNo=0&SearchString=${serchString}&ReportType=${currReportType}&SrcUserId=${filterUserId}`, {}, setAppointments, signal);
       if (res) {
         let deptStages = selectedDepartment?.LinkStageList;
         let arr: any = []
@@ -215,6 +209,60 @@ export default function MarketingSalesPage() {
     }
   }
 
+  // ============================================================================================================
+
+  // const [filterStages, setFilterStages] = useState({ loading: false, data: [], err: { status: false, msg: "" } });
+  const [filterUsers, setFilterUsers] = useState({ loading: false, data: [], err: { status: false, msg: "" } });
+
+  // useEffect(() => {
+  //   if (!selectedDepartment.DeptId) return;
+  //   const getFilterStages = async (companyId, userRoleLevelCode, deptCategory, signal) => {
+  //     if (!companyId) return;
+  //     console.log(`${BASE_URL}/api/VALUES/GetStage?CompId=${companyId}&RoleId=${userRoleLevelCode}&LevelId=0&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${deptCategory}&BusinessType=`);    
+  //     const res = await getFrom(`${BASE_URL}/api/VALUES/GetStage?CompId=${companyId}&RoleId=${userRoleLevelCode}&LevelId=0&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${deptCategory}&BusinessType=`, {}, setFilterStages, signal);
+  //     if (res) {
+  //       setFilterStages(res);
+  //     }
+  //   };
+
+  //   let controller = new AbortController();
+  //   getFilterStages(selectedCompany.EncCompanyId, user.UserRoleLevelCode, selectedDepartment.DeptId, controller.signal);
+  //   return () => controller.abort();
+  // }, [selectedCompany.EncCompanyId, user.UserRoleLevelCode, selectedDepartment.DeptId,]);
+
+  useEffect(() => {
+    if (!selectedDepartment.DeptId) return;
+    const getFilterUsers = async (companyId, deptCategory, signal) => {
+      if (!companyId) return;
+      console.log(`${BASE_URL}/api/UserReg/GetAllUserOfDept?CompId=${companyId}&DeptId=${deptCategory}`);    
+      const res = await getFrom(`${BASE_URL}/api/UserReg/GetAllUserOfDept?CompId=${companyId}&DeptId=${deptCategory}`, {}, setFilterUsers, signal);
+      if (res) {
+        setFilterUsers(res);
+      }
+    };
+
+    let controller = new AbortController();
+    getFilterUsers(selectedCompany.EncCompanyId, selectedDepartment.DeptId, controller.signal);
+    return () => controller.abort();
+  }, [selectedCompany.EncCompanyId, selectedDepartment.DeptId]);
+
+  const handleSearch = (text: string) => {
+    if (text.trim().length < 2) return;
+    if (reportType !== 'SEARCH' || selectedFilterUserId ) {
+      setReportType('SEARCH'); 
+      setSelectedFilterUserId(0)
+    }
+    setQuery(text); 
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+        handleSearch(debounceQuery)   
+        console.log(debounceQuery);                                                 
+    }, 800);
+    return () => clearTimeout(timer)
+  }, [debounceQuery])
+
   return (
     <View className="flex-1 bg-slate-200">
       <View className="bg-sky-900 px-5 pt-6 pb-6">
@@ -256,7 +304,7 @@ export default function MarketingSalesPage() {
         <View className="">
           <View className="flex-row gap-3 items-center mb-4">
             <View className="flex-1 flex-row items-center bg-white/10 rounded-xl px-3 py-1 h-full">
-              <TextInput placeholder="Search Appointments..." className="flex-1 text-sm text-white" placeholderTextColor={colors.gray[300]} />
+              <TextInput onChangeText={(text) => setDebounceQuery(text)} value={debounceQuery} placeholder="Search Appointments..." className="flex-1 text-sm text-white" placeholderTextColor={colors.gray[300]} />
             </View>
             <Pressable className="w-[3.3rem] h-[3.2rem] rounded-xl bg-orange-500/90 items-center justify-center">
               <Plus size={22} color={'#fff'} />
@@ -264,14 +312,19 @@ export default function MarketingSalesPage() {
           </View>
 
           {/* Day Week Month */}
-          <View className="flex-row gap-2 mb-4">
-            {Object.keys(range).map((v: string) => (
-              <Pressable key={v} onPress={() => setDuration(v)} className={`flex-1 py-2 rounded-lg items-center border ${ duration === v ? "bg-sky-600 border-sky-600" : "border-slate-400" }`}>
-                <Text className={`text-sm font-semibold ${duration === v ? "text-white" : "text-slate-400"}`}>
-                  {v}
-                </Text>
-              </Pressable>
-            ))}
+          <View className="flex-row gap-3 items-center mb-4">
+            <View className="flex-row gap-2 flex-1">
+              {Object.keys(range).map((v: string) => (
+                <Pressable key={v} onPress={() => setDuration(v)} className={`flex-1 py-2 rounded-lg items-center border ${ duration === v ? "bg-sky-600 border-sky-600" : "border-slate-400" }`}>
+                  <Text className={`text-sm font-semibold ${duration === v ? "text-white" : "text-slate-400"}`}>
+                    {v}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+            <TouchableOpacity onPress={() => setOpenFilters(true)} className={`py-2 rounded-lg items-center bg-gray-300 border border-white w-[3.3rem]`}>
+              <Funnel size={18} color={'black'} />
+            </TouchableOpacity>
           </View>
 
           {/* Date */}
@@ -303,9 +356,8 @@ export default function MarketingSalesPage() {
       <View>
         {renderStages()}
       </View>
-      {/* {renderAppointments()} */}
-      {/* <AppointmentActivity /> */}
-      <MyModal modalActive={true} onClose={() => {}} child={<AppointmentActivity />} />
+      {renderAppointments()}
+      <MyModal modalActive={openFilters} onClose={() => setOpenFilters(false)} child={<SettingsScreen filterStages={stages} selectedStageId={selectedStage.AutoId} selectStage={setSelectedStage} filterUsers={filterUsers} selectedFilterUserId={selectedFilterUserId} selectUser={setSelectedFilterUserId} />} />
     </View>
   );
 }
@@ -374,10 +426,10 @@ const AppointmentCard = ({ appt }) => {
           </Text>
         </View> */}
       </View>
-      <View className={`rounded-lg p-3 mb-3 border`} style={{ borderColor: cardStyle.remarksBorder, backgroundColor: cardStyle.remarksBg, }}>
+      {appt.Remarks2 ? <View className={`rounded-lg p-3 mb-3 border`} style={{ borderColor: cardStyle.remarksBorder, backgroundColor: cardStyle.remarksBg, }}>
         <Text className="text-[10px] text-slate-900 font-medium uppercase mb-1">Remarks</Text>
         <Text className="text-sm text-slate-600">{appt.Remarks2}</Text>
-      </View>
+      </View> : null}
       <View className="flex-row items-center gap-2 mb-3">
         <Calendar size={14} color="#6366f1" />
         <Text className="text-[0.8rem]">
@@ -397,7 +449,7 @@ const AppointmentCard = ({ appt }) => {
           <Pencil size={14} color="#64748b" />
         </Pressable>
       </View>
-      {/* <MyModal modalActive={openDetails} onClose={() => setOpenDetails(false)} child={<AppointmentActivity />} /> */}
+      <MyModal modalActive={openDetails} containerClass='mt-auto' onClose={() => setOpenDetails(false)} child={<AppointmentActivity />} />
     </View>
   );
 }
@@ -464,10 +516,10 @@ const DateTab = ({ tab, active, onPress }: { tab: (typeof TABS)[0]; active: bool
   );
 };
 
-const COL = { appt: 80, purpose: 110, staff: 110, remarks: 80, next: 90, action: 52 };
+const COL = { appt: 19, purpose: 27, remarks: 19, next: 22, action: 13 };     // purpose: 27
 
 const TH = ({ label, width }: { label: string; width: number }) => (
-  <View style={{ width }} className="py-3 px-2.5 justify-center">
+  <View style={{ width: `${width}%` }} className="py-3 px-2.5 justify-center">
     <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider">
       {label}
     </Text>
@@ -475,22 +527,22 @@ const TH = ({ label, width }: { label: string; width: number }) => (
 );
 
 const TD = ({ width, children }: { width: number; children: React.ReactNode }) => (
-  <View style={{ width }} className="py-3 px-2.5 justify-center border-e border-gray-100">
+  <View style={{ width: `${width}%` }} className="py-3 px-2.5 justify-center border-e border-gray-100">
     {children}
   </View>
 );
 
 const TableView = ({ data, onEdit }: { data: Activity[]; onEdit: (id: number) => void }) => (
   <View className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <View>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="w-full">
+      <View className="w-full min-w-[34rem]">
         <View className="flex-row bg-gray-100 border-b border-gray-100">
           <TH label="Appt" width={COL.appt} />
           <TH label="Purpose" width={COL.purpose} />
           {/* <TH label="Staff" width={COL.staff} /> */}
           <TH label="Remarks" width={COL.remarks} />
           <TH label="Next Appt" width={COL.next} />
-          <TH label="" width={COL.action} />
+          <TH label="Action" width={COL.action} />
         </View>
 
         {data.map((item, index) => (
@@ -506,7 +558,7 @@ const TableView = ({ data, onEdit }: { data: Activity[]; onEdit: (id: number) =>
 
             <TD width={COL.purpose}>
               <View style={{ backgroundColor: item.purposeBg }} className="self-start rounded-lg px-2 py-1 mb-1.5" >
-                <Text style={{ color: item.purposeColor }} className="text-xs font-semibold" numberOfLines={2} >
+                <Text style={{ color: item.purposeColor }} className="text-xs font-semibold">
                   {item.purpose}
                 </Text>
               </View>
@@ -557,19 +609,18 @@ const TableView = ({ data, onEdit }: { data: Activity[]; onEdit: (id: number) =>
 
 // ─── View Toggle ─────────────────────────────────────────────────────────────
 
-const ViewToggle = ({ view, onChange }: { view: "card" | "table"; onChange: (v: "card" | "table") => void }) => (
-  <View className="flex-row bg-gray-100 rounded-xl p-1 gap-1">
-    <TouchableOpacity onPress={() => onChange("card")} className={`flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg ${ view === "card" ? "bg-white shadow-sm" : "" }`} >
-      <LayoutGrid size={14} color={view === "card" ? "#7C3AED" : "#9CA3AF"} />
-      <Text className={`text-xs font-semibold ${ view === "card" ? "text-violet-600" : "text-gray-400" }`} >
-        Cards
+const ViewToggle = ({ view, onChange }: any) => (
+  <View className="flex-row bg-gray-100 rounded-xl p-2 gap-1">
+    <TouchableOpacity onPress={() => onChange("stage")} className={`flex-1 justify-center flex-row items-center gap-1.5 px-3 py-2.5 rounded-lg ${ view === "stage" ? "bg-white shadow-sm" : "shadow-none" }`} >
+      <LayoutGrid size={14} color={view === "stage" ? "#7C3AED" : "#9CA3AF"} />
+      <Text className={`text-sm font-semibold ${ view === "stage" ? "text-violet-600" : "text-gray-400" }`} >
+        Stages
       </Text>
     </TouchableOpacity>
-    <TouchableOpacity
-      onPress={() => onChange("table")} className={`flex-row items-center gap-1.5 px-3 py-1.5 rounded-lg ${ view === "table" ? "bg-white shadow-sm" : "" }`} >
-      <Table2 size={14} color={view === "table" ? "#7C3AED" : "#9CA3AF"} />
-      <Text className={`text-xs font-semibold ${ view === "table" ? "text-violet-600" : "text-gray-400" }`} >
-        Table
+    <TouchableOpacity onPress={() => onChange("user")} className={`flex-1 justify-center flex-row items-center gap-1.5 px-3 py-2.5 rounded-lg ${ view === "user" ? "bg-white shadow-sm" : "shadow-none" }`} >
+      <Table2 size={14} color={view === "user" ? "#7C3AED" : "#9CA3AF"} />
+      <Text className={`text-sm font-semibold ${ view === "user" ? "text-violet-600" : "text-gray-400" }`} >
+        Users
       </Text>
     </TouchableOpacity>
   </View>
@@ -590,32 +641,23 @@ export function AppointmentActivity() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 200);
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1" contentContainerClassName="p-4" showsVerticalScrollIndicator={false} >
-        {/* Header */}
-        <View className="flex-row items-start justify-between mb-5">
+    <ScrollView contentContainerClassName="p-4 min-h-[30rem] bg-white" showsVerticalScrollIndicator={false} >
+      <View className="flex-row items-center mb-5 gap-4">
           <View>
-            <Text className="text-lg font-bold text-gray-900 mb-0.5">
-              Activity Details
-            </Text>
+          <Text className="text-lg font-bold text-gray-900">Activity Details</Text>
+        </View>
+        {/* <ViewToggle view={view} onChange={setView} /> */}
             <Text className="text-sm text-gray-400">
               {filtered.length} appointment{filtered.length !== 1 ? "s" : ""}
             </Text>
-          </View>
-          <ViewToggle view={view} onChange={setView} />
         </View>
         {/* {TABS.map((i: any) => (<Pressable onPress={() => {makeForcedRerender(); setActiveTab(i.value)}}><Text>{i.value}</Text></Pressable>))} */}
-
-        {/* Date filter tabs */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerClassName="mb-5"
-        >
+      <View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="mb-5" >
           {TABS.map((tab) => (
             <DateTab
               key={tab.value}
@@ -625,10 +667,59 @@ export function AppointmentActivity() {
             />
           ))}
         </ScrollView>
-
-        {/* Content */}
+      </View>
         {loading ? null : <TableView data={filtered} onEdit={handleEdit} />}
       </ScrollView>
-    </SafeAreaView>
   );
+}
+
+export function SettingsScreen({ onClose, filterStages, selectedStageId, filterUsers, selectedFilterUserId, selectStage, selectUser }: any) {
+  const [view, setView] = useState('stage');
+
+  const onStageSelect = (i: any) => {
+    selectStage(i)
+    onClose(false);
+  }
+
+  const onUserSelect = (i: any) => {
+    selectUser(i.UserId)
+    onClose(false);
+  }
+
+  return (    
+      <ScrollView contentContainerClassName="p-4" showsVerticalScrollIndicator={false}>
+        <View className="bg-white rounded-3xl overflow-hidden shadow-sm shadow-blue-100 pb-4">
+          <View className="px-6 pt-6 pb-4 border-b border-gray-100">
+            <ViewToggle view={view} onChange={setView} />
+          </View>
+          {view === 'stage' ? 
+            filterStages.map((item: any, index: number) => <FilterBtn key={index} index={index} view={view} data={item} active={selectedStageId === item.AutoId } onPress={onStageSelect} />)
+            : 
+            filterUsers.data.map((item: any, index: number) => <FilterBtn key={index} index={index} view={view} data={item} active={selectedFilterUserId === item.UserId} onPress={onUserSelect} />)
+          }
+        </View>
+      </ScrollView>
+  );
+}
+
+const FilterBtn = ({ data, onPress, index, view, active }: any) => {
+  let bgColor = getRandomColor(index)['100'];
+  return (
+    <>
+      <TouchableOpacity onPress={() => onPress(data)} activeOpacity={0.65} className={`flex-row items-center px-4 py-2.5 ${active ? 'bg-purple-50 border-y border-purple-200/80' : ''}`}>
+        <View className={`w-9 h-9 rounded-xl items-center justify-center mr-3`} style={{backgroundColor: bgColor}}>
+          {view === 'stage' ? <Text className="font-semibold text-sm">{data.OpportunityCnt}</Text> : <FontAwesome5 name="user-tie" size={14} color="gray" />}
+        </View>
+        <Text className="flex-1 text-sm text-slate-700" style={{ fontFamily: "System", letterSpacing: 0.1 }}>
+          {view === 'stage' ? data.LinkDescription : data.UserFullName}
+        </Text>
+        {active ?
+          <FontAwesome5 name="check" size={16} color={colors.orange[500]} />
+          :
+          <ChevronRight size={18} color="#94a3b8" strokeWidth={2} />
+        }
+      </TouchableOpacity>
+      <View className="h-[1px] bg-slate-100 mx-4" />
+    </>
+  )
 }
