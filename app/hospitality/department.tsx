@@ -13,6 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import React from "react";
 import { SafeAreaView } from "react-native";
 import { CalendarDays, Clock, User, CheckCircle2, CalendarClock, StickyNote, LayoutGrid, Table2 } from "lucide-react-native";
+import UpdateStage from "./stageUpdate";
 
 
 const cardColor = { '1': 'rose', '2': 'yellow', '3': 'green' };
@@ -389,15 +390,16 @@ const AppointmentCard = ({ appt }) => {
   };
 
   const [openDetails, setOpenDetails] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
 
   return (
     <View className={`bg-white rounded-2xl border-t-[3px] p-4 shadow-sm`} style={{ borderColor: cardStyle.borderTop }} >
       <View className="flex-row items-center mb-3">
-        <View className={`w-11 h-11 rounded-xl items-center justify-center mr-3`} style={{ backgroundColor: cardStyle.avatarBg }}>
+        <View className={`w-11 h-11 rounded-xl items-center justify-center`} style={{ backgroundColor: cardStyle.avatarBg }}>
           <Text className={`font-bold`} style={{ color: cardStyle.avatarText }}>{appt.Name?.slice(0, 2).toUpperCase()}</Text>
         </View>
-        <View className="flex-1">
-          <Text className="font-bold text-slate-900">{appt.Name}</Text>
+        <View className="flex-1 ml-3 mr-1.5">
+          <Text className="font-bold text-slate-900" numberOfLines={1}>{appt.Name}</Text>
           <View className="flex-row items-center gap-1 mt-1">
             <Phone size={12} color="#64748b" />
             <Text className="text-xs text-slate-500">{appt.RegMob1} {appt.RegMob2 && ` / ${appt.RegMob2}`}</Text>
@@ -442,14 +444,15 @@ const AppointmentCard = ({ appt }) => {
           <Text className="font-bold">{appt.DoctName[0]}</Text>
           <Text className="text-sm font-semibold text-slate-600">{appt.DoctName}</Text>
         </View>
-        <Pressable onPress={() => setOpenDetails(true)} className="bg-orange-500 px-4 py-2 rounded-lg">
+        <Pressable onPress={() => setOpenDetails(true)} className="px-4 py-2 rounded-lg" style={{backgroundColor: cardStyle.borderTop}}>
           <Text className="text-white text-xs font-semibold">Call Now</Text>
         </Pressable>
-        <Pressable className="w-9 h-9 rounded-lg bg-slate-100 items-center justify-center">
+        <Pressable onPress={() => setUpdateModal(true)} className="w-9 h-9 rounded-lg bg-slate-100 items-center justify-center">
           <Pencil size={14} color="#64748b" />
         </Pressable>
       </View>
       <MyModal modalActive={openDetails} containerClass='mt-auto' onClose={() => setOpenDetails(false)} child={<AppointmentActivity />} />
+      <MyModal modalActive={updateModal} onClose={() => setUpdateModal(false)} child={<UpdateStage />} />
     </View>
   );
 }

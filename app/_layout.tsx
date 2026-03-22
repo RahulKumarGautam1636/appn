@@ -1,5 +1,5 @@
 import { SplashScreen, Stack, usePathname } from "expo-router";
-import { KeyboardAvoidingView, StatusBar } from "react-native";
+import { KeyboardAvoidingView, StatusBar, View } from "react-native";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -99,17 +99,19 @@ function LayoutContent() {
 
 export default function RootLayout() {
   return (
-    <Provider store={store}>
-      <GestureHandlerRootView className={`flex-1 ${web ? 'h-full w-full max-w-[500px] mx-auto border border-gray-200' : ''}`}>
-        <SafeAreaProvider>
-          <LayoutContent />
-          <Auth />
-          <Init />
-          <Modals />
-          <UpdateBanner />
-        </SafeAreaProvider>
-      </GestureHandlerRootView>
-    </Provider>
+    <View className={`flex-1 ${web ? 'h-full w-full max-w-[500px] mx-auto border border-gray-200' : ''}`}>
+      <Provider store={store}>
+        <GestureHandlerRootView>
+          <SafeAreaProvider>
+            <LayoutContent />
+            <Auth />
+            <Init />
+            <Modals />
+            <UpdateBanner />
+          </SafeAreaProvider>
+        </GestureHandlerRootView>
+      </Provider>
+    </View>
   );
 }
 
