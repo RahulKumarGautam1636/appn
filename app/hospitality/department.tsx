@@ -339,7 +339,7 @@ export default function MarketingSalesPage() {
                 <Text className="font-semibold text-white">{getFormattedDate(fromDate)}</Text>
               </Pressable>
             </View>
-            {range[duration] === 1 ? null : <><Minus size={20} color="#fff" />
+              {range[duration] === 1 ? null : <><Minus size={20} color="#fff" />
             <View className="flex-row items-center gap-2">
               {/* <Calendar size={16} color="#6366f1" /> */}
               <Pressable onPress={() => setToDateActive(true)}>
@@ -451,7 +451,7 @@ const AppointmentCard = ({ appt }) => {
           <Pencil size={14} color="#64748b" />
         </Pressable>
       </View>
-      <MyModal modalActive={openDetails} containerClass='mt-auto' onClose={() => setOpenDetails(false)} child={<AppointmentActivity />} />
+      <MyModal modalActive={openDetails} containerClass='mt-auto' onClose={() => setOpenDetails(false)} child={<AppointmentActivity apptn={appt} />} />
       <MyModal modalActive={updateModal} onClose={() => setUpdateModal(false)} child={<UpdateStage />} />
     </View>
   );
@@ -631,7 +631,7 @@ const ViewToggle = ({ view, onChange }: any) => (
 
 // ─── Root Screen ─────────────────────────────────────────────────────────────
 
-export function AppointmentActivity() {
+export function AppointmentActivity({ apptn }: any) {
   const [activeTab, setActiveTab] = useState("all");
   const [view, setView] = useState<"card" | "table">("card");
 
@@ -646,6 +646,49 @@ export function AppointmentActivity() {
       setLoading(false);
     }, 200);
   }
+
+  // NEW WORK ==================================================================================================================
+
+  const { selected: selectedCompany } = useSelector((i: RootState) => i.companies);
+  const { current: selectedDepartment } = useSelector((i: RootState) => i.appData.department);
+  const user = useSelector((i: RootState) => i.user);
+  const [details, setDetails] = useState({ loading: false, data: { PartyMasterList: [] }, err: { status: false, msg: "" } });
+  const [formattedData, setFormattedDate] = useState([]);
+  
+
+  useEffect(() => {
+    if (!selectedDepartment.DeptId) return;
+    const getDetails = async (department, company, userId, signal) => {
+      if (!department) return;
+      console.log(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${department.DeptCategory}&ProcedureId=${department.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date().toLocaleDateString('en-TT')}&ToDateStr=${new Date().toLocaleDateString('en-TT')}&UserId=${userId}&RootId=${apptn.ChainRootId}&LevelNo=${apptn.LevelNo}&SearchString=&ReportType=TASKHISTORY&SrcUserId=0`);    
+      const res = await getFrom(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${department.DeptCategory}&ProcedureId=${department.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date().toLocaleDateString('en-TT')}&ToDateStr=${new Date().toLocaleDateString('en-TT')}&UserId=${userId}&RootId=${apptn.ChainRootId}&LevelNo=${apptn.LevelNo}&SearchString=&ReportType=TASKHISTORY&SrcUserId=0`, {}, setDetails, signal);
+      if (res) {
+        setDetails(res);
+      }
+    };
+
+    let controller = new AbortController();
+    getDetails(selectedDepartment, selectedCompany, user.UserId, controller.signal);
+    return () => controller.abort();
+  }, [selectedDepartment.DeptId, selectedCompany.CompanyId, selectedCompany.LocationId, user.UserId]);
+
+    
+  useEffect(() => {
+    const groupByDate = groupBy(details.data.PartyMasterList, 'NextAppDate');    
+    const sortedEntries = Object.fromEntries(Object.entries(groupByDate).sort((a, b) => new Date(b[0]) - new Date(a[0])));
+    
+    const formatted = Object.keys(sortedEntries).map((date: any) => {
+      const maxLevel = sortedEntries[date].map((i: any) => i.LevelId || 1);
+      return {
+        date: date,
+        items: sortedEntries[date],
+        style: Math.max(...maxLevel)
+      }
+    })
+    setFormattedDate(formatted)  
+  }, [details.loading])
+  
+  console.log(formattedData);
 
   return (
     <ScrollView contentContainerClassName="p-4 min-h-[30rem] bg-white" showsVerticalScrollIndicator={false} >

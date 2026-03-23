@@ -55,12 +55,9 @@ export function UpdateStage({
     <View className="flex-1 bg-black/40 justify-end">
       <Pressable className="flex-1" onPress={onClose} />
       <View style={{ paddingBottom: 20 }} className="bg-white rounded-t-3xl">
-        {/* Drag pill */}
         <View className="w-10 h-1 rounded-full bg-gray-200 self-center mt-3 mb-1" />
 
-        {/* ── Header ── */}
         <View className="flex-row items-center px-5 py-4 border-b border-gray-100">
-          {/* Avatar */}
           <View
             style={{ backgroundColor: ac + "18", borderColor: ac + "40" }}
             className="w-12 h-12 rounded-2xl items-center justify-center border-2 mr-3"
@@ -73,7 +70,6 @@ export function UpdateStage({
             </Text>
           </View>
 
-          {/* Name & phone */}
           <View className="flex-1">
             <Text className="text-gray-900 text-[15px] font-bold">{name}</Text>
             <View className="flex-row items-center gap-1 mt-0.5">
@@ -82,7 +78,6 @@ export function UpdateStage({
             </View>
           </View>
 
-          {/* Stage badge */}
           <View
             style={{ backgroundColor: ac + "18", borderColor: ac + "40" }}
             className="px-2.5 py-1 rounded-full border mr-2"
@@ -95,7 +90,6 @@ export function UpdateStage({
             </Text>
           </View>
 
-          {/* Close button */}
           <TouchableOpacity
             onPress={onClose}
             activeOpacity={0.7}
@@ -105,18 +99,13 @@ export function UpdateStage({
           </TouchableOpacity>
         </View>
 
-        {/* ── Body ── */}
         <View className="px-5 pt-5">
-          {/* Stage label */}
           <View className="flex-row items-center gap-1.5 mb-2">
             <Layers size={13} color={ac} strokeWidth={2} />
-            <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">
-              Update Stage
-            </Text>
+            <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">Update Stage</Text>
             <View className="w-1.5 h-1.5 rounded-full bg-red-400 ml-1" />
           </View>
 
-          {/* Dropdown trigger */}
           <TouchableOpacity
             onPress={() => setDropdownOpen(!dropdownOpen)}
             activeOpacity={0.75}
@@ -136,13 +125,10 @@ export function UpdateStage({
               size={17}
               color="#9ca3af"
               strokeWidth={2.5}
-              style={{
-                transform: [{ rotate: dropdownOpen ? "180deg" : "0deg" }],
-              }}
+              style={{ transform: [{ rotate: dropdownOpen ? "180deg" : "0deg" }], }}
             />
           </TouchableOpacity>
 
-          {/* Dropdown list */}
           {dropdownOpen && (
             <View className="border border-gray-100 rounded-2xl mt-1.5 bg-white overflow-hidden shadow-sm shadow-gray-200">
               {STAGES.map((stage, idx) => (
@@ -192,16 +178,12 @@ export function UpdateStage({
             </View>
           )}
 
-          {/* Remarks label */}
           <View className="flex-row items-center gap-1.5 mt-5 mb-2">
             <MessageSquare size={13} color={ac} strokeWidth={2} />
-            <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">
-              Today's Remarks
-            </Text>
+            <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">Today's Remarks</Text>
             <View className="w-1.5 h-1.5 rounded-full bg-red-400 ml-1" />
           </View>
 
-          {/* Remarks input */}
           <TextInput
             value={remarks}
             onChangeText={setRemarks}
@@ -218,27 +200,19 @@ export function UpdateStage({
             className="bg-gray-50 border-2 rounded-2xl px-4 py-3.5 text-gray-800 text-sm"
           />
 
-          {/* Char count */}
           {remarks.length > 0 && (
-            <Text className="text-gray-300 text-xs text-right mt-1.5 font-medium">
-              {remarks.length} chars
-            </Text>
+            <Text className="text-gray-300 text-xs text-right mt-1.5 font-medium">{remarks.length} chars</Text> 
           )}
 
-          {/* ── Buttons ── */}
           <View className="flex-row gap-3 mt-6">
-            {/* Cancel */}
             <TouchableOpacity
               onPress={onClose}
               activeOpacity={0.7}
               className="flex-1 py-4 rounded-2xl items-center justify-center bg-gray-100"
             >
-              <Text className="text-gray-500 text-sm font-semibold">
-                Cancel
-              </Text>
+              <Text className="text-gray-500 text-sm font-semibold">Cancel</Text> 
             </TouchableOpacity>
 
-            {/* Save */}
             <TouchableOpacity
               onPress={handleSave}
               disabled={!remarks.trim() || saved}
@@ -258,9 +232,7 @@ export function UpdateStage({
               ) : (
                 <>
                   <Sparkles size={14} color="#fff" strokeWidth={2.5} />
-                  <Text className="text-white text-sm font-bold tracking-wide">
-                    Save Changes
-                  </Text>
+                  <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text> 
                 </>
               )}
             </TouchableOpacity>
@@ -391,9 +363,9 @@ function Dropdown({
 // ── Section Divider ────────────────────────────────────
 function SectionDivider({ label }: { label: string }) {
   return (
-    <View className="flex-row items-center gap-3 my-5">
+    <View className="flex-row items-center gap-3 my-7">
       <View className="flex-1 h-px bg-indigo-200" />
-      <Text className="text-indigo-500 text-xs font-extrabold tracking-widest uppercase px-1">
+      <Text className="text-indigo-500 text-sm font-extrabold tracking-widest uppercase px-1">
         {label}
       </Text>
       <View className="flex-1 h-px bg-indigo-200" />
@@ -441,30 +413,26 @@ export default function ParticularsForm({ onSubmit }: Props) {
 
   return (
     <ScrollView
-      className="flex-1 bg-gray-50"
+      className="flex-1 bg-slate-100"
       contentContainerStyle={{ paddingBottom: Platform.OS === "ios" ? 48 : 32 }}
       keyboardShouldPersistTaps="handled"
     >
       <UpdateStage />
+
       <View className="px-4 pt-5">
-        {/* ── Particulars Card ── */}
         <View
-          className="bg-white rounded-3xl border border-gray-100 overflow-hidden mb-1"
-          style={{
-            shadowColor: "#6366f1",
-            shadowOpacity: 0.06,
-            shadowRadius: 16,
-            elevation: 3,
-          }}
+          className="bg-white rounded-3xl border border-gray-100 overflow-hidden mb-1 shadow-sm"
+          // style={{
+          //   shadowColor: "#6366f1",
+          //   shadowOpacity: 1,
+          //   shadowRadius: 16,
+          //   elevation: 2,
+          // }}
         >
-          {/* Card header */}
-          <View className="px-5 pt-4 pb-3 border-b border-gray-50">
-            <Text className="text-gray-900 text-base font-extrabold tracking-tight">
-              Particulars
-            </Text>
+          <View className="px-5 pt-4 pb-3 border-b border-indigo-200/75">
+            <Text className="text-gray-900 text-base font-extrabold tracking-tight">Particulars</Text>
           </View>
 
-          {/* Rows */}
           {particulars.map((item, idx) => (
             <View
               key={item.id}
@@ -478,7 +446,6 @@ export default function ParticularsForm({ onSubmit }: Props) {
                 {item.label}
               </Text>
 
-              {/* Amount input with ₹ prefix */}
               <View
                 style={{ borderColor: "#e5e7eb" }}
                 className="flex-row items-center border-2 rounded-xl overflow-hidden bg-indigo-50/60"
@@ -499,8 +466,7 @@ export default function ParticularsForm({ onSubmit }: Props) {
             </View>
           ))}
 
-          {/* Total row */}
-          <View className="flex-row items-center justify-between px-5 py-3.5 bg-indigo-50/60 border-t border-indigo-100">
+          <View className="flex-row items-center justify-between px-5 py-3.5 border-t border-indigo-200/75">
             <Text className="text-indigo-600 text-xs font-extrabold tracking-widest uppercase">
               Total
             </Text>
@@ -513,7 +479,6 @@ export default function ParticularsForm({ onSubmit }: Props) {
           </View>
         </View>
 
-        {/* ── Today's Remarks ── */}
         <View className="mt-5">
           <FieldLabel label="Todays Remarks" required />
           <TextInput
@@ -533,12 +498,9 @@ export default function ParticularsForm({ onSubmit }: Props) {
           />
         </View>
 
-        {/* ── Next Followup Divider ── */}
         <SectionDivider label="Next Followup Details" />
 
-        {/* Date + Time row */}
         <View className="flex-row gap-3 mb-4">
-          {/* Date */}
           <View className="flex-1">
             <FieldLabel label="Date" required />
             <TouchableOpacity
@@ -557,7 +519,6 @@ export default function ParticularsForm({ onSubmit }: Props) {
             </TouchableOpacity>
           </View>
 
-          {/* Time */}
           <View className="flex-1">
             <FieldLabel label="Time" />
             <TouchableOpacity
@@ -573,7 +534,6 @@ export default function ParticularsForm({ onSubmit }: Props) {
           </View>
         </View>
 
-        {/* Dept + Stage row */}
         <View className="flex-row gap-3 mb-4">
           <View className="flex-1">
             <FieldLabel label="Dept." required />
@@ -595,7 +555,6 @@ export default function ParticularsForm({ onSubmit }: Props) {
           </View>
         </View>
 
-        {/* Refer To */}
         <View className="mb-6">
           <FieldLabel label="Refer To" />
           <Dropdown
@@ -607,7 +566,6 @@ export default function ParticularsForm({ onSubmit }: Props) {
           />
         </View>
 
-        {/* ── Submit Button ── */}
         <TouchableOpacity
           onPress={handleSubmit}
           activeOpacity={0.85}
