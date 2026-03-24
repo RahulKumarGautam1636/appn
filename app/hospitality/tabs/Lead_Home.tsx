@@ -85,7 +85,7 @@ const RetaurantHome = () => {
   
   const renderStats = () => {
     if (stats.loading) {
-        return <GridLoader containerClass='mt-4 gap-3 px-4' classes='h-24' count={1} />;
+        return <GridLoader containerClass='mt-4 gap-3 px-4' classes='h-24 flex-1 rounded-2xl' count={4} />;
     } else if (!stats.data.PatientRegList.length) {
         return (
             <View className="text-center py-10">

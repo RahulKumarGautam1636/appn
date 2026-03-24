@@ -22,13 +22,10 @@ export default function MarketingSalesPage() {
 
   const user = useSelector((i: RootState) => i.user);
   const { selected: selectedCompany, list: companiesList } = useSelector((i: RootState) => i.companies);
-  // const [department, setDepartment] = useState({ loading: false, data: { PatientRegList: [], tabs: [] }, err: { status: false, msg: "" } });
-  // const [selectedDepartment, setSelectedDepartment] = useState({});
   const { current: selectedDepartment, stage: currentStage} = useSelector((i: RootState) => i.appData.department);
   const [stages, setStages] = useState([]);
   const [selectedStage, setSelectedStage] = useState({});
   const [appointments, setAppointments] = useState({ loading: false, data: { PartyMasterList: [] }, err: { status: false, msg: "" } });
-
   const [fromDate, setFromDate] = useState(new Date());             // '2026-03-07'
   const [fromDateActive, setFromDateActive] = useState(false);
   const [toDate, setToDate] = useState(new Date(fromDate));
@@ -42,24 +39,6 @@ export default function MarketingSalesPage() {
   const [reportType, setReportType] = useState("CURRENTSTATUS");            // set reportType === 'SEARCH' and selectedFilterUserId === 0 when searching in input box.
   const [query, setQuery] = useState('');
   const [debounceQuery, setDebounceQuery] = useState('');
-
-  // useEffect(() => {
-  //   if (!selectedCompany.EncCompanyId) return;
-  //   let controller = new AbortController();
-  //   getDepartments(controller.signal, user, selectedCompany);
-  //   return () => controller.abort();
-  // }, [user.UserId, selectedCompany.EncCompanyId]);
-
-  // const getDepartments = async (signal, user, company) => {
-  //   if (user.UserId > 1) {
-  //     const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=01/03/2026&dttoStr=05/03/2026`, {}, setDepartment, signal);
-  //     if (res) {
-  //       let uniqueItems = groupBy(res.data.PatientRegList, 'Department');
-  //       setSelectedDepartment({...res.data.PatientRegList[0]});
-  //       setDepartment({...res, data: {PatientRegList: res.data.PatientRegList, tabs: uniqueItems}});
-  //     }
-  //   }
-  // };
 
   const makeForcedRerender = async () => {
     setForceRerender(true);
@@ -137,25 +116,6 @@ export default function MarketingSalesPage() {
     setToDate(new Date(to.setDate(to.getDate() + range[duration])));
   }
 
-  // useEffect(() => {
-  //   console.log(selectedStage.LinkDescription, selectedStage.AutoId); 
-  //   console.log(stageItems); 
-  // },[selectedStage]) 
-  const [durationDropdown, setDurationDropdown] = useState(false);
-
-  const LocationDropdown = () => {
-    return (
-      <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
-        {Object.keys(range).map((i: any, n: number) => (
-            <TouchableOpacity key={i} className={`flex-row gap-3 p-4 ${n === (Object.keys(range).length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {setDuration(i); setDurationDropdown(false)}}>
-                <MaterialCommunityIcons name={i === duration ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'} size={23} color={myColors.primary[500]} />
-                <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>{i}</Text>
-            </TouchableOpacity>
-        ))}
-      </View>
-    )
-  }
-
   const getFormattedDate = (date: any) => date.toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -175,10 +135,6 @@ export default function MarketingSalesPage() {
           renderItem={({item}: any) => (<AppointmentCard appt={item} />)}
           ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
         />
-
-        // <View className="px-3 py-3 gap-3">
-        //   {stageItems.map((item, index) => (<AppointmentCard appt={item} key={index} />))}
-        // </View> 
       )
     }
   }
@@ -193,11 +149,6 @@ export default function MarketingSalesPage() {
             const stageColor = cardColor[String(item.LevelId)];
             const btnStyle = { border: colors[stageColor][200], bg: colors[stageColor][100], text: colors[stageColor][600], };
             return (
-              // <TouchableOpacity className={`max-w-[10rem] rounded-xl p-3 border`} key={index} onPress={() => {setSelectedStage(item)}} style={{borderColor: btnStyle.border, backgroundColor: btnStyle.bg}}>
-              //   <Text className="text-xl font-bold" style={{color: btnStyle.text}}>{item.OpportunityCnt}</Text>
-              //   <Text className="text-gray-800 text-xs" numberOfLines={2}>{item.LinkDescription}</Text>
-              // </TouchableOpacity>
-
               <TouchableOpacity className={`flex flex-row items-center border rounded-xl relative`} key={index} onPress={() => {setSelectedStage(item); makeForcedRerender()}} style={{backgroundColor: btnStyle.bg, borderColor: btnStyle.border}}>
                 <Text className="text-xl font-bold p-3 text-white rounded-tl-xl rounded-bl-xl" style={{backgroundColor: btnStyle.text}}>{item.OpportunityCnt}</Text>
                 <Text className="text-gray-800 text-xs px-3 max-w-[10rem]" numberOfLines={2}>{item.LinkDescription}</Text>
@@ -210,26 +161,7 @@ export default function MarketingSalesPage() {
     }
   }
 
-  // ============================================================================================================
-
-  // const [filterStages, setFilterStages] = useState({ loading: false, data: [], err: { status: false, msg: "" } });
   const [filterUsers, setFilterUsers] = useState({ loading: false, data: [], err: { status: false, msg: "" } });
-
-  // useEffect(() => {
-  //   if (!selectedDepartment.DeptId) return;
-  //   const getFilterStages = async (companyId, userRoleLevelCode, deptCategory, signal) => {
-  //     if (!companyId) return;
-  //     console.log(`${BASE_URL}/api/VALUES/GetStage?CompId=${companyId}&RoleId=${userRoleLevelCode}&LevelId=0&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${deptCategory}&BusinessType=`);    
-  //     const res = await getFrom(`${BASE_URL}/api/VALUES/GetStage?CompId=${companyId}&RoleId=${userRoleLevelCode}&LevelId=0&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${deptCategory}&BusinessType=`, {}, setFilterStages, signal);
-  //     if (res) {
-  //       setFilterStages(res);
-  //     }
-  //   };
-
-  //   let controller = new AbortController();
-  //   getFilterStages(selectedCompany.EncCompanyId, user.UserRoleLevelCode, selectedDepartment.DeptId, controller.signal);
-  //   return () => controller.abort();
-  // }, [selectedCompany.EncCompanyId, user.UserRoleLevelCode, selectedDepartment.DeptId,]);
 
   useEffect(() => {
     if (!selectedDepartment.DeptId) return;
@@ -258,8 +190,8 @@ export default function MarketingSalesPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-        handleSearch(debounceQuery)   
-        console.log(debounceQuery);                                                 
+      handleSearch(debounceQuery)   
+      console.log(debounceQuery);                                                 
     }, 800);
     return () => clearTimeout(timer)
   }, [debounceQuery])
@@ -457,16 +389,6 @@ const AppointmentCard = ({ appt }) => {
   );
 }
 
-
-
-// ─── Data ────────────────────────────────────────────────────────────────────
-
-const TABS = [
-  { label: "All", value: "all" },
-  { label: "15 Mar", sublabel: "Sun", value: "15-mar", color: "#F59E0B" },
-  { label: "02 Mar", sublabel: "Mon", value: "02-mar", color: "#EF4444" },
-];
-
 const ACTIVITIES = [
   {
     id: 1,
@@ -498,22 +420,30 @@ const ACTIVITIES = [
 
 type Activity = (typeof ACTIVITIES)[0];
 
-const DateTab = ({ tab, active, onPress }: { tab: (typeof TABS)[0]; active: boolean; onPress: () => void }) => {
-  if (tab.value === "all") {
+const DateTab = ({ tab, active, onPress }: any) => {
+  if (tab.date === "All") {
     return (
-      <TouchableOpacity onPress={onPress} className={`px-5 rounded-2xl mr-2 border ${ active ? "bg-violet-600 border-violet-600" : "bg-white border-gray-200" }`} >
+      <TouchableOpacity onPress={onPress} className={`px-5 rounded-2xl mr-2 border ${ active ? "bg-violet-600 border-violet-600" : "bg-gray-100 border-gray-200" }`} >
         <Text className={`text-sm font-bold my-auto ${ active ? "text-white" : "text-gray-500" }`} >All</Text>
       </TouchableOpacity> );
   }
 
-  const isAmber = tab.color === "#F59E0B";
+  let splitDate = new Date(tab.date).toDateString()
+
+  const btnColor = cardColor[String(tab.level)];
+  const btnStyle = {
+    borderClr: colors[btnColor][200],
+    bg: active ? colors[btnColor][500] : colors[btnColor][50],
+    textClr: active ? '#ffffff' : colors[btnColor][600]
+  };
+
   return (
-    <TouchableOpacity onPress={onPress} className={`px-4 py-2 rounded-2xl mr-2 border items-center min-w-[72px] ${ active ? isAmber ? "bg-amber-500 border-amber-500" : "bg-rose-500 border-rose-500" : "bg-white border-gray-200" }`} >
-      <Text className={`text-sm font-bold leading-tight ${ active ? "text-white" : "text-gray-700" }`} >
-        {tab.label}
+    <TouchableOpacity onPress={onPress} className={`px-4 py-2 rounded-2xl mr-2 border items-center min-w-[72px]`} style={{borderColor: btnStyle.borderClr, backgroundColor: btnStyle.bg}}>
+      <Text className={`text-sm font-bold leading-tight`} style={{color: btnStyle.textClr}}>
+        {splitDate.split(' ')[2]} {splitDate.split(' ')[1]}
       </Text>
-      <Text className={`text-xs ${active ? "text-white/80" : "text-gray-400"}`}>
-        {tab.sublabel}
+      <Text className={`text-xs ${active ? "text-white/80" : "text-gray-500"}`}>
+        {splitDate.split(' ')[0]}
       </Text>
     </TouchableOpacity>
   );
@@ -535,7 +465,8 @@ const TD = ({ width, children }: { width: number; children: React.ReactNode }) =
   </View>
 );
 
-const TableView = ({ data, onEdit }: { data: Activity[]; onEdit: (id: number) => void }) => (
+const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void }) => ( 
+  
   <View className="bg-white rounded-lg border border-gray-200 overflow-hidden">
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="w-full">
       <View className="w-full min-w-[34rem]">
@@ -548,63 +479,94 @@ const TableView = ({ data, onEdit }: { data: Activity[]; onEdit: (id: number) =>
           <TH label="Action" width={COL.action} />
         </View>
 
-        {data.map((item, index) => (
-          <View key={item.id} className={`flex-row ${ index < data.length - 1 ? "border-b border-gray-50" : "" }`} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#fafafa" }} >
-            <TD width={COL.appt}>
-              <View style={{ borderLeftColor: item.purposeColor, borderLeftWidth: 3 }} className="pl-2 rounded-sm" >
-                <Text className="text-xs font-semibold text-gray-800">
-                  {item.date}
-                </Text>
-                <Text className="text-xs text-gray-400 mt-1">{item.time}</Text>
-              </View>
-            </TD>
+        {data.map((table, index) => {
+          
+          return (
+            <>
+              {table?.items?.map((row, index) => {
+                console.log(row);
+                
+                const nextAppDate = (new Date(row.NextAppDate).toDateString()).split(' ');       
+                const nextFollowupDate = (new Date(row.NextFollowupDate).toDateString()).split(' ');
 
-            <TD width={COL.purpose}>
-              <View style={{ backgroundColor: item.purposeBg }} className="self-start rounded-lg px-2 py-1 mb-1.5" >
-                <Text style={{ color: item.purposeColor }} className="text-xs font-semibold">
-                  {item.purpose}
-                </Text>
-              </View>
-              <Text className="text-xs text-gray-500 flex-1 mt-1" numberOfLines={2}>
-                {item.staff}
-              </Text>
-            </TD>
+                const rowColor = cardColor[String(table.level)];
+                const rowStyle = {
+                  borderClr: colors[rowColor][200],
+                  bgClr: colors[rowColor][50],
+                  textBg: colors[rowColor][100],
+                  clr: colors[rowColor][500],
+                  textClr: colors[rowColor][600]
+                };       
 
-            {/* <TD width={COL.staff}>
-              <View className="flex-row items-center gap-1.5">
-                <View className="w-6 h-6 rounded-full bg-gray-100 items-center justify-center shrink-0">
-                  <User size={11} color="#9CA3AF" />
-                </View>
-                <Text className="text-xs text-gray-600 flex-1" numberOfLines={2}>
-                  {item.staff}
-                </Text>
-              </View>
-            </TD> */}
+                return (
+                  // <View key={index} className={`flex-row ${ index < data?.items?.length - 1 ? "border-b border-gray-50" : "" }`} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#fafafa" }} >
+                  <View key={index} className={`flex-row ${ index < data?.items?.length - 1 ? "border-b border-gray-50" : "" }`} 
+                    style={{ 
+                      // backgroundColor: rowStyle.bgClr, 
+                      borderColor: rowStyle.borderClr 
+                    }} 
+                  >
+                    <TD width={COL.appt}>
+                      <View style={{ borderLeftColor: rowStyle.textClr, borderLeftWidth: 3 }} className="pl-2 rounded-sm" >
+                        <Text className="text-xs font-semibold text-gray-800">
+                          {nextAppDate[2]} {nextAppDate[1]} {nextAppDate[3].slice(2)}
+                        </Text>
+                        <Text className="text-xs text-gray-500 mt-1">{row.NextAppTime}</Text>
+                      </View>
+                    </TD>
 
-            <TD width={COL.remarks}>
-              <Text className="text-xs text-gray-600 text-center">{item.remarks || '------'}</Text>
-            </TD>
+                    <TD width={COL.purpose}>
+                      <View style={{ backgroundColor: rowStyle.textBg }} className="self-start rounded-lg px-2 py-1 mb-1.5" >
+                        <Text style={{ color: rowStyle.textClr }} className="text-xs font-semibold">
+                          {row.OpportunityDesc || '------'}
+                        </Text>
+                      </View>
+                      <Text className="text-xs text-gray-500 flex-1 mt-1" numberOfLines={2}>
+                        {row.UserFullName}
+                      </Text>
+                    </TD>
 
-            <TD width={COL.next}>
-              {item.nextAppt ? (
-                <View className="flex-row items-center gap-1 bg-violet-50 px-2 py-1 rounded-lg self-center">
-                  {/* <CalendarClock size={10} color="#7C3AED" /> */}
-                  <Text className="text-xs font-semibold text-violet-700">
-                    {item.nextAppt || '------'}
-                  </Text>
-                </View>
-              ) : (
-                <Text className="text-xs text-gray-600 text-center">------</Text>
-              )}
-            </TD>
+                    {/* <TD width={COL.staff}>
+                      <View className="flex-row items-center gap-1.5">
+                        <View className="w-6 h-6 rounded-full bg-gray-100 items-center justify-center shrink-0">
+                          <User size={11} color="#9CA3AF" />
+                        </View>
+                        <Text className="text-xs text-gray-600 flex-1" numberOfLines={2}>
+                          {row.staff}
+                        </Text>
+                      </View>
+                    </TD> */}
 
-            <TD width={COL.action}>
-              <TouchableOpacity onPress={() => onEdit(item.id)} className="p-2 rounded-xl bg-gray-50 active:bg-gray-100 self-center" >
-                <Pencil size={14} color="#6B7280" /> 
-              </TouchableOpacity>
-            </TD>
-          </View>
-        ))}
+                    <TD width={COL.remarks}>
+                      <Text className="text-xs text-gray-600 text-center">{row.Remarks2 || '------'}</Text>
+                    </TD>
+
+                    <TD width={COL.next}>
+                      {row.NextFollowupDate ? (
+                        <View className="flex-row items-center gap-1 px-2 py-1 rounded-lg self-center" style={{ backgroundColor: rowStyle.clr }}>
+                          {/* <CalendarClock size={10} color="#7C3AED" /> */}
+                          <Text className="text-xs font-semibold" style={{ color: 'white' }}>
+                            {/* {row.NextFollowupDate || '------'} */}
+                            {nextFollowupDate[2]} {nextFollowupDate[1]} {nextFollowupDate[3].slice(2)}
+                          </Text>
+                        </View>
+                      ) : (
+                        <Text className="text-xs text-gray-600 text-center">------</Text>
+                      )}
+                      {row.NextFollowupTime ? <Text className="text-xs text-gray-500 mt-1 text-center">{row.NextFollowupTime}</Text> : null}
+                    </TD>
+
+                    <TD width={COL.action}>
+                      <TouchableOpacity onPress={() => onEdit(row)} className="p-2 rounded-xl bg-gray-50 active:bg-gray-100 self-center" >
+                        <Pencil size={14} color="#6B7280" /> 
+                      </TouchableOpacity>
+                    </TD>
+                  </View>
+                ) 
+                })}  
+            </>
+          )
+        })}
       </View>
     </ScrollView>
   </View>
@@ -653,7 +615,8 @@ export function AppointmentActivity({ apptn }: any) {
   const { current: selectedDepartment } = useSelector((i: RootState) => i.appData.department);
   const user = useSelector((i: RootState) => i.user);
   const [details, setDetails] = useState({ loading: false, data: { PartyMasterList: [] }, err: { status: false, msg: "" } });
-  const [formattedData, setFormattedDate] = useState([]);
+  const [formattedData, setFormattedData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState({ date: 'All', items: [], level: 0 });
   
 
   useEffect(() => {
@@ -682,13 +645,17 @@ export function AppointmentActivity({ apptn }: any) {
       return {
         date: date,
         items: sortedEntries[date],
-        style: Math.max(...maxLevel)
+        level: Math.max(...maxLevel)
       }
     })
-    setFormattedDate(formatted)  
+    setFormattedData(formatted)  
+    // setSelectedDate(formatted[0])
   }, [details.loading])
   
   console.log(formattedData);
+  console.log(selectedDate);
+
+  const tableData = selectedDate.date === 'All' ? formattedData : formattedData.filter((i: any) => i.date === selectedDate.date);
 
   return (
     <ScrollView contentContainerClassName="p-4 min-h-[30rem] bg-white" showsVerticalScrollIndicator={false} >
@@ -703,18 +670,23 @@ export function AppointmentActivity({ apptn }: any) {
         </View>
         {/* {TABS.map((i: any) => (<Pressable onPress={() => {makeForcedRerender(); setActiveTab(i.value)}}><Text>{i.value}</Text></Pressable>))} */}
       <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="mb-5" >
-          {TABS.map((tab) => (
+      {details.loading ? 
+        <GridLoader containerClass='gap-3 py-3 flex-row bg-white' count={3} classes='h-[53px] flex-1' /> 
+        :
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="mb-5">
+          <DateTab tab={{ date: 'All' }} active={selectedDate.date === 'All'} onPress={() => {makeForcedRerender(); setSelectedDate({ date: 'All', items: [], level: 0 })}} />
+          {formattedData.map((item) => (
             <DateTab
-              key={tab.value}
-              tab={tab}
-              active={activeTab === tab.value}
-              onPress={() => {makeForcedRerender(); setActiveTab(tab.value)}}
+              key={item.date}
+              tab={item}
+              active={selectedDate.date === item.date}
+              onPress={() => {makeForcedRerender(); setSelectedDate(item)}}
             />
           ))}
         </ScrollView>
+      }
       </View>
-        {loading ? null : <TableView data={filtered} onEdit={handleEdit} />}
+        {loading ? null : <TableView onEdit={handleEdit} data={tableData} />}
       </ScrollView>
   );
 }
