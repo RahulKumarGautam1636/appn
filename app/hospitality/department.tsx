@@ -324,6 +324,62 @@ const AppointmentCard = ({ appt }) => {
   const [openDetails, setOpenDetails] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
 
+  const user = useSelector((i: RootState) => i.user);
+  const { selected: selectedCompany, list: companiesList } = useSelector((i: RootState) => i.companies);
+  const [registerData, setRegisterData] = useState<RegisterDataPCard>({
+    EncCompanyId: selectedCompany.EncCompanyId,
+    PBankId: appt.PBankId,
+    UnderDoctId: appt.DoctId,
+    ReferrerId: 0,
+    ProviderId: 0,
+    MarketedId: appt.MarketById,
+    DeptId: appt.DeptId,
+    UserId: user?.UserId,
+    OpportunityId: appt.OpportunityId,
+    EnqStatusValue: "",
+    EnqStatusId: 0,
+    Remarks: appt.Remarks,
+    NextAppDate: appt.NextAppDate,
+    BillId: appt.EnqId,
+    PartyCode: appt.PartyCode,
+    AppointmentTo: appt.AppointmentTo,
+    AppointmentToId: appt.AppointmentToId,
+    ParentId: appt.LastAutoId,
+    RootId: appt.RootId === 0 ? appt.LastAutoId : appt.RootId,
+    // DirectSalesDetailsList: Array.isArray(appt.EnqList)?appt.EnqList.map((el:any)=>({ItemId:el.ItemId,Description:el.ItemDesc,SRate:el.Amount,DeptId:appt.DeptId,BillQty:1,Delstatus:"N"})): []
+    DirectSalesDetailsList: [],// checkerFunc(patient),
+    NextAppDateStr: "",
+    PBankDesc: appt.PBankDesc,
+    NextOpportunityId: 0,
+    PrevOpportunityId: appt.OpportunityId,
+    PrevRefType: appt.TranRefType,
+    LinkURL: "",
+    EnqFollowUpList: [{
+      RefToId: appt.DoctId,
+      RefById: 0,
+      ProviderId: 0,
+      MarketById: appt.MarketById,
+      DeptId: appt.DeptId,
+      CallerId: user?.UserId,
+      OpportunityId: appt.OpportunityId, //pending
+      AppointmentToId: appt.AppointmentToId,
+      AppointmentTo: appt.AppointmentTo,
+      EnqStatusValue: "",
+      EnqStatus: 0,
+      Remarks2: "",
+      NextAppDateStr: new Date().toLocaleDateString('en-TT'),
+      NextAppTime: new Date().toLocaleDateString('en-TT'),  // dayjs().format('hh:mm A'),
+      NextFollowupDateStr: "",
+      NextFollowupTime: new Date().toLocaleDateString('en-TT'), // dayjs().format('hh:mm A'),
+      RefId: appt.EnqId,
+      PartyCode: appt.PartyCode,
+      InsBy: user?.UserId,
+      ParentId: appt.LastAutoId,
+      RootId: appt.RootId === 0 ? appt.LastAutoId : appt.RootId,
+      LinkURL: ""
+    }]
+  })
+
   return (
     <View className={`bg-white rounded-2xl border-t-[3px] p-4 shadow-sm`} style={{ borderColor: cardStyle.borderTop }} >
       <View className="flex-row items-center mb-3">
@@ -376,9 +432,18 @@ const AppointmentCard = ({ appt }) => {
           <Text className="font-bold">{appt.DoctName[0]}</Text>
           <Text className="text-sm font-semibold text-slate-600">{appt.DoctName}</Text>
         </View>
-        <Pressable onPress={() => setOpenDetails(true)} className="px-4 py-2 rounded-lg" style={{backgroundColor: cardStyle.borderTop}}>
-          <Text className="text-white text-xs font-semibold">Call Now</Text>
-        </Pressable>
+        {appt.IsCanceled === 'Y' ? 
+          <Pressable className="px-4 py-2 rounded-lg" style={{backgroundColor: cardStyle.borderTop}}>
+            <Text className="text-white text-xs font-semibold">Cancelled</Text>
+          </Pressable>
+        : 
+          <>
+            {appt.OpportunityDesc ? 
+            <Pressable onPress={() => setOpenDetails(true)} className="px-4 py-2 rounded-lg" style={{backgroundColor: cardStyle.borderTop}}>
+              <Text className="text-white text-xs font-semibold">{appt.OpportunityDesc}</Text>
+            </Pressable> : null}
+          </>
+        }
         <Pressable onPress={() => setUpdateModal(true)} className="w-9 h-9 rounded-lg bg-slate-100 items-center justify-center">
           <Pencil size={14} color="#64748b" />
         </Pressable>
@@ -388,37 +453,6 @@ const AppointmentCard = ({ appt }) => {
     </View>
   );
 }
-
-const ACTIVITIES = [
-  {
-    id: 1,
-    date: "15 Mar 26",
-    time: "04:25 PM",
-    day: "15-mar",
-    purpose: "Registration",
-    purposeColor: "#7C3AED",
-    purposeBg: "#EDE9FE",
-    staff: "Vivek Prasad",
-    remarks: "Registered",
-    nextAppt: null,
-    status: "completed",
-  },
-  {
-    id: 2,
-    date: "02 Mar 26",
-    time: "06:18 PM",
-    day: "02-mar",
-    purpose: "Appointment / Schedule",
-    purposeColor: "#0369A1",
-    purposeBg: "#E0F2FE",
-    staff: "Rahul Developer",
-    remarks: null,
-    nextAppt: "02 Mar 26",
-    status: "scheduled",
-  },
-];
-
-type Activity = (typeof ACTIVITIES)[0];
 
 const DateTab = ({ tab, active, onPress }: any) => {
   if (tab.date === "All") {
@@ -483,12 +517,9 @@ const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void
           
           return (
             <>
-              {table?.items?.map((row, index) => {
-                console.log(row);
-                
+              {table?.items?.map((row, index) => {                
                 const nextAppDate = (new Date(row.NextAppDate).toDateString()).split(' ');       
                 const nextFollowupDate = (new Date(row.NextFollowupDate).toDateString()).split(' ');
-
                 const rowColor = cardColor[String(table.level)];
                 const rowStyle = {
                   borderClr: colors[rowColor][200],
@@ -596,9 +627,6 @@ const ViewToggle = ({ view, onChange }: any) => (
 export function AppointmentActivity({ apptn }: any) {
   const [activeTab, setActiveTab] = useState("all");
   const [view, setView] = useState<"card" | "table">("card");
-
-  const filtered = activeTab === "all" ? ACTIVITIES : ACTIVITIES.filter((a) => a.day === activeTab);
-
   const handleEdit = (id: number) => console.log("Edit", id);
   const [loading, setLoading] = useState(false);
 
@@ -652,10 +680,11 @@ export function AppointmentActivity({ apptn }: any) {
     // setSelectedDate(formatted[0])
   }, [details.loading])
   
-  console.log(formattedData);
-  console.log(selectedDate);
+  // console.log(formattedData);
+  // console.log(selectedDate);
 
   const tableData = selectedDate.date === 'All' ? formattedData : formattedData.filter((i: any) => i.date === selectedDate.date);
+  const totalEntries = (formattedData.map((i: any) => i.items)).flat(); 
 
   return (
     <ScrollView contentContainerClassName="p-4 min-h-[30rem] bg-white" showsVerticalScrollIndicator={false} >
@@ -665,7 +694,7 @@ export function AppointmentActivity({ apptn }: any) {
         </View>
         {/* <ViewToggle view={view} onChange={setView} /> */}
             <Text className="text-sm text-gray-400">
-              {filtered.length} appointment{filtered.length !== 1 ? "s" : ""}
+              ( {totalEntries.length} Entrie{totalEntries.length !== 1 ? "s" : ""} )
             </Text>
         </View>
         {/* {TABS.map((i: any) => (<Pressable onPress={() => {makeForcedRerender(); setActiveTab(i.value)}}><Text>{i.value}</Text></Pressable>))} */}

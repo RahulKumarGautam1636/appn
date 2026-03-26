@@ -1243,13 +1243,6 @@ export const groupMembers = (obj: any) => obj.reduce((acc: any, curr: any) => {
   return acc;
 }, {});
 
-
-export const getCatId = (categories: any, key: string, ) => {
-  const category: any = categories.find((i: any) => ((i.ParentDesc).trim()).includes(key));
-  const catId = category?.Parent || 0
-  return catId;
-}
-
 export const useDeptId = (key: string) => {
   const categories = useSelector((state: RootState) => state.menu.departments);
   const targetDept: any = categories.find((i: any) => ((i.DeptCategory).trim()).includes(key));
