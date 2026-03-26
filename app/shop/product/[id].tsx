@@ -309,7 +309,7 @@ const ProductPage = () => {
         </View>
         <View>
           {/* <View className='m-3 shadow-sm rounded-xl overflow-hidden'>
-            <Link href={'/appn/appnList'}>
+            <Link href={'/appn/opd_list'}>
                 <View className='flex-row gap-3 w-full bg-white p-4 items-center'>
                     <FontAwesome name="shield" size={18} color={myColors.primary[500]} style={{width: 22}} />
                     <Text className="font-medium text-slate-600 text-[14px] mr-auto">Shipping Details</Text>
@@ -323,7 +323,7 @@ const ProductPage = () => {
                     <Feather name="chevron-right" size={20} color='#6b7280' />
                 </View>
             </Pressable>                
-            <Link href={'/appn/appnList'}>
+            <Link href={'/appn/opd_list'}>
                 <View className='flex-row gap-3 w-full bg-white p-4 items-center'>
                     <FontAwesome name="shield" size={18} color={myColors.primary[500]} style={{width: 22}} />
                     <Text className="font-medium text-slate-600 text-[14px] mr-auto">Privacy Policy</Text>

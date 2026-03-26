@@ -19,7 +19,7 @@ export default function LabCard({ data, testDate, classes }: any) {
         if (isAdded) {
             dispatch(removeFromCart(data.LocationItemId));
         } else {
-            dispatch(addToCart({...data, testDate: testDate}));
+            dispatch(addToCart({...data, testDate: testDate, type: 'LABTEST'}));
         }
     }   
 
@@ -54,15 +54,15 @@ export default function LabCard({ data, testDate, classes }: any) {
 
 export const LabCartCard = ({ data }: any) => {
     const dispatch = useDispatch()
-    const [date, setDate] = useState({ active: false, value: new Date()});
+    // const [date, setDate] = useState({ active: false, value: new Date()});
 
-    const [day, month, year] = data.testDate.split('/').map(Number);
-    let parsedActiveDate = new Date(year, month - 1, day);
-    let formattedDate = new Date(parsedActiveDate);
+    // const [day, month, year] = data.testDate.split('/').map(Number);
+    // let parsedActiveDate = new Date(year, month - 1, day);
+    // let formattedDate = new Date(parsedActiveDate);
 
-    useEffect(() => {
-        setDate(pre => ({...pre, value: formattedDate}))
-    }, [])
+    // useEffect(() => {
+    //     setDate(pre => ({...pre, value: formattedDate}))
+    // }, [])
 
     return (
         <View className='bg-white rounded-2xl shadow-lg border-b-2 border-gray-300' key={data.ItemId}>
@@ -92,12 +92,12 @@ export const LabCartCard = ({ data }: any) => {
                     </View>
                 </View>
             </View>
-            <Pressable onPress={() => setDate(pre => ({...pre, active: true}))} className='flex-row w-full p-4 border-t border-gray-200 items-center'>
+            {/* <Pressable onPress={() => setDate(pre => ({...pre, active: true}))} className='flex-row w-full p-4 border-t border-gray-200 items-center'>
                 <Text className="font-PoppinsMedium text-slate-700 text-[13px] leading-6 mr-auto">Test Date :</Text>
                 <Text className="font-PoppinsMedium text-slate-500 text-[13px] leading-6 mr-2">{new Date(date.value).toLocaleDateString('en-TT')}</Text>
                 <Feather name="chevron-down" size={22} color='gray' />
                 {date.active ? <DateTimePicker value={date.value} mode="date" display="default" onChange={(e, d) => setDate({active: false, value: d})} /> : null}
-            </Pressable> 
+            </Pressable>  */}
         </View>
     )
 }

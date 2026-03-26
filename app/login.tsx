@@ -177,6 +177,7 @@ const Login = ({ modalMode }: any) => {
                 UserRegTypeId: data.UserRegTypeId,
                 UserRoleLevelCode: data.UserRoleLevelCode,
                 UserLevelCode: data.UserLevelCode,
+                UserLevelSeq: data.UserLevelSeq,
                 UserCompList: data.UserCompList[0],
                 UserCompList2: isLP ? data.UserCompList : null,
             };
@@ -496,7 +497,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
             if (regData.RegMob1.length < 10) return alert('please enter a valid phone number.');
             const userExist = await checkExistingUser();
             if (userExist) return;
-            const receivedOtp = await makeOtpRequest();
+            const receivedOtp = await makeOtpRequest();            
             setOTP({...otp, isOpen: true, sent: true, recievedValue: receivedOtp});
         } else if (otp.sent) {
             if (compCode !== defaultId) {
@@ -527,7 +528,7 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
 
     const makeOtpRequest = async () => {
         setLoading(true);
-        const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}`);        
+        const res = await axios.get(`${BASE_URL}/api/UserReg/Get?Id=0&name=Subscriber&mob=${regData.RegMob1}&compId=${compCode}`);        
         setLoading(false);
         if (res.status === 200) {
             console.log(res.data);            

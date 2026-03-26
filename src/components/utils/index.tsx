@@ -1250,6 +1250,13 @@ export const getCatId = (categories: any, key: string, ) => {
   return catId;
 }
 
+export const useDeptId = (key: string) => {
+  const categories = useSelector((state: RootState) => state.menu.departments);
+  const targetDept: any = categories.find((i: any) => ((i.DeptCategory).trim()).includes(key));
+  const deptId = targetDept?.DeptId || 0
+  return [deptId];
+}
+
 export const getMonthDate = (date: any) => {
   const splitDate = new Date(date).toDateString().split(' ')
   return splitDate[1] + ' ' + splitDate[2]

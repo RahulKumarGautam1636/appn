@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getCompanies, setCompany, getDepartments, getMembers, getCompanyDetails, getProducts, getCategories, setLocation, setBusinessType } from "../store/slices/slices";
+import { getCompanies, setCompany, getDepartments, getMembers, getCompanyDetails, getProducts, getCategories, setLocation, setBusinessType, getMenuPermissions } from "../store/slices/slices";
 import { useEffect } from "react";
 import { RootState } from "../store/store";
 import { BASE_URL } from "../constants";
@@ -35,6 +35,11 @@ const Init = () => {
     useEffect(() => {
         dispatch(getCategories({ compCode: compCode, locationId: locationId }));
     }, [compCode, locationId])
+
+    useEffect(() => {
+        if (!selected.CompanyId) return;
+        dispatch(getMenuPermissions({ companyCode: selected.CompanyId }));
+    }, [selected.CompanyId])
 
     useEffect(() => {
         dispatch(getProducts({ compCode: compCode, locationId: locationId }));

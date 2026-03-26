@@ -173,12 +173,12 @@ export default function RootLayout() {
 //                 <Stack.Screen name="appn/tabs" options={{ headerShown: false, animation: 'slide_from_left' }} />
 //                 <Stack.Screen name="login" options={{ headerShown: false }} />
 //                 <Stack.Screen name="account" options={{ headerShown: false, animation: 'slide_from_right' }} />
-//                 <Stack.Screen name="appn/appnList" options={{ headerShown: false, animation: 'slide_from_left' }} />
+//                 <Stack.Screen name="appn/opd_list" options={{ headerShown: false, animation: 'slide_from_left' }} />
 //                 <Stack.Screen name="search" options={{ headerShown: false }} />
 //                 <Stack.Screen name="members" options={{ headerShown: false, animation: 'slide_from_right' }} />
 //                 <Stack.Screen name="appn/cart" options={{ headerShown: false, animation: 'slide_from_left' }} />
 //                 <Stack.Screen name="appn/testDetail" options={{ headerShown: false }} />
-//                 <Stack.Screen name="appn/testList" options={{ headerShown: false, animation: 'slide_from_right' }} />
+//                 <Stack.Screen name="appn/investigation_list" options={{ headerShown: false, animation: 'slide_from_right' }} />
 //                 <Stack.Screen name="appn/clinic/[compId]" options={{ headerShown: false, animation: 'slide_from_right' }} />
 //                 <Stack.Screen name="appn/doctor/[id]" options={{ headerShown: false }} />
 

@@ -180,6 +180,43 @@ const deptsSlice = createSlice({
 export const { setDepts } = deptsSlice.actions;
 const deptsReducer = deptsSlice.reducer;
 
+export const getMenuPermissions = createAsyncThunk(
+  'auth/getMenuPermissions',
+  async (params: any, { dispatch, rejectWithValue }) => {
+    try {              
+      const res = await axios.get(`${baseUrl}/api/DashBoard/Get?UserId=0&CID=${params.companyCode}&Location=0&RoleId=0&dtfrStr=11/03/2026&dttoStr=11/03/2026`);
+      if (res.status === 200) {  
+        const departments = res.data?.PatientRegList?.map((i: any) => ({ DeptId: i.DeptId, DeptCategory: i.DeptCategory, Department: i.Department }));                                                
+        return { departments: departments };        
+      } else {
+        throw new Error('Fetching Departments failed');
+      }
+    } catch (err: any) {
+      return rejectWithValue(err.message || 'Something went wrong');
+    }
+  }
+);
+
+const menuSlice = createSlice({
+  name: 'menu',
+  initialState: { departments: [], status: 'loading', error: null },
+  reducers: {
+    setMenu: (state, action: any) => {
+      Object.assign(state, action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    requestStatusHandlers(builder, getMenuPermissions, {
+      onSuccess: (state: any, action: any) => {
+        Object.assign(state, action.payload);
+      },
+    });
+  },
+});
+
+export const { setMenu } = menuSlice.actions;
+const menuReducer = menuSlice.reducer;
+
 const appnDataSlice = createSlice({
   name: 'appnData',
   initialState: {     
@@ -187,6 +224,7 @@ const appnDataSlice = createSlice({
     selectedAppnDate: "",                                                     // used to detect active item of date button slider in bookingForm.                                               
     doctor: { Name: "", SpecialistDesc: "", Qualification: "", RegMob1: "" },
     // UnderDoctId: "", AppointDate: "", AppTime: "", TimeSlotId: "",
+    labTestDate: ""             // for lab tests.
   },
   reducers: {
     setAppnData: (state, action: any) => {
@@ -366,7 +404,7 @@ export const getCategories = createAsyncThunk(
       const getCategories = async () => {         
         if (categoriesController) categoriesController.abort();       
         categoriesController = new AbortController();         
-        const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatSubCat?CID=${params.compCode}&LOCID=${params.locationId}`, { signal: categoriesController.signal });
+        const res = await axios.get(`${BASE_URL}/api/Pharma/GetCatSubCat?CID=${params.compCode}&LOCID=${params.locationId}&CategoryId=0&ParentId=0`, { signal: categoriesController.signal });
         if (res.status === 200) {
           const categories = getCategoryRequiredFieldsOnly(res.data.LinkCategoryList);
           return { loading: false, LinkCategoryList: categories, LinkSubCategoryList: res.data.LinkSubCategoryList }
@@ -494,5 +532,6 @@ export {
   cartReducer,
   appDataReducer,
   companyReducer,
-  siteDataReducer
+  siteDataReducer,
+  menuReducer,
 }

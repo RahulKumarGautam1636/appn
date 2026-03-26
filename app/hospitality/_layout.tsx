@@ -9,7 +9,7 @@ export default function Layout() {
         <Stack.Screen name="hospitality/compSelection" options={{animation: 'slide_from_right'}} />
         {/* <Stack.Screen name="appn/cart" options={{animation: 'slide_from_left'}} />
         <Stack.Screen name="appn/testDetail" />
-        <Stack.Screen name="appn/testList" options={{animation: 'slide_from_right'}} />
+        <Stack.Screen name="appn/investigation_list" options={{animation: 'slide_from_right'}} />
         <Stack.Screen name="appn/clinic/[compId]" options={{animation: 'slide_from_right'}} />
         <Stack.Screen name="appn/doctor/[id]" />
         <Stack.Screen name="appn/account" options={{animation: 'slide_from_right'}} /> */}

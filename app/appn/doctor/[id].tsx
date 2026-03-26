@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { useEffect, useState } from 'react';
 import { BASE_URL, BC_ROY, defaultId } from '@/src/constants';
-import { getCatId, getFrom, GridLoader, wait, withAutoUnmount } from '@/src/components/utils';
+import { useDeptId, getFrom, GridLoader, wait, withAutoUnmount } from '@/src/components/utils';
 import axios from 'axios';
 import { getMembers, setAppnData, setCompanies, setModal } from '@/src/store/slices/slices';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
@@ -40,8 +40,7 @@ const Booking = () => {
     const [refNo, setRefNo] = useState('');
     let selectedCompany = selected.EncCompanyId === compInfo.EncCompanyId ? compInfo : selected;
 
-    const categories = useSelector((state: RootState) => state.siteData.categories.LinkCategoryList);
-    const opdCatId = getCatId(categories, 'OPD');
+    const opdDeptId = useDeptId('OPD')[0];
 
     useEffect(() => {
         setSelectedDate(selectedAppnDate);
@@ -163,7 +162,7 @@ const Booking = () => {
                 UHID: user.UHID,
                 MemberId: user.MemberId,
                 Country: user.Country,
-                EnqType: 'OPD',
+                EnqType: 'Appointment / Schedule',
                 LocationId: locationId, 
 
                 UnderDoctId: doctor.PartyCode,  // sales
@@ -171,7 +170,7 @@ const Booking = () => {
                 ProviderId: user.ProviderId,   // provider
                 MarketedId: user.MarketedId,   // marketing,
                 Remarks: remarks,
-                DeptId: opdCatId,
+                DeptId: opdDeptId,
                 
 
                 UserRoleId: user.UserRoleId,
@@ -251,7 +250,7 @@ const Booking = () => {
                     Aadhaar: selectedMember.Aadhaar,
                     UHID: selectedMember.UHID,
                     Country: selectedMember.Country,
-                    EnqType: 'OPD',
+                    EnqType: 'Appointment / Schedule',
                     LocationId: locationId, 
 
                     UnderDoctId: doctor.PartyCode,      
@@ -259,7 +258,7 @@ const Booking = () => {
                     ProviderId: selectedMember.ProviderId,  
                     MarketedId: selectedMember.MarketedId,      
                     Remarks: remarks,
-                    DeptId: opdCatId, 
+                    DeptId: opdDeptId, 
 
 
                     UserRoleId: 0,
