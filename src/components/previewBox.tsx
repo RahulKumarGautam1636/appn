@@ -1,68 +1,68 @@
 import React, { useState } from 'react';
 import { View, FlatList, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, useAnimatedGestureHandler } from 'react-native-reanimated';
-import { PinchGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Image } from 'expo-image';
 
 const { width } = Dimensions.get('window');
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-// const images = [
-//   { uri: 'https://admin.takehome.live/Content/ImageMaster/856441_2.jpg' },
-//   { uri: 'https://admin.takehome.live/Content/ImageMaster/250506161756_1.png' },
-//   { uri: 'https://admin.takehome.live/Content/ImageMaster/860872_2.png' },
-// ];
-
-export default function ProductImagePreview({ images=[] }) {
+export default function ProductImagePreview({ images = [] }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const scale = useSharedValue(1);
 
-  const pinchHandler = useAnimatedGestureHandler({
-    onActive: (event) => {
+  // ✅ New Pinch Gesture
+  const pinch = Gesture.Pinch()
+    .onUpdate((event) => {
       scale.value = event.scale;
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       scale.value = withTiming(1, { duration: 200 });
-    },
-  });
+    });
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
 
-  if (!images.length) return;
+  if (!images.length) return null;
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       {/* Zoomable Image */}
-      <PinchGestureHandler onGestureEvent={pinchHandler}>
+      <GestureDetector gesture={pinch}>
         <Animated.View style={styles.imageWrapper}>
-          <AnimatedImage source={images[selectedIndex].uri} style={[styles.mainImage, animatedStyle]} contentFit="contain" />
+          <AnimatedImage
+            source={images[selectedIndex].uri}
+            style={[styles.mainImage, animatedStyle]}
+            contentFit="contain"
+          />
         </Animated.View>
-      </PinchGestureHandler>
+      </GestureDetector>
 
       {/* Thumbnail Carousel */}
-      {images.length > 1 ? <FlatList
-        data={images}
-        horizontal
-        keyExtractor={(_, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
-        style={{ marginTop: 15 }}
-        contentContainerStyle={{ paddingHorizontal: 10 }}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity onPress={() => setSelectedIndex(index)}>
-            <Image
-              source={item.uri}
-              contentFit="cover"
-              style={[
-                styles.thumbnail,
-                selectedIndex === index && styles.activeThumbnail,
-              ]}
-            />
-          </TouchableOpacity>
-        )}
-      /> : null}
-    </GestureHandlerRootView>
+      {images.length > 1 && (
+        <FlatList
+          data={images}
+          horizontal
+          keyExtractor={(_, index) => index.toString()}
+          showsHorizontalScrollIndicator={false}
+          style={{ marginTop: 15 }}
+          contentContainerStyle={{ paddingHorizontal: 10 }}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity onPress={() => setSelectedIndex(index)}>
+              <Image
+                source={item.uri}
+                contentFit="cover"
+                style={[
+                  styles.thumbnail,
+                  selectedIndex === index && styles.activeThumbnail,
+                ]}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      )}
+    </View>
   );
 }
 

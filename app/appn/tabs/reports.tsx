@@ -1,4 +1,4 @@
-import { Feather, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -209,7 +209,7 @@ const CommonParent = ({ stats, report, setReport, handleClose }: any) => {
 
       <View className='w-full px-2 py-4 bg-blue-700'>
 
-        <View className="flex flex-row gap-2.5 mb-5">
+        <View className="flex flex-row gap-2.5 mb-4">
           <TouchableOpacity onPress={() => setReport(report === 'patients' ? '' : 'patients')} className={`${report === 'patients' ? 'bg-blue-200' : 'bg-white'} flex-row rounded-2xl flex-1 p-3 border border-white cursor-pointer justify-between items-center`}>
               <View className="flex-row items-center gap-3">
                   <View className="bg-cyan-400 rounded-2xl py-1.5 px-3.5">
@@ -236,36 +236,46 @@ const CommonParent = ({ stats, report, setReport, handleClose }: any) => {
       </View>
 
         {/* <Text className='text-base text-white mb-4 font-semibold'>Filter By Date</Text> */}
-        <View className='flex-row justify-between items-center flex-wrap'>
+        <View className='flex-row justify-between flex-wrap gap-y-1'>
 
-          <Pressable onPress={() => {setFirstClick(true); setDurationDropdown(true)}} className='flex-row items-center bg-white p-2 rounded-lg'>
+          <Pressable onPress={() => setDetailed(!detailed)} className='flex-row items-center bg-white p-2 rounded-lg'>
+            {detailed ? <FontAwesome5 name="check-circle" size={17} color="red" /> : <FontAwesome5 name="circle" size={17} color="#484848" />}
             <View>
-                <Text className="font-medium text-gray-600 text-[13px] mr-2">{duration}</Text>
+                <Text className="font-medium text-gray-600 text-[12px] ml-1">Details</Text>
             </View>
-            <Feather name="chevron-down" size={20} color='gray' />
-            <MyModal modalActive={durationDropdown} onClose={() => setDurationDropdown(false)} child={<DurationDropdown />} />
           </Pressable>
-          <View className='flex-row items-center gap-1 ml-auto'>
-            <TouchableOpacity onPress={() => handleDate('prev')}>
-              <Feather name="chevron-left" size={23} color='white' />
-            </TouchableOpacity>
-            <View className='flex-row items-center bg-gray-100 p-2 rounded-lg'>
-              <Pressable onPress={() => setFromDateActive(true)}>
-                  <Text className="font-medium text-gray-600 text-[13px] leading-5 px-1">{new Date(fromDate).toLocaleDateString('en-TT')}</Text>
-              </Pressable>
-              {fromDateActive ? <DateTimePicker value={fromDate} mode="date" display="default" onChange={(e: any, d: any) => {setFromDateActive(false); setFromDate(d); setFirstClick(true);}} /> : null}
+
+          <View className='flex-row ml-auto gap-1'>
+            <Pressable onPress={() => {setFirstClick(true); setDurationDropdown(true)}} className='flex-row items-center bg-white p-2 rounded-lg'>
+              <View>
+                  <Text className="font-medium text-gray-600 text-[12px] mr-1">{duration}</Text>
+              </View>
+              <Feather name="chevron-down" size={18} color='#484848' className='w-4' />
+              <MyModal modalActive={durationDropdown} onClose={() => setDurationDropdown(false)} child={<DurationDropdown />} />
+            </Pressable>
+            <View className='flex-row bg-white rounded-lg'>
+              <TouchableOpacity onPress={() => handleDate('prev')} className='bg-blue-200 justify-center rounded-tl-lg rounded-bl-lg'>
+                <Feather name="chevron-left" size={20} color='#484848' />
+              </TouchableOpacity>
+              <View className='flex-row items-center py-2'>
+                <Pressable onPress={() => setFromDateActive(true)}>
+                    <Text className="font-medium text-gray-600 text-[12px] leading-5 px-1">{new Date(fromDate).toLocaleDateString('en-TT')}</Text>
+                </Pressable>
+                {fromDateActive ? <DateTimePicker value={fromDate} mode="date" display="default" onChange={(e: any, d: any) => {setFromDateActive(false); setFromDate(d); setFirstClick(true);}} /> : null}
+              </View>
+              <Text className='font-semibold my-auto'>-</Text>
+              <View className='flex-row items-center py-2'>
+                <Pressable onPress={() => setToDateActive(true)}>
+                    <Text className="font-medium text-gray-600 text-[12px] leading-5 px-1">{new Date(toDate).toLocaleDateString('en-TT')}</Text>
+                </Pressable>
+                {toDateActive ? <DateTimePicker value={toDate} mode="date" display="default" onChange={(e: any, d: any) => {setToDateActive(false); setToDate(d); setFirstClick(true);}} /> : null}
+              </View>
+              <TouchableOpacity onPress={() => handleDate('next')} className='bg-blue-200 justify-center rounded-tr-lg rounded-br-lg'>
+                <Feather name="chevron-right" size={20} color='#484848' />
+              </TouchableOpacity>
             </View>
-            <Text className='text-white font-semibold'> - </Text>
-            <View className='flex-row items-center bg-gray-100 p-2 rounded-lg'>
-              <Pressable onPress={() => setToDateActive(true)}>
-                  <Text className="font-medium text-gray-600 text-[13px] leading-5 px-1">{new Date(toDate).toLocaleDateString('en-TT')}</Text>
-              </Pressable>
-              {toDateActive ? <DateTimePicker value={toDate} mode="date" display="default" onChange={(e: any, d: any) => {setToDateActive(false); setToDate(d); setFirstClick(true);}} /> : null}
-            </View>
-            <TouchableOpacity onPress={() => handleDate('next')}>
-              <Feather name="chevron-right" size={23} color='white' />
-            </TouchableOpacity>
           </View>
+
         </View>
       </View>
       {report === 'patients' ? 
@@ -415,8 +425,8 @@ const PatientCard = ({ data, classes, index, active, setActive, detailed }: any)
         <TouchableOpacity onPress={() => setActive(active === index ? "" : index)} className={`flex-row items-start gap-4 bg-white rounded-2xl shadow-sm border p-3 relative ${classes} ${active === index ? 'border-orange-500' : 'border-gray-200'}`}>
           <View className="mr-auto flex-1">
             <View className='flex-row items-center gap-4'>
-              <Text className="font-bold text-sky-800 text-[13px]">{testName}</Text>
-              <Text className="text-gray-700 text-[11px] font-medium">No. of Cases : {patientCount}</Text>
+              <Text className="font-bold text-sky-800 text-[12px]">{testName}</Text>
+              <Text className="text-orange-600 text-[11px] font-medium">No. of Cases : {patientCount}</Text>
             </View>
             {detailed ? <View className="flex-row justify-between items-end mt-2.5">
               <Text className="mt-1.5 text-[12px] text-gray-900 font-medium leading-4 flex-1">
@@ -441,104 +451,102 @@ const PatientCard = ({ data, classes, index, active, setActive, detailed }: any)
               </Text>
             </View>
           </View>
-          <Ionicons name="chevron-down" className={`absolute top-2 right-2 rounded-md px-1 ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} />
+          <Ionicons name="chevron-down" className={`absolute top-2 right-2 rounded-md px-1 ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100 rotate-0'}`} size={19} color={active === index ? 'white' : `#2563eb`} />
         </TouchableOpacity>
 
         {active === index ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator>
-            <View className="gap-3">
-              <View className="bg-white rounded-lg shadow-sm w-full">
-                <View className="flex flex-row border border-gray-200 bg-orange-50 rounded-t-lg">
-                  <View className="p-3 w-[8rem]">
-                    <Text className="text-[0.8rem] font-medium text-gray-800">Cases</Text>
-                  </View>
-
-                  {detailed ? <><View className="py-3 pr-3 border-l border-white w-[5rem]">
-                    <Text className="text-[0.8rem] font-medium text-gray-800 text-right">Rate</Text>
-                  </View>
-                  <View className="py-3 pr-3 flex-1 border-l border-white w-[5rem]">
-                    <Text className="text-[0.8rem] font-medium text-gray-800 text-right">Disc</Text>
-                  </View>
-                  <View className="py-3 pr-3 flex-1 border-l border-white w-[5rem]">
-                    <Text className="text-[0.8rem] font-medium text-gray-800 text-right">INV Amt</Text>
-                  </View></> : null}
-
-                  <View className="py-3 pr-3 flex-1 border-l border-white w-[5rem]">
-                    <Text className="text-[0.8rem] font-medium text-gray-800 text-right">IP Amt</Text>
-                  </View>
-                  <View className="py-3 pr-3 flex-1 border-l border-white w-[5rem]">
-                    <Text className="text-[0.8rem] font-medium text-gray-800 text-right">Paid</Text>
-                  </View>
-                  <View className="py-3 pr-3 flex-1 border-l border-white w-[5rem]">
-                    <Text className="text-[0.8rem] font-medium text-gray-800 text-right">Balance</Text>
-                  </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator contentContainerClassName='min-w-full'>
+            <View className="bg-white rounded-lg shadow-sm w-full">
+              <View className="flex flex-row border border-gray-200 bg-orange-50 rounded-t-lg">
+                <View className="flex-1 p-3 w-[7rem]">
+                  <Text className="text-xs font-medium text-gray-800">Cases</Text>
                 </View>
-                {invoiceList.map((i: any, n: number) => {
-                  const invoiceNo = i[0].invoiceno;
-                  const ipAmount = sumByKey(i, "TaxableAmount");
-                  const paidAmount = sumByKey(i, "AllocatedAmount");
-                  const balance = i[0].Balance;
-                  return (
-                    <React.Fragment key={n}>
-                      <View className="flex flex-row bg-purple-50 border-x border-purple-100">
-                        <View className="flex-1 p-3 w-[8rem]">
-                          <Text className="text-sm font-medium text-gray-800">{invoiceNo}</Text>
+
+                {detailed ? <><View className="py-3 pr-3 border-l border-white w-[4rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">Rate</Text>
+                </View>
+                <View className="py-3 pr-3 flex-1 border-l border-white w-[4rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">Disc</Text>
+                </View>
+                <View className="py-3 pr-3 flex-1 border-l border-white w-[4rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">INV Amt</Text>
+                </View></> : null}
+
+                <View className="py-3 pr-3 flex-1 border-l border-white w-[4rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">IP Amt</Text>
+                </View>
+                <View className="py-3 pr-3 flex-1 border-l border-white w-[4rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">Paid</Text>
+                </View>
+                <View className="py-3 pr-3 flex-1 border-l border-white w-[4rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">Balance</Text>
+                </View>
+              </View>
+              {invoiceList.map((i: any, n: number) => {
+                const invoiceNo = i[0].invoiceno;
+                const ipAmount = sumByKey(i, "TaxableAmount");
+                const paidAmount = sumByKey(i, "AllocatedAmount");
+                const balance = i[0].Balance;
+                return (
+                  <React.Fragment key={n}>
+                    <View className="flex flex-row bg-purple-50 border-x border-purple-100">
+                      <View className="flex-1 p-3 w-[7rem]">
+                        <Text className="text-xs font-medium text-gray-800">{invoiceNo}</Text>
+                      </View>
+
+                      {detailed ? <><View className="p-3 flex-1 border-l border-white w-[4rem]">
+                        <Text className="text-xs font-medium text-gray-800 text-right">{totalRate}</Text>
+                      </View>
+                      <View className="p-3 flex-1 border-l border-white w-[4rem]">
+                        <Text className="text-xs font-medium text-gray-800 text-right">{invDiscount}</Text>
+                      </View>
+                      <View className="p-3 flex-1 border-l border-white w-[4rem]">
+                        <Text className="text-xs font-medium text-gray-800 text-right">{invAmount}</Text>
+                      </View></> : null}
+
+
+                      <View className="p-3 flex-1 border-l border-white w-[4rem]">
+                        <Text className="text-xs font-medium text-gray-800 text-right">{ipAmount}</Text>
+                      </View>
+                      <View className="p-3 flex-1 border-l border-white w-[4rem]">
+                        <Text className="text-xs font-medium text-gray-800 text-right">{paidAmount}</Text>
+                      </View>
+                      <View className="p-3 flex-1 border-l border-white w-[4rem]">
+                        <Text className="text-xs font-medium text-gray-800 text-right">{balance}</Text>
+                      </View>
+                    </View>
+                    {i.map((item: any, itemIndex: number) => (
+                      <View key={itemIndex} className={`flex flex-row w-full border-b border-gray-100 hover:bg-gray-50 transition-colors ${index === patients.length - 1 ? "rounded-b-lg" : ""}`}>
+                        <View className="flex-1 p-3 w-[7rem]">
+                          <View className="flex flex-row items-center gap-3">
+                            <Text className="text-xs text-gray-900 font-medium">{item.Description}</Text>
+                          </View>
                         </View>
 
-                        {detailed ? <><View className="p-3 flex-1 border-l border-white w-[5rem]">
-                          <Text className="text-sm font-medium text-gray-800 text-right">{totalRate}</Text>
+                        {detailed ? <><View className="p-3 flex-1 border-l border-gray-100 w-[4rem]">
+                          <Text className="text-xs text-gray-900 text-right">{item.Rate}</Text>
                         </View>
-                        <View className="p-3 flex-1 border-l border-white w-[5rem]">
-                          <Text className="text-sm font-medium text-gray-800 text-right">{invDiscount}</Text>
+                        <View className="p-3 flex-1 border-l border-gray-100 w-[4rem]">
+                          <Text className="text-xs text-gray-900 text-right">{item.Discount}</Text>
                         </View>
-                        <View className="p-3 flex-1 border-l border-white w-[5rem]">
-                          <Text className="text-sm font-medium text-gray-800 text-right">{invAmount}</Text>
+                        <View className="p-3 flex-1 border-l border-gray-100 w-[4rem]">
+                          <Text className="text-xs text-gray-900 text-right">-</Text>
                         </View></> : null}
 
-
-                        <View className="p-3 flex-1 border-l border-white w-[5rem]">
-                          <Text className="text-sm font-medium text-gray-800 text-right">{ipAmount}</Text>
+                        <View className="p-3 flex-1 border-l border-gray-100 w-[4rem]">
+                          <Text className="text-xs text-gray-900 text-right">{item.TaxableAmount}</Text>
                         </View>
-                        <View className="p-3 flex-1 border-l border-white w-[5rem]">
-                          <Text className="text-sm font-medium text-gray-800 text-right">{paidAmount}</Text>
-                        </View>
-                        <View className="p-3 flex-1 border-l border-white w-[5rem]">
-                          <Text className="text-sm font-medium text-gray-800 text-right">{balance}</Text>
+                        <View className="p-3 flex-1 border-l border-gray-100 w-[4rem]">
+                          <Text className="text-xs text-gray-900 font-medium text-right">-</Text>
+                        </View>                        
+                        <View className="p-3 flex-1 border-l border-gray-100 w-[4rem]">
+                          <Text className="text-xs text-gray-900 font-medium text-right">-</Text>
                         </View>
                       </View>
-                      {i.map((item: any, itemIndex: number) => (
-                        <View key={itemIndex} className={`flex flex-row w-full border-b border-gray-100 hover:bg-gray-50 transition-colors ${index === patients.length - 1 ? "rounded-b-lg" : ""}`}>
-                          <View className="p-3 w-[8rem]">
-                            <View className="flex flex-row items-center gap-3">
-                              <Text className="text-xs text-gray-900 font-medium">{item.Description}</Text>
-                            </View>
-                          </View>
-
-                          {detailed ? <><View className="p-3 border-l border-gray-100 w-[5rem]">
-                            <Text className="text-sm text-gray-900 text-right">{item.Rate}</Text>
-                          </View>
-                          <View className="p-3 border-l border-gray-100 w-[5rem]">
-                            <Text className="text-sm text-gray-900 text-right">{item.Discount}</Text>
-                          </View>
-                          <View className="p-3 border-l border-gray-100 w-[5rem]">
-                            <Text className="text-sm text-gray-900 text-right">-</Text>
-                          </View></> : null}
-
-                          <View className="p-3 border-l border-gray-100 w-[5rem]">
-                            <Text className="text-sm text-gray-900 text-right">{item.TaxableAmount}</Text>
-                          </View>
-                          <View className="p-3 border-l border-gray-100 w-[5rem]">
-                            <Text className="text-sm text-gray-900 font-medium text-right">-</Text>
-                          </View>                        
-                          <View className="p-3 border-l border-gray-100 w-[5rem]">
-                            <Text className="text-sm text-gray-900 font-medium text-right">-</Text>
-                          </View>
-                        </View>
-                      ))}
-                    </React.Fragment>
-                  );
-                })}
-              </View>
+                    ))}
+                  </React.Fragment>
+                );
+              })}
             </View>
           </ScrollView>
         ) : null}
@@ -638,7 +646,7 @@ export const Cases = ({ fromDate, toDate, detailed }: any) => {
   )
 }
 
-const ProviderGroupByCases = ({ data, userRefId }: any) => {
+const ProviderGroupByCases = ({ data, userRefId, detailed }: any) => {
   const providerName = data[0].ReferenceBy;
   // const providerRefId = data[0].ReferrerId;
   // const isCurrentUser = providerRefId === userRefId;
@@ -665,14 +673,14 @@ const ProviderGroupByCases = ({ data, userRefId }: any) => {
       </TouchableOpacity>
       {open ?
         <View className={`gap-2 px-2 pt-3 pb-4`}>
-          {testList?.map((dept: any, index: Number) => <CaseCard key={index} data={dept} index={index} active={active} setActive={setActive}/>)}
+          {testList?.map((dept: any, index: Number) => <CaseCard key={index} data={dept} index={index} active={active} setActive={setActive} detailed={detailed}/>)}
         </View> 
       : null}
     </View>
   )
 }
 
-const CaseCard = ({ data, classes, index, active, setActive }: any) => {
+const CaseCard = ({ data, classes, index, active, setActive, detailed }: any) => {
 
     const testName = data[0].Description;
     const patients = groupBy(data, 'PartyName');
@@ -680,62 +688,73 @@ const CaseCard = ({ data, classes, index, active, setActive }: any) => {
     const patientCount = patientsList.length;
     const ipAmount = sumByKey(data, 'TaxableAmount');
     // const paidAmount = sumByKey(data, 'AllocatedAmount');  
-    // const balance = sumByKey(patientsList, 'Balance'); 
+    // const balance = sumByKey(patientsList, 'Balance');
+    
+    const totalDiscount = sumByKey(patientsList, 'Discount'); 
+    const totalAmount = sumByKey(patientsList, 'Rate');  
 
     return (
       <View className='gap-3'>
         <TouchableOpacity onPress={() => setActive(active === index ? "" : index)} className={`flex-row items-start gap-4 bg-white rounded-2xl shadow-sm border p-3 relative ${classes} ${active === index ? 'border-orange-500' : 'border-gray-200'}`}>
           <View className="mr-auto flex-1">
-            <Text className="font-PoppinsSemibold text-sky-800 leading-6 text-[13px]">{testName}</Text>
-            {/* <Text className="text-gray-600 mt-[6px] text-[11px] font-PoppinsMedium">No. of Patients : {patientCount}</Text> */}
-            <View className="flex-row items-end mt-[5px] gap-16">
-              <Text className="mt-1.5 text-[12px] text-orange-600 font-PoppinsMedium leading-4">
-                Patients : {patientCount}
+            <Text className="font-PoppinsSemibold text-sky-800 leading-6 text-[12px]">{testName}</Text>
+            <Text className="text-gray-600 mt-[6px] text-[11px] font-medium">No. of Patients : {patientCount}</Text>
+            <View className="flex-row items-end mt-[5px] justify-between">
+              {detailed ? <><Text className="mt-1.5 text-[11px] text-orange-600 font-medium leading-4">
+                Total Disc : {totalDiscount}
               </Text>
-              <Text className="mt-1.5 text-[12px] text-blue-600 font-PoppinsMedium leading-4">
-                IP Amount : {ipAmount}
+              <Text className="mt-1.5 text-[11px] text-blue-600 font-medium leading-4">
+                Total Amt : {totalAmount}
+              </Text></> : null}
+              <Text className="text-green-600 mt-1.5 text-[11px] font-medium leading-4">
+                IP Amt : {ipAmount}
               </Text>
-              {/* <Text className="text-green-600 mt-1.5 text-[12px] font-PoppinsMedium leading-4">
-                Paid : {paidAmount}
-              </Text> */}
             </View>
           </View>
-          {/* <Ionicons name="chevron-down" className={`p-[9px] rounded-full my-auto ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} /> */}
-          <Ionicons name="chevron-down" className={`absolute px-1 top-2 right-2 rounded-md ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100'}`} size={19} color={active === index ? 'white' : `#2563eb`} />
+          {/* <Ionicons name="chevron-down" className={`p-[9px] rounded-full my-auto ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100 rotate-0'}`} size={19} color={active === index ? 'white' : `#2563eb`} /> */}
+          <Ionicons name="chevron-down" className={`absolute px-1 top-2 right-2 rounded-md ${active === index ? 'rotate-180 bg-sky-500' : 'bg-sky-100 rotate-0'}`} size={19} color={active === index ? 'white' : `#2563eb`} />
         </TouchableOpacity>
 
         {active === index && (
-          <View className="gap-3">
-            <View className="bg-white rounded-lg shadow-sm w-full max-w-2xl">
+          <ScrollView horizontal showsHorizontalScrollIndicator contentContainerClassName='min-w-full'>
+            <View className="bg-white rounded-lg shadow-sm w-full">
               <View className="flex flex-row border border-gray-200 bg-orange-50 rounded-t-lg">
-                <View className="flex-1 p-3">
-                  <Text className="text-sm font-medium text-gray-800">Patients</Text>
+                <View className="flex-1 p-3 w-[8rem]">
+                  <Text className="text-xs font-medium text-gray-800">Patients</Text>
                 </View>
-                <View className="p-3">
-                  <Text className="text-sm font-medium text-gray-800 text-right">IP Amount</Text>
+
+                {detailed ? <><View className="p-3 flex-1 border-l border-white w-[5rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">Total Disc</Text>
                 </View>
-                {/* <View className="p-3">
-                  <Text className="text-sm font-medium text-gray-800 text-right">Paid</Text>
-                </View> */}
+                <View className="p-3 flex-1 border-l border-white w-[5rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">Total Amt</Text>
+                </View></> : null}
+
+                <View className="p-3 flex-1 border-l border-white w-[5rem]">
+                  <Text className="text-xs font-medium text-gray-800 text-right">IP Amt</Text>
+                </View>
               </View>
 
               {patientsList.map((patient: any, index) => (
                 <View key={index} className={`flex flex-row border-b border-gray-100 hover:bg-gray-50 transition-colors ${index === patients.length - 1 ? "rounded-b-lg" : ""}`}>
-                  <View className="flex-1 p-3">
-                    <View className="flex flex-row items-center gap-3">
-                      <Text className="text-sm text-gray-900 font-medium">{patient.PartyName}</Text>
-                    </View>
+                  <View className="flex-1 p-3 w-[8rem]">
+                    <Text className="text-xs text-gray-900 font-medium">{patient.PartyName}</Text>
                   </View>
-                  <View className="p-3">
-                    <Text className="text-sm text-gray-900 text-right">{patient.TaxableAmount}</Text>
+                  
+                  {detailed ? <><View className="p-3 flex-1 border-l border-gray-100 w-[5rem]">
+                    <Text className="text-xs text-gray-900 font-medium text-right">{patient.Discount}</Text>
                   </View>
-                  {/* <View className="p-3">
-                    <Text className="text-sm text-gray-900 font-medium text-right">{patient.Rate}</Text>
-                  </View> */}
+                  <View className="p-3 flex-1 border-l border-gray-100 w-[5rem]">
+                    <Text className="text-xs text-gray-900 font-medium text-right">{patient.Rate}</Text>
+                  </View></> : null}
+
+                  <View className="p-3 flex-1 border-l border-gray-100 w-[5rem]">
+                    <Text className="text-xs text-gray-900 text-right">{patient.TaxableAmount}</Text>
+                  </View>
                 </View>
               ))}
             </View>
-          </View>
+          </ScrollView>
         )}
       </View>
     );

@@ -35,7 +35,7 @@ const Profile = () => {
               </ScrollView>
           } />
 
-        <SafeAreaView className="flex-1 bg-gray-100">
+        <View className="flex-1 bg-gray-100"> {/* SafeAreaView was being used and replaced with View becuase SafeAreaView deparecated after expo update */}
           {/* Header */}
           <View className="pb-2 bg-white">
               <View className="justify-between flex-row p-4 items-center">
@@ -205,7 +205,7 @@ const Profile = () => {
               </Animated.View>
             )}
           </ScrollView>
-        </SafeAreaView>
+        </View>
       </>
     );
 }
