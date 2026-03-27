@@ -198,7 +198,7 @@ export default function MarketingSalesPage() {
 
   return (
     <View className="flex-1 bg-slate-200">
-      <View className="bg-sky-900 px-5 pt-6 pb-6">
+      {true ? null : <><View className="bg-sky-900 px-5 pt-6 pb-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center gap-3">
             <Pressable className="w-9 h-9 rounded-xl bg-white/10 items-center justify-center">
@@ -285,7 +285,7 @@ export default function MarketingSalesPage() {
           {fromDateActive ? <DateTimePicker value={fromDate} mode="date" display="default" onChange={(e: any, d: any) => {setFromDateActive(false); setFromDate(d); setFirstClick(true);}} /> : null}
           {toDateActive ? <DateTimePicker value={toDate} mode="date" display="default" onChange={(e: any, d: any) => {setToDateActive(false); setToDate(d); setFirstClick(true);}} /> : null}
         </View>
-      </View>
+      </View></>}
       <View>
         {renderStages()}
       </View>
@@ -323,62 +323,7 @@ const AppointmentCard = ({ appt }) => {
 
   const [openDetails, setOpenDetails] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
-
-  const user = useSelector((i: RootState) => i.user);
-  const { selected: selectedCompany, list: companiesList } = useSelector((i: RootState) => i.companies);
-  const [registerData, setRegisterData] = useState<RegisterDataPCard>({
-    EncCompanyId: selectedCompany.EncCompanyId,
-    PBankId: appt.PBankId,
-    UnderDoctId: appt.DoctId,
-    ReferrerId: 0,
-    ProviderId: 0,
-    MarketedId: appt.MarketById,
-    DeptId: appt.DeptId,
-    UserId: user?.UserId,
-    OpportunityId: appt.OpportunityId,
-    EnqStatusValue: "",
-    EnqStatusId: 0,
-    Remarks: appt.Remarks,
-    NextAppDate: appt.NextAppDate,
-    BillId: appt.EnqId,
-    PartyCode: appt.PartyCode,
-    AppointmentTo: appt.AppointmentTo,
-    AppointmentToId: appt.AppointmentToId,
-    ParentId: appt.LastAutoId,
-    RootId: appt.RootId === 0 ? appt.LastAutoId : appt.RootId,
-    // DirectSalesDetailsList: Array.isArray(appt.EnqList)?appt.EnqList.map((el:any)=>({ItemId:el.ItemId,Description:el.ItemDesc,SRate:el.Amount,DeptId:appt.DeptId,BillQty:1,Delstatus:"N"})): []
-    DirectSalesDetailsList: [],// checkerFunc(patient),
-    NextAppDateStr: "",
-    PBankDesc: appt.PBankDesc,
-    NextOpportunityId: 0,
-    PrevOpportunityId: appt.OpportunityId,
-    PrevRefType: appt.TranRefType,
-    LinkURL: "",
-    EnqFollowUpList: [{
-      RefToId: appt.DoctId,
-      RefById: 0,
-      ProviderId: 0,
-      MarketById: appt.MarketById,
-      DeptId: appt.DeptId,
-      CallerId: user?.UserId,
-      OpportunityId: appt.OpportunityId, //pending
-      AppointmentToId: appt.AppointmentToId,
-      AppointmentTo: appt.AppointmentTo,
-      EnqStatusValue: "",
-      EnqStatus: 0,
-      Remarks2: "",
-      NextAppDateStr: new Date().toLocaleDateString('en-TT'),
-      NextAppTime: new Date().toLocaleDateString('en-TT'),  // dayjs().format('hh:mm A'),
-      NextFollowupDateStr: "",
-      NextFollowupTime: new Date().toLocaleDateString('en-TT'), // dayjs().format('hh:mm A'),
-      RefId: appt.EnqId,
-      PartyCode: appt.PartyCode,
-      InsBy: user?.UserId,
-      ParentId: appt.LastAutoId,
-      RootId: appt.RootId === 0 ? appt.LastAutoId : appt.RootId,
-      LinkURL: ""
-    }]
-  })
+  
 
   return (
     <View className={`bg-white rounded-2xl border-t-[3px] p-4 shadow-sm`} style={{ borderColor: cardStyle.borderTop }} >
@@ -444,12 +389,13 @@ const AppointmentCard = ({ appt }) => {
             </Pressable> : null}
           </>
         }
+        {/* getStages(selectedCompany.EncCompanyId, user, appt) */}
         <Pressable onPress={() => setUpdateModal(true)} className="w-9 h-9 rounded-lg bg-slate-100 items-center justify-center">
           <Pencil size={14} color="#64748b" />
         </Pressable>
       </View>
       <MyModal modalActive={openDetails} containerClass='mt-auto' onClose={() => setOpenDetails(false)} child={<AppointmentActivity apptn={appt} />} />
-      <MyModal modalActive={updateModal} onClose={() => setUpdateModal(false)} child={<UpdateStage />} />
+      <MyModal modalActive={updateModal} onClose={() => setUpdateModal(false)} child={<UpdateStage appt={appt} />} />
     </View>
   );
 }

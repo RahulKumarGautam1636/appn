@@ -19,6 +19,7 @@
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.10.0",
+    "dayjs": "^1.11.20",
     "expo": "^54.0.33",
     "expo-blur": "~15.0.8",
     "expo-constants": "~18.0.13",
