@@ -4,9 +4,10 @@ import { X, ChevronDown, Phone, Layers, MessageSquare, Check, Sparkles, Calendar
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BASE_URL } from "@/src/constants";
-import { getFrom } from "@/src/components/utils";
+import { getFrom, useFetch } from "@/src/components/utils";
 import dayjs from "@/src/components/utils/dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from "axios";
 
 
 const STAGES = [
@@ -54,7 +55,7 @@ const STAGE_OPTIONS: DropdownOption[] = [
 ];
 
 const REFER_OPTIONS: DropdownOption[] = [
-  { label: "Select User",  value: ""         },
+  { label: "Select User",  value: "Test"         },
   { label: "Dr. Sharma",   value: "sharma"   },
   { label: "Dr. Mehta",    value: "mehta"    },
   { label: "Dr. Verma",    value: "verma"    },
@@ -63,20 +64,25 @@ const REFER_OPTIONS: DropdownOption[] = [
 // ── Reusable Dropdown ──────────────────────────────────
 function Dropdown({
   options,
-  selected,
+  selectValue,
+  selectKey,
+  labelKey,
   onSelect,
   placeholder = "Select",
   accentColor = "#6366f1",
 }: {
-  options: DropdownOption[];
-  selected: DropdownOption | null;
-  onSelect: (opt: DropdownOption) => void;
+  options: any;
+  selectValue: any | null;
+  selectKey: string;
+  labelKey: string;
+  onSelect: (opt: any) => void;
   placeholder?: string;
   accentColor?: string;
 }) {
+  const selected = options.find(((i: any) => i[selectKey] === selectValue)) || {};  
   const [open, setOpen] = useState(false);
-  const label = selected?.label ?? placeholder;
-
+  const label = selected[labelKey] ? selected[labelKey] : placeholder;
+  
   return (
     <View className="relative">
       <TouchableOpacity
@@ -105,11 +111,11 @@ function Dropdown({
           className="absolute left-0 right-0 bg-white border border-gray-100 rounded-2xl overflow-hidden z-50"
           style={{ top: "105%", shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 12, elevation: 8 }}
         >
-          {options.map((opt, idx) => {
-            const isSelected = selected?.value === opt.value;
+          {options.map((opt: any, idx: number) => {
+            const isSelected = selected[selectKey] === opt[selectKey];
             return (
               <TouchableOpacity
-                key={opt.value}
+                key={opt[selectKey]}
                 onPress={() => { onSelect(opt); setOpen(false); }}
                 activeOpacity={0.7}
                 style={{
@@ -123,7 +129,7 @@ function Dropdown({
                   style={{ color: isSelected ? accentColor : "#6b7280" }}
                   className={`text-sm ${isSelected ? "font-semibold" : "font-normal"}`}
                 >
-                  {opt.label}
+                  {opt[labelKey]}
                 </Text>
                 {isSelected && <Check size={13} color={accentColor} strokeWidth={2.5} />}
               </TouchableOpacity>
@@ -138,7 +144,7 @@ function Dropdown({
 // ── Section Divider ────────────────────────────────────
 function SectionDivider({ label }: { label: string }) {
   return (
-    <View className="flex-row items-center gap-3 my-7">
+    <View className="flex-row items-center gap-3 mb-7 mt-1">
       <View className="flex-1 h-px bg-indigo-200" />
       <Text className="text-indigo-500 text-sm font-extrabold tracking-widest uppercase px-1">
         {label}
@@ -164,7 +170,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
   const [time, setTime]                   = useState("12:25 PM");
   const [dept, setDept]                   = useState<DropdownOption>(DEPT_OPTIONS[0]);
   const [stage, setStage]                 = useState<DropdownOption>(STAGE_OPTIONS[0]);
-  const [referTo, setReferTo]             = useState<DropdownOption | null>(null);
+  const [referTo, setReferTo]             = useState<DropdownOption>(REFER_OPTIONS[0]);
 
   const updateAmount = (id: string, value: string) => {
     setParticulars((prev) =>
@@ -198,13 +204,24 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
     }, 600);
   };
 
-  const initials = appt.Name.split(" ").map((n) => n[0]).join("").toUpperCase();
+  const initials = appt.Name.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase();
 
   // NEW WORK --------------------------------------------------------------------------------------
   const user = useSelector((i: RootState) => i.user);
   const { selected: selectedCompany } = useSelector((i: RootState) => i.companies);
   const [stages, setStages] = useState({ loading: false, data: [], err: { status: false, msg: "" } })
   const [rowObjArr, setRowObjArr] = useState([]);
+  const [remarksError, setRemarksError] = useState(false);
+
+  const checkSalesItems: (patient: any) => any[] = (patient) => {
+    if (patient.TranRefType === "ENQ") {
+      return Array.isArray(patient.EnqList) ? patient.EnqList.map((el: any) => ({ ItemId: el.ItemId, Description: el.ItemDesc, SRate: el.Amount, DeptId: patient.DeptId, BillQty: 1, Delstatus: "N" })) : []
+    }
+    else if (patient.TranRefType === "ORDER") {
+      return Array.isArray(patient.OrderList) ? patient.OrderList.map((el: any) => ({ ItemId: el.ItemId, Description: el.ItemDesc, SRate: el.Amount, DeptId: patient.DeptId, BillQty: 1, Delstatus: "N" })) : []
+    }
+    return []
+  }
 
   const [regData, setRegData] = useState({
     EncCompanyId: selectedCompany.EncCompanyId,
@@ -227,7 +244,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
     ParentId: appt.LastAutoId,
     RootId: appt.RootId === 0 ? appt.LastAutoId : appt.RootId,
     // DirectSalesDetailsList: Array.isArray(appt.EnqList)?appt.EnqList.map((el:any)=>({ItemId:el.ItemId,Description:el.ItemDesc,SRate:el.Amount,DeptId:appt.DeptId,BillQty:1,Delstatus:"N"})): []
-    DirectSalesDetailsList: [],// checkerFunc(patient),
+    DirectSalesDetailsList: checkSalesItems(appt),
     NextAppDateStr: "",
     PBankDesc: appt.PBankDesc,
     NextOpportunityId: 0,
@@ -266,7 +283,6 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
       console.log(`${BASE_URL}/api/VALUES/GetNextStageByStageId?CompId=${companyId}&RoleId=${user.UserRoleLevelCode}&StageId=${apptUser.OpportunityId}&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${apptUser.DeptId ? apptUser.DeptId : 0}&BusinessType=`);    
       const res = await getFrom(`${BASE_URL}/api/VALUES/GetNextStageByStageId?CompId=${companyId}&RoleId=${user.UserRoleLevelCode}&StageId=${apptUser.OpportunityId}&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${apptUser.DeptId ? apptUser.DeptId : 0}&BusinessType=`, {}, setStages, signal);
       if (res) {
-        console.log(res.data);  
         let sorted = res.data.sort((a: any, b: any) => b.SeqId - a.SeqId);    
         setStages({ ...res, data: sorted });
       }
@@ -276,8 +292,6 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
     getStages(selectedCompany.EncCompanyId, user, appt, controller.signal)
     return () => controller.abort();
   }, [selectedCompany.EncCompanyId, user.OpportunityId, appt.DeptId]);
-
-  console.log(stages); 
 
   const selectedStage2 = stages.data.find((i: any) => i.AutoId === regData.EnqFollowUpList[0]?.EnqStatus) || {};
 
@@ -337,7 +351,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
     setRowObjArr((prev) => [...prev, { showDateTime: { showDate: false, showTime: false }, err: { date: false, dept: false, stage: false, remarks: false }, stageArr: [], refToIdArr: [], isStageArrLoaded: false, isRefToIdArrLoaded: false }]);
   };
 
-  console.log(appt.Name, regData);
+  console.log(regData);
   console.log(rowObjArr);  
   
   const handleDateSelect = (event: any, index: number, selected?: Date | undefined) => {
@@ -353,17 +367,154 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
         return { ...prev, EnqFollowUpList: arr };
       });
     }
-    // setShowDateTimeArr(index - 1, false, "showDate");
+    setShowDateTimeArr(index - 1, false, "showDate");
+  };
+
+  const setShowDateTimeArr = (index: number, bool: boolean, key: any) => {
     setRowObjArr((prev) => {
       const arr = [...prev];
-      arr[index - 1]["showDateTime"]["showDate"] = false;
+      arr[index]["showDateTime"][key] = bool
       return arr;
+    })
+  }
+  
+  const handleTimeSelect = (event: any, index: number, selected?: Date | undefined) => {
+    if (event.type === "set" && selected) {
+      const timeString = dayjs(selected).format('hh:mm A');
+
+      setRegData((prev) => {
+        const arr = [...prev.EnqFollowUpList];
+        if (index === 1) {
+          arr[0].NextFollowupTime = timeString;
+        }
+        arr[index].NextAppTime = timeString;
+        return ({ ...prev, EnqFollowUpList: arr });
+      });
+    }
+    setShowDateTimeArr(index - 1, false, "showTime")
+  };
+
+  const handleChangeForArrayElement = (index: number, key: any, value: any) => {
+    setRegData((prev) => {
+      const arr = [...prev.EnqFollowUpList];
+      arr[index][key] = value;
+      return { ...prev, EnqFollowUpList: arr };
     });
   };
 
+  const deptsArr = useFetch(`${BASE_URL}/api/Values/GetAllDepartment?CID=${selectedCompany.CompanyId}`, selectedCompany.CompanyId)[0];
+
+  const getFollowUpStage = async (currDeptId: number, index: number) => {
+    try {
+      console.log(`${BASE_URL}/api/VALUES/GetStage?CompId=${selectedCompany.EncCompanyId}&RoleId=${user.UserRoleLevelCode}&LevelId=1&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${currDeptId}&BusinessType=`);    
+      const res = await axios.get(`${BASE_URL}/api/VALUES/GetStage?CompId=${selectedCompany.EncCompanyId}&RoleId=${user.UserRoleLevelCode}&LevelId=1&DeptId=0&VerticleTypeId=0&LocationId=0&ProcedureId=${currDeptId}&BusinessType=`);
+      if (res.status === 200) {
+        if (Array.isArray(res.data) && res.data.length) {
+          setRowObjArr((prev) => {
+            const arr = [...prev];
+            arr[index].stageArr = res.data;
+            arr[index].isStageArrLoaded = true;
+            return arr;
+          });
+  
+          const stgArr = res.data.sort((a, b) => (b.AutoId - a.AutoId))
+          handleChangeForArrayStage(index + 1, stgArr[stgArr.length - 1]);
+        }
+      } else {
+        setRowObjArr((prev) => {
+          const arr = [...prev];
+          arr[index].stageArr = [];
+          return arr;
+        });
+      }      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserByDept = async (currDeptId: number, index: number) => {
+    try {
+      console.log(`${BASE_URL}/api/UserReg/GetAllUserOfDept?CompId=${selectedCompany.EncCompanyId}&DeptId=${currDeptId}`);    
+      const res = await axios.get(`${BASE_URL}/api/UserReg/GetAllUserOfDept?CompId=${selectedCompany.EncCompanyId}&DeptId=${currDeptId}`);
+      if (res.status === 200) {
+        if (Array.isArray(res.data) && res.data.length) {
+          setRowObjArr((prev) => {
+            const arr = [...prev];
+            arr[index].refToIdArr = res.data.filter((el: any) => el.PartyCode !== 0);
+            arr[index].isRefToIdArrLoaded = true;
+            return arr;
+          });
+        }
+      } else {
+        setRowObjArr((prev) => {
+          const arr = [...prev];
+          arr[index].refToIdArr = [];
+          return arr;
+        });
+      }      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (rowObjArr.length > 0 && !rowObjArr[rowObjArr.length - 1].isStageArrLoaded) {
+      getFollowUpStage(appt.DeptId, rowObjArr.length - 1);
+    }
+    if (rowObjArr.length > 0 && !rowObjArr[rowObjArr.length - 1].isRefToIdArrLoaded) {
+      getUserByDept(appt.DeptId, rowObjArr.length - 1);
+    }
+  }, [regData.EnqFollowUpList]);
+
+  const validate = (): { flag: boolean, label: string } => {
+    let flag = { flag: false, label: "" };
+
+    setRowObjArr((prev) => {
+      const arr = [...prev];
+      for (const el of arr) {
+        el.err.date = false
+        el.err.dept = false
+        el.err.stage = false
+        el.err.remarks = false
+      }
+      return arr;
+    })
+    setRemarksError(false);
+    if (!regData.EnqFollowUpList[0].Remarks2) {
+      setRemarksError(true);
+      if (!flag.flag && !regData.EnqFollowUpList[0].Remarks2) {
+        flag = { flag: true, label: "Please fill required fields" };
+      }
+    }
+    const tempError = [...rowObjArr];
+    regData.EnqFollowUpList.slice(1).forEach((el, index) => {
+      if (!el.NextFollowupDateStr) {
+        el.NextFollowupDateStr = el.NextAppDateStr;
+        el.NextFollowupTime = el.NextAppTime;
+
+      }
+      if (!flag.flag && el.RefToId === 0) {
+        if (el.DeptId === patient.DeptId) {
+          el.RefToId = patient.DoctId;
+        }
+        else {
+          flag = { flag: true, label: "Please choose the refer to" };
+        }
+      }
+      tempError[index].err.date = !Boolean(el.NextAppDateStr);
+      tempError[index].err.dept = !Boolean(el.DeptId);
+      tempError[index].err.stage = !Boolean(el.EnqStatus);
+      tempError[index].err.remarks = !Boolean(el.Remarks2);
+      if (!flag.flag && (!Boolean(el.NextAppDateStr) || !Boolean(el.DeptId) || !Boolean(el.EnqStatus) || !Boolean(el.Remarks2))) {
+        flag = { flag: true, label: "Please fill required fields" };
+      }
+    });
+    setRowObjArr(tempError);
+    return flag
+  }
+
   return (
-    <ScrollView className="flex-1 bg-slate-100" contentContainerStyle={{ paddingBottom: Platform.OS === "ios" ? 48 : 32 }} keyboardShouldPersistTaps="handled">
-      
+    <ScrollView contentContainerClassName="min-h-[30rem] bg-slate-100 pb-4" showsVerticalScrollIndicator={false}>      
       <View className="flex-1 bg-black/40 justify-end">
         <Pressable className="flex-1" onPress={onClose} />
         <View style={{ paddingBottom: 20 }} className="bg-white rounded-t-3xl">
@@ -414,7 +565,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
               <View className="border border-gray-100 rounded-2xl mt-1.5 bg-white overflow-hidden shadow-sm shadow-gray-200">
                 {stages.data.map((stage: any, idx: number) => (
                   <TouchableOpacity
-                    key={stage.label}
+                    key={stage.AutoId}
                     onPress={() => {
                       if (regData.EnqFollowUpList.length > 1) {
                         setRegData((prev) => ({ ...prev, EnqFollowUpList: [prev.EnqFollowUpList[0]] }));
@@ -453,6 +604,54 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
               </View>
             )}
 
+            {regData.DirectSalesDetailsList.length > 0 ? <View className="bg-white rounded-3xl border border-gray-100 overflow-hidden mb-2 mt-4 shadow-sm">
+              <View className="px-5 pt-4 pb-3 border-b border-indigo-200/75">
+                <Text className="text-gray-900 text-base font-extrabold tracking-tight">Particulars</Text>
+              </View>
+
+              {regData.DirectSalesDetailsList.map((item, index) => (
+                <View
+                  key={index}
+                  style={{
+                    borderBottomWidth: index < regData.DirectSalesDetailsList.length - 1 ? 1 : 0,
+                    borderBottomColor: "#f3f4f6",
+                  }}
+                  className="flex-row items-center px-5 py-3.5"
+                >
+                  <Text className="flex-1 text-gray-700 text-sm font-semibold">{item.Description}</Text>
+
+                  <View style={{ borderColor: "#e5e7eb" }} className="flex-row items-center border-2 rounded-xl overflow-hidden bg-indigo-50/60">
+                    <View className="px-2.5 py-2 bg-indigo-50 border-r border-indigo-100">
+                      <IndianRupee size={13} color={ac} strokeWidth={2.5} />
+                    </View>
+                    <TextInput 
+                      value={item.SRate} 
+                      onChangeText={(text) => {
+                        setRegData((prev) => {
+                          const temp = [...prev.DirectSalesDetailsList];
+                          temp[index].SRate = text;
+                          return ({ ...prev, DirectSalesDetailsList: temp })
+                        })
+                      }}
+                      editable={regData.EnqFollowUpList[0].EnqStatusValue === "Registration"}
+                      keyboardType="numeric" 
+                      className="px-3 py-2 text-gray-800 text-sm font-bold text-right w-[72px]" 
+                    />
+                  </View>
+                </View>
+              ))}
+
+              <View className="flex-row items-center justify-between px-5 py-3.5 border-t border-indigo-200/75">
+                <Text className="text-indigo-600 text-xs font-extrabold tracking-widest uppercase">Total</Text>
+                <View className="flex-row items-center gap-1">
+                  <IndianRupee size={13} color={ac} strokeWidth={2.5} />
+                  <Text style={{ color: ac }} className="text-base font-extrabold">
+                    {total.toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+            </View> : null}
+
             <View className="flex-row items-center gap-1.5 mt-5 mb-2">
               <MessageSquare size={13} color={ac} strokeWidth={2} />
               <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">Today's Remarks</Text>
@@ -460,22 +659,22 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
             </View>
 
             <TextInput
-              value={remarks}
-              onChangeText={setRemarks}
+              value={regData.EnqFollowUpList[0].Remarks2}
+              onChangeText={(text) => handleChangeForArrayElement(0, "Remarks2", text)}
               placeholder="Write your notes here..."
               placeholderTextColor="#d1d5db"
               multiline
               numberOfLines={4}
               textAlignVertical="top"
               style={{
-                borderColor: remarks ? ac + "80" : "#e5e7eb",
+                borderColor: regData.EnqFollowUpList[0].Remarks2 ? ac + "80" : "#e5e7eb",
                 minHeight: 100,
                 lineHeight: 22,
               }}
               className="bg-gray-50 border-2 rounded-2xl px-4 py-3.5 text-gray-800 text-sm"
             />
-
-            {remarks.length > 0 && <Text className="text-gray-300 text-xs text-right mt-1.5 font-medium">{remarks.length} chars</Text>}
+            {regData.EnqFollowUpList[0].Remarks2.length > 0 && <Text className="text-gray-300 text-xs text-right mt-1.5 font-medium">{regData.EnqFollowUpList[0].Remarks2.length} chars</Text>}
+            {remarksError && <Text className='text-red-600'>This field is required</Text>}
           </View>
         </View>
       </View>
@@ -483,102 +682,83 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
       {/* Merger End ========================================================================================================== */}
 
       <View className="px-4 pt-5">
-        {regData.DirectSalesDetailsList.length > 0 ? <View className="bg-white rounded-3xl border border-gray-100 overflow-hidden mb-1 shadow-sm">
-          <View className="px-5 pt-4 pb-3 border-b border-indigo-200/75">
-            <Text className="text-gray-900 text-base font-extrabold tracking-tight">Particulars</Text>
-          </View>
-
-          {particulars.map((item, idx) => (
-            <View
-              key={item.id}
-              style={{
-                borderBottomWidth: idx < particulars.length - 1 ? 1 : 0,
-                borderBottomColor: "#f3f4f6",
-              }}
-              className="flex-row items-center px-5 py-3.5"
-            >
-              <Text className="flex-1 text-gray-700 text-sm font-semibold">{item.label}</Text>
-
-              <View style={{ borderColor: "#e5e7eb" }} className="flex-row items-center border-2 rounded-xl overflow-hidden bg-indigo-50/60">
-                <View className="px-2.5 py-2 bg-indigo-50 border-r border-indigo-100">
-                  <IndianRupee size={13} color={ac} strokeWidth={2.5} />
-                </View>
-                <TextInput value={item.amount} onChangeText={(v) => updateAmount(item.id, v.replace(/[^0-9.]/g, ""))} keyboardType="numeric" style={{ width: 72, textAlign: "right" }} className="px-3 py-2 text-gray-800 text-sm font-bold" />
-              </View>
-            </View>
-          ))}
-
-          <View className="flex-row items-center justify-between px-5 py-3.5 border-t border-indigo-200/75">
-            <Text className="text-indigo-600 text-xs font-extrabold tracking-widest uppercase">Total</Text>
-            <View className="flex-row items-center gap-1">
-              <IndianRupee size={13} color={ac} strokeWidth={2.5} />
-              <Text style={{ color: ac }} className="text-base font-extrabold">
-                {total.toLocaleString()}
-              </Text>
-            </View>
-          </View>
-        </View> : null}
-
-        <View className="mt-5">
-          <FieldLabel label="Todays Remarks" required />
-          <TextInput
-            value={remarks}
-            onChangeText={setRemarks}
-            placeholder="Enter remarks..."
-            placeholderTextColor="#d1d5db"
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-            style={{
-              borderColor: remarks ? ac + "80" : "#e5e7eb",
-              height: 80,
-              lineHeight: 22,
-            }}
-            className="bg-white border-2 rounded-2xl px-4 py-3.5 text-gray-800 text-sm"
-          />
-        </View>
-
-
         {regData.EnqFollowUpList.slice(1).map((row: any, index) => (
-          <>
+          <View key={index}>
             <SectionDivider label="Next Followup Details" />
             <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
                 <FieldLabel label="Date" required />
-                <TouchableOpacity activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-3.5 py-3">
-                  <Text className={`text-sm font-semibold ${date ? "text-gray-800" : "text-gray-300"}`}>{date || "Date"}</Text>
+                <TouchableOpacity onPress={() => setShowDateTimeArr(index, true, "showDate")} activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-3.5 py-3">
+                  <Text className={`text-sm font-semibold ${row.NextAppDateStr ? "text-gray-800" : "text-gray-400"}`}>{row.NextAppDateStr ? row.NextAppDateStr : "Date"}</Text>
                   <Calendar size={16} color={ac} strokeWidth={2} />
                 </TouchableOpacity>
-                {rowObjArr[index].showDateTime.showDate ? <DateTimePicker value={row.NextAppDateStr ? dayjs.utc(row.NextAppDateStr, "DD/MM/YYYY").toDate() : new Date()} mode="date" display="default" onChange={(e, d) => handleDateSelect({active: false, value: d})} minimumDate={new Date()} /> : null}
+                {rowObjArr[index].err.date && <Text className='text-red-600 text-xs'>This field is required</Text>}
+                {rowObjArr[index].showDateTime.showDate ? <DateTimePicker value={row.NextAppDateStr ? dayjs.utc(row.NextAppDateStr, "DD/MM/YYYY").toDate() : new Date()} mode="date" display="default" onChange={(e, date) => handleDateSelect(e, index + 1, date)} minimumDate={new Date()} /> : null}
               </View>
 
               <View className="flex-1">
                 <FieldLabel label="Time" />
-                <TouchableOpacity activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-3.5 py-3">
-                  <Text className="text-gray-800 text-sm font-semibold">{time}</Text>
+                <TouchableOpacity onPress={() => setShowDateTimeArr(index, true, "showTime")} activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-3.5 py-3">
+                  <Text className={`text-sm font-semibold ${row.NextAppTime ? "text-gray-800" : "text-gray-400"}`}>{row.NextAppTime ? row.NextAppTime : "Time"}</Text>
                   <Clock size={16} color={ac} strokeWidth={2} />
                 </TouchableOpacity>
+                {rowObjArr[index].showDateTime.showTime ? <DateTimePicker value={row.NextAppTime ? dayjs(row.NextAppTime, 'hh:mm A').toDate() : new Date()} mode="time" display="default" onChange={(e, time) => handleTimeSelect(e, index + 1, time)} /> : null}
               </View>
             </View>
 
             <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
                 <FieldLabel label="Dept." required />
-                <Dropdown options={DEPT_OPTIONS} selected={dept} onSelect={setDept} accentColor={ac} />
+                <Dropdown options={deptsArr} labelKey="Description" selectValue={row.DeptId} selectKey={'SubCode'} 
+                  onSelect={async (opt) => {
+                    handleChangeForArrayElement(index + 1, "DeptId", opt.SubCode);
+                    handleChangeForArrayElement(index + 1, "EnqStatus", 0);
+                    handleChangeForArrayElement(index + 1, "OpportunityId", 0);
+                    getFollowUpStage(opt.SubCode, index);
+                    handleChangeForArrayElement(index + 1, "RefToId", 0);
+                    getUserByDept(opt.SubCode, index);
+                  }} 
+                placeholder="Select Department" accentColor={ac} />
+                {rowObjArr[index].err.dept && <Text className='text-red-600 text-xs'>This field is required</Text>}
               </View>
               <View className="flex-1">
                 <FieldLabel label="Stage" required />
-                <Dropdown options={STAGE_OPTIONS} selected={stage} onSelect={setStage} accentColor={ac} />
+                <Dropdown options={rowObjArr[index].stageArr} labelKey="LinkDescription" selectValue={row.OpportunityId} selectKey={'AutoId'} onSelect={(opt) => handleChangeForArrayStage(index + 1, opt)} placeholder="Select Stage" accentColor={ac} />
+                {rowObjArr[index].err.stage && <Text className='text-red-600 text-xs'>This field is required</Text>}
               </View>
             </View>
 
-            <View className="mb-6">
+            <View className="mb-4">
               <FieldLabel label="Refer To" />
-              <Dropdown options={REFER_OPTIONS} selected={referTo} onSelect={(opt) => setReferTo(opt.value ? opt : null)} placeholder="Select User" accentColor={ac} />
+              <Dropdown options={rowObjArr[index].refToIdArr} labelKey="UserFullName" selectValue={row.RefToId} selectKey={'PartyCode'} onSelect={(opt) => handleChangeForArrayElement(index + 1, "RefToId", opt.PartyCode)} placeholder="Refer To" accentColor={ac} />
             </View>
-          </>
+
+            <View className="">
+              <FieldLabel label="Enter Remarks" required />
+              <TextInput
+                value={row.Remarks2}
+                onChangeText={(text) => handleChangeForArrayElement(index + 1, "Remarks2", text)}
+                placeholder="Enter remarks..."
+                placeholderTextColor="#d1d5db"
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                style={{
+                  borderColor: remarks ? ac + "80" : "#e5e7eb",
+                  height: 80,
+                  lineHeight: 22,
+                }}
+                className="bg-white border-2 rounded-2xl px-4 py-3.5 text-gray-800 text-sm"
+              />
+              {rowObjArr[index].err.remarks && <Text className='text-red-600 text-xs'>This field is required</Text>}
+            </View>
+          </View>
         ))}
 
+        {regData.EnqFollowUpList.length > 1 && regData.EnqFollowUpList[0].EnqStatusValue !== "ReSchedule" ? 
+        <TouchableOpacity onPress={createFieldFirst} activeOpacity={0.7} className="px-6 py-2.5 bg-rose-50 border-dashed border border-rose-500 ml-auto mt-2 !rounded-lg">
+          <Text className="text-xs text-rose-500 font-bold">+  ADD MORE</Text>
+        </TouchableOpacity> : null}
 
         <View className="flex-row gap-3 mt-6">
           <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="flex-1 py-4 rounded-2xl items-center justify-center bg-gray-100">
@@ -587,26 +767,20 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
 
           <TouchableOpacity
             onPress={handleSave}
-            disabled={!remarks.trim() || saved}
+            disabled={!selectedStage2.LinkDescription}
             activeOpacity={0.8}
             style={{
-              backgroundColor: !remarks.trim() ? ac + "50" : ac,
+              backgroundColor: !selectedStage2.LinkDescription ? ac + "50" : ac,
               shadowColor: ac,
               shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: remarks.trim() ? 0.35 : 0,
+              shadowOpacity: selectedStage2.LinkDescription ? 0.35 : 0,
               shadowRadius: 10,
-              elevation: remarks.trim() ? 6 : 0,
+              elevation: selectedStage2.LinkDescription ? 6 : 0,
             }}
             className="flex-[2] py-4 rounded-2xl items-center justify-center flex-row gap-2"
           >
-            {saved ? (
-              <Check size={18} color="#fff" strokeWidth={3} />
-            ) : (
-              <>
-                <Sparkles size={14} color="#fff" strokeWidth={2.5} />
-                <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text>
-              </>
-            )}
+            <Sparkles size={14} color="#fff" strokeWidth={2.5} />
+            <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text>
           </TouchableOpacity>
         </View>
 
@@ -621,7 +795,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
             shadowRadius: 12,
             elevation: 6,
           }}
-          className="py-4 rounded-2xl items-center justify-center flex-row gap-2"
+          className="py-4 rounded-2xl items-center justify-center flex-row gap-2 mt-6"
         >
           <Send size={15} color="#fff" strokeWidth={2.5} />
           <Text className="text-white text-sm font-bold tracking-wide">Submit Details</Text>

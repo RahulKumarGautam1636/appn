@@ -26,7 +26,7 @@ export default function MarketingSalesPage() {
   const [stages, setStages] = useState([]);
   const [selectedStage, setSelectedStage] = useState({});
   const [appointments, setAppointments] = useState({ loading: false, data: { PartyMasterList: [] }, err: { status: false, msg: "" } });
-  const [fromDate, setFromDate] = useState(new Date());             // '2026-03-07'
+  const [fromDate, setFromDate] = useState(new Date());             // '2026-02-14T18:30:00.000Z'
   const [fromDateActive, setFromDateActive] = useState(false);
   const [toDate, setToDate] = useState(new Date(fromDate));
   const [toDateActive, setToDateActive] = useState(false);
@@ -198,7 +198,7 @@ export default function MarketingSalesPage() {
 
   return (
     <View className="flex-1 bg-slate-200">
-      {true ? null : <><View className="bg-sky-900 px-5 pt-6 pb-6">
+      {false ? null : <><View className="bg-sky-900 px-5 pt-6 pb-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center gap-3">
             <Pressable className="w-9 h-9 rounded-xl bg-white/10 items-center justify-center">
@@ -324,6 +324,17 @@ const AppointmentCard = ({ appt }) => {
   const [openDetails, setOpenDetails] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   
+  const checkSalesItems = (item: any) => {
+    if (item.TranRefType === "ENQ") {
+      return item.EnqList
+    }
+    else if (item.TranRefType === "ORDER") {
+      return item.OrderList
+    }
+    return []
+  }
+
+  const salesItems = checkSalesItems(appt);
 
   return (
     <View className={`bg-white rounded-2xl border-t-[3px] p-4 shadow-sm`} style={{ borderColor: cardStyle.borderTop }} >
@@ -361,6 +372,25 @@ const AppointmentCard = ({ appt }) => {
           </Text>
         </View> */}
       </View>
+
+      {salesItems.map((item: any, index: number) => (
+        <View key={index + "key001"} className="bg-gray-50 px-4 py-3 border-t border-gray-100">
+          <View className="flex-row items-center justify-between">
+            <View className="flex-1">
+              {Boolean(item.ItemDesc) && (
+                <Text className="text-gray-700 text-sm font-medium">{item.ItemDesc}</Text>
+              )}
+              {Boolean(appt.PBankDesc) && (
+                <Text className="text-gray-500 text-xs mt-0.5">{appt.PBankDesc}</Text>
+              )}
+            </View>
+            {Boolean(item.Amount) && (
+              <Text className="text-green-700 font-bold text-sm">₹{item.Amount}</Text>
+            )}
+          </View>
+        </View>
+      ))}
+
       {appt.Remarks2 ? <View className={`rounded-lg p-3 mb-3 border`} style={{ borderColor: cardStyle.remarksBorder, backgroundColor: cardStyle.remarksBg, }}>
         <Text className="text-[10px] text-slate-900 font-medium uppercase mb-1">Remarks</Text>
         <Text className="text-sm text-slate-600">{appt.Remarks2}</Text>
@@ -448,7 +478,7 @@ const TD = ({ width, children }: { width: number; children: React.ReactNode }) =
 const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void }) => ( 
   
   <View className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="w-full">
+    <ScrollView horizontal showsHorizontalScrollIndicator contentContainerClassName='min-w-full'>
       <View className="w-full min-w-[34rem]">
         <View className="flex-row bg-gray-100 border-b border-gray-100">
           <TH label="Appt" width={COL.appt} />
@@ -462,8 +492,8 @@ const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void
         {data.map((table, index) => {
           
           return (
-            <>
-              {table?.items?.map((row, index) => {                
+            <React.Fragment key={index}>
+              {table?.items?.map((row, n) => {                
                 const nextAppDate = (new Date(row.NextAppDate).toDateString()).split(' ');       
                 const nextFollowupDate = (new Date(row.NextFollowupDate).toDateString()).split(' ');
                 const rowColor = cardColor[String(table.level)];
@@ -477,7 +507,7 @@ const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void
 
                 return (
                   // <View key={index} className={`flex-row ${ index < data?.items?.length - 1 ? "border-b border-gray-50" : "" }`} style={{ backgroundColor: index % 2 === 0 ? "#ffffff" : "#fafafa" }} >
-                  <View key={index} className={`flex-row ${ index < data?.items?.length - 1 ? "border-b border-gray-50" : "" }`} 
+                  <View key={n} className={`flex-row ${ index < data?.items?.length - 1 ? "border-b border-gray-50" : "" }`} 
                     style={{ 
                       // backgroundColor: rowStyle.bgClr, 
                       borderColor: rowStyle.borderClr 
@@ -541,7 +571,7 @@ const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void
                   </View>
                 ) 
                 })}  
-            </>
+            </React.Fragment>
           )
         })}
       </View>
@@ -571,8 +601,6 @@ const ViewToggle = ({ view, onChange }: any) => (
 // ─── Root Screen ─────────────────────────────────────────────────────────────
 
 export function AppointmentActivity({ apptn }: any) {
-  const [activeTab, setActiveTab] = useState("all");
-  const [view, setView] = useState<"card" | "table">("card");
   const handleEdit = (id: number) => console.log("Edit", id);
   const [loading, setLoading] = useState(false);
 
@@ -633,7 +661,7 @@ export function AppointmentActivity({ apptn }: any) {
   const totalEntries = (formattedData.map((i: any) => i.items)).flat(); 
 
   return (
-    <ScrollView contentContainerClassName="p-4 min-h-[30rem] bg-white" showsVerticalScrollIndicator={false} >
+    <ScrollView contentContainerClassName="p-4 min-h-[30rem] bg-white" showsVerticalScrollIndicator={false}>
       <View className="flex-row items-center mb-5 gap-4">
           <View>
           <Text className="text-lg font-bold text-gray-900">Activity Details</Text>
