@@ -1,13 +1,12 @@
-import { Feather, FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link, useRouter } from 'expo-router';
+import { Feather, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Card_3, Card_4, CompCard, mmDDyyyyDate, MyModal } from '@/src/components';
-import { useDispatch, useSelector } from 'react-redux';
+import { Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { MyModal } from '@/src/components';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL, BC_ROY, defaultId, hasAccess, myColors } from '@/src/constants';
 import { filterUnique, getFrom, GridLoader, groupBy, ListLoader, NoContent, sumByKey, useFetch, uType } from '@/src/components/utils';
-import { setModal } from '@/src/store/slices/slices';
 import { CalendarDays, ChevronRight, FlaskConical, Stethoscope, Users, ChevronDown, ChevronUp } from 'lucide-react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 

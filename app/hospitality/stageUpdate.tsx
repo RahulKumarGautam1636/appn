@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView, Platform, Alert, FlatList } from "react-native";
 import { X, ChevronDown, Phone, Layers, MessageSquare, Check, Sparkles, Calendar, Clock, IndianRupee, Send } from "lucide-react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BASE_URL } from "@/src/constants";
-import { CustomDropdown, getFrom, NoContent, useFetch } from "@/src/components/utils";
+import { CustomDropdown, getFrom, NoContent, useFetch, wait } from "@/src/components/utils";
 import dayjs from "@/src/components/utils/dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
+import { setModal } from "@/src/store/slices/slices";
 
 function SectionDivider({ label }: { label: string }) {
   return (
@@ -46,6 +47,7 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
   const [stages, setStages] = useState({ loading: false, data: [], err: { status: false, msg: "" } })
   const [rowObjArr, setRowObjArr] = useState([]);
   const [remarksError, setRemarksError] = useState(false);
+  const dispatch = useDispatch();
 
   const checkSalesItems: (patient: any) => any[] = (patient) => {
     if (patient.TranRefType === "ENQ") {
@@ -373,9 +375,10 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
     } else {
       console.log(`${BASE_URL}/api/Appointment/UpdateStage`, JSON.stringify(regData, null, 2));
       console.log(rowObjArr);  
-      // setLoadingbtn(true);
+      dispatch(setModal({ name: 'LOADING', state: true }));
       try {
-        const res = await axios.post(`${BASE_URL}/api/Appointment/UpdateStage`, regData);
+        const res = { data: ["Y"] }  // await axios.post(`${BASE_URL}/api/Appointment/UpdateStage`, regData);
+        await wait(3000);
         console.log(res.data);
         if (res.data[0] === "Y") {
           Alert.alert("Info", "Stage Change Successfully");
@@ -385,11 +388,11 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
         } else {
           Alert.alert("Error !", "Somenthing went wrong");
         }
-        // setLoadingbtn(false);
+        dispatch(setModal({ name: 'LOADING', state: false }));
         // setVisible(false);
       } catch (err) {
         console.log(err);
-        // setLoadingbtn(false);
+        dispatch(setModal({ name: 'LOADING', state: false }));
         Alert.alert("Error !", "Somenthing went wrong");
       }
     }

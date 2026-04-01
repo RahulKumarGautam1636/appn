@@ -1,7 +1,3 @@
-import { Card_2, Card_3 } from "@/src/components";
-import { getFrom, ListLoader, NoContent } from "@/src/components/utils";
-import { BASE_URL } from "@/src/constants";
-import { setModal } from "@/src/store/slices/slices";
 import { RootState } from "@/src/store/store";
 import { Feather, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router, useGlobalSearchParams, useLocalSearchParams, useRouter } from "expo-router";

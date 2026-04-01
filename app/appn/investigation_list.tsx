@@ -285,12 +285,11 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Card_3, Card_4, CompCard } from '@/src/components';
+import { Card_3, Card_4 } from '@/src/components/cards';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { BASE_URL, defaultId, myColors } from '@/src/constants';
 import { getFrom, ListLoader, NoContent } from '@/src/components/utils';
-import { setModal } from '@/src/store/slices/slices';
 
 
 const TestList = ({ memberId }: any) => {

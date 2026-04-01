@@ -9,7 +9,7 @@ import { Feather, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/src/store/store';
 import { PHARMACY, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from '@/src/constants';
-import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser } from '@/src/store/slices/slices';
+// import { dumpCart, resetSiteProducts, setCompCode, setLocation, setLogin, setModal, setPrescription, setUser } from '@/src/store/slices/slices';
 import { switchSegment } from '@/src/components/utils';
 import { FullScreenLoading } from '@/src/components';
 import { AppError } from '@/src/components/update';
