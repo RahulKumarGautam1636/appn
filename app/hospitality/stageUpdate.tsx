@@ -1,150 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView, Platform } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView, Platform, Alert, FlatList } from "react-native";
 import { X, ChevronDown, Phone, Layers, MessageSquare, Check, Sparkles, Calendar, Clock, IndianRupee, Send } from "lucide-react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BASE_URL } from "@/src/constants";
-import { getFrom, useFetch } from "@/src/components/utils";
+import { CustomDropdown, getFrom, NoContent, useFetch } from "@/src/components/utils";
 import dayjs from "@/src/components/utils/dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 
-
-const STAGES = [
-  { label: "Registration", color: "#6366f1" },
-  { label: "Verification", color: "#8b5cf6" },
-  { label: "Onboarding",   color: "#a78bfa" },
-  { label: "Active",       color: "#10b981" },
-  { label: "Follow-up",    color: "#f59e0b" },
-  { label: "Closed",       color: "#ef4444" },
-];
-
-// ── Types ──────────────────────────────────────────────
-interface Particular {
-  id: string;
-  label: string;
-  amount: string;
-}
-
-interface DropdownOption {
-  label: string;
-  value: string;
-}
-
-// ── Static data ────────────────────────────────────────
-const INITIAL_PARTICULARS: Particular[] = [
-  { id: "1", label: "HIV I & II",  amount: "400" },
-  { id: "2", label: "USG chest",   amount: "500" },
-  { id: "3", label: "USG WALL",    amount: "600" },
-];
-
-const DEPT_OPTIONS: DropdownOption[] = [
-  { label: "INVESTIGATION", value: "investigation" },
-  { label: "CONSULTATION",  value: "consultation"  },
-  { label: "RADIOLOGY",     value: "radiology"     },
-  { label: "PATHOLOGY",     value: "pathology"     },
-];
-
-const STAGE_OPTIONS: DropdownOption[] = [
-  { label: "Lab Test Booking", value: "lab_test"    },
-  { label: "Registration",     value: "registration"},
-  { label: "Verification",     value: "verification"},
-  { label: "Active",           value: "active"      },
-  { label: "Follow-up",        value: "followup"    },
-  { label: "Closed",           value: "closed"      },
-];
-
-const REFER_OPTIONS: DropdownOption[] = [
-  { label: "Select User",  value: "Test"         },
-  { label: "Dr. Sharma",   value: "sharma"   },
-  { label: "Dr. Mehta",    value: "mehta"    },
-  { label: "Dr. Verma",    value: "verma"    },
-];
-
-// ── Reusable Dropdown ──────────────────────────────────
-function Dropdown({
-  options,
-  selectValue,
-  selectKey,
-  labelKey,
-  onSelect,
-  placeholder = "Select",
-  accentColor = "#6366f1",
-}: {
-  options: any;
-  selectValue: any | null;
-  selectKey: string;
-  labelKey: string;
-  onSelect: (opt: any) => void;
-  placeholder?: string;
-  accentColor?: string;
-}) {
-  const selected = options.find(((i: any) => i[selectKey] === selectValue)) || {};  
-  const [open, setOpen] = useState(false);
-  const label = selected[labelKey] ? selected[labelKey] : placeholder;
-  
-  return (
-    <View className="relative">
-      <TouchableOpacity
-        onPress={() => setOpen(!open)}
-        activeOpacity={0.75}
-        style={{ borderColor: open ? accentColor : "#e5e7eb" }}
-        className="flex-row items-center justify-between bg-gray-50 border-2 rounded-2xl px-3.5 py-3"
-      >
-        <Text
-          style={{ color: selected ? "#1f2937" : "#9ca3af" }}
-          className="text-sm font-semibold flex-1 mr-1"
-          numberOfLines={1}
-        >
-          {label}
-        </Text>
-        <ChevronDown
-          size={15}
-          color={open ? accentColor : "#9ca3af"}
-          strokeWidth={2.5}
-          style={{ transform: [{ rotate: open ? "180deg" : "0deg" }] }}
-        />
-      </TouchableOpacity>
-
-      {open && (
-        <View
-          className="absolute left-0 right-0 bg-white border border-gray-100 rounded-2xl overflow-hidden z-50"
-          style={{ top: "105%", shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 12, elevation: 8 }}
-        >
-          {options.map((opt: any, idx: number) => {
-            const isSelected = selected[selectKey] === opt[selectKey];
-            return (
-              <TouchableOpacity
-                key={opt[selectKey]}
-                onPress={() => { onSelect(opt); setOpen(false); }}
-                activeOpacity={0.7}
-                style={{
-                  backgroundColor: isSelected ? accentColor + "12" : "transparent",
-                  borderBottomWidth: idx < options.length - 1 ? 1 : 0,
-                  borderBottomColor: "#f3f4f6",
-                }}
-                className="flex-row items-center justify-between px-4 py-3"
-              >
-                <Text
-                  style={{ color: isSelected ? accentColor : "#6b7280" }}
-                  className={`text-sm ${isSelected ? "font-semibold" : "font-normal"}`}
-                >
-                  {opt[labelKey]}
-                </Text>
-                {isSelected && <Check size={13} color={accentColor} strokeWidth={2.5} />}
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      )}
-    </View>
-  );
-}
-
-// ── Section Divider ────────────────────────────────────
 function SectionDivider({ label }: { label: string }) {
   return (
-    <View className="flex-row items-center gap-3 mb-7 mt-1">
+    <View className="flex-row items-center gap-3 mb-5 mt-1">
       <View className="flex-1 h-px bg-indigo-200" />
       <Text className="text-indigo-500 text-sm font-extrabold tracking-widest uppercase px-1">
         {label}
@@ -154,7 +21,6 @@ function SectionDivider({ label }: { label: string }) {
   );
 }
 
-// ── Field label ────────────────────────────────────────
 function FieldLabel({ label, required }: { label: string; required?: boolean }) {
   return (
     <View className="flex-row items-center mb-1.5">
@@ -164,46 +30,14 @@ function FieldLabel({ label, required }: { label: string; required?: boolean }) 
   );
 }
 
-export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any) {
-  const [particulars, setParticulars]     = useState<Particular[]>(INITIAL_PARTICULARS);
-  const [date, setDate]                   = useState("");
-  const [time, setTime]                   = useState("12:25 PM");
-  const [dept, setDept]                   = useState<DropdownOption>(DEPT_OPTIONS[0]);
-  const [stage, setStage]                 = useState<DropdownOption>(STAGE_OPTIONS[0]);
-  const [referTo, setReferTo]             = useState<DropdownOption>(REFER_OPTIONS[0]);
-
-  const updateAmount = (id: string, value: string) => {
-    setParticulars((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, amount: value } : p))
-    );
-  };
-
-  const total = particulars.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
-
-  const handleSubmit = () => {
-    onSubmit?.({ particulars, remarks, date, time, dept, stage, referTo });
-  };
+export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
 
   const ac = "#6366f1"; // primary accent
 
-  // MERGE START ===============================================================================================================================
+  // MERGE START --------------------------------------------------------------------------------------
 
-  const [selectedStage, setSelectedStage] = useState(STAGES[0]);
   const [remarks, setRemarks]           = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [saved, setSaved]               = useState(false);
-
-  const handleSave = () => {
-    if (!remarks.trim()) return;
-    setSaved(true);
-    setTimeout(() => {
-      onSave(selectedStage.label, remarks);
-      onClose();
-      setRemarks("");
-      setSaved(false);
-    }, 600);
-  };
-
   const initials = appt.Name.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase();
 
   // NEW WORK --------------------------------------------------------------------------------------
@@ -330,9 +164,9 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
       EnqStatus: 0,
       Remarks2: "",
       NextAppDateStr: "",
-      NextAppTime: '', // dayjs().format("hh:mm A"),
+      NextAppTime: dayjs().format("hh:mm A"),
       NextFollowupDateStr: "",
-      NextFollowupTime: '', // dayjs().format("hh:mm A"),
+      NextFollowupTime: dayjs().format("hh:mm A"),
       RefId: appt.EnqId,
       PartyCode: appt.PartyCode,
       InsBy: user?.UserId,
@@ -350,9 +184,6 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
     });
     setRowObjArr((prev) => [...prev, { showDateTime: { showDate: false, showTime: false }, err: { date: false, dept: false, stage: false, remarks: false }, stageArr: [], refToIdArr: [], isStageArrLoaded: false, isRefToIdArrLoaded: false }]);
   };
-
-  console.log(regData);
-  console.log(rowObjArr);  
   
   const handleDateSelect = (event: any, index: number, selected?: Date | undefined) => {
 
@@ -513,6 +344,57 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
     return flag
   }
 
+  const hasSimilarRow = (): boolean => {
+    const mySet = new Set();
+    for (const i of regData.EnqFollowUpList.slice(1)) {
+      const str = JSON.stringify({
+        EnqStatus: i.EnqStatus,
+        OpportunityId: i.OpportunityId,
+        DeptId: i.DeptId,
+        CallerId: i.CallerId,
+      });
+      if (mySet.has(str)) {
+        return true;
+      } else {
+        mySet.add(str);
+      }
+    }
+    return false;
+  };
+
+  const handleSave = async () => {
+    const validateObj = validate();
+    if (!regData.EnqFollowUpList[0].EnqStatus) {
+      Alert.alert("Info !", "Please Change the Stage");
+    } else if (validateObj.flag) {
+      Alert.alert("info!", validateObj.label);
+    } else if (hasSimilarRow()) {
+      Alert.alert("info", "All followup must be unique");
+    } else {
+      console.log(`${BASE_URL}/api/Appointment/UpdateStage`, JSON.stringify(regData, null, 2));
+      console.log(rowObjArr);  
+      // setLoadingbtn(true);
+      try {
+        const res = await axios.post(`${BASE_URL}/api/Appointment/UpdateStage`, regData);
+        console.log(res.data);
+        if (res.data[0] === "Y") {
+          Alert.alert("Info", "Stage Change Successfully");
+          // setPatient((prev) => ({ ...prev, isLoading: true }));
+          // mutate();
+          setRefresh(Math.random())
+        } else {
+          Alert.alert("Error !", "Somenthing went wrong");
+        }
+        // setLoadingbtn(false);
+        // setVisible(false);
+      } catch (err) {
+        console.log(err);
+        // setLoadingbtn(false);
+        Alert.alert("Error !", "Somenthing went wrong");
+      }
+    }
+  };
+
   return (
     <ScrollView contentContainerClassName="min-h-[30rem] bg-slate-100 pb-4" showsVerticalScrollIndicator={false}>      
       <View className="flex-1 bg-black/40 justify-end">
@@ -582,7 +464,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
                     activeOpacity={0.7}
                     style={{
                       backgroundColor: selectedStage2.AutoId === stage.AutoId ? stage.color + "12" : "transparent",
-                      borderBottomWidth: idx < STAGES.length - 1 ? 1 : 0,
+                      borderBottomWidth: idx < stages.length - 1 ? 1 : 0,
                       borderBottomColor: "#f3f4f6",
                     }}
                     className="flex-row items-center justify-between px-4 py-3.5"
@@ -646,7 +528,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
                 <View className="flex-row items-center gap-1">
                   <IndianRupee size={13} color={ac} strokeWidth={2.5} />
                   <Text style={{ color: ac }} className="text-base font-extrabold">
-                    {total.toLocaleString()}
+                    589.00
                   </Text>
                 </View>
               </View>
@@ -683,7 +565,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
 
       <View className="px-4 pt-5">
         {regData.EnqFollowUpList.slice(1).map((row: any, index) => (
-          <View key={index}>
+          <View key={index} className={`${index === 0 ? '' : 'mt-4'}`}>
             <SectionDivider label="Next Followup Details" />
             <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
@@ -709,7 +591,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
             <View className="flex-row gap-3 mb-4">
               <View className="flex-1">
                 <FieldLabel label="Dept." required />
-                <Dropdown options={deptsArr} labelKey="Description" selectValue={row.DeptId} selectKey={'SubCode'} 
+                <CustomDropdown options={deptsArr} labelKey="Description" selectValue={row.DeptId} selectKey={'SubCode'} 
                   onSelect={async (opt) => {
                     handleChangeForArrayElement(index + 1, "DeptId", opt.SubCode);
                     handleChangeForArrayElement(index + 1, "EnqStatus", 0);
@@ -723,14 +605,14 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
               </View>
               <View className="flex-1">
                 <FieldLabel label="Stage" required />
-                <Dropdown options={rowObjArr[index].stageArr} labelKey="LinkDescription" selectValue={row.OpportunityId} selectKey={'AutoId'} onSelect={(opt) => handleChangeForArrayStage(index + 1, opt)} placeholder="Select Stage" accentColor={ac} />
+                <CustomDropdown options={rowObjArr[index].stageArr} labelKey="LinkDescription" selectValue={row.OpportunityId} selectKey={'AutoId'} onSelect={(opt) => handleChangeForArrayStage(index + 1, opt)} placeholder="Select Stage" accentColor={ac} />
                 {rowObjArr[index].err.stage && <Text className='text-red-600 text-xs'>This field is required</Text>}
               </View>
             </View>
 
             <View className="mb-4">
               <FieldLabel label="Refer To" />
-              <Dropdown options={rowObjArr[index].refToIdArr} labelKey="UserFullName" selectValue={row.RefToId} selectKey={'PartyCode'} onSelect={(opt) => handleChangeForArrayElement(index + 1, "RefToId", opt.PartyCode)} placeholder="Refer To" accentColor={ac} />
+              <CustomDropdown float={false} options={rowObjArr[index].refToIdArr} labelKey="UserFullName" selectValue={row.RefToId} selectKey={'PartyCode'} onSelect={(opt) => handleChangeForArrayElement(index + 1, "RefToId", opt.PartyCode)} placeholder="Refer To" accentColor={ac} />
             </View>
 
             <View className="">
@@ -761,7 +643,7 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
         </TouchableOpacity> : null}
 
         <View className="flex-row gap-3 mt-6">
-          <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="flex-1 py-4 rounded-2xl items-center justify-center bg-gray-100">
+          <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="flex-1 py-4 rounded-2xl items-center justify-center bg-gray-200 shadow-sm">
             <Text className="text-gray-500 text-sm font-semibold">Cancel</Text>
           </TouchableOpacity>
 
@@ -771,13 +653,13 @@ export default function ParticularsForm({ appt, onSubmit, onClose, onSave }: any
             activeOpacity={0.8}
             style={{
               backgroundColor: !selectedStage2.LinkDescription ? ac + "50" : ac,
-              shadowColor: ac,
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: selectedStage2.LinkDescription ? 0.35 : 0,
-              shadowRadius: 10,
-              elevation: selectedStage2.LinkDescription ? 6 : 0,
+              // shadowColor: ac,
+              // shadowOffset: { width: 0, height: 4 },
+              // shadowOpacity: selectedStage2.LinkDescription ? 0.35 : 0,
+              // shadowRadius: 10,
+              // elevation: selectedStage2.LinkDescription ? 6 : 0,
             }}
-            className="flex-[2] py-4 rounded-2xl items-center justify-center flex-row gap-2"
+            className="flex-[2] py-4 rounded-2xl items-center justify-center flex-row gap-2 shadow-sm"
           >
             <Sparkles size={14} color="#fff" strokeWidth={2.5} />
             <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text>

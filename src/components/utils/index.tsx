@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "tailwindcss/colors";
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { FileText, Soup } from "lucide-react-native";
+import { Check, ChevronDown, FileText, Soup } from "lucide-react-native";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { BASE_URL, initReg, isLP, TAKEHOME_AGRO, TAKEHOME_ELECTRONICS, TAKEHOME_GARMENTS, TAKEHOME_PHARMA, TAKEHOME_SURGICAL } from "@/src/constants";
@@ -894,6 +894,100 @@ export default function MyDropdown({ offsetY=0, offsetX=0, maxHeight=200, isOpen
   );
 }
 
+export function CustomDropdown({
+  options,
+  selectValue,
+  selectKey,
+  labelKey,
+  onSelect,
+  placeholder = "Select",
+  accentColor = "#6366f1",
+  float = true,
+  containerClass,
+}: {
+  options: any;
+  selectValue: any | null;
+  selectKey: string;
+  labelKey: string;
+  onSelect: (opt: any) => void;
+  placeholder?: string;
+  accentColor?: string;
+  float?: boolean;
+  containerClass?: string;
+}) {
+  // options = options.slice(0, 100);
+  const selected = options.find(((i: any) => i[selectKey] === selectValue)) || {};  
+  const [open, setOpen] = useState(false);
+  const label = selected[labelKey] ? selected[labelKey] : placeholder;
+
+  const OptionItem = ({ opt, idx }: any) => {
+    const isSelected = selected[selectKey] === opt[selectKey];  
+    return (
+      <TouchableOpacity
+        // key={idx}       // opt[selectKey]
+        onPress={() => { onSelect(opt); setOpen(false); }}
+        activeOpacity={0.7}
+        style={{
+          backgroundColor: isSelected ? accentColor + "12" : "transparent",
+          borderBottomWidth: idx < options.length - 1 ? 1 : 0,
+          borderBottomColor: "#f3f4f6",
+        }}
+        className="flex-row items-center justify-between px-4 py-3"
+      >
+        <Text
+          style={{ color: isSelected ? accentColor : "#6b7280" }}
+          className={`text-sm ${isSelected ? "font-semibold" : "font-normal"}`}
+        >
+          {opt[labelKey]}
+        </Text>
+        {isSelected && <Check size={13} color={accentColor} strokeWidth={2.5} />}
+      </TouchableOpacity>
+    );
+  }
+  return (
+    <View className="relative">
+      <TouchableOpacity
+        onPress={() => setOpen(!open)}
+        activeOpacity={0.75}
+        style={{ borderColor: open ? accentColor : "#e5e7eb" }}
+        className="flex-row items-center justify-between bg-gray-50 border-2 rounded-2xl px-3.5 py-3"
+      >
+        <Text
+          style={{ color: selected ? "#1f2937" : "#9ca3af" }}
+          className="text-sm font-semibold flex-1 mr-1"
+          numberOfLines={1}
+        >
+          {label}
+        </Text>
+        <ChevronDown
+          size={15}
+          color={open ? accentColor : "#9ca3af"}
+          strokeWidth={2.5}
+          style={{ transform: [{ rotate: open ? "180deg" : "0deg" }] }}
+        />
+      </TouchableOpacity>
+
+      {open && (
+        <>
+        <View className={`bg-white border border-gray-100 rounded-2xl overflow-hidden z-50 ${float ? 'absolute left-0 right-0 top-[105%]' : ''} ${containerClass}`} style={{ shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 12, elevation: 8 }}>
+          {/* <ScrollView showsVerticalScrollIndicator> */}
+            {options.map((opt: any, idx: number) => (<OptionItem opt={opt} idx={idx} key={idx} />))}
+          {/* </ScrollView> */}
+        </View>
+        {/* <FlatList
+          data={options}
+          keyExtractor={(item, index) => index + "_option"}
+          showsVerticalScrollIndicator={false}
+          contentContainerClassName="absolute left-0 right-0 bg-red-500 border border-gray-100 rounded-2xl overflow-hidden z-50"
+          contentContainerStyle={{ top: "105%", shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 12, elevation: 8 }}
+          renderItem={({item, index}: any) => (<OptionItem opt={item} idx={index} />)}
+          ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
+        /> */}
+        </>
+      )}
+    </View>
+  );
+}
 
 export const invalidDate = '0001-01-01T00:00:00'
 

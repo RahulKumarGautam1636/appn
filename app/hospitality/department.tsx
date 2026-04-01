@@ -39,6 +39,7 @@ export default function MarketingSalesPage() {
   const [reportType, setReportType] = useState("CURRENTSTATUS");            // set reportType === 'SEARCH' and selectedFilterUserId === 0 when searching in input box.
   const [query, setQuery] = useState('');
   const [debounceQuery, setDebounceQuery] = useState('');
+  const [refresh, setRefresh] = useState(1);
 
   const makeForcedRerender = async () => {
     setForceRerender(true);
@@ -52,7 +53,7 @@ export default function MarketingSalesPage() {
     let controller = new AbortController();
     getAppointments(selectedDepartment, user.UserId, selectedCompany, fromDate, toDate, selectedFilterUserId, reportType, query, controller.signal);
     return () => controller.abort();
-  }, [user.UserId, selectedCompany.CompanyId, selectedDepartment.DeptCategory, fromDate, toDate, selectedFilterUserId, reportType, query]);
+  }, [user.UserId, selectedCompany.CompanyId, selectedDepartment.DeptCategory, fromDate, toDate, selectedFilterUserId, reportType, query, refresh]);
 
   const getAppointments = async (dept, userId, company, from, to, filterUserId, currReportType, serchString, signal) => {
     console.log(`${BASE_URL}/api/Appointment/GetFollowUpDetails?Category=${dept.DeptCategory}&ProcedureId=${dept.DeptId}&CID=${company.CompanyId}&LOCID=${company.LocationId}&FromDateStr=${new Date(from).toLocaleDateString('en-TT')}&ToDateStr=${new Date(to).toLocaleDateString('en-TT')}&UserId=${userId}&RootId=0&LevelNo=0&SearchString=${serchString}&ReportType=${currReportType}&SrcUserId=${filterUserId}`);    
@@ -132,7 +133,7 @@ export default function MarketingSalesPage() {
           keyExtractor={(item, index) => index + "_patient"}
           showsVerticalScrollIndicator={false}
           contentContainerClassName="px-3 py-3 gap-3"
-          renderItem={({item}: any) => (<AppointmentCard appt={item} />)}
+          renderItem={({item}: any) => (<AppointmentCard appt={item} setRefresh={setRefresh} />)}
           ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
         />
       )
@@ -295,23 +296,7 @@ export default function MarketingSalesPage() {
   );
 }
 
-const statusConfig = {
-  reschedule: {
-    label: "Reschedule",
-    bg: "bg-orange-50",
-    text: "text-orange-700",
-    border: "border-orange-200",
-  },
-  pending: {
-    label: "Pending",
-    bg: "bg-yellow-50",
-    text: "text-yellow-700",
-    border: "border-yellow-200",
-  },
-};
-
-const AppointmentCard = ({ appt }) => {
-  const sc = statusConfig['reschedule'];
+const AppointmentCard = ({ appt, setRefresh }: any) => {
   const stageColor = cardColor[String(appt.LevelId)];
   const cardStyle = {
     borderTop: colors[stageColor][500],
@@ -425,7 +410,7 @@ const AppointmentCard = ({ appt }) => {
         </Pressable>
       </View>
       <MyModal modalActive={openDetails} containerClass='mt-auto' onClose={() => setOpenDetails(false)} child={<AppointmentActivity apptn={appt} />} />
-      <MyModal modalActive={updateModal} onClose={() => setUpdateModal(false)} child={<UpdateStage appt={appt} />} />
+      <MyModal modalActive={updateModal} onClose={() => setUpdateModal(false)} child={<UpdateStage appt={appt} setRefresh={setRefresh} />} />
     </View>
   );
 }
@@ -490,13 +475,13 @@ const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void
         </View>
 
         {data.map((table, index) => {
-          
+          console.log(table);          
           return (
             <React.Fragment key={index}>
               {table?.items?.map((row, n) => {                
                 const nextAppDate = (new Date(row.NextAppDate).toDateString()).split(' ');       
                 const nextFollowupDate = (new Date(row.NextFollowupDate).toDateString()).split(' ');
-                const rowColor = cardColor[String(table.level)];
+                const rowColor = cardColor[String(row.LevelId)];
                 const rowStyle = {
                   borderClr: colors[rowColor][200],
                   bgClr: colors[rowColor][50],
