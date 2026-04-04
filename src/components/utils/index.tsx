@@ -1607,3 +1607,12 @@ export const getRandomInt = (min: number, max: number): number => {
 };
 
 // GET COLOR ENDS
+
+export function FieldLabel({ label, required }: { label: string; required?: boolean }) {
+  return (
+    <View className="flex-row items-center mb-1.5">
+      <Text className="text-gray-500 text-xs font-bold tracking-wide">{label}</Text>
+      {required && <Text className="text-red-400 ml-0.5 text-xs font-bold">*</Text>}
+    </View>
+  );
+}

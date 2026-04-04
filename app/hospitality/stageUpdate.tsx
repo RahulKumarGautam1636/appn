@@ -4,7 +4,7 @@ import { X, ChevronDown, Phone, Layers, MessageSquare, Check, Sparkles, Calendar
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BASE_URL } from "@/src/constants";
-import { CustomDropdown, getFrom, NoContent, useFetch, wait } from "@/src/components/utils";
+import { CustomDropdown, FieldLabel, getFrom, NoContent, useFetch, wait } from "@/src/components/utils";
 import dayjs from "@/src/components/utils/dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
@@ -18,15 +18,6 @@ function SectionDivider({ label }: { label: string }) {
         {label}
       </Text>
       <View className="flex-1 h-px bg-indigo-200" />
-    </View>
-  );
-}
-
-function FieldLabel({ label, required }: { label: string; required?: boolean }) {
-  return (
-    <View className="flex-row items-center mb-1.5">
-      <Text className="text-gray-500 text-xs font-bold tracking-wide">{label}</Text>
-      {required && <Text className="text-red-400 ml-0.5 text-xs font-bold">*</Text>}
     </View>
   );
 }
