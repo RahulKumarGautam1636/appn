@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, FlatList, Alert } from "react-native";
 import { ArrowLeft, Bell, Calendar, Phone, MapPin, Pencil, ChevronLeft, ChevronRight, Search, Minus, Plus, CreditCard, Check, ArrowLeftRight, Shield, Gift, MessageCircle, FileText, Funnel, X, Layers, ChevronDown, Sparkles, MessageSquare, } from "lucide-react-native";
 import colors from "tailwindcss/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
-import { mmDDyyyyDate, MyModal, sortByCount } from "@/src/components";
+import ButtonPrimary, { mmDDyyyyDate, MyModal, sortByCount, SvgLoader } from "@/src/components";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BASE_URL, myColors } from "@/src/constants";
 import { FieldLabel, getFrom, getMonthDate, getRandomColor, GridLoader, groupBy, NoContent } from "@/src/components/utils";
@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native";
 import { CalendarDays, Clock, User, CheckCircle2, CalendarClock, StickyNote, LayoutGrid, Table2 } from "lucide-react-native";
 import UpdateStage from "./stageUpdate";
 import dayjs from "@/src/components/utils/dayjs";
+import axios from "axios";
 
 
 const cardColor = { '1': 'rose', '2': 'yellow', '3': 'green' };
@@ -389,9 +390,9 @@ const AppointmentCard = ({ appt, setRefresh }: any) => {
         </Text>
       </View>
       <View className="flex-row items-center gap-2">
-        <View className="flex-1 bg-slate-100 rounded-lg px-3 py-2 flex-row items-center gap-3">
-          <Text className="font-bold">{appt.DoctName[0]}</Text>
-          <Text className="text-sm font-semibold text-slate-600">{appt.DoctName}</Text>
+        <View className="flex-1 bg-slate-100 rounded-lg px-3 py-[0.42rem] flex-row items-center gap-3">
+          <Text className="font-bold text-sm">{appt.DoctName[0]}</Text>
+          <Text className="text-[0.83rem] font-semibold text-slate-600">{appt.DoctName}</Text>
         </View>
         {appt.IsCanceled === 'Y' ? 
           <Pressable className="px-4 py-2 rounded-lg" style={{backgroundColor: cardStyle.borderTop}}>
@@ -461,7 +462,7 @@ const TD = ({ width, children }: { width: number; children: React.ReactNode }) =
   </View>
 );
 
-const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void }) => {
+const TableView = ({ data, onEdit, setRefreshDetails }: any) => {
   const [editOpen, setEditOpen] = useState({ status: false, selectedRow: {} });
   
   return ( 
@@ -549,7 +550,7 @@ const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void
                   </TD>
 
                   <TD width={COL.action}>
-                    <TouchableOpacity onPress={() => setEditOpen({status: true, selectedRow: row})} className="p-2 rounded-xl bg-gray-50 active:bg-gray-100 self-center" >
+                    <TouchableOpacity onPress={() => setEditOpen({status: true, selectedRow: row})} className="p-2 rounded-xl bg-gray-100 active:bg-gray-100 self-center" >
                       <Pencil size={14} color="#6B7280" /> 
                     </TouchableOpacity>
                   </TD>
@@ -559,7 +560,7 @@ const TableView = ({ data, onEdit }: { data: any[]; onEdit: (id: number) => void
           </React.Fragment>
         </View>
       </ScrollView>
-      <MyModal modalActive={editOpen.status} onClose={() => setEditOpen({status: false, selectedRow: {}})} child={<RowUpdate data={{row: editOpen.selectedRow}} />} />
+      <MyModal modalActive={editOpen.status} onClose={() => setEditOpen({status: false, selectedRow: {}})} containerClass='mt-auto' child={<RowUpdate data={{row: editOpen.selectedRow}} setRefreshDetails={setRefreshDetails} />} />
     </View>
   );
 }
@@ -604,7 +605,7 @@ export function AppointmentActivity({ apptn }: any) {
   const [details, setDetails] = useState({ loading: false, data: { PartyMasterList: [] }, err: { status: false, msg: "" } });
   const [formattedData, setFormattedData] = useState([]);
   const [selectedDate, setSelectedDate] = useState({ date: 'All', items: [], level: 0 });
-  
+  const [refreshDetails, setRefreshDetails] = useState(1);  
 
   useEffect(() => {
     if (!selectedDepartment.DeptId) return;
@@ -621,7 +622,7 @@ export function AppointmentActivity({ apptn }: any) {
     let controller = new AbortController();
     getDetails(selectedDepartment, selectedCompany, user.UserId, controller.signal);
     return () => controller.abort();
-  }, [selectedDepartment.DeptId, selectedCompany.CompanyId, selectedCompany.LocationId, user.UserId]);
+  }, [selectedDepartment.DeptId, selectedCompany.CompanyId, selectedCompany.LocationId, user.UserId, refreshDetails]);
 
     
   useEffect(() => {
@@ -649,11 +650,11 @@ export function AppointmentActivity({ apptn }: any) {
     <ScrollView contentContainerClassName="p-4 min-h-[30rem] bg-white" showsVerticalScrollIndicator={false}>
       <View className="flex-row items-center mb-5 gap-4">
           <View>
-          {/* <Text className="text-lg font-bold text-gray-900">Activity Details</Text> */}
+          <Text className="text-lg font-bold text-gray-900">Activity Details</Text>
         </View>
         {/* <ViewToggle view={view} onChange={setView} /> */}
-            <Text className="text-sm text-gray-400">
-              ( {tableData.length} Entrie{tableData.length !== 1 ? "s" : ""} )
+            <Text className="text-sm text-gray-500">
+              ( {tableData.length} {tableData.length !== 1 ? "Entries" : "Entry"} )
             </Text>
         </View>
         {/* {TABS.map((i: any) => (<Pressable onPress={() => {makeForcedRerender(); setActiveTab(i.value)}}><Text>{i.value}</Text></Pressable>))} */}
@@ -674,7 +675,7 @@ export function AppointmentActivity({ apptn }: any) {
         </ScrollView>
       }
       </View>
-        {loading ? null : <TableView onEdit={handleEdit} data={tableData} />}
+        {loading ? null : <TableView onEdit={handleEdit} data={tableData} setRefreshDetails={setRefreshDetails} />}
       </ScrollView>
   );
 }
@@ -693,18 +694,38 @@ export function SettingsScreen({ onClose, filterStages, selectedStageId, filterU
   }
 
   return (    
-      <ScrollView contentContainerClassName="p-4" showsVerticalScrollIndicator={false}>
+      <View className="p-4 flex-1">
         <View className="bg-white rounded-3xl overflow-hidden shadow-sm shadow-blue-100 pb-4">
           <View className="px-6 pt-6 pb-4 border-b border-gray-100">
             <ViewToggle view={view} onChange={setView} />
           </View>
-          {view === 'stage' ? 
+          {/* {view === 'stage' ? 
             filterStages.map((item: any, index: number) => <FilterBtn key={index} index={index} view={view} data={item} active={selectedStageId === item.AutoId } onPress={onStageSelect} />)
             : 
             filterUsers.data.map((item: any, index: number) => <FilterBtn key={index} index={index} view={view} data={item} active={selectedFilterUserId === item.UserId} onPress={onUserSelect} />)
+          } */}
+
+          {view === 'stage' ? 
+            <FlatList
+              data={filterStages}
+              keyExtractor={(item, index) => index + "_stages"}
+              // showsVerticalScrollIndicator={false}
+              // contentContainerClassName="px-3 py-3 gap-3"
+              renderItem={({item, index}: any) => (<FilterBtn index={index} view={view} data={item} active={selectedStageId === item.AutoId } onPress={onStageSelect} />)}
+              ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
+            />
+            :
+            <FlatList
+              data={filterUsers.data}
+              keyExtractor={(item, index) => index + "_users"}
+              // showsVerticalScrollIndicator={false}
+              contentContainerClassName="flex-1"
+              renderItem={({item, index}: any) => (<FilterBtn index={index} view={view} data={item} active={selectedFilterUserId === item.UserId} onPress={onUserSelect} />)}
+              ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
+            />        
           }
         </View>
-      </ScrollView>
+      </View>
   );
 }
 
@@ -732,25 +753,67 @@ const FilterBtn = ({ data, onPress, index, view, active }: any) => {
 
 
 
-const RowUpdate = ({ data, onClose }: any) => {
+const RowUpdate = ({ data, onClose, setRefreshDetails }: any) => {
 
   const { row } = data;
   const ac = "#6366f1"; // primary accent
   const initials = row.UserFullName?.split(" ")?.slice(0, 2)?.map((n: any) => n[0])?.join("").toUpperCase();
-  console.log(row)
+  const user = useSelector((i: RootState) => i.user);
+  const [loading, setLoading] = useState(false);
 
   const [dateOepn, setDateOpen] = useState(false)
   const [timeOpen, setTimeOpen] = useState(false)
-  const handleDateSelect = (date) => setDateOpen(false);
-  const handleTimeSelect = (time) => setTimeOpen(false);
+
+  const handleDateSelect = (e, date) => {
+    if (e.type === "set" && date) {
+      setRegisterData((pre) => ({ ...pre, NextAppDateStr: dayjs(date).format("DD/MM/YYYY") }));
+    }
+    setDateOpen(false);
+  } 
+  const handleTimeSelect = (e, time) => {
+    if (e.type === "set" && time) {
+      setRegisterData((pre) => ({ ...pre, NextAppTime: dayjs(time).format('HH:mm') }));
+    }
+    setTimeOpen(false);
+  }
+
+  const [registerData, setRegisterData] = useState({
+    FollowUpId: row.LastAutoId,
+    Remarks: row.Remarks2,
+    NextAppDateStr: dayjs(row.NextAppDate).format('DD/MM/YYYY'),
+    NextAppTime: row.NextAppTime,
+    UserId: user?.UserId
+  }) 
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      console.log(`${BASE_URL}/api/Appointment/UpdateStage`, registerData);
+      const res = await axios.post(`${BASE_URL}/api/Appointment/UpdateSpecificStage`, registerData);
+      if (res.data[0] === 'Y') {
+        Alert.alert("Info", "Stage updated Successfully");
+      } else {
+        Alert.alert("Error !", "Somenthing went wrong");
+      }
+      setLoading(false);
+      onClose();
+      setRefreshDetails(Math.random());
+    }
+    catch (err) {
+      console.log(err);
+      setLoading(false)
+      Alert.alert("Error !", "Somenthing went wrong");
+    }
+  }
+
   return (
-    <ScrollView contentContainerClassName="min-h-[30rem] bg-slate-100 pb-4" showsVerticalScrollIndicator={false}>      
-      <View className="flex-1 bg-black/40 justify-end">
+    <ScrollView contentContainerClassName="min-h-[30rem]" showsVerticalScrollIndicator={false}>      
+      <View className="flex-1 justify-end">
         <Pressable className="flex-1" onPress={onClose} />
-        <View style={{ paddingBottom: 20 }} className="bg-white rounded-t-3xl">
+        <View className="bg-white rounded-t-3xl">
           <View className="w-10 h-1 rounded-full bg-gray-200 self-center mt-3 mb-1" />
 
-          <View className="flex-row items-center px-5 py-4 border-b border-gray-100">
+          <View className="flex-row items-center px-5 py-4 border-b border-gray-200">
             <View style={{ backgroundColor: ac + "18", borderColor: ac + "40" }} className="w-12 h-12 rounded-2xl items-center justify-center border-2 mr-3">
               <Text style={{ color: ac }} className="text-base font-bold tracking-wider">
                 {initials}
@@ -758,7 +821,7 @@ const RowUpdate = ({ data, onClose }: any) => {
             </View>
 
             <View className="flex-1">
-              <Text className="text-gray-900 text-[15px] font-bold">{row.UserFullName}</Text>
+              <Text className="text-gray-900 text-[15px] font-bold">{row.Name}</Text>
               <View className="flex-row items-center gap-1 mt-0.5">
                 <Phone size={11} color="#9ca3af" strokeWidth={2} />
                 <Text className="text-gray-400 text-xs font-medium">{row.RegMob1} {row.RegMob2 && ` / ${row.RegMob2}`}</Text>
@@ -775,203 +838,57 @@ const RowUpdate = ({ data, onClose }: any) => {
               <X size={15} color="#6b7280" strokeWidth={2.5} />
             </TouchableOpacity>
           </View>
-
-          <View className="px-5 pt-5">
-            <View className="flex-row items-center gap-1.5 mb-2">
-              <Layers size={13} color={ac} strokeWidth={2} />
-              <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">Purpose</Text>
-              <View className="w-1.5 h-1.5 rounded-full bg-red-400 ml-1" />
-            </View>
-
-            <TouchableOpacity onPress={() => {}} activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-gray-50 border-2 rounded-2xl px-4 py-3.5">
-              <View className="flex-row items-center gap-2.5">
-                <View style={{ backgroundColor: ac }} className="w-2.5 h-2.5 rounded-full" />
-                <Text className="text-gray-800 text-sm font-semibold">Please select</Text>
-              </View>
-              <ChevronDown size={17} color="#9ca3af" strokeWidth={2.5} />
-            </TouchableOpacity>
-
-            {/* {dropdownOpen && (
-              <View className="border border-gray-100 rounded-2xl mt-1.5 bg-white overflow-hidden shadow-sm shadow-gray-200">
-                {stages.data.map((stage: any, idx: number) => (
-                  <TouchableOpacity
-                    key={stage.AutoId}
-                    onPress={() => {
-                      if (regData.EnqFollowUpList.length > 1) {
-                        setRegData((prev) => ({ ...prev, EnqFollowUpList: [prev.EnqFollowUpList[0]] }));
-                        setRowObjArr([]);
-                      }
-                      if (stage.CodeValue === "Service Done") {
-                        createFieldFirst();
-                      } else if (stage.CodeValue === "ReSchedule") {
-                        createFieldFirst();
-                      }
-                      handleChangeForArrayStage(0, stage);
-                      setDropdownOpen(false);
-                    }}
-                    activeOpacity={0.7}
-                    style={{
-                      backgroundColor: selectedStage2.AutoId === stage.AutoId ? stage.color + "12" : "transparent",
-                      borderBottomWidth: idx < stages.length - 1 ? 1 : 0,
-                      borderBottomColor: "#f3f4f6",
-                    }}
-                    className="flex-row items-center justify-between px-4 py-3.5"
-                  >
-                    <View className="flex-row items-center gap-3">
-                      <View style={{ backgroundColor: stage.color }} className="w-2.5 h-2.5 rounded-full" />
-                      <Text
-                        style={{
-                          color: selectedStage2.AutoId === stage.AutoId ? stage.color : "#6b7280",
-                        }}
-                        className={`text-sm ${selectedStage2.AutoId === stage.AutoId ? "font-semibold" : "font-normal"}`}
-                      >
-                        {stage.LinkDescription}
-                      </Text>
-                    </View>
-                    {selectedStage2.AutoId === stage.AutoId && <Check size={14} color={stage.color} strokeWidth={2.5} />}
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )} */}
-
-            {/* {regData.DirectSalesDetailsList.length > 0 ? <View className="bg-white rounded-3xl border border-gray-100 overflow-hidden mb-2 mt-4 shadow-sm">
-              <View className="px-5 pt-4 pb-3 border-b border-indigo-200/75">
-                <Text className="text-gray-900 text-base font-extrabold tracking-tight">Particulars</Text>
-              </View>
-
-              {regData.DirectSalesDetailsList.map((item, index) => (
-                <View
-                  key={index}
-                  style={{
-                    borderBottomWidth: index < regData.DirectSalesDetailsList.length - 1 ? 1 : 0,
-                    borderBottomColor: "#f3f4f6",
-                  }}
-                  className="flex-row items-center px-5 py-3.5"
-                >
-                  <Text className="flex-1 text-gray-700 text-sm font-semibold">{item.Description}</Text>
-
-                  <View style={{ borderColor: "#e5e7eb" }} className="flex-row items-center border-2 rounded-xl overflow-hidden bg-indigo-50/60">
-                    <View className="px-2.5 py-2 bg-indigo-50 border-r border-indigo-100">
-                      <IndianRupee size={13} color={ac} strokeWidth={2.5} />
-                    </View>
-                    <TextInput 
-                      value={item.SRate} 
-                      onChangeText={(text) => {
-                        setRegData((prev) => {
-                          const temp = [...prev.DirectSalesDetailsList];
-                          temp[index].SRate = text;
-                          return ({ ...prev, DirectSalesDetailsList: temp })
-                        })
-                      }}
-                      editable={regData.EnqFollowUpList[0].EnqStatusValue === "Registration"}
-                      keyboardType="numeric" 
-                      className="px-3 py-2 text-gray-800 text-sm font-bold text-right w-[72px]" 
-                    />
-                  </View>
-                </View>
-              ))}
-
-              <View className="flex-row items-center justify-between px-5 py-3.5 border-t border-indigo-200/75">
-                <Text className="text-indigo-600 text-xs font-extrabold tracking-widest uppercase">Total</Text>
-                <View className="flex-row items-center gap-1">
-                  <IndianRupee size={13} color={ac} strokeWidth={2.5} />
-                  <Text style={{ color: ac }} className="text-base font-extrabold">
-                    589.00
-                  </Text>
-                </View>
-              </View>
-            </View> : null} */}
-
-            <View className="flex-row items-center gap-1.5 mt-5 mb-2">
-              <MessageSquare size={13} color={ac} strokeWidth={2} />
-              <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">Today's Remarks</Text>
-              <View className="w-1.5 h-1.5 rounded-full bg-red-400 ml-1" />
-            </View>
-
-            <TextInput
-              value={''}
-              onChangeText={(text) =>{}}
-              placeholder="Write your notes here..."
-              placeholderTextColor="#d1d5db"
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
-              style={{
-                borderColor: false ? ac + "80" : "#e5e7eb",
-                minHeight: 100,
-                lineHeight: 22,
-              }}
-              className="bg-gray-50 border-2 rounded-2xl px-4 py-3.5 text-gray-800 text-sm"
-            />
-            {/* {regData.EnqFollowUpList[0].Remarks2.length > 0 && <Text className="text-gray-300 text-xs text-right mt-1.5 font-medium">{regData.EnqFollowUpList[0].Remarks2.length} chars</Text>} */}
-            {/* {remarksError && <Text className='text-red-600'>This field is required</Text>} */}
-          </View>
         </View>
       </View>
 
-      <View className="px-4 pt-5">
-
+      <View className="px-4 pt-6 pb-5 bg-slate-100">
         <View>
-          <View className="flex-row gap-3 mb-4">
+          <View className="flex-row items-center gap-1.5 mb-2">
+            <Layers size={13} color={ac} strokeWidth={2} />
+            <Text className="text-gray-500 text-[10px] font-extrabold tracking-widest uppercase">Purpose</Text>
+            <View className="w-1.5 h-1.5 rounded-full bg-red-400 ml-1" />
+          </View>
+
+          <TouchableOpacity onPress={() => {}} activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-4 py-3.5">
+            <View className="flex-row items-center gap-2.5">
+              <View style={{ backgroundColor: ac }} className="w-2.5 h-2.5 rounded-full" />
+              <Text className="text-gray-800 text-sm font-semibold">{row.OpportunityDesc || 'General Follow-up'}</Text>
+            </View>
+            <ChevronDown size={17} color="#9ca3af" strokeWidth={2.5} />
+          </TouchableOpacity>
+          <View className="flex-row gap-3 my-4">
             <View className="flex-1">
               <FieldLabel label="Date" required />
               <TouchableOpacity onPress={() => setDateOpen(!dateOepn)} activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-3.5 py-3">
-                <Text className={`text-sm font-semibold ${row.NextAppDateStr ? "text-gray-800" : "text-gray-400"}`}>{row.NextAppDateStr ? row.NextAppDateStr : "Date"}</Text>
+                <Text className={`text-sm font-semibold ${registerData.NextAppDateStr ? "text-gray-800" : "text-gray-400"}`}>{registerData.NextAppDateStr}</Text>
                 <Calendar size={16} color={ac} strokeWidth={2} />
               </TouchableOpacity>
               {/* {rowObjArr[index].err.date && <Text className='text-red-600 text-xs'>This field is required</Text>} */}
-              {dateOepn ? <DateTimePicker value={row.NextAppDateStr ? dayjs.utc(row.NextAppDateStr, "DD/MM/YYYY").toDate() : new Date()} mode="date" display="default" onChange={(e, date) => handleDateSelect(date)} minimumDate={new Date()} /> : null}
+              {/* {dateOepn ? <DateTimePicker value={dayjs.utc(registerData.NextAppDateStr, "DD/MM/YYYY").toDate()} mode="date" display="default" onChange={(e, date) => handleDateSelect(e, date)} minimumDate={new Date()} /> : null} */}
             </View>
 
             <View className="flex-1">
               <FieldLabel label="Time" />
               <TouchableOpacity onPress={() => setTimeOpen(!timeOpen)} activeOpacity={0.75} style={{ borderColor: "#e5e7eb" }} className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-3.5 py-3">
-                <Text className={`text-sm font-semibold ${row.NextAppTime ? "text-gray-800" : "text-gray-400"}`}>{row.NextAppTime ? row.NextAppTime : "Time"}</Text>
+                <Text className={`text-sm font-semibold ${registerData.NextAppTime ? "text-gray-800" : "text-gray-400"}`}>{registerData.NextAppTime}</Text>
                 <Clock size={16} color={ac} strokeWidth={2} />
               </TouchableOpacity>
-              {timeOpen ? <DateTimePicker value={row.NextAppTime ? dayjs(row.NextAppTime, 'hh:mm A').toDate() : new Date()} mode="time" display="default" onChange={(e, time) => handleTimeSelect(time)} /> : null}
+              {/* {timeOpen ? <DateTimePicker value={dayjs(registerData.NextAppTime, 'hh:mm A').toDate()} mode="time" display="default" onChange={(e, time) => handleTimeSelect(e, time)} /> : null} */}
             </View>
           </View>
-
-          {/* <View className="flex-row gap-3 mb-4">
-            <View className="flex-1">
-              <FieldLabel label="Dept." required />
-              <CustomDropdown options={deptsArr} labelKey="Description" selectValue={row.DeptId} selectKey={'SubCode'} 
-                onSelect={async (opt) => {
-                  handleChangeForArrayElement(index + 1, "DeptId", opt.SubCode);
-                  handleChangeForArrayElement(index + 1, "EnqStatus", 0);
-                  handleChangeForArrayElement(index + 1, "OpportunityId", 0);
-                  getFollowUpStage(opt.SubCode, index);
-                  handleChangeForArrayElement(index + 1, "RefToId", 0);
-                  getUserByDept(opt.SubCode, index);
-                }} 
-              placeholder="Select Department" accentColor={ac} />
-              {rowObjArr[index].err.dept && <Text className='text-red-600 text-xs'>This field is required</Text>}
-            </View>
-            <View className="flex-1">
-              <FieldLabel label="Stage" required />
-              <CustomDropdown options={rowObjArr[index].stageArr} labelKey="LinkDescription" selectValue={row.OpportunityId} selectKey={'AutoId'} onSelect={(opt) => handleChangeForArrayStage(index + 1, opt)} placeholder="Select Stage" accentColor={ac} />
-              {rowObjArr[index].err.stage && <Text className='text-red-600 text-xs'>This field is required</Text>}
-            </View>
-          </View>
-
-          <View className="mb-4">
-            <FieldLabel label="Refer To" />
-            <CustomDropdown float={false} options={rowObjArr[index].refToIdArr} labelKey="UserFullName" selectValue={row.RefToId} selectKey={'PartyCode'} onSelect={(opt) => handleChangeForArrayElement(index + 1, "RefToId", opt.PartyCode)} placeholder="Refer To" accentColor={ac} />
-          </View> */}
 
           <View className="">
             <FieldLabel label="Enter Remarks" required />
             <TextInput
-              value={row.Remarks2}
-              onChangeText={(text) => {}}
+              value={registerData.Remarks}
+              onChangeText={(text) => setRegisterData((prev) => ({ ...prev, Remarks: text }))}
               placeholder="Enter remarks..."
               placeholderTextColor="#d1d5db"
               multiline
               numberOfLines={4}
               textAlignVertical="top"
               style={{
-                borderColor: false ? ac + "80" : "#e5e7eb",
+                borderColor: registerData.Remarks ? ac + "80" : "#e5e7eb",
                 height: 80,
                 lineHeight: 22,
               }}
@@ -982,21 +899,23 @@ const RowUpdate = ({ data, onClose }: any) => {
         </View>
 
         <View className="flex-row gap-3 mt-6">
-          <TouchableOpacity onPress={() => {}} activeOpacity={0.7} className="flex-1 py-4 rounded-2xl items-center justify-center bg-gray-200 shadow-sm">
+          <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="flex-1 py-4 rounded-2xl items-center justify-center bg-gray-200 shadow-sm">
             <Text className="text-gray-500 text-sm font-semibold">Cancel</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {}}
-            // disabled={!selectedStage2.LinkDescription}
+            onPress={handleSubmit}
+            disabled={loading}
             activeOpacity={0.8}
             style={{
-              // backgroundColor: !selectedStage2.LinkDescription ? ac + "50" : ac,
+              backgroundColor: false ? ac + "50" : ac,
             }}
             className="flex-[2] py-4 rounded-2xl items-center justify-center flex-row gap-2 shadow-sm"
           >
-            <Sparkles size={14} color="#fff" strokeWidth={2.5} />
-            <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text>
+            {loading ? <SvgLoader height={15} /> : <>
+              <Sparkles size={14} color="#fff" strokeWidth={2.5} />
+              <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text>
+            </>}
           </TouchableOpacity>
         </View>
       </View>

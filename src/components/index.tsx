@@ -85,9 +85,9 @@ const CircleWave = ({ delay = 0, color, cx }: any) => {
 
 
 
-export const SvgLoader = () => {
+export const SvgLoader = ({ height=20 }) => {
   return (
-    <View style={{ width: 80, height: 20 }}>
+    <View style={{ width: 80, height: height }}>
       <Svg width="100%" height="100%" viewBox="0 0 200 100">
         <CircleWave delay={0} color="#abbd81" cx={240} />
         <CircleWave delay={125} color="#f8b26a" cx={145} />
