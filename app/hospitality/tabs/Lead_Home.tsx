@@ -7,12 +7,14 @@ import { Image } from 'react-native';
 import { getFrom, getRandomColor, GridLoader, ProductCard, sumByKey } from '@/src/components/utils';
 import { getRequiredFields } from '@/src/components/utils/shared';
 import { BASE_URL, myColors } from '@/src/constants';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome6, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import Svg, { Path } from "react-native-svg";
 import { Link } from 'expo-router';
 import { setCompanies, setDepartment } from '@/src/store/slices/slices';
 import { MyModal, sortByCount } from '@/src/components';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import dayjs from "@/src/components/utils/dayjs";
 
 const RetaurantHome = () => {
 
@@ -27,6 +29,24 @@ const RetaurantHome = () => {
   const [searchTerm, setSearchTerm] = useState({query: '', filterTerm: 'All', filterId: ''});
   const [autoCompleteList, setAutoCompleteList] = useState({loading: false, data: {itemMasterCollection: []}, err: {status: false, msg: ''}}); 
   // const [searchResultsActive_1, setSearchResultsActive_1] = useState(false);
+
+  const [locationDropdown, setLocationDropdown] = useState(false);
+  const dispatch = useDispatch();
+  const companyLocations = user?.UserCompList2?.filter(((i: any) => i.CompanyId === selectedCompany.CompanyId));
+  const [selectedDate, setSelectedDate] = useState({ active: false, value: dayjs() })
+
+  const LocationDropdown = () => {
+    return (
+      <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+        {companyLocations?.map((i: any, n: number) => (
+            <TouchableOpacity key={i.LocationId} className={`flex-row gap-3 p-4 ${n === (companyLocations.length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {dispatch(setCompanies({ selected: i })); setLocationDropdown(false)}}>
+                <MaterialCommunityIcons name={i.LocationId === selectedCompany.LocationId ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'} size={23} color={myColors.primary[500]} />
+                <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>{i.LocationName}</Text>
+            </TouchableOpacity>
+        ))}
+      </View>
+    )
+  }
 
   useEffect(() => {
     let controller = new AbortController();
@@ -66,8 +86,9 @@ const RetaurantHome = () => {
   useEffect(() => {
     let controller = new AbortController();
     const getSearchResult = async (user, company, signal) => {                      
-        if (!user.UserId || !company.CompanyId) return;                 
-        const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=${new Date().toLocaleDateString('en-TT')}&dttoStr=${new Date().toLocaleDateString('en-TT')}`, {}, setStats, signal);
+        if (!user.UserId || !company.CompanyId) return;   
+        console.log(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=${selectedDate.value.format("DD/MM/YYYY")}&dttoStr=${selectedDate.value.format("DD/MM/YYYY")}`);                      
+        const res = await getFrom(`${BASE_URL}/api/DashBoard/Get?UserId=${user.UserId}&CID=${company.CompanyId}&Location=${company.LocationId}&RoleId=${user.UserRoleLevelCode}&dtfrStr=${selectedDate.value.format("DD/MM/YYYY")}&dttoStr=${selectedDate.value.format("DD/MM/YYYY")}`, {}, setStats, signal);
         if (res) {  
           let arr: any = []
           res.data.PatientRegList.forEach((item: any) => {
@@ -81,11 +102,11 @@ const RetaurantHome = () => {
     }  
     getSearchResult(user, selectedCompany, controller.signal);
     return () => controller.abort();
-  }, [user.UserId, selectedCompany.CompanyId, selectedCompany.LocationId])
+  }, [user.UserId, selectedCompany.CompanyId, selectedCompany.LocationId, selectedDate.value])
   
   const renderStats = () => {
     if (stats.loading) {
-        return <GridLoader containerClass='mt-4 gap-3 px-4' classes='h-24 flex-1 rounded-2xl' count={4} />;
+        return <GridLoader containerClass='p-4 gap-3' classes='h-24 flex-1 rounded-2xl' count={4} />;
     } else if (!stats.data.PatientRegList.length) {
         return (
             <View className="text-center py-10">
@@ -95,7 +116,7 @@ const RetaurantHome = () => {
         )
     } else if (stats.data.PatientRegList.length) {
         return (
-            <ScrollView horizontal contentContainerClassName="px-2 py-4 bg-white">
+            <ScrollView horizontal contentContainerClassName="px-2 py-4">
                 {stats.data.PatientRegList.map((item, index) => <StatCard data={item} key={index} index={index} />)}    
             </ScrollView>
         )
@@ -104,7 +125,7 @@ const RetaurantHome = () => {
 
   const renderDepartments = () => {
     if (stats.loading) {
-        return <GridLoader containerClass='mt-4 gap-3 flex-col px-4' classes='h-24' count={4} />;
+        return <GridLoader containerClass='gap-3 flex-col px-4' classes='h-24' count={4} />;
     } else if (!stats.data.PatientRegList.length) {
         return (
             <View className="text-center py-10">
@@ -196,9 +217,39 @@ const RetaurantHome = () => {
           </View>
 
         </View>
-        <BalanceCard selectedCompany={selectedCompany} locations={user.UserCompList2}/>
+        {/* <BalanceCard selectedCompany={selectedCompany} locations={user.UserCompList2}/> */}
+        <View className="w-full items-center bg-sky-900 px-4 pb-4">
+          <View className="w-full flex-row items-center justify-between bg-sky-900 rounded-2xl">
+            <View className="flex-row items-center rounded-xl gap-3">
 
-        <View className="">
+              <TouchableOpacity className="bg-white/20 rounded-xl py-2 px-3.5" onPress={() => setSelectedDate((pre) => ({...pre, value: pre.value.subtract(1, 'day')}))}>
+                <FontAwesome6 name="caret-left" size={18} color="white" />
+              </TouchableOpacity>
+              {/* <View className="bg-white/20 rounded-lg p-2">
+                <CalendarDays size={18} color="white" />
+              </View> */}
+              <Pressable onPress={() => setSelectedDate((pre) => ({...pre, active: true}))}>
+                <Text className="text-gray-300 text-xs">Select Date</Text>
+                <Text className="text-white font-semibold text-base tracking-wider">
+                  {dayjs(selectedDate.value).format("DD MMM YYYY")}
+                </Text>
+              </Pressable>
+              <TouchableOpacity className="bg-white/20 rounded-xl py-2 px-3.5" onPress={() => setSelectedDate((pre) => ({...pre, value: pre.value.add(1, 'day')}))}>
+                {/* <CalendarDays size={18} color="white" /> */}
+                <FontAwesome6 name="caret-right" size={18} color="white" />
+              </TouchableOpacity>
+
+              {selectedDate.active ? <DateTimePicker value={selectedDate.value.toDate()} mode="date" display="default" onChange={(e, date) => setSelectedDate({ active: false, value: dayjs(date) })} minimumDate={new Date()} /> : null}
+            </View>
+            <TouchableOpacity onPress={() => setLocationDropdown(true)} className="bg-white/20 px-4 py-2 rounded-xl min-w-20 justify-between flex-row items-center gap-3">
+              <Text className="text-white text-sm font-medium">{selectedCompany.LocationName}</Text>
+              <Text className="text-white text-sm font-medium">▼</Text>
+            </TouchableOpacity>
+          </View>
+          <MyModal modalActive={locationDropdown} onClose={() => setLocationDropdown(false)} child={<LocationDropdown />} />
+        </View>
+
+        <View className="bg-white">
           {renderStats()}
         </View>
 
@@ -271,48 +322,50 @@ function FoodItemCard() {
 }
 
 
-const BalanceCard = ({ selectedCompany, locations }: any) => {
+// const BalanceCard = ({ selectedCompany, locations }: any) => {
 
-  const [locationDropdown, setLocationDropdown] = useState(false);
-  const dispatch = useDispatch();
-  const companyLocations = locations.filter(((i: any) => i.CompanyId === selectedCompany.CompanyId));
+//   const [locationDropdown, setLocationDropdown] = useState(false);
+//   const dispatch = useDispatch();
+//   const companyLocations = locations.filter(((i: any) => i.CompanyId === selectedCompany.CompanyId));
+//   const [selectedDate, setSelectedDate] = useState({ active: false, value: new Date() })
 
-  const LocationDropdown = () => {
-    return (
-      <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
-        {companyLocations?.map((i: any, n: number) => (
-            <TouchableOpacity key={i.LocationId} className={`flex-row gap-3 p-4 ${n === (companyLocations.length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {dispatch(setCompanies({ selected: i })); setLocationDropdown(false)}}>
-                <MaterialCommunityIcons name={i.LocationId === selectedCompany.LocationId ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'} size={23} color={myColors.primary[500]} />
-                <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>{i.LocationName}</Text>
-            </TouchableOpacity>
-        ))}
-      </View>
-    )
-  }
+//   const LocationDropdown = () => {
+//     return (
+//       <View className='bg-white mx-4 rounded-3xl shadow-md shadow-gray-400'>
+//         {companyLocations?.map((i: any, n: number) => (
+//             <TouchableOpacity key={i.LocationId} className={`flex-row gap-3 p-4 ${n === (companyLocations.length -1) ? '' : 'border-b border-gray-300'}`} onPress={() => {dispatch(setCompanies({ selected: i })); setLocationDropdown(false)}}>
+//                 <MaterialCommunityIcons name={i.LocationId === selectedCompany.LocationId ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'} size={23} color={myColors.primary[500]} />
+//                 <Text className="font-PoppinsSemibold text-gray-700 text-[14px]" numberOfLines={1}>{i.LocationName}</Text>
+//             </TouchableOpacity>
+//         ))}
+//       </View>
+//     )
+//   }
   
-  return (
-    <View className="w-full items-center bg-sky-900 px-4 pb-4">
-      <View className="w-full flex-row items-center justify-between bg-sky-900 rounded-2xl">
-        <View className="flex-row items-center rounded-xl">
-          <View className="bg-white/20 rounded-lg p-2 mr-3">
-            <CalendarDays size={18} color="white" />
-          </View>
-          <View>
-            <Text className="text-gray-300 text-xs">Balance</Text>
-            <Text className="text-white font-semibold text-base">
-              $ 124.5
-            </Text>
-          </View>
-        </View>
-        <TouchableOpacity onPress={() => setLocationDropdown(true)} className="bg-white/20 px-4 py-2 rounded-xl min-w-20 justify-between flex-row items-center gap-3">
-          <Text className="text-white text-sm font-medium">{selectedCompany.LocationName}</Text>
-          <Text className="text-white text-sm font-medium">▼</Text>
-        </TouchableOpacity>
-      </View>
-      <MyModal modalActive={locationDropdown} onClose={() => setLocationDropdown(false)} child={<LocationDropdown />} />
-    </View>
-);
-};
+//   return (
+//     <View className="w-full items-center bg-sky-900 px-4 pb-4">
+//       <View className="w-full flex-row items-center justify-between bg-sky-900 rounded-2xl">
+//         <View className="flex-row items-center rounded-xl">
+//           <View className="bg-white/20 rounded-lg p-2 mr-3">
+//             <CalendarDays size={18} color="white" />
+//           </View>
+//           <Pressable onPress={() => setSelectedDate((pre) => ({...pre, active: true}))}>
+//             <Text className="text-gray-300 text-xs">Balance</Text>
+//             <Text className="text-white font-semibold text-base">
+//               $ 124.5
+//             </Text>
+//           </Pressable>
+//           {selectedDate ? <DateTimePicker value={selectedDate.value} mode="date" display="default" onChange={(e, date) => setSelectedDate({ active: false, value: date })} minimumDate={new Date()} /> : null}
+//         </View>
+//         <TouchableOpacity onPress={() => setLocationDropdown(true)} className="bg-white/20 px-4 py-2 rounded-xl min-w-20 justify-between flex-row items-center gap-3">
+//           <Text className="text-white text-sm font-medium">{selectedCompany.LocationName}</Text>
+//           <Text className="text-white text-sm font-medium">▼</Text>
+//         </TouchableOpacity>
+//       </View>
+//       <MyModal modalActive={locationDropdown} onClose={() => setLocationDropdown(false)} child={<LocationDropdown />} />
+//     </View>
+//   );
+// };
 
 
 const WaveIcon = ({ color }) => (

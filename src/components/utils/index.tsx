@@ -110,7 +110,7 @@ export const GridLoader = ({ classes='h-[120px] flex-1', count=6, containerClass
   }
 
   return (
-    <View className={`flex justify-between overflow-hidden ${containerClass}`}>
+    <View className={`flex justify-between overflow-hidden ${containerClass} flex-row`}>
       {Array.from(Array(count).keys()).map(i => (<Animated.View className={`${classes} bg-gray-300`} key={i} style={[styles.skeleton, style, { opacity }]} />))}
     </View>
   )

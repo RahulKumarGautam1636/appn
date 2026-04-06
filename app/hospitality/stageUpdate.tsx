@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Pressable, ScrollView, Platform, Alert, FlatList } from "react-native";
 import { X, ChevronDown, Phone, Layers, MessageSquare, Check, Sparkles, Calendar, Clock, IndianRupee, Send } from "lucide-react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BASE_URL } from "@/src/constants";
 import { CustomDropdown, FieldLabel, getFrom, NoContent, useFetch, wait } from "@/src/components/utils";
 import dayjs from "@/src/components/utils/dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
-import { setModal } from "@/src/store/slices/slices";
+import { SvgLoader } from "@/src/components";
 
 function SectionDivider({ label }: { label: string }) {
   return (
@@ -38,7 +38,7 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
   const [stages, setStages] = useState({ loading: false, data: [], err: { status: false, msg: "" } })
   const [rowObjArr, setRowObjArr] = useState([]);
   const [remarksError, setRemarksError] = useState(false);
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const checkSalesItems: (patient: any) => any[] = (patient) => {
     if (patient.TranRefType === "ENQ") {
@@ -365,10 +365,10 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
       Alert.alert("info", "All followup must be unique");
     } else {
       console.log(`${BASE_URL}/api/Appointment/UpdateStage`, JSON.stringify(regData, null, 2));
-      console.log(rowObjArr);  
-      dispatch(setModal({ name: 'LOADING', state: true }));
+      // console.log(rowObjArr);  
+      setLoading(true);
       try {
-        const res = { data: ["Y"] }  // await axios.post(`${BASE_URL}/api/Appointment/UpdateStage`, regData);
+        const res = await axios.post(`${BASE_URL}/api/Appointment/UpdateStage`, regData);   // { data: ["Y"] }  // 
         await wait(3000);
         console.log(res.data);
         if (res.data[0] === "Y") {
@@ -379,11 +379,11 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
         } else {
           Alert.alert("Error !", "Somenthing went wrong");
         }
-        dispatch(setModal({ name: 'LOADING', state: false }));
+        setLoading(false);
         // setVisible(false);
       } catch (err) {
         console.log(err);
-        dispatch(setModal({ name: 'LOADING', state: false }));
+        setLoading(false);
         Alert.alert("Error !", "Somenthing went wrong");
       }
     }
@@ -655,8 +655,10 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
             }}
             className="flex-[2] py-4 rounded-2xl items-center justify-center flex-row gap-2 shadow-sm"
           >
-            <Sparkles size={14} color="#fff" strokeWidth={2.5} />
-            <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text>
+            {loading ? <SvgLoader height={15} /> : <>
+              <Sparkles size={14} color="#fff" strokeWidth={2.5} />
+              <Text className="text-white text-sm font-bold tracking-wide">Save Changes</Text>
+            </>}
           </TouchableOpacity>
         </View>
 

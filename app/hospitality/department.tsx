@@ -5,7 +5,7 @@ import colors from "tailwindcss/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import ButtonPrimary, { mmDDyyyyDate, MyModal, sortByCount, SvgLoader } from "@/src/components";
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BASE_URL, myColors } from "@/src/constants";
 import { FieldLabel, getFrom, getMonthDate, getRandomColor, GridLoader, groupBy, NoContent } from "@/src/components/utils";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -16,6 +16,7 @@ import { CalendarDays, Clock, User, CheckCircle2, CalendarClock, StickyNote, Lay
 import UpdateStage from "./stageUpdate";
 import dayjs from "@/src/components/utils/dayjs";
 import axios from "axios";
+import { useRouter } from "expo-router";
 
 
 const cardColor = { '1': 'rose', '2': 'yellow', '3': 'green' };
@@ -42,6 +43,7 @@ export default function MarketingSalesPage() {
   const [query, setQuery] = useState('');
   const [debounceQuery, setDebounceQuery] = useState('');
   const [refresh, setRefresh] = useState(1);
+  const router = useRouter()
 
   const makeForcedRerender = async () => {
     setForceRerender(true);
@@ -199,16 +201,18 @@ export default function MarketingSalesPage() {
     return () => clearTimeout(timer)
   }, [debounceQuery])
 
+  let companyName = selectedCompany?.COMPNAME.slice(0, 23);
+
   return (
     <View className="flex-1 bg-slate-200">
       {false ? null : <><View className="bg-sky-900 px-5 pt-6 pb-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center gap-3">
-            <Pressable className="w-9 h-9 rounded-xl bg-white/10 items-center justify-center">
+            <Pressable className="w-9 h-9 rounded-xl bg-white/10 items-center justify-center" onPress={() => router.back()}>
               <ArrowLeft size={18} color="white" />
             </Pressable>
             <View>
-              <Text className="text-white/60 text-[11px] tracking-widest">GBOOKS INFOTECH</Text>
+              <Text className="text-white/60 text-[11px] tracking-widest">{companyName} {companyName.length >= 23 ? '...' : '' }</Text>
               <Text className="text-white text-lg font-bold">{selectedDepartment.Department}</Text>
             </View>
           </View>
@@ -407,8 +411,8 @@ const AppointmentCard = ({ appt, setRefresh }: any) => {
           </>
         }
         {/* getStages(selectedCompany.EncCompanyId, user, appt) */}
-        <Pressable onPress={() => setUpdateModal(true)} className="w-9 h-9 rounded-lg bg-slate-100 items-center justify-center">
-          <Pencil size={14} color="#64748b" />
+        <Pressable onPress={() => setUpdateModal(true)} className="w-8 h-8 rounded-lg bg-slate-100 items-center justify-center">
+          <FontAwesome6 name="pencil" size={14} color={cardStyle.borderTop} />
         </Pressable>
       </View>
       <MyModal modalActive={openDetails} containerClass='mt-auto' onClose={() => setOpenDetails(false)} child={<AppointmentActivity apptn={appt} />} />
@@ -694,8 +698,8 @@ export function SettingsScreen({ onClose, filterStages, selectedStageId, filterU
   }
 
   return (    
-      <View className="p-4 flex-1">
-        <View className="bg-white rounded-3xl overflow-hidden shadow-sm shadow-blue-100 pb-4">
+      // <View className="">
+        <View className="bg-white rounded-3xl flex-1 m-4 pb-4">
           <View className="px-6 pt-6 pb-4 border-b border-gray-100">
             <ViewToggle view={view} onChange={setView} />
           </View>
@@ -704,28 +708,29 @@ export function SettingsScreen({ onClose, filterStages, selectedStageId, filterU
             : 
             filterUsers.data.map((item: any, index: number) => <FilterBtn key={index} index={index} view={view} data={item} active={selectedFilterUserId === item.UserId} onPress={onUserSelect} />)
           } */}
-
-          {view === 'stage' ? 
-            <FlatList
-              data={filterStages}
-              keyExtractor={(item, index) => index + "_stages"}
-              // showsVerticalScrollIndicator={false}
-              // contentContainerClassName="px-3 py-3 gap-3"
-              renderItem={({item, index}: any) => (<FilterBtn index={index} view={view} data={item} active={selectedStageId === item.AutoId } onPress={onStageSelect} />)}
-              ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
-            />
-            :
-            <FlatList
-              data={filterUsers.data}
-              keyExtractor={(item, index) => index + "_users"}
-              // showsVerticalScrollIndicator={false}
-              contentContainerClassName="flex-1"
-              renderItem={({item, index}: any) => (<FilterBtn index={index} view={view} data={item} active={selectedFilterUserId === item.UserId} onPress={onUserSelect} />)}
-              ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
-            />        
-          }
+          <View className="flex-1">
+            {view === 'stage' ? 
+              <FlatList
+                data={filterStages}
+                keyExtractor={(item, index) => index + "_stages"}
+                // showsVerticalScrollIndicator={false}
+                // contentContainerClassName="px-3 py-3 gap-3"
+                renderItem={({item, index}: any) => (<FilterBtn index={index} view={view} data={item} active={selectedStageId === item.AutoId } onPress={onStageSelect} />)}
+                ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
+              />
+              :
+              <FlatList
+                data={filterUsers.data}
+                keyExtractor={(item, index) => index + "_users"}
+                // showsVerticalScrollIndicator={false}
+                // contentContainerClassName="flex-1"
+                renderItem={({item, index}: any) => (<FilterBtn index={index} view={view} data={item} active={selectedFilterUserId === item.UserId} onPress={onUserSelect} />)}
+                ListEmptyComponent={<NoContent imgClass='h-[200] mt-8 mb-4' />}
+              />        
+            }
+          </View>
         </View>
-      </View>
+      // </View>
   );
 }
 
