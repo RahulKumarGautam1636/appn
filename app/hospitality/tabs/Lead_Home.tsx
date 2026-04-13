@@ -10,7 +10,7 @@ import { BASE_URL, myColors } from '@/src/constants';
 import { FontAwesome6, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
 import Svg, { Path } from "react-native-svg";
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { setCompanies, setDepartment } from '@/src/store/slices/slices';
 import { MyModal, sortByCount } from '@/src/components';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -401,7 +401,7 @@ const StatCard = memo(({ index, data }: any) => {
           // style={{color: textColor}}
         >{count}</Text>
       </View>
-      <Text className="text-sm text-gray-600 text-center tracking-tight" numberOfLines={2}>{data.Department}</Text>
+      <Text className="text-sm text-gray-600 text-center tracking-tight capitalize" numberOfLines={2}>{data.Department.toLowerCase()}</Text>
     </TouchableOpacity>
   )
 })
@@ -422,7 +422,7 @@ const DepartmentCard = memo(({ index, data }: any) => {
             {/* <Ellipsis size={18} color={colors.blue[500]} /> */}
           </View>
         </Link>
-        <TouchableOpacity className="bg-gray-100 px-2 py-1.5 rounded-full">
+        <TouchableOpacity onPress={() => {dispatch(setDepartment({ current: data, stage: {} })); router.push('/hospitality/regForm')}} className="bg-gray-100 px-2 py-1.5 rounded-full">
           <Plus size={18} color={colors.blue[500]} />
         </TouchableOpacity>
       </View>

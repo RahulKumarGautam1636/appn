@@ -24,7 +24,7 @@ const cardColor = { '1': 'rose', '2': 'yellow', '3': 'green' };
 export default function MarketingSalesPage() {
 
   const user = useSelector((i: RootState) => i.user);
-  const { selected: selectedCompany, list: companiesList } = useSelector((i: RootState) => i.companies);
+  const { selected: selectedCompany } = useSelector((i: RootState) => i.companies);
   const { current: selectedDepartment, stage: currentStage} = useSelector((i: RootState) => i.appData.department);
   const [stages, setStages] = useState([]);
   const [selectedStage, setSelectedStage] = useState({});
@@ -246,7 +246,7 @@ export default function MarketingSalesPage() {
             <View className="flex-1 flex-row items-center bg-white/10 rounded-xl px-3 py-1 h-full">
               <TextInput onChangeText={(text) => setDebounceQuery(text)} value={debounceQuery} placeholder="Search Appointments..." className="flex-1 text-sm text-white" placeholderTextColor={colors.gray[300]} />
             </View>
-            <Pressable className="w-[3.3rem] h-[3.2rem] rounded-xl bg-orange-500/90 items-center justify-center">
+            <Pressable onPress={() => router.push('/hospitality/regForm')} className="w-[3.3rem] h-[3.2rem] rounded-xl bg-orange-500/90 items-center justify-center">
               <Plus size={22} color={'#fff'} />
             </Pressable>
           </View>
@@ -927,3 +927,926 @@ const RowUpdate = ({ data, onClose, setRefreshDetails }: any) => {
     </ScrollView>
   )
 }
+
+
+
+
+// import React, { useState } from "react";
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   ScrollView,
+//   TouchableOpacity,
+//   StatusBar,
+// } from "react-native";
+// import {
+//   ChevronLeft,
+//   ChevronDown,
+//   Phone,
+//   CreditCard,
+//   User,
+//   MapPin,
+//   Building2,
+//   Calendar,
+//   Banknote,
+//   Users,
+//   Briefcase,
+//   Send,
+//   Stethoscope,
+//   ClipboardList,
+//   Star,
+//   UserCheck,
+//   Building,
+//   Search,
+// } from "lucide-react-native";
+
+// // ─── Design Tokens ───────────────────────────────────────────
+// const PRIMARY = "#0891b2";   // cyan-600
+// const ACCENT  = "#06b6d4";   // cyan-500
+// const BG      = "#f0f9ff";   // sky-50
+// const CARD    = "#ffffff";
+// const BORDER  = "#bae6fd";   // sky-200
+// const BORDER_FOCUS = "#0891b2";
+// const TEXT    = "#0f172a";   // slate-900
+// const MUTED   = "#64748b";   // slate-500
+// const LABEL   = "#475569";   // slate-600
+// const SURFACE2 = "#e0f2fe";  // sky-100
+// // ─────────────────────────────────────────────────────────────
+
+// // ── Section Header ────────────────────────────────────────────
+// const SectionHeader = ({ icon: Icon, title }: { icon: any; title: string }) => (
+//   <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 18, marginTop: 4 }}>
+//     <View
+//       style={{
+//         width: 36,
+//         height: 36,
+//         borderRadius: 12,
+//         backgroundColor: "#cffafe",
+//         alignItems: "center",
+//         justifyContent: "center",
+//         marginRight: 10,
+//       }}
+//     >
+//       <Icon size={17} color={PRIMARY} strokeWidth={2.2} />
+//     </View>
+//     <Text
+//       style={{
+//         fontSize: 11,
+//         fontWeight: "800",
+//         letterSpacing: 2,
+//         color: PRIMARY,
+//         textTransform: "uppercase",
+//       }}
+//     >
+//       {title}
+//     </Text>
+//     <View style={{ flex: 1, height: 1.5, backgroundColor: BORDER, marginLeft: 10 }} />
+//   </View>
+// );
+
+// // ── Field Label ───────────────────────────────────────────────
+// const FieldLabel = ({ label, required }: { label: string; required?: boolean }) => (
+//   <Text
+//     style={{
+//       fontSize: 11,
+//       fontWeight: "700",
+//       color: LABEL,
+//       letterSpacing: 0.8,
+//       textTransform: "uppercase",
+//       marginBottom: 6,
+//       marginLeft: 2,
+//     }}
+//   >
+//     {label}
+//     {required && <Text style={{ color: "#e11d48" }}> *</Text>}
+//   </Text>
+// );
+
+// // ── Floating Text Input ───────────────────────────────────────
+// const FloatingInput = ({
+//   label,
+//   placeholder,
+//   value,
+//   onChangeText,
+//   icon: Icon,
+//   keyboardType = "default",
+//   required = false,
+//   multiline = false,
+// }: {
+//   label: string;
+//   placeholder: string;
+//   value: string;
+//   onChangeText: (t: string) => void;
+//   icon?: any;
+//   keyboardType?: any;
+//   required?: boolean;
+//   multiline?: boolean;
+// }) => {
+//   const [focused, setFocused] = useState(false);
+//   return (
+//     <View style={{ marginBottom: 14 }}>
+//       <FieldLabel label={label} required={required} />
+//       <View
+//         style={{
+//           flexDirection: "row",
+//           alignItems: multiline ? "flex-start" : "center",
+//           borderRadius: 14,
+//           paddingHorizontal: 14,
+//           paddingVertical: multiline ? 12 : 0,
+//           minHeight: multiline ? 88 : 52,
+//           backgroundColor: focused ? "#ecfeff" : CARD,
+//           borderWidth: 1.5,
+//           borderColor: focused ? BORDER_FOCUS : BORDER,
+//           shadowColor: focused ? ACCENT : "#94a3b8",
+//           shadowOffset: { width: 0, height: focused ? 4 : 1 },
+//           shadowOpacity: focused ? 0.15 : 0.06,
+//           shadowRadius: focused ? 12 : 4,
+//           elevation: focused ? 4 : 1,
+//         }}
+//       >
+//         {Icon && (
+//           <Icon
+//             size={16}
+//             color={focused ? PRIMARY : MUTED}
+//             strokeWidth={2}
+//             style={{ marginRight: 10, marginTop: multiline ? 2 : 0 }}
+//           />
+//         )}
+//         <TextInput
+//           style={{ flex: 1, fontSize: 14, color: TEXT }}
+//           placeholder={placeholder}
+//           placeholderTextColor="#94a3b8"
+//           value={value}
+//           onChangeText={onChangeText}
+//           onFocus={() => setFocused(true)}
+//           onBlur={() => setFocused(false)}
+//           keyboardType={keyboardType}
+//           multiline={multiline}
+//           textAlignVertical={multiline ? "top" : "center"}
+//         />
+//       </View>
+//     </View>
+//   );
+// };
+
+// // ── Select Pill ───────────────────────────────────────────────
+// const SelectPill = ({
+//   label,
+//   value,
+//   onPress,
+//   icon: Icon,
+//   required = false,
+// }: {
+//   label: string;
+//   value: string;
+//   onPress: () => void;
+//   icon?: any;
+//   required?: boolean;
+// }) => (
+//   <View style={{ marginBottom: 14, flex: 1 }}>
+//     <FieldLabel label={label} required={required} />
+//     <TouchableOpacity
+//       onPress={onPress}
+//       style={{
+//         flexDirection: "row",
+//         alignItems: "center",
+//         justifyContent: "space-between",
+//         borderRadius: 14,
+//         paddingHorizontal: 14,
+//         height: 52,
+//         backgroundColor: CARD,
+//         borderWidth: 1.5,
+//         borderColor: BORDER,
+//         shadowColor: "#94a3b8",
+//         shadowOffset: { width: 0, height: 1 },
+//         shadowOpacity: 0.06,
+//         shadowRadius: 4,
+//         elevation: 1,
+//       }}
+//     >
+//       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+//         {Icon && <Icon size={16} color={MUTED} strokeWidth={2} />}
+//         <Text style={{ fontSize: 14, color: value ? TEXT : "#94a3b8" }}>
+//           {value || `Select ${label}`}
+//         </Text>
+//       </View>
+//       <ChevronDown size={16} color={MUTED} />
+//     </TouchableOpacity>
+//   </View>
+// );
+
+// // ── DOB Row ───────────────────────────────────────────────────
+// const DOBRow = ({
+//   dob,
+//   years,
+//   months,
+//   days,
+//   onChange,
+// }: {
+//   dob: string;
+//   years: string;
+//   months: string;
+//   days: string;
+//   onChange: (field: string, val: string) => void;
+// }) => {
+//   const MiniInput = ({
+//     label,
+//     field,
+//     val,
+//     ph,
+//     maxLen,
+//   }: {
+//     label: string;
+//     field: string;
+//     val: string;
+//     ph: string;
+//     maxLen: number;
+//   }) => {
+//     const [focused, setFocused] = useState(false);
+//     return (
+//       <View style={{ flex: 1 }}>
+//         <FieldLabel label={label} />
+//         <TextInput
+//           style={{
+//             height: 48,
+//             borderRadius: 12,
+//             paddingHorizontal: 10,
+//             textAlign: "center",
+//             fontSize: 14,
+//             color: TEXT,
+//             backgroundColor: focused ? "#ecfeff" : CARD,
+//             borderWidth: 1.5,
+//             borderColor: focused ? BORDER_FOCUS : BORDER,
+//             shadowColor: focused ? ACCENT : "#94a3b8",
+//             shadowOffset: { width: 0, height: focused ? 3 : 1 },
+//             shadowOpacity: focused ? 0.12 : 0.06,
+//             shadowRadius: focused ? 8 : 4,
+//             elevation: focused ? 3 : 1,
+//           }}
+//           placeholder={ph}
+//           placeholderTextColor="#94a3b8"
+//           value={val}
+//           onChangeText={(t) => onChange(field, t)}
+//           onFocus={() => setFocused(true)}
+//           onBlur={() => setFocused(false)}
+//           keyboardType="numeric"
+//           maxLength={maxLen}
+//         />
+//       </View>
+//     );
+//   };
+
+//   return (
+//     <View style={{ marginBottom: 14 }}>
+//       <FieldLabel label="Date of Birth" />
+//       <TouchableOpacity
+//         style={{
+//           flexDirection: "row",
+//           alignItems: "center",
+//           borderRadius: 14,
+//           paddingHorizontal: 14,
+//           height: 52,
+//           backgroundColor: CARD,
+//           borderWidth: 1.5,
+//           borderColor: BORDER,
+//           marginBottom: 8,
+//           shadowColor: "#94a3b8",
+//           shadowOffset: { width: 0, height: 1 },
+//           shadowOpacity: 0.06,
+//           shadowRadius: 4,
+//           elevation: 1,
+//         }}
+//       >
+//         <Calendar size={16} color={MUTED} strokeWidth={2} style={{ marginRight: 10 }} />
+//         <Text style={{ fontSize: 14, color: dob ? TEXT : "#94a3b8" }}>
+//           {dob || "Pick a date"}
+//         </Text>
+//       </TouchableOpacity>
+//       <View style={{ flexDirection: "row", gap: 8 }}>
+//         <MiniInput label="Years" field="years" val={years} ph="YYYY" maxLen={4} />
+//         <MiniInput label="Months" field="months" val={months} ph="MM" maxLen={2} />
+//         <MiniInput label="Days" field="days" val={days} ph="DD" maxLen={2} />
+//       </View>
+//     </View>
+//   );
+// };
+
+// // ── Card Type Row ─────────────────────────────────────────────
+// const CardTypeRow = ({
+//   cardType,
+//   cardNo,
+//   onTypePress,
+//   onCardChange,
+// }: {
+//   cardType: string;
+//   cardNo: string;
+//   onTypePress: () => void;
+//   onCardChange: (t: string) => void;
+// }) => {
+//   const [focused, setFocused] = useState(false);
+//   return (
+//     <View style={{ marginBottom: 14 }}>
+//       <FieldLabel label="ID Card" />
+//       <View style={{ flexDirection: "row", gap: 8 }}>
+//         <TouchableOpacity
+//           onPress={onTypePress}
+//           style={{
+//             flexDirection: "row",
+//             alignItems: "center",
+//             borderRadius: 14,
+//             paddingHorizontal: 12,
+//             height: 52,
+//             minWidth: 130,
+//             gap: 6,
+//             backgroundColor: SURFACE2,
+//             borderWidth: 1.5,
+//             borderColor: BORDER,
+//           }}
+//         >
+//           <CreditCard size={15} color={PRIMARY} strokeWidth={2} />
+//           <Text style={{ fontSize: 13, color: PRIMARY, fontWeight: "600", flex: 1 }}>{cardType}</Text>
+//           <ChevronDown size={14} color={PRIMARY} />
+//         </TouchableOpacity>
+//         <View
+//           style={{
+//             flex: 1,
+//             flexDirection: "row",
+//             alignItems: "center",
+//             borderRadius: 14,
+//             paddingHorizontal: 12,
+//             height: 52,
+//             backgroundColor: focused ? "#ecfeff" : CARD,
+//             borderWidth: 1.5,
+//             borderColor: focused ? BORDER_FOCUS : BORDER,
+//             shadowColor: focused ? ACCENT : "#94a3b8",
+//             shadowOffset: { width: 0, height: focused ? 4 : 1 },
+//             shadowOpacity: focused ? 0.15 : 0.06,
+//             shadowRadius: focused ? 12 : 4,
+//             elevation: focused ? 4 : 1,
+//           }}
+//         >
+//           <TextInput
+//             style={{ flex: 1, fontSize: 14, color: TEXT }}
+//             placeholder="Card Number"
+//             placeholderTextColor="#94a3b8"
+//             value={cardNo}
+//             onChangeText={onCardChange}
+//             onFocus={() => setFocused(true)}
+//             onBlur={() => setFocused(false)}
+//           />
+//         </View>
+//       </View>
+//     </View>
+//   );
+// };
+
+// // ── Appointment Row ───────────────────────────────────────────
+// const AppointmentRow = ({
+//   date,
+//   stage,
+//   status,
+//   onStagePress,
+//   onStatusPress,
+// }: {
+//   date: string;
+//   stage: string;
+//   status: string;
+//   onStagePress: () => void;
+//   onStatusPress: () => void;
+// }) => (
+//   <View style={{ marginBottom: 14 }}>
+//     <FieldLabel label="Appointment Details" required />
+//     <View style={{ flexDirection: "row", gap: 8 }}>
+//       {/* Date */}
+//       <TouchableOpacity
+//         style={{
+//           flexDirection: "row",
+//           alignItems: "center",
+//           borderRadius: 14,
+//           paddingHorizontal: 12,
+//           height: 52,
+//           flex: 1,
+//           gap: 6,
+//           backgroundColor: "#ecfeff",
+//           borderWidth: 1.5,
+//           borderColor: "#a5f3fc",
+//         }}
+//       >
+//         <Calendar size={15} color={PRIMARY} strokeWidth={2} />
+//         <Text style={{ fontSize: 13, color: PRIMARY, fontWeight: "700" }}>{date}</Text>
+//       </TouchableOpacity>
+
+//       {/* Stage */}
+//       <TouchableOpacity
+//         onPress={onStagePress}
+//         style={{
+//           flexDirection: "row",
+//           alignItems: "center",
+//           justifyContent: "space-between",
+//           borderRadius: 14,
+//           paddingHorizontal: 10,
+//           height: 52,
+//           flex: 1.15,
+//           backgroundColor: CARD,
+//           borderWidth: 1.5,
+//           borderColor: BORDER,
+//           gap: 4,
+//         }}
+//       >
+//         <Text style={{ fontSize: 12, color: TEXT, flex: 1, fontWeight: "500" }} numberOfLines={2}>
+//           {stage || "Stage"}
+//         </Text>
+//         <ChevronDown size={14} color={MUTED} />
+//       </TouchableOpacity>
+
+//       {/* Status */}
+//       <TouchableOpacity
+//         onPress={onStatusPress}
+//         style={{
+//           flexDirection: "row",
+//           alignItems: "center",
+//           borderRadius: 14,
+//           paddingHorizontal: 10,
+//           height: 52,
+//           minWidth: 82,
+//           gap: 5,
+//           backgroundColor: "#f0fdf4",
+//           borderWidth: 1.5,
+//           borderColor: "#bbf7d0",
+//         }}
+//       >
+//         <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: "#22c55e" }} />
+//         <Text style={{ fontSize: 12, color: "#15803d", fontWeight: "700", flex: 1 }}>
+//           {status}
+//         </Text>
+//         <ChevronDown size={13} color="#15803d" />
+//       </TouchableOpacity>
+//     </View>
+//   </View>
+// );
+
+// // ── Search Pair Row ───────────────────────────────────────────
+// const SearchPairRow = ({
+//   label1,
+//   label2,
+//   val1,
+//   val2,
+//   icon1: Icon1,
+//   icon2: Icon2,
+//   onChange1,
+//   onChange2,
+// }: {
+//   label1: string;
+//   label2: string;
+//   val1: string;
+//   val2: string;
+//   icon1?: any;
+//   icon2?: any;
+//   onChange1: (t: string) => void;
+//   onChange2: (t: string) => void;
+// }) => {
+//   const MiniSearch = ({
+//     label,
+//     val,
+//     Icon,
+//     onChange,
+//   }: {
+//     label: string;
+//     val: string;
+//     Icon: any;
+//     onChange: (t: string) => void;
+//   }) => {
+//     const [focused, setFocused] = useState(false);
+//     return (
+//       <View style={{ flex: 1 }}>
+//         <FieldLabel label={label} />
+//         <View
+//           style={{
+//             flexDirection: "row",
+//             alignItems: "center",
+//             borderRadius: 12,
+//             paddingHorizontal: 10,
+//             height: 48,
+//             backgroundColor: focused ? "#ecfeff" : CARD,
+//             borderWidth: 1.5,
+//             borderColor: focused ? BORDER_FOCUS : BORDER,
+//             shadowColor: focused ? ACCENT : "#94a3b8",
+//             shadowOffset: { width: 0, height: focused ? 3 : 1 },
+//             shadowOpacity: focused ? 0.12 : 0.06,
+//             shadowRadius: focused ? 8 : 4,
+//             elevation: focused ? 3 : 1,
+//           }}
+//         >
+//           {Icon && (
+//             <Icon
+//               size={14}
+//               color={focused ? PRIMARY : MUTED}
+//               strokeWidth={2}
+//               style={{ marginRight: 6 }}
+//             />
+//           )}
+//           <TextInput
+//             style={{ flex: 1, fontSize: 13, color: TEXT }}
+//             placeholder="Search"
+//             placeholderTextColor="#94a3b8"
+//             value={val}
+//             onChangeText={onChange}
+//             onFocus={() => setFocused(true)}
+//             onBlur={() => setFocused(false)}
+//           />
+//         </View>
+//       </View>
+//     );
+//   };
+
+//   return (
+//     <View style={{ flexDirection: "row", gap: 8, marginBottom: 14 }}>
+//       <MiniSearch label={label1} val={val1} Icon={Icon1} onChange={onChange1} />
+//       <MiniSearch label={label2} val={val2} Icon={Icon2} onChange={onChange2} />
+//     </View>
+//   );
+// };
+
+// // ── Card Wrapper ──────────────────────────────────────────────
+// const FormCard = ({ children }: { children: React.ReactNode }) => (
+//   <View
+//     style={{
+//       backgroundColor: CARD,
+//       borderRadius: 20,
+//       padding: 18,
+//       marginBottom: 16,
+//       borderWidth: 1,
+//       borderColor: BORDER,
+//       shadowColor: PRIMARY,
+//       shadowOffset: { width: 0, height: 2 },
+//       shadowOpacity: 0.07,
+//       shadowRadius: 10,
+//       elevation: 2,
+//     }}
+//   >
+//     {children}
+//   </View>
+// );
+
+// // ─────────────────────────────────────────────────────────────
+// // Main Screen
+// // ─────────────────────────────────────────────────────────────
+// export default function OPDRegistrationForm() {
+//   const [form, setForm] = useState({
+//     mobile: "",
+//     altMobile: "",
+//     cardType: "PAN Card",
+//     cardNo: "",
+//     partyName: "",
+//     gender: "",
+//     dob: "",
+//     dobYears: "",
+//     dobMonths: "",
+//     dobDays: "",
+//     address: "",
+//     city: "",
+//     state: "West Bengal",
+//     pincode: "",
+//     particular: "",
+//     amount: "",
+//     bank: "",
+//     appointmentDate: "07/04/2026",
+//     stage: "Appointment / Schedule",
+//     status: "Active",
+//     remarks: "",
+//     executive: "",
+//     partner: "",
+//     referrer: "",
+//     businessExec: "",
+//   });
+
+//   const set = (field: string) => (val: string) =>
+//     setForm((prev) => ({ ...prev, [field]: val }));
+
+//   return (
+//     <View style={{ flex: 1, backgroundColor: BG }}>
+//       <StatusBar barStyle="dark-content" backgroundColor={BG} />
+
+//       {/* ── Header ── */}
+//       <View
+//         style={{
+//           backgroundColor: CARD,
+//           paddingTop: 52,
+//           paddingBottom: 16,
+//           paddingHorizontal: 20,
+//           borderBottomWidth: 1,
+//           borderBottomColor: BORDER,
+//           shadowColor: PRIMARY,
+//           shadowOffset: { width: 0, height: 4 },
+//           shadowOpacity: 0.08,
+//           shadowRadius: 16,
+//           elevation: 5,
+//         }}
+//       >
+//         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+//           <TouchableOpacity
+//             style={{
+//               width: 38,
+//               height: 38,
+//               borderRadius: 12,
+//               backgroundColor: SURFACE2,
+//               alignItems: "center",
+//               justifyContent: "center",
+//               borderWidth: 1,
+//               borderColor: BORDER,
+//             }}
+//           >
+//             <ChevronLeft size={20} color={PRIMARY} strokeWidth={2.5} />
+//           </TouchableOpacity>
+
+//           <View style={{ alignItems: "center" }}>
+//             <View
+//               style={{
+//                 flexDirection: "row",
+//                 alignItems: "center",
+//                 gap: 6,
+//                 backgroundColor: "#ecfeff",
+//                 paddingHorizontal: 10,
+//                 paddingVertical: 4,
+//                 borderRadius: 20,
+//                 borderWidth: 1,
+//                 borderColor: "#a5f3fc",
+//                 marginBottom: 5,
+//               }}
+//             >
+//               <Stethoscope size={13} color={ACCENT} strokeWidth={2.5} />
+//               <Text
+//                 style={{
+//                   fontSize: 10,
+//                   fontWeight: "800",
+//                   color: PRIMARY,
+//                   letterSpacing: 1.5,
+//                   textTransform: "uppercase",
+//                 }}
+//               >
+//                 OPD · Consultation
+//               </Text>
+//             </View>
+//             <Text style={{ fontSize: 20, fontWeight: "800", color: TEXT, letterSpacing: -0.5 }}>
+//               Registration
+//             </Text>
+//           </View>
+
+//           <View
+//             style={{
+//               width: 38,
+//               height: 38,
+//               borderRadius: 12,
+//               backgroundColor: "#ecfeff",
+//               alignItems: "center",
+//               justifyContent: "center",
+//               borderWidth: 1,
+//               borderColor: "#a5f3fc",
+//             }}
+//           >
+//             <ClipboardList size={18} color={PRIMARY} strokeWidth={2} />
+//           </View>
+//         </View>
+
+//         {/* Step progress */}
+//         <View style={{ flexDirection: "row", justifyContent: "center", gap: 6, marginTop: 14 }}>
+//           {[1, 2, 3, 4, 5].map((i) => (
+//             <View
+//               key={i}
+//               style={{
+//                 height: 4,
+//                 borderRadius: 99,
+//                 backgroundColor: i === 1 ? PRIMARY : BORDER,
+//                 width: i === 1 ? 28 : 8,
+//               }}
+//             />
+//           ))}
+//         </View>
+//       </View>
+
+//       {/* ── Form ── */}
+//       <ScrollView
+//         style={{ flex: 1 }}
+//         contentContainerStyle={{ padding: 16, paddingBottom: 130 }}
+//         showsVerticalScrollIndicator={false}
+//       >
+//         {/* Personal */}
+//         <FormCard>
+//           <SectionHeader icon={User} title="Personal Information" />
+//           <FloatingInput
+//             label="Mobile"
+//             placeholder="Mobile No. / type at least 4 digits"
+//             value={form.mobile}
+//             onChangeText={set("mobile")}
+//             icon={Phone}
+//             keyboardType="phone-pad"
+//             required
+//           />
+//           <FloatingInput
+//             label="Alternative Mobile"
+//             placeholder="Mobile No."
+//             value={form.altMobile}
+//             onChangeText={set("altMobile")}
+//             icon={Phone}
+//             keyboardType="phone-pad"
+//           />
+//           <CardTypeRow
+//             cardType={form.cardType}
+//             cardNo={form.cardNo}
+//             onTypePress={() => {}}
+//             onCardChange={set("cardNo")}
+//           />
+//           <FloatingInput
+//             label="Party Name"
+//             placeholder="Type at least 4 letters to search"
+//             value={form.partyName}
+//             onChangeText={set("partyName")}
+//             icon={User}
+//             required
+//           />
+//           <SelectPill
+//             label="Gender"
+//             value={form.gender}
+//             onPress={() => {}}
+//             icon={Users}
+//             required
+//           />
+//           <DOBRow
+//             dob={form.dob}
+//             years={form.dobYears}
+//             months={form.dobMonths}
+//             days={form.dobDays}
+//             onChange={(field, val) =>
+//               set(`dob${field.charAt(0).toUpperCase() + field.slice(1)}`)(val)
+//             }
+//           />
+//         </FormCard>
+
+//         {/* Address */}
+//         <FormCard>
+//           <SectionHeader icon={MapPin} title="Address Details" />
+//           <FloatingInput
+//             label="Address"
+//             placeholder="Full Address"
+//             value={form.address}
+//             onChangeText={set("address")}
+//             icon={MapPin}
+//             required
+//           />
+//           <FloatingInput
+//             label="City"
+//             placeholder="City"
+//             value={form.city}
+//             onChangeText={set("city")}
+//             icon={Building2}
+//           />
+//           <View style={{ flexDirection: "row", gap: 8 }}>
+//             <SelectPill
+//               label="State"
+//               value={form.state}
+//               onPress={() => {}}
+//               icon={Building}
+//               required
+//             />
+//             <View style={{ flex: 1 }}>
+//               <FloatingInput
+//                 label="Pincode"
+//                 placeholder="Pincode"
+//                 value={form.pincode}
+//                 onChangeText={set("pincode")}
+//                 keyboardType="numeric"
+//               />
+//             </View>
+//           </View>
+//         </FormCard>
+
+//         {/* Payment */}
+//         <FormCard>
+//           <SectionHeader icon={Banknote} title="Payment Details" />
+//           <View style={{ flexDirection: "row", gap: 8 }}>
+//             <View style={{ flex: 1 }}>
+//               <FloatingInput
+//                 label="Particular"
+//                 placeholder="Search"
+//                 value={form.particular}
+//                 onChangeText={set("particular")}
+//                 icon={Search}
+//               />
+//             </View>
+//             <View style={{ flex: 1 }}>
+//               <FloatingInput
+//                 label="Amount"
+//                 placeholder="₹ 0.00"
+//                 value={form.amount}
+//                 onChangeText={set("amount")}
+//                 keyboardType="numeric"
+//               />
+//             </View>
+//           </View>
+//           <SelectPill
+//             label="Bank"
+//             value={form.bank}
+//             onPress={() => {}}
+//             icon={Building}
+//           />
+//         </FormCard>
+
+//         {/* Appointment */}
+//         <FormCard>
+//           <SectionHeader icon={Calendar} title="Appointment" />
+//           <AppointmentRow
+//             date={form.appointmentDate}
+//             stage={form.stage}
+//             status={form.status}
+//             onStagePress={() => {}}
+//             onStatusPress={() => {}}
+//           />
+//           <FloatingInput
+//             label="Remarks"
+//             placeholder="Any additional remarks…"
+//             value={form.remarks}
+//             onChangeText={set("remarks")}
+//             multiline
+//           />
+//         </FormCard>
+
+//         {/* Team */}
+//         <FormCard>
+//           <SectionHeader icon={Briefcase} title="Team & Referrals" />
+//           <SearchPairRow
+//             label1="Executive"
+//             label2="Partner"
+//             val1={form.executive}
+//             val2={form.partner}
+//             icon1={UserCheck}
+//             icon2={Users}
+//             onChange1={set("executive")}
+//             onChange2={set("partner")}
+//           />
+//           <SearchPairRow
+//             label1="Referrer"
+//             label2="Business Executive"
+//             val1={form.referrer}
+//             val2={form.businessExec}
+//             icon1={Star}
+//             icon2={Briefcase}
+//             onChange1={set("referrer")}
+//             onChange2={set("businessExec")}
+//           />
+//         </FormCard>
+//       </ScrollView>
+
+//       {/* ── Submit ── */}
+//       <View
+//         style={{
+//           position: "absolute",
+//           bottom: 0,
+//           left: 0,
+//           right: 0,
+//           backgroundColor: CARD,
+//           paddingHorizontal: 20,
+//           paddingBottom: 34,
+//           paddingTop: 12,
+//           borderTopWidth: 1,
+//           borderTopColor: BORDER,
+//           shadowColor: PRIMARY,
+//           shadowOffset: { width: 0, height: -6 },
+//           shadowOpacity: 0.1,
+//           shadowRadius: 16,
+//           elevation: 12,
+//         }}
+//       >
+//         <TouchableOpacity
+//           activeOpacity={0.85}
+//           style={{
+//             height: 56,
+//             borderRadius: 16,
+//             backgroundColor: PRIMARY,
+//             flexDirection: "row",
+//             alignItems: "center",
+//             justifyContent: "center",
+//             gap: 10,
+//             shadowColor: PRIMARY,
+//             shadowOffset: { width: 0, height: 8 },
+//             shadowOpacity: 0.35,
+//             shadowRadius: 18,
+//             elevation: 10,
+//           }}
+//         >
+//           <Send size={18} color="#fff" strokeWidth={2.5} />
+//           <Text
+//             style={{
+//               color: "#fff",
+//               fontSize: 16,
+//               fontWeight: "800",
+//               letterSpacing: 0.3,
+//             }}
+//           >
+//             Complete Registration
+//           </Text>
+//         </TouchableOpacity>
+//       </View>
+//     </View>
+//   );
+// }

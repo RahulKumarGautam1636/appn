@@ -153,7 +153,7 @@ export default function ServicesGrid() {
           </View>
       </View>
       <View className="p-2">
-        <Text className="text-lg text-slate-400 font-PoppinsSemibold px-2 py-3">Select Company</Text>
+          <Text className="text-lg text-slate-400 font-PoppinsSemibold px-2 py-3">Select Company</Text>
         <View>
           {user?.UserCompList2?.map((item, index) => (
             <CompanyCard key={index} company={item} index={index} />

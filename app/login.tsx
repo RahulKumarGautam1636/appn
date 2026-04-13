@@ -179,11 +179,17 @@ const Login = ({ modalMode }: any) => {
                 UserLevelCode: data.UserLevelCode,
                 UserLevelSeq: data.UserLevelSeq,
                 UserCompList: data.UserCompList[0],
-                UserCompList2: isLP ? data.UserCompList : null,
             };
+
+            let lpData = isLP ? {
+                UserCompList2: data.UserCompList,
+                BankLedgerId: data.BankLedgerId,
+                CashLedgerId: data.CashLedgerId
+            } : {}
+
             const userData = { UserName: params.phone, UserPassword: data.UserPassword, EncCompanyId: params.EncCompanyId };
             if (keepLoggedIn) await storage.set('user', JSON.stringify(userData));
-            dispatch(setUser(userLoginData));
+            dispatch(setUser({...userLoginData, ...lpData}));
             dispatch(setLogin(true));
             if (isLP) return router.push('/hospitality/compSelection')
             if (modalMode) {
@@ -479,7 +485,12 @@ export const Registeration = ({ existUser={}, setTab=()=>{}, setLoginData=()=>{}
                 alert('THIS USER ID IS INACTIVE')
                 return false;
             } else if (data.UserId) {
-                dispatch(setUser({ ...data, UserCompList: data.UserCompList[0], UserCompList2: isLP ? data.UserCompList : null }));
+                let lpData = isLP ? {
+                    UserCompList2: data.UserCompList,
+                    BankLedgerId: data.BankLedgerId,
+                    CashLedgerId: data.CashLedgerId
+                } : {}
+                dispatch(setUser({ ...data, UserCompList: data.UserCompList[0], ...lpData }));
                 // localStorage.setItem("userLoginData", encrypt({ phone: params.RegMob1, password: params.UserPassword, compCode: compCode }));
                 if (keepLoggedIn) storage.set('user', JSON.stringify(body));
                 return true;
