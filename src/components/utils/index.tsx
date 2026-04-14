@@ -989,6 +989,67 @@ export function CustomDropdown({
   );
 }
 
+
+export function MyList({
+  options,
+  selectValue,
+  selectKey,
+  labelKey,
+  onSelect,
+  placeholder = "Select",
+  accentColor = "#6366f1",
+  float = true,
+  containerClass,
+  handleClose = () => {}
+}: {
+  options: any;
+  selectValue: any | null;
+  selectKey: string;
+  labelKey: string;
+  onSelect: (opt: any) => void;
+  placeholder?: string;
+  accentColor?: string;
+  float?: boolean;
+  containerClass?: string;
+  handleClose?: () => void;
+}) {
+  // options = options.slice(0, 100);
+  const selected = options.find(((i: any) => i[selectKey] === selectValue)) || {};  
+  const label = selected[labelKey] ? selected[labelKey] : placeholder;
+
+  const OptionItem = ({ opt, idx }: any) => {
+    const isSelected = selected[selectKey] === opt[selectKey];  
+    return (
+      <TouchableOpacity
+        onPress={() => { onSelect(opt); handleClose(); }}
+        activeOpacity={0.7}
+        style={{
+          backgroundColor: isSelected ? accentColor + "12" : "transparent",
+          borderBottomWidth: idx < options.length - 1 ? 1 : 0,
+          borderBottomColor: "#f3f4f6",
+        }}
+        className="flex-row items-center justify-between px-4 py-3"
+      >
+        <Text
+          style={{ color: isSelected ? accentColor : "#6b7280" }}
+          className={`text-sm ${isSelected ? "font-semibold" : "font-normal"}`}
+        >
+          {opt[labelKey]}
+        </Text>
+        {isSelected && <Check size={13} color={accentColor} strokeWidth={2.5} />}
+      </TouchableOpacity>
+    );
+  }
+  return (
+    <View className="relative">
+      <View className={`bg-white border border-gray-100 rounded-2xl overflow-hidden z-50 ${float ? 'absolute left-0 right-0 top-[105%]' : ''} ${containerClass}`} style={{ shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 12, elevation: 8 }}>
+          {options.map((opt: any, idx: number) => (<OptionItem opt={opt} idx={idx} key={idx} />))}
+      </View>
+    </View>
+  );
+}
+
+
 export const invalidDate = '0001-01-01T00:00:00'
 
 export const isEmpty = (obj: any) => {

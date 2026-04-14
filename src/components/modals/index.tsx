@@ -29,7 +29,7 @@ const Modals = () => {
             <MyModal modalActive={modals.DEPTS.state} name='DEPTS' child={<DeptsModal />} />
             <MyModal modalActive={modals.PRESC.state} name='PRESC' child={<PrescriptionForm />} />
             <MyModal modalActive={modals.LOCATIONS.state} name='LOCATIONS' child={<Locations />} />
-            <MyModal modalActive={modals.ADD_MEMBER.state} name='LOCATIONS' child={<AddMember isModal={true} />} />
+            <MyModal modalActive={modals.ADD_MEMBER.state} name='ADD_MEMBER' child={<AddMember isModal={true} />} />
             <MyModal modalActive={modals.LOADING.state} name='LOADING' child={<FullScreenLoading />} />
             <MyModal modalActive={modals.COMPARE_PRODUCTS.state} name='LOADING' child={<CompareProducts itemId={modals.COMPARE_PRODUCTS.data?.itemId} />} />
             <MyModal modalActive={modals.TABLES.state} name='TABLES' child={<TableSelection isModal={modals.TABLES.state} />} />

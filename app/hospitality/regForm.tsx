@@ -4,7 +4,7 @@ import { X, ChevronDown, Phone, Layers, MessageSquare, Check, Sparkles, Calendar
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { BASE_URL, gender, states } from "@/src/constants";
-import { CustomDropdown, FieldLabel, getFrom, NoContent, useFetch, wait } from "@/src/components/utils";
+import { CustomDropdown, FieldLabel, getFrom, MyList, NoContent, useFetch, wait } from "@/src/components/utils";
 import dayjs from "@/src/components/utils/dayjs";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
@@ -52,6 +52,14 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
   const [IDCardCodeObj, setIDCardCodeObj] = useState(null);
   const [numberList, setNumberlist] = useState([]);
   const [shownumberList, setShowNumberlist] = useState(false);
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [date, setDate] = useState(dayjs());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [age, setAge] = useState({ years: '', months: '', days: '' });
+  const [partyList, setPartylist] = useState([]);
+  const [showpartyList, setShowPartylist] = useState(false);
+
   const [registerData, setRegisterData] = useState({
     Name: "",
     UserRoleId: user?.UserRoleId,
@@ -198,54 +206,110 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
   }, [])
 
   const [searchItem, setSearchItem] = useState('');
-  const [query, setQuery] = useState({ name: '' });
 
   useEffect(() => {
       const controller = new AbortController();
       const getLabData = async (companyId: string, query: string, signal: AbortSignal) => {
           if (!companyId) return console.log('no DeptId received');
-          const res = await axios.get(`${BASE_URL}/api/Values/Get?CID=${companyId}&type=MOB&Specialist=0&prefixText=${query}`, { signal: signal });
-          if (res.status === 200) {
-            if (res.data?.length > 0) {
+          if (!query.length) return;
+          try {
+            const res = await axios.get(`${BASE_URL}/api/Values/Get?CID=${companyId}&type=MOB&Specialist=0&prefixText=${query}`, { signal: signal });
+            if (res.status === 200) {
+              if (res.data?.length > 0) {
                 setNumberlist(res.data);
                 setShowNumberlist(true);
-            } else {
+              } else {
                 setShowNumberlist(false);
                 setNumberlist([]);
-            }
+              }
+            }            
+          } catch (err) {
+            if (err.code === 'ERR_CANCELED') return;           // return early if request aborted to prevent loading: false.
+            console.log(err)
+            alert(err.message);
           }
       }
       getLabData(selectedCompany.EncCompanyId, registerData.RegMob1, controller.signal);
-      // setSearchItem({ name: '' });
       return () => controller.abort();
   }, [selectedCompany.EncCompanyId, registerData.RegMob1]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // setQuery({ name: searchItem });
-
       const cleaned = searchItem.replace(/\D/g, "");
       const normalized = cleaned.startsWith("91") && cleaned.length > 10 ? cleaned.slice(-10) : cleaned;    // Remove country code if present (like +91 or 91)
-      if (normalized.length <= 10) {
-          setRegisterData((prev) => ({
-              ...prev, RegMob1: normalized,
-          }));
+      if (normalized.length >= 3) {
+        setRegisterData((prev) => ({...prev, RegMob1: normalized}));
+      } else {
+        setShowNumberlist(false);
+        setNumberlist([]);
       }
-      // if (normalized.length > 3) {
-      //     fetchRegisterData(normalized);
-      // }
-      else {
-          setShowNumberlist(false);
-          setNumberlist([]);
-      }
-
     }, 800);
-    return () => {
-      clearTimeout(timer)
-    };
+    return () => clearTimeout(timer);
   }, [searchItem]);
 
-  console.log(registerData); 
+  const handleSelectNumber = (data: any) => {
+    if (data) {
+        setRegisterData((prev) => ({
+            ...prev,
+            PartyId: data.PartyId,
+            PartyCode: data.PartyCode,
+            MemberId: data.MemberId,
+            RegMob1: `${data.Mobile}`,
+            RegMob2: `${data.RegMob2}`,
+            IDCardTypeId: data.IDCardTypeId ? data.IDCardTypeId : prev.IDCardTypeId,
+            IDCardTypeDesc: data.IDCardTypeDesc ? data.IDCardTypeDesc : prev.IDCardTypeDesc,
+            IDCardTypeNo: data.IDCardTypeNo,
+            Salutation: data.Salutation,
+            Name: data.Name,
+            GenderDesc: data.GenderDesc,
+            Gender: data.Gender,
+            DOB: (!data.DOB || data.DOB === "0001-01-01T00:00:00" || data.DOB === "1900-01-01T00:00:00") ? "" : dayjs(data.DOB).format("DD/MM/YYYY"),
+            DOBstr: (!data.DOB || data.DOB === "0001-01-01T00:00:00" || data.DOB === "1900-01-01T00:00:00") ? "" : dayjs(data.DOB).format("DD/MM/YYYY"),
+            // Age: data.Age,
+            // AgeMonth: data.AgeMonth,
+            // AgeDay: data.AgeDay,
+            Address: data.Address,
+            City: data.City,
+            State: data.State,
+            StateName: data.StateDesc,
+            Pin: data.Pin,
+        }))
+        if (data.DOB && data.DOB !== "0001-01-01T00:00:00" && data.DOB !== "1900-01-01T00:00:00") {
+            setTheDate(dayjs(data.DOB).toDate());
+        }
+        setSearchItem(data.RegMob1)
+        const obj = idcardArr.find((el) => el.CodeId === data.IDCardTypeId);
+        if (obj) {
+            setIDCardCodeObj(obj);
+        }
+        if (shownumberList) {
+            setShowNumberlist(false);
+        }
+        if (showpartyList) {
+            setShowPartylist(false);
+        }
+    }
+  }
+
+  const setTheDate = (selected?: Date | undefined) => {
+    const dob = dayjs(selected);
+    setSelectedDate(dob);
+    setDate(dob);
+    setShowDatePicker(false);
+
+    // Calculate age
+    const now = dayjs();
+    const years = now.diff(dob, "year");
+    const months = now.diff(dob.add(years, "year"), "month");
+    const days = now.diff(dob.add(years, "year").add(months, "month"), "day");
+
+    setRegisterData((prev) => ({ ...prev, DOB: dob.format("DD/MM/YYYY"), DOBstr: dob.format("DD/MM/YYYY"), Age: years, AgeMonth: months, AgeDay: days, IsDOBCalculated: "N" }));
+
+    setAge({ years: years.toString(), months: months.toString(), days: days.toString() });
+
+  };
+
+  console.log(shownumberList); 
 
   return (
     <ScrollView contentContainerClassName="min-h-[30rem] bg-slate-100 pb-4" showsVerticalScrollIndicator={false}>   
@@ -270,6 +334,7 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
               <TextInput
                 value={searchItem}
                 onChangeText={(text) => setSearchItem(text)}
+                // onFocus={() => setShowNumberlist(!shownumberList)}
                 placeholder="Type 4 digits to search.."
                 placeholderTextColor="#d1d5db"
                 style={{
@@ -277,6 +342,7 @@ export default function ParticularsForm({ appt, onClose, setRefresh }: any) {
                 }}
                 className="flex-row items-center justify-between bg-white border-2 rounded-2xl px-3.5 py-3 text-sm text-gray-600"
               />
+              {shownumberList ? <MyList float={false} options={numberList} labelKey="Name" selectValue={''} selectKey={'RegMob1'} onSelect={(opt) => handleSelectNumber(opt)} placeholder="Mobile" accentColor={ac} /> : null}
             </View>
             <View className="flex-1">
               <FieldLabel label="Alternative Mobile" required />
